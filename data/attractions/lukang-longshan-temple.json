@@ -1,0 +1,102 @@
+{
+  "id": "lukang-longshan-temple",
+  "name": {
+    "zh_TW": "鹿港龍山寺",
+    "en": "Lukang Longshan Temple"
+  },
+  "location": {
+    "city_zh": "彰化縣",
+    "city_en": "Changhua County",
+    "district_zh": "鹿港鎮",
+    "district_en": "Lukang Township",
+    "address_zh": "彰化縣鹿港鎮金門街109號",
+    "address_en": "No. 109, Jinmen St., Lukang Township, Changhua County",
+    "coordinates": {
+      "lat": 24.0531,
+      "lng": 120.4354
+    }
+  },
+  "category": "temple_shrine",
+  "eras": [
+    "Qing Dynasty (1683–1895)",
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1786,
+  "heritage_status": "National Historic Monument (國定古蹟)",
+  "summary": {
+    "zh_TW": "臺灣現存規模最宏偉、工藝最精湛的清代閩南木構佛寺，享有『臺灣紫禁城』與『民間藝術殿堂』之盛譽。",
+    "en": "Taiwan's most intact, magnificent, and artistically sophisticated Qing-dynasty Southern Fujianese Buddhist temple, widely acclaimed as the 'Forbidden City of Taiwan'."
+  },
+  "historical_narrative": {
+    "zh_TW": "鹿港在清領乾隆至道光年間為臺灣中部最繁華的對渡商港，有『一府二鹿三艋舺』之美譽。西元1786年（乾隆五十一年），泉州泉安移民將原大有街之舊廟遷建至現金門街現址，並由鹿港八郊行商與士紳出資，延聘泉州惠安頂級木雕大師與匠師，採用珍貴福建杉木、泉州白石與青斗石精心營建。龍山寺主祀觀世音菩薩，全寺格局三進二院，佔地一千六百多坪，寺內的戲台八卦藻井更是臺灣現存年代最早且跨距最大的頂級木作藻井藝術，全程不耗一釘一鐵，純以精密榫卯斗栱懸臂疊組而成。",
+    "en": "During the 18th and 19th centuries, Lukang was Taiwan's premier trading port with mainland China, giving rise to the famous historical adage: 'First Tainan, Second Lukang, Third Bangka (Taipei)'. In 1786, wealthy Lukang merchant guilds (Eight Suburbs Guilds) financed the relocation and expansion of Longshan Temple to its current site. Master craftsmen from Quanzhou, Fujian were commissioned to construct this temple compound using imported granite, bluestone, and aged Chinese fir timbers. Dedicated to Guanyin (Avalokiteshvara), the complex spans over 5,000 square meters. Its theatrical stage features a world-renowned Octagonal Caisson Ceiling (Zaojing) assembled entirely with interlocking mortise-and-tenon joints without a single metallic nail."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1653",
+      "era_category": "Early Qing",
+      "event_zh": "泉州僧侶肇善禪師迎奉觀音大士神像至鹿港大有街創建草創小廟。",
+      "event_en": "Monk Zhaoshan brought Guanyin statues from Mount Putuo to found an early shrine."
+    },
+    {
+      "year_or_era": "1786",
+      "era_category": "Qing Dynasty",
+      "event_zh": "由鹿港八郊商賈士紳合資遷建於現址，奠定今日宏偉三進院落基礎。",
+      "event_en": "Merchant guilds funded the relocation to current site with full three-hall courtyard layout."
+    },
+    {
+      "year_or_era": "1831",
+      "era_category": "Qing Dynasty",
+      "event_zh": "大規模擴建拜殿、戲台及八卦藻井，集結兩岸頂尖唐山匠師施作。",
+      "event_en": "Major expansion constructed the grand prayer pavilion and the masterpiece octagonal caisson ceiling."
+    },
+    {
+      "year_or_era": "1999",
+      "era_category": "Modern Era",
+      "event_zh": "九二一大地震受損，隨後展開歷時數年、被譽為臺灣古蹟修復典範的跨國修復工程。",
+      "event_en": "Underwent landmark heritage restoration following the 1999 Jiji Earthquake, setting national conservation standards."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "臺灣傳統木構建築工藝與佛道宗教美學的最高顛峰，承載清代海商貿易黃金時期的精緻文化品味。",
+    "why_it_matters_en": "Represents the supreme zenith of traditional Chinese timber-frame engineering and liturgical decorative arts in Taiwan, preserved with astonishing authenticity.",
+    "architectural_highlights_zh": "戲台上方懸臂式十六組斗栱旋轉交疊形成的八卦藻井、三川殿五門木雕隔扇花鳥人物、清代彩繪大師郭新林之門神彩繪、泉州石雕龍柱與青斗石石獅。",
+    "architectural_highlights_en": "The gravity-defying Octagonal Spiderweb Caisson Ceiling above the theatrical stage; exquisite Qing openwork latticed timber screens depicting floral and mythological motifs; authentic hand-painted Door Gods by master painter Guo Xin-lin; and hand-carved 18th-century Quanzhou bluestone dragon pillars.",
+    "intangible_culture_zh": "鹿港雅正優雅的南管音樂演奏發源地之一，伴隨古剎暮鼓晨鐘悠揚迴盪。",
+    "intangible_culture_en": "Traditional Nanguan (Southern Pipes) classical chamber music is frequently performed here, harmonizing with gentle temple gongs."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "Longshan Temple is an active Buddhist sanctuary. Speak in hushed tones. When entering any threshold, step OVER the wooden threshold bar—never step ON it (stepping on thresholds is considered disrespectful in East Asian architecture).",
+    "etiquette_tips_zh": "請放低交談音量。跨越門檻時切勿踩踏門檻（踩門檻在東方習俗代表不敬），請直接跨步而過。",
+    "must_see_spots_en": [
+      "The jaw-dropping Octagonal Caisson Ceiling (look straight up beneath the theater stage)",
+      "Three-Bay Five-Door Front Hall featuring intricate openwork wood relief panels",
+      "Qing-dynasty solid bluestone guardian lions with smiling masculine/feminine expressions",
+      "The peaceful Rear Hall courtyard with ancient banyan trees and stone water cisterns"
+    ],
+    "must_see_spots_zh": [
+      "戲台正上方八卦八角迴旋式懸臂藻井（臺灣木構極品）",
+      "三川殿五門木雕隔扇鏤空透雕",
+      "三川殿前清代青斗石刻抱鼓石與石獅",
+      "後殿寧靜後花園與古井庭院"
+    ],
+    "recommended_duration_min": 75,
+    "transportation_en": "Take Taiwan High Speed Rail to Taichung Station, then transfer to Changhua Bus No. 6936 (Taiwan Tourist Shuttle Lukang Line) directly to Lukang, followed by a 10-minute walk through the heritage alleyways.",
+    "transportation_zh": "搭乘高鐵至台中站，轉乘彰化客運6936（台灣好行鹿港祈福線）至鹿港，步行約10分鐘即可到達。",
+    "best_time_to_visit": "Mid-morning (9:00 AM - 11:30 AM) when gentle sunlight beams filter through the incense smoke and timber latticework."
+  },
+  "tags": [
+    "timber_architecture",
+    "caisson_ceiling",
+    "buddhism",
+    "lukang_heritage",
+    "craftsmanship",
+    "national_monument"
+  ],
+  "metadata": {
+    "source": "Lukang Longshan Temple Foundation & Bureau of Cultural Heritage",
+    "generated_by": "Taiwan-Guidebook Curatorial Team",
+    "last_updated": "2026-08-31"
+  }
+}

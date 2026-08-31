@@ -1,0 +1,109 @@
+{
+  "id": "tainan-confucius-temple",
+  "name": {
+    "zh_TW": "臺南孔子廟（全臺首學）",
+    "en": "Tainan Confucius Temple (First Academy of Taiwan)"
+  },
+  "location": {
+    "city_zh": "臺南市",
+    "city_en": "Tainan City",
+    "district_zh": "中西區",
+    "district_en": "West Central District",
+    "address_zh": "臺南市中西區南門路2號",
+    "address_en": "No. 2, Nanmen Rd., West Central Dist., Tainan City",
+    "coordinates": {
+      "lat": 22.9904,
+      "lng": 120.2043
+    }
+  },
+  "category": "temple_shrine",
+  "eras": [
+    "Kingdom of Tungning (1661–1683)",
+    "Qing Dynasty (1683–1895)",
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1665,
+  "heritage_status": "National Historic Monument (國定古蹟)",
+  "summary": {
+    "zh_TW": "建於明鄭時期西元1665年，為臺灣最早建立的孔廟與最高官辦學府，尊稱『全臺首學』，承載數百年儒家禮樂文教根基。",
+    "en": "Erected in 1665 during the Kingdom of Tungning, this is Taiwan's earliest Confucius Temple and premier imperial academy. Revered as the 'First Academy of Taiwan', it is the cradle of classical Confucian education and ritual music."
+  },
+  "historical_narrative": {
+    "zh_TW": "西元1665年（明永曆十九年），鄭成功之子鄭經採納謀士陳永華『建聖廟、設學校』的建言，在承天府桂仔埔興建了臺灣歷史上第一座孔廟及附屬官學（太學），開創了臺灣系統性科舉教育與儒家文化體系之先河。進入清領時期後，康熙帝派施琅進駐臺灣，孔廟獲歷代清朝皇帝御賜尊號與匾額，並改為『臺灣府學』。清康熙至光緒年間，八位皇帝親筆賜匾懸掛於大成殿內；民國以降歷任總統亦依例賜匾，形成全臺絕無僅有、貫穿四百年政權遞嬗的珍貴御匾典藏群。每年孔子誕辰舉辦之釋奠大典，完整保存了極為罕見的明清宮廷雅樂與六佾舞儀軌。",
+    "en": "In 1665, during the reign of Zheng Jing (son of General Koxinga), prime advisor Chen Yong-hua advocated building a sacred temple and imperial school to lay the foundation for civic education on the island. This marked the birth of institutionalized civil service examination training and Confucian humanism in Taiwan. Following the Qing takeover, Emperor Kangxi refurbished the complex into the Taiwan Prefectural Academy. Successive Qing Emperors (from Kangxi, Yongzheng, Qianlong through Guangxu) personally bestowed imperial calligraphic honor boards ('plagues') to hang inside the Dacheng Hall—a tradition continued by Presidents in modern Taiwan. The annual autumn Confucius Memorial Ceremony retains centuries-old ritual court music, incense offerings, and ceremonial 6-row dancer rituals (Liu Yi Wu)."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1665",
+      "era_category": "Kingdom of Tungning",
+      "event_zh": "諮議參軍陳永華倡議興建聖廟與官學，為全臺文教之始。",
+      "event_en": "Advisor Chen Yong-hua established the Confucius Temple and the First Academy."
+    },
+    {
+      "year_or_era": "1684",
+      "era_category": "Qing Dynasty",
+      "event_zh": "清朝設臺灣府，將孔廟改制為臺灣府學，頒賜『萬世師表』等御匾。",
+      "event_en": "Qing court designated the site as Taiwan Prefectural School and bestowed imperial plaques."
+    },
+    {
+      "year_or_era": "1715",
+      "era_category": "Qing Dynasty",
+      "event_zh": "巡道陳璸重修大成殿、明倫堂及文昌閣，確立『左學右廟』之完整格局。",
+      "event_en": "Refurbished into the traditional architectural layout of 'School on the Left, Temple on the Right'."
+    },
+    {
+      "year_or_era": "1917",
+      "era_category": "Japanese Colonial",
+      "event_zh": "日治時期官方實施大整修，保存清代原始木作構件與石雕精髓。",
+      "event_en": "Japanese administration undertook comprehensive conservation of the classical wooden timber structures."
+    },
+    {
+      "year_or_era": "Present",
+      "era_category": "Modern Era",
+      "event_zh": "每年9月28日清晨舉行隆重古禮秋祭大典，全臺矚目。",
+      "event_en": "Hosts the prestigious dawn autumn Confucius Rite every September 28th following archaic Ming-Qing ritual protocols."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "代表漢人儒家教育在臺灣生根發芽的起點，是臺灣儒學傳統、科舉制度與古代禮樂制度最權威的活化石。",
+    "why_it_matters_en": "The spiritual birthplace of Taiwan's literary scholarship and civil service exams, maintaining living traditions of ancient East Asian ceremonial rites.",
+    "architectural_highlights_zh": "經典『左學右廟』佈局、大成殿重簷歇山頂、朱紅沈穩色調、無雕龍畫棟的肅穆文廟風格、大成門與泮池、大成殿內懸掛的清代至當代完整御匾收藏。",
+    "architectural_highlights_en": "Distinctive deep terracotta-red walls symbolizing scholarly solemnity; sweeping double-eaved hip-and-gable roof on Dacheng Hall; no painted human deity statues (only ancestral spirit tablets honoring Confucius and disciples); Pan Chi (Crescent Pond); and the most comprehensive collection of authentic Imperial Calligraphy Plaques in the Sinosphere.",
+    "intangible_culture_zh": "全臺保存最完整的八佾舞/六佾舞秋祭古禮，以及『拔智慧毛』等深具教育意義的民俗記憶。",
+    "intangible_culture_en": "Traditional ritual ceremonies featuring solemn bronze bells, stone chimes (Bianqing), ceremonial feather robes, and the historic ritual of sharing 'Wisdom Cattle Hair'."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "Unlike folk Taoist temples with incense smoke and fortune sticks, a Confucius Temple is a tranquil house of veneration without deity idols or fortune-telling. Please maintain a quiet and contemplative atmosphere. Do not climb on stone balustrades or touch historical timber brackets.",
+    "etiquette_tips_zh": "孔廟非一般民間道教寺廟，不燒香、不抽籤，供奉神位而非神像，請保持莊重肅靜。",
+    "must_see_spots_en": [
+      "'First Academy of Taiwan' (全臺首學) wooden entrance plaque",
+      "Dacheng Hall interior featuring 15+ Imperial & Presidential Honor Boards",
+      "Minglun Hall (Hall of Moral Brightness) housing ancient Zhao Mengfu calligraphy stone rubbings",
+      "Three-story Wenchang Pavilion (God of Literature Pagoda)"
+    ],
+    "must_see_spots_zh": [
+      "東大門『全臺首學』橫匾",
+      "大成殿內歷代清朝皇帝與歷任總統御匾群",
+      "明倫堂與趙孟頫書法石刻《大學》全文",
+      "三層樓古典文昌閣與泮池古樹庭園"
+    ],
+    "recommended_duration_min": 60,
+    "transportation_en": "Take Tainan City Bus No. 2, 88, or Taiwan Tourist Shuttle 99 to 'Confucius Temple' stop, or take an easy 12-minute walk from Hayashi Department Store / National Museum of Taiwan Literature.",
+    "transportation_zh": "搭乘大台南公車2號、88號至『孔廟』站下車；或從國立臺灣文學館/林百貨步行約5分鐘。",
+    "best_time_to_visit": "Early morning (8:30 AM - 10:30 AM) when the tree-shaded courtyards are peaceful and illuminated by soft sunlight."
+  },
+  "tags": [
+    "confucianism",
+    "first_academy",
+    "imperial_plaques",
+    "classical_architecture",
+    "ancient_rituals",
+    "tainan_cultural_core"
+  ],
+  "metadata": {
+    "source": "Tainan Confucius Temple Foundation & Bureau of Cultural Heritage",
+    "generated_by": "Taiwan-Guidebook Curatorial Team",
+    "last_updated": "2026-08-31"
+  }
+}

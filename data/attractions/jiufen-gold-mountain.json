@@ -1,0 +1,108 @@
+{
+  "id": "jiufen-gold-mountain",
+  "name": {
+    "zh_TW": "九份山城與金瓜石礦業遺址",
+    "en": "Jiufen Old Street & Jinguashi Gold Mountain"
+  },
+  "location": {
+    "city_zh": "新北市",
+    "city_en": "New Taipei City",
+    "district_zh": "瑞芳區",
+    "district_en": "Ruifang District",
+    "address_zh": "新北市瑞芳區基山街、豎崎路與金光路",
+    "address_en": "Jishan St., Shuqi Rd. & Jinguang Rd., Ruifang Dist., New Taipei City",
+    "coordinates": {
+      "lat": 25.1098,
+      "lng": 121.8452
+    }
+  },
+  "category": "industrial_heritage",
+  "eras": [
+    "Qing Dynasty (1683–1895)",
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1890,
+  "heritage_status": "Cultural Heritage Landscape & World Heritage Potential Site (臺灣世界遺產潛力點)",
+  "summary": {
+    "zh_TW": "從清末築路築鐵路意外發現金沙，到日治時期成為東亞第一金都『小香港』，現為依山傍海、茶香繚繞的懷舊文化山城。",
+    "en": "From late Qing railway workers discovering placer gold in 1890 to becoming 'Asia's Gold Capital' during the Japanese era, this mist-shrouded mountain settlement now captivates global travelers with its vertical stairways, teahouse culture, and cinematic nostalgia."
+  },
+  "historical_narrative": {
+    "zh_TW": "『九份』之名源自清代此地原本僅有九戶人家，每次對外採買日常物資皆需均分『九份』。1890年（光緒十六年），劉銘傳修築臺北至基隆鐵路工人於基隆河下游發現沙金，隨即掀起淘金熱潮，沿河上溯發現九份小金瓜金脈。1895年日本統治臺灣後，將礦權劃分給藤田組與顏雲年創辦之『臺陽礦業』，引進現代化坑道爆破與浮選冶煉技術，金瓜石與九份產金量躍居亞洲之冠，贏得『東亞第一金都』與入夜不夜城『小香港』稱號。1970年代金礦開採殆盡後一度沉寂，直到侯孝賢導演以此為背景拍攝威尼斯影展金獅獎電影《悲情城市》，以獨特的多雨石階梯、紅燈籠老茶樓與無敵山海景致重新驚豔全球。",
+    "en": "Originally a sleepy camphor-farming hamlet of just nine households ('Jiu Fen' literally means 'Nine Portions'), the area was transformed overnight in 1890 when railway workers building the Taipei-Keelung line stumbled upon placer gold flakes. During Japanese colonial rule, industrial extraction by Tanaka and the Taiwanese Taiyang Mining Company yielded unprecedented gold and copper tonnage, elevating Jinguashi-Jiufen to the premier gold producer in East Asia. After mines depleted in the 1970s, the mountain town gained global fame when visionary film director Hou Hsiao-hsien filmed the Venice Golden Lion winner 'A City of Sadness' (1989) here, celebrating its atmospheric staircases, lantern-lit hillside teahouses, and cinematic coastal mist."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1890",
+      "era_category": "Qing Dynasty",
+      "event_zh": "基隆河工人在七堵鐵橋下發現砂金，開啟九份金瓜石淘金熱潮。",
+      "event_en": "Railway laborers discovered gold flakes in the river, sparking the Great Gold Rush."
+    },
+    {
+      "year_or_era": "1896",
+      "era_category": "Japanese Colonial",
+      "event_zh": "日本政府頒布臺灣礦業條例，藤田組與田中組進駐現代化機械開採。",
+      "event_en": "Japanese mining conglomerates mechanized extraction, producing tons of pure gold."
+    },
+    {
+      "year_or_era": "1914",
+      "era_category": "Japanese Colonial",
+      "event_zh": "顏雲年向日商租賃九份礦區，奠定臺灣本土採礦龍頭『臺陽礦業』王國。",
+      "event_en": "Industrialist Yen Yun-nien founded Taiyang Mining, sharing wealth with local miners."
+    },
+    {
+      "year_or_era": "1971",
+      "era_category": "Post-WWII",
+      "event_zh": "金礦產量枯竭，台金公司與臺陽礦業陸續停採，山城歸於平靜。",
+      "event_en": "Mining operations ceased, entering a quiet two-decade interlude."
+    },
+    {
+      "year_or_era": "1989",
+      "era_category": "Modern Era",
+      "event_zh": "電影《悲情城市》榮獲威尼斯影展金獅獎，帶動九份國際觀光文藝復興。",
+      "event_en": "Hou Hsiao-hsien's film 'A City of Sadness' won the Venice Golden Lion, sparking a global renaissance."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "記錄了臺灣近代工業採礦、礦工奮鬥史以及從工業採礦重鎮轉型為國際知性觀光聚落的代表性軌跡。",
+    "why_it_matters_en": "A rare preserved mining landscape capturing Taiwan's industrial resilience, traditional hillside vernacular architecture, and film heritage.",
+    "architectural_highlights_zh": "依山面海的階梯式立體聚落、黑色油毛氈『黑紙頂』防雨屋頂、豎崎路陡峭石階與兩側紅燈籠老茶樓、金瓜石日式木造四連棟宿舍群。",
+    "architectural_highlights_en": "Steep hillside terraces connected by 300+ vertical stone steps; black asphalt tar-paper roofs (Hei Zhi Ding) designed to repel torrential monsoon rains; glowing red silk lanterns; and preserved 1930s Japanese timber official residences at the Gold Museum.",
+    "intangible_culture_zh": "九份獨特的慢活品茗茶藝文化、芋圓傳統手工點心與金瓜石煉金淘金工藝傳承。",
+    "intangible_culture_en": "Gongfu tea brewing traditions overlooking the Pacific, handmade taro balls (Yu Yuan), and gold-panning demonstrations."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "Jiufen's famous Shuqi Road consists of over 300 steep stone steps that can become slippery on rainy days. Wear non-slip walking shoes and bring an umbrella. Traditional teahouses generally charge a nominal table/tea fee per person for an authentic Gongfu tea ceremony experience.",
+    "etiquette_tips_zh": "豎崎路皆為陡峭石階，雨天路面濕滑請務必穿著防滑平底鞋並備雨具。茶藝館多依人頭計茶水費，可體驗正統功夫茶道。",
+    "must_see_spots_en": [
+      "Shuqi Road stone stairways illuminated by glowing red lanterns at twilight",
+      "A-Mei Teahouse (famed for its nostalgic tiered wooden structure overlooking the sea)",
+      "Shengping Theater (Taiwan's earliest modern theater in mining history, built in 1934)",
+      "Jinguashi Gold Museum (touch a 220kg 99.9% pure solid gold bullion ingot)"
+    ],
+    "must_see_spots_zh": [
+      "豎崎路陡峭階梯與傍晚點亮之紅燈籠",
+      "阿妹茶樓與九份海景品茗時光",
+      "昇平戲院（1934年建造之北臺灣最早現代戲院）",
+      "金瓜石黃金博物館（親手觸摸220公斤999純金大金磚與日式四連棟）"
+    ],
+    "recommended_duration_min": 180,
+    "transportation_en": "Take Taipei MRT Blue/Brown Line to 'Zhongxiao Fuxing Station' (Exit 2) and ride Keelung Bus 1062 directly to Jiufen Old Street (approx. 70 mins), or take TRA Train to Ruifang Station and transfer to Bus 788, 827, or 965.",
+    "transportation_zh": "搭乘台北捷運至『忠孝復興站』2號出口轉乘基隆客運1062直達九份老街；或搭火車至瑞芳站轉乘公車788、827、965號。",
+    "best_time_to_visit": "Late afternoon (4:00 PM - 8:00 PM) to watch sunset turn into twilight when red lanterns illuminate the mountain."
+  },
+  "tags": [
+    "gold_rush",
+    "teahouse_culture",
+    "a_city_of_sadness",
+    "red_lanterns",
+    "mountain_and_ocean",
+    "world_heritage_potential"
+  ],
+  "metadata": {
+    "source": "New Taipei City Tourism and Travel Department & Gold Museum",
+    "generated_by": "Taiwan-Guidebook Curatorial Team",
+    "last_updated": "2026-08-31"
+  }
+}

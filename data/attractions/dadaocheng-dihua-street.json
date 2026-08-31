@@ -1,0 +1,102 @@
+{
+  "id": "dadaocheng-dihua-street",
+  "name": {
+    "zh_TW": "大稻埕迪化街歷史街區",
+    "en": "Dadaocheng Dihua Street Historic District"
+  },
+  "location": {
+    "city_zh": "臺北市",
+    "city_en": "Taipei City",
+    "district_zh": "大同區",
+    "district_en": "Datong District",
+    "address_zh": "臺北市大同區迪化街一段",
+    "address_en": "Sec. 1, Dihua St., Datong Dist., Taipei City",
+    "coordinates": {
+      "lat": 25.0569,
+      "lng": 121.5101
+    }
+  },
+  "category": "historic_street_district",
+  "eras": [
+    "Qing Dynasty (1683–1895)",
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1853,
+  "heritage_status": "Historic Settlement & Heritage Street Preservation Zone (歷史聚落與文化資產保存區)",
+  "summary": {
+    "zh_TW": "清末開港茶葉外銷全世界的起點，擁有全臺保存最完整的巴洛克與閩南長條街屋，匯聚中藥、南北貨、布匹與當代文創新生命。",
+    "en": "The epicenter of Taiwan's 19th-century Formosa Oolong tea boom. Home to the island's best-preserved Baroque-revival and Southern Fujianese shophouse streetscapes, bustling with Chinese herbal medicine, dried delicacies, textiles, and artisanal cafes."
+  },
+  "historical_narrative": {
+    "zh_TW": "1853年艋舺爆發嚴重的『頂下郊拚』械鬥，落敗的同安人由林佑藻率領帶著霞海城隍神像撤遷至大稻埕，因臨近淡水河碼頭腹地而迅速崛起。1860年天津條約臺灣正式開港通商，英商杜德（John Dodd）引進安溪茶苗並在大稻埕設茶廠精製『福爾摩沙烏龍茶（Formosa Oolong Tea）』直銷歐美，讓大稻埕迅速成為臺灣面向世界的首富之地與各國領事洋行聚集所。日治時期實施市區改正，富裕的布商、中藥商與南北貨行家競相在迪化街興建華麗的仿巴洛克山牆與洗石子洋樓。現今迪化街完整保留了深達數十公尺、前店中坊後倉的傳統長條形街屋，並轉型為結合傳統老行號與青年文創咖啡空間的迷人街區。",
+    "en": "Following the 1853 immigrant clash in Bangka, refugees led by Lin You-zao settled along the tranquil Tamsui riverside, founding Dadaocheng ('Large Rice-Drying Field'). When the port opened to Western trade in 1860, Scottish merchant John Dodd and tea master Li Chun-sheng pioneered the export of premium Formosa Oolong tea to New York and London, sparking Taiwan's tea golden age. Dadaocheng swiftly surpassed Bangka as Taipei's richest cosmopolitan quarter, hosting European consulates, shipping firms, and opera theaters. During the Japanese colonial period, prosperous textile and herbal medicine tycoons adorned Dihua Street with elaborate Baroque-style pediments and ornate stucco relief. Today, the 3-entry deep shophouses remain vibrant living heritage."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1853",
+      "era_category": "Late Qing",
+      "event_zh": "頂下郊拚事件後，同安人移居大稻埕建街，形成中街、南街早期聚落。",
+      "event_en": "Settlers founded commercial rows following the Bangka conflict, building early shophouses."
+    },
+    {
+      "year_or_era": "1869",
+      "era_category": "Late Qing",
+      "event_zh": "約翰·杜德載運兩艘帆船的福爾摩沙烏龍茶直銷紐約獲空前好評，開啟臺灣茶葉黃金年代。",
+      "event_en": "John Dodd shipped Formosa Oolong to New York, unleashing the global Taiwanese tea boom."
+    },
+    {
+      "year_or_era": "1895-1920",
+      "era_category": "Japanese Colonial",
+      "event_zh": "日治市區改正，茶商、布行與藥商興建精雕細琢之仿巴洛克洋樓立面。",
+      "event_en": "Urban redesign created grand Baroque and Art Deco stucco facades with family crests."
+    },
+    {
+      "year_or_era": "1996",
+      "era_category": "Modern Era",
+      "event_zh": "發起『我愛迪化街』保存運動，成功阻止拆除拓寬，轉型為全臺首座歷史風貌保存特區。",
+      "event_en": "Citizens and architects halted demolition, establishing Taiwan's premier historic preservation zone."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "見證臺灣近代商業文明萌芽、全球化茶葉貿易與現代化市民文化的活態歷史街區。",
+    "why_it_matters_en": "A vibrant living testimony to Taiwan's integration into global trade, East-meets-West architecture, and mercantile culture.",
+    "architectural_highlights_zh": "閩南式瓦頂街屋、仿巴洛克山牆雕飾（鮑魚勳章飾、麒麟琴棋書畫商標）、現代主義折衷洗石子立面、三進式狹長天井街屋建築。",
+    "architectural_highlights_en": "Four distinct architectural styles along one corridor: Southern Fujianese brick cottages, Western Baroque pediments with ornate merchant crests, Japanese Showa-period modernism, and traditional 3-courtyard elongated shophouses featuring hidden tranquil atriums (Tianjing).",
+    "intangible_culture_zh": "每年農曆年前全臺規模最大之『年貨大街』，以及台北霞海城隍廟月老牽紅線祈求良緣之信仰熱潮。",
+    "intangible_culture_en": "The exuberant Lunar New Year Market (Nianhuo Dajie) and Taipei Xiahai City God Temple, globally famous for its matchmaker deity (Yuelao) uniting souls in love."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "Many herbal medicine and dry goods shops display free samples of dried fruit, nuts, and herbal tea—feel free to taste respectfully before purchasing. If visiting the famous Xiahai City God Temple to pray for love, follow the English guide brochure available at the reception counter.",
+    "etiquette_tips_zh": "中藥南北貨老店常提供果乾茶飲試吃，請禮貌品嚐。霞海城隍廟求姻緣流程備有英文解說單，可向廟方服務處洽詢。",
+    "must_see_spots_en": [
+      "Taipei Xiahai City God Temple (famed worldwide for the Chinese Matchmaker God Yuelao)",
+      "Traditional 3-courtyard historic shophouses with hidden garden cafes and tea studios",
+      "Yongle Fabric Market (Taiwan's largest textile and tailor paradise)",
+      "Dadaocheng Wharf (Pier 5 container market and sunset bike path along Tamsui River)"
+    ],
+    "must_see_spots_zh": [
+      "台北霞海城隍廟（月老靈驗享譽國際）",
+      "三進式長條老街屋天井文創茶館（如合勝堂、進益採買等）",
+      "永樂布業商場（全臺最大布料批發與旗袍手工藝中心）",
+      "大稻埕碼頭（PIER5貨櫃市集與淡水河夕陽自行車道）"
+    ],
+    "recommended_duration_min": 150,
+    "transportation_en": "Take Taipei MRT Green Line to 'Beimen Station' (Exit 3) or Orange Line to 'Daqiaotou Station' (Exit 1), followed by a 7-minute stroll into Dihua Street.",
+    "transportation_zh": "搭乘台北捷運松山新店線至『北門站』3號出口，或中和新蘆線至『大橋頭站』1號出口，步行約7分鐘即達迪化街商圈。",
+    "best_time_to_visit": "Afternoon (1:00 PM - 6:00 PM) when all heritage cafes and boutiques are bustling, followed by river sunset at Dadaocheng Wharf."
+  },
+  "tags": [
+    "tea_trade",
+    "baroque_architecture",
+    "yuelao_matchmaker",
+    "traditional_medicine",
+    "craft_coffee",
+    "taipei_heritage"
+  ],
+  "metadata": {
+    "source": "Taipei City Department of Cultural Affairs & URS Historic Preservation Project",
+    "generated_by": "Taiwan-Guidebook Curatorial Team",
+    "last_updated": "2026-08-31"
+  }
+}

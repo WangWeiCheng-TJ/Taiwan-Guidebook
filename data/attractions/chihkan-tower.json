@@ -1,0 +1,110 @@
+{
+  "id": "chihkan-tower",
+  "name": {
+    "zh_TW": "赤崁樓",
+    "en": "Chihkan Tower (Fort Provintia)"
+  },
+  "location": {
+    "city_zh": "臺南市",
+    "city_en": "Tainan City",
+    "district_zh": "中西區",
+    "district_en": "West Central District",
+    "address_zh": "臺南市中西區民族路二段212號",
+    "address_en": "No. 212, Sec. 2, Minzu Rd., West Central Dist., Tainan City",
+    "coordinates": {
+      "lat": 22.9975,
+      "lng": 120.2026
+    }
+  },
+  "category": "historical_fortress",
+  "eras": [
+    "Dutch & Spanish Era (1624–1662)",
+    "Kingdom of Tungning (1661–1683)",
+    "Qing Dynasty (1683–1895)",
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1653,
+  "heritage_status": "National Historic Monument (國定古蹟)",
+  "summary": {
+    "zh_TW": "原為荷蘭人所建之普羅民遮城，歷經明鄭最高行政中樞與清代中式樓閣改建，是臺灣歷史更迭最具代表性的地標之一。",
+    "en": "Originally built by the Dutch East India Company as Fort Provintia in 1653, this landmark later served as Koxinga's supreme government center and was transformed into classical Chinese pavilions during the Qing Dynasty."
+  },
+  "historical_narrative": {
+    "zh_TW": "1653年郭懷一抗荷事件平息後，荷蘭人為了強化對漢人與原住民的防禦並掌控台江內海航道，建立了『普羅民遮城』（Fort Provintia，漢人俗稱紅毛樓或赤崁樓）。1661年鄭成功率軍東征，登陸鹿耳門後隨即攻下赤崁樓，並以此作為全島最高行政中心『承天府署』。進入清領時期後，原荷式紅毛樓建築因地震與風雨逐漸倒塌。19世紀末，清廷地方官員在荷蘭城堡的磚石殘基之上陸續興建了文昌閣、海神廟、蓬壺書院等傳統閩南風格閣樓。日治時期歷經整修與考古挖掘，使底層厚實的荷蘭磚紅基座與上方飛簷翹角的漢式樓閣融為一體。",
+    "en": "In 1653, following the Guo Huai-yi peasant rebellion, the Dutch VOC built Fort Provintia to control the inland Taijiang lagoon and administrative quarters. In 1661, General Koxinga (Zheng Chenggong) besieged the fortress, establishing his seat of government (Chengtian Prefecture). During the Qing Dynasty, earthquakes decimated the original European structures. In the late 19th century, Qing magistrates built classical Chinese pavilions—the Haishen (Sea God) Temple and Wenchang Pavilion—directly on top of the ancient Dutch red-brick bastions. The site is famous for its harmonious juxtaposition of 17th-century European bastion foundations and Qing-dynasty imperial architecture."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1653",
+      "era_category": "Dutch Formosa",
+      "event_zh": "荷蘭東印度公司建成普羅民遮城（Provintia），作為商業管理與防衛中心。",
+      "event_en": "Dutch East India Company erected Fort Provintia as their administrative stronghold."
+    },
+    {
+      "year_or_era": "1661",
+      "era_category": "Kingdom of Tungning",
+      "event_zh": "鄭成功收復臺灣，設赤崁樓為承天府，為治理臺灣的政治中樞。",
+      "event_en": "Koxinga captured Fort Provintia, designating it the supreme prefecture government office."
+    },
+    {
+      "year_or_era": "1788",
+      "era_category": "Qing Dynasty",
+      "event_zh": "清乾隆帝平定林爽文事件後，賜御製馱碑贔屭石龜九座安置於赤崁樓。",
+      "event_en": "Emperor Qianlong bestowed nine imperial honorific turtle-base steles (Bixi) following the pacification of the Lin Shuangwen rebellion."
+    },
+    {
+      "year_or_era": "1886",
+      "era_category": "Late Qing",
+      "event_zh": "台灣知縣沈受謙於荷蘭古基上改建海神廟與文昌閣。",
+      "event_en": "Magistrate Shen Shou-qian constructed Chinese classical pavilions (Sea God Temple & Wenchang Pavilion) over the ruins."
+    },
+    {
+      "year_or_era": "1944",
+      "era_category": "Japanese Colonial",
+      "event_zh": "日本學者與地方當局拆除雜建，發掘並修復荷蘭原始城壁棱堡殘跡。",
+      "event_en": "Japanese architectural historians excavated and conserved the original Dutch bastion masonry walls."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "赤崁樓是臺南作為臺灣古都的核心地標，凝結了荷蘭航海帝國、明鄭反清復明復興基地與清朝地方文教治理三重重大歷史意義。",
+    "why_it_matters_en": "Chihkan Tower is the quintessential cultural icon of Tainan, encapsulating three foundational epochs of Taiwan: the Dutch maritime empire, Koxinga's Southern Ming loyalist stronghold, and Qing imperial governance.",
+    "architectural_highlights_zh": "現存珍貴荷蘭原始紅磚稜堡遺跡（以糯米、糖水、蚵灰三合土砌築）、九座乾隆御賜贔屭御碑、文昌閣魁星爺雕像、瓶形門與斷足石馬。",
+    "architectural_highlights_en": "Key features include the surviving Dutch bastion wall constructed with traditional mortar composed of glutinous rice, sugar syrup, and crushed oyster shells; nine majestic Imperial Qianlong Bixi (dragon-headed turtle) granite steles; and the intricately carved Kuixing deity shrine worshiped by students for academic success.",
+    "intangible_culture_zh": "全臺考生祈求魁星爺金榜題名的信仰中心，以及台南中西區文史小吃聚落的核心源頭。",
+    "intangible_culture_en": "A revered pilgrimage spot where students and scholars pray to the God of Examinations (Kuixing) for academic and career breakthroughs."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "When visiting the Wenchang Pavilion on the second floor, speak quietly out of respect for worshippers. Rubbing the nose of the Qianlong turtle steles is traditionally believed to bring luck, but please touch gently without scratching the stone surfaces.",
+    "etiquette_tips_zh": "參觀二樓文昌閣與魁星殿時請放低音量以示尊重。園區草坪與古蹟本體請愛護維護。",
+    "must_see_spots_en": [
+      "Original 17th-century Dutch brick bastion gate and underground passageway entrance",
+      "Row of 9 imperial dragon-turtle (Bixi) steles granted by Emperor Qianlong",
+      "Statue and shrine of Kui Xing holding a calligraphy brush atop an Ao fish",
+      "Penghu Academy (Penghu Shuyuan) gate and surviving Qing wooden structure"
+    ],
+    "must_see_spots_zh": [
+      "荷蘭時代原始普羅民遮城紅磚城門與神秘地道傳說入口",
+      "乾隆御製九座贔屭馱碑群",
+      "二樓文昌閣魁星爺神像與祈願魁星筆",
+      "蓬壺書院遺存門廳與清代儒學講堂遺跡"
+    ],
+    "recommended_duration_min": 75,
+    "transportation_en": "From Tainan Railway Station, walk 15 minutes down Chenggong Road or take City Bus No. 3, 5, 88, or 99 directly to 'Chihkan Tower' (赤崁樓) stop.",
+    "transportation_zh": "由臺南火車站前站出發，步行約15分鐘，或搭乘大台南公車3路、5路、88路、99路至『赤崁樓』站即達。",
+    "best_time_to_visit": "Late afternoon leading into nightfall; the complex is beautifully illuminated with atmospheric spotlights after 6:00 PM."
+  },
+  "tags": [
+    "voc_dutch",
+    "koxinga",
+    "imperial_steles",
+    "tainan_old_capital",
+    "kuixing_exam_deity",
+    "national_monument"
+  ],
+  "metadata": {
+    "source": "Tainan City Cultural Affairs Bureau & Bureau of Cultural Heritage",
+    "generated_by": "Taiwan-Guidebook Curatorial Team",
+    "last_updated": "2026-08-31"
+  }
+}

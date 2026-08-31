@@ -1,0 +1,115 @@
+{
+  "id": "fort-san-domingo",
+  "name": {
+    "zh_TW": "淡水紅毛城",
+    "en": "Fort San Domingo"
+  },
+  "location": {
+    "city_zh": "新北市",
+    "city_en": "New Taipei City",
+    "district_zh": "淡水區",
+    "district_en": "Tamsui District",
+    "address_zh": "新北市淡水區中正路28巷1號",
+    "address_en": "No. 1, Ln. 28, Zhongzheng Rd., Tamsui Dist., New Taipei City",
+    "coordinates": {
+      "lat": 25.1754,
+      "lng": 121.4328
+    }
+  },
+  "category": "historical_fortress",
+  "eras": [
+    "Dutch & Spanish Era (1624–1662)",
+    "Qing Dynasty (1683–1895)",
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1628,
+  "heritage_status": "National Historic Monument (國定古蹟)",
+  "summary": {
+    "zh_TW": "坐落於淡水河口的戰略堡壘，見證近四百年大航海時代以來的政權更迭與北台灣對外貿易興衰。",
+    "en": "A legendary strategic fortress overlooking the Tamsui River mouth, witnessing nearly 400 years of geopolitical shifts, naval battles, and international diplomacy since the Age of Discovery."
+  },
+  "historical_narrative": {
+    "zh_TW": "淡水紅毛城最早由西班牙人於1628年建立，名為聖多明哥城（Fort San Domingo），作為鞏固北臺灣統治與貿易的據點。1642年荷蘭人將西班牙人逐出北臺灣後，在原地以堅固石材重建並命名為安東尼堡（Fort Antonio）。由於當時漢人稱荷蘭人為『紅毛番』，此堡壘遂被稱為『紅毛城』。歷經明鄭、清代改建並增設城門砲台，1867年英國政府向清廷租借該處作為英國領事館，並於主堡旁擴建紅磚拱廊洋樓作為領事官邸。這座古堡先後飄揚過西班牙、荷蘭、明鄭、清朝、英國、日本、澳大利亞、美國及中華民國共9面旗幟，堪稱臺灣近代史的縮影。",
+    "en": "Fort San Domingo was originally constructed with wood and earth in 1628 by the Spanish empire as a Northern Taiwan outpost to protect trade routes between Manila and Japan. In 1642, the Dutch East India Company expelled the Spanish and rebuilt a stone bastion named Fort Antonio in 1644. Taiwanese locals called the red-haired Dutch 'Hongmao', giving rise to the site's enduring moniker 'Hongmao Castle' (Red Hair Fort). Through the Qing Dynasty, it served as maritime coastal defense. In 1867, the British Empire leased the compound as their British Consulate, later erecting a stately Victorian red-brick consular residence with Victorian tilework. Nine sovereign flags have flown over this strategic hilltop across nearly four centuries."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1628",
+      "era_category": "Spanish Colonial",
+      "event_zh": "西班牙人進駐淡水，建立木造聖多明哥城（San Domingo）。",
+      "event_en": "Spanish conquistadors landed in Tamsui and erected the wooden Fort San Domingo."
+    },
+    {
+      "year_or_era": "1644",
+      "era_category": "Dutch Formosa",
+      "event_zh": "荷蘭人擊退西班牙人後，以厚重石材重建安東尼堡（Fort Antonio）。",
+      "event_en": "Dutch East India Company rebuilt the stone fortification and named it Fort Antonio."
+    },
+    {
+      "year_or_era": "1724",
+      "era_category": "Qing Dynasty",
+      "event_zh": "淡水廳同知王汧重修紅毛城，並增築南門與東門等外牆防禦設施。",
+      "event_en": "Qing officials refurbished the fort, adding defensive perimeter walls and gates."
+    },
+    {
+      "year_or_era": "1867",
+      "era_category": "Qing / British Lease",
+      "event_zh": "英國政府簽署永久租約作為領事館，並將外牆粉刷為現今醒目的紅色。",
+      "event_en": "British Empire signed a perpetual lease for the compound as a consular headquarters."
+    },
+    {
+      "year_or_era": "1891",
+      "era_category": "Late Qing",
+      "event_zh": "英國領事官邸落成，展現維多利亞紅磚迴廊建築美學。",
+      "event_en": "The two-story Victorian consular residence with colonial verandahs was completed."
+    },
+    {
+      "year_or_era": "1980",
+      "era_category": "Modern Era",
+      "event_zh": "產權由中華民國政府正式收回，現開放為新北市立淡水古蹟博物館。",
+      "event_en": "The property was officially returned to Taiwan and opened to the public as a living museum."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "紅毛城是臺灣現存歷史最悠久的古蹟之一，具體展現了17世紀歐洲重商主義擴張、大航海時代的海洋地緣政治，以及19世紀開港通商後西方外交建築風格在臺灣的融合。",
+    "why_it_matters_en": "Fort San Domingo is one of Taiwan's oldest standing architectural complexes. It encapsulates 17th-century European mercantilism, Age of Discovery geopolitics, and 19th-century colonial diplomatic heritage.",
+    "architectural_highlights_zh": "主堡牆厚達1.9公尺，具備防砲轟拱頂與地牢；領事官邸則呈現精湛的英國維多利亞風格，包括清水紅磚、綠釉花瓶欄杆、VR1891維多利亞女王徽號磚雕以及引進自英國的Minton地磚。",
+    "architectural_highlights_en": "The main fortress features 1.9-meter-thick stone walls with bombproof barrel-vaulted ceilings. The consular residence boasts classic British Victorian verandah architecture, VR 1891 monogram brick carvings, green glazed bottle balustrades, and authentic Victorian encaustic tiles imported from Britain.",
+    "intangible_culture_zh": "見證淡水夕照與淡江水運的人文記憶，是淡水開港歷史的核心符號。",
+    "intangible_culture_en": "Symbolizes Tamsui's transformation from an aboriginal river port to an international tea and camphor export harbor."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "Wear comfortable walking shoes as the estate is built on a gentle slope with cobblestones. Photography is allowed, but flash is prohibited inside historic rooms. Preserved historical interior floors require shoe covers or adherence to designated pathways.",
+    "etiquette_tips_zh": "園區包含坡道與石階步道，建議穿著舒適步行鞋。室內古蹟展廳禁止使用閃光燈，請依循導覽動線參觀。",
+    "must_see_spots_en": [
+      "Dutch-era underground prison cells and defensive ramparts",
+      "Victorian consular dining room with English fireplace and Minton floor tiles",
+      "17th-century muzzle-loading bronze and iron cannons placed in the courtyard",
+      "Hilltop panoramic lookout facing the Tamsui River mouth and Mount Guanyin"
+    ],
+    "must_see_spots_zh": [
+      "主堡荷蘭地牢與厚重穹頂防禦結構",
+      "英國領事官邸壁爐、僕役呼叫鈴與英國進口彩釉地磚",
+      "庭園中清代嘉慶年間鑄造的古砲群",
+      "俯瞰淡水河口與觀音山日落的眺望平台"
+    ],
+    "recommended_duration_min": 90,
+    "transportation_en": "Take Taipei Metro (MRT) Red Line to the terminal 'Tamsui Station', then transfer to Bus R26, 836, or 857 to 'Fort San Domingo (紅毛城)' stop, or enjoy a scenic 15-minute riverside walk from the station.",
+    "transportation_zh": "搭乘台北捷運淡水信義線至『淡水站』，轉乘公車紅26、836至『紅毛城(真理大學)站』，或沿淡水金色水岸步道步行約15分鐘。",
+    "best_time_to_visit": "Late afternoon (3:30 PM - 5:30 PM) to catch the golden hour light on the red bricks and the famous Tamsui sunset."
+  },
+  "tags": [
+    "colonial_fortress",
+    "age_of_discovery",
+    "victorian_architecture",
+    "tamsui_river",
+    "national_monument",
+    "sunset_viewpoint"
+  ],
+  "metadata": {
+    "source": "Bureau of Cultural Heritage, Ministry of Culture, Taiwan & Tamsui Historical Museum",
+    "generated_by": "Taiwan-Guidebook Curatorial Team",
+    "last_updated": "2026-08-31"
+  }
+}

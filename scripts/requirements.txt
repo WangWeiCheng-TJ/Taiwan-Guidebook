@@ -1,0 +1,3 @@
+# Optional dependencies (the core generator uses Python standard library)
+jsonschema>=4.20.0
+python-dotenv>=1.0.0
