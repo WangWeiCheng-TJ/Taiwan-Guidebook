@@ -723,7 +723,7 @@ for spot in db['attractions']:
     print(f"[{spot['established_year'] or 'Unknown'}] {spot['name']['zh_TW']} ({spot['name']['en']})")
 `,
     curl: `# cURL to inspect or download the JSON database
-curl -s "https://raw.githubusercontent.com/Taiwan-Guidebook/taiwan-guidebook/main/data/taiwan_attractions.json" | jq '.attractions[0]'
+curl -s "https://raw.githubusercontent.com/WangWeiCheng-TJ/Taiwan-Guidebook/main/data/taiwan_attractions.json" | jq '.attractions[0]'
 `
   };
 

@@ -134,7 +134,7 @@ def build():
             "total_count": len(attractions),
             "generated_at": "2026-08-31",
             "license": "CC-BY-4.0",
-            "repository": "https://github.com/Taiwan-Guidebook/taiwan-guidebook"
+            "repository": "https://github.com/WangWeiCheng-TJ/Taiwan-Guidebook"
         },
         "eras_index": [
             "Prehistoric & Indigenous",

@@ -140,7 +140,7 @@ python scripts/build_dataset.py
 ### 1. JavaScript (Web / Node.js)
 ```javascript
 // 透過 fetch 讀取所有景點資料
-fetch('https://raw.githubusercontent.com/YOUR_USERNAME/Taiwan-Guidebook/main/data/taiwan_attractions.json')
+fetch('https://raw.githubusercontent.com/WangWeiCheng-TJ/Taiwan-Guidebook/main/data/taiwan_attractions.json')
   .then(response => response.json())
   .then(data => {
     console.log(`已成功載入 ${data.attractions.length} 處臺灣歷史名勝`);
@@ -155,7 +155,7 @@ fetch('https://raw.githubusercontent.com/YOUR_USERNAME/Taiwan-Guidebook/main/dat
 import json
 import urllib.request
 
-url = "https://raw.githubusercontent.com/YOUR_USERNAME/Taiwan-Guidebook/main/data/taiwan_attractions.json"
+url = "https://raw.githubusercontent.com/WangWeiCheng-TJ/Taiwan-Guidebook/main/data/taiwan_attractions.json"
 with urllib.request.urlopen(url) as response:
     db = json.loads(response.read().decode('utf-8'))
 
@@ -172,8 +172,8 @@ for spot in db["attractions"]:
 ```bash
 # 1. 在 GitHub 上建立一個新的 Repository (例如: Taiwan-Guidebook)
 
-# 2. 設定遠端庫網址 (將 YOUR_USERNAME 換成您的 GitHub 帳號)
-git remote add origin https://github.com/YOUR_USERNAME/Taiwan-Guidebook.git
+# 2. 設定遠端庫網址
+git remote add origin https://github.com/WangWeiCheng-TJ/Taiwan-Guidebook.git
 
 # 3. 命名主分支為 main
 git branch -M main
