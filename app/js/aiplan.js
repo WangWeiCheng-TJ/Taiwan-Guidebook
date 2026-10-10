@@ -14,7 +14,13 @@ import { parseTrip } from './trip.js';
  * @returns {string}
  */
 export function planRequestSuffix() {
-  throw new Error('TODO(T2): planRequestSuffix');
+  return [
+    'Format your suggested itinerary as exactly one ```json fenced code block in the Trip shape, using guidebook ids in "place" when a stop is in the guidebook and "name" otherwise.',
+    'Example (one line):',
+    '```json',
+    '{"title":"Day trip","days":[{"date":"2026-11-04","items":[{"time":"09:00","place":"chihkan-tower","note":"visit"},{"name":"Curry shop"}]}]}',
+    '```',
+  ].join('\n');
 }
 
 /**
@@ -25,7 +31,55 @@ export function planRequestSuffix() {
  * @returns {string|null}  the raw JSON text, or null if nothing found
  */
 export function extractJsonBlock(text) {
-  throw new Error('TODO(T2): extractJsonBlock');
+  if (typeof text !== 'string') return null;
+
+  const jsonMatch = text.match(/```+[ \t]*json\b[ \t]*\r?\n?([\s\S]*?)```+/i);
+  if (jsonMatch) {
+    return jsonMatch[1].trim();
+  }
+
+  const fenceRegex = /```+[ \t]*[^\n\r`]*\r?\n?([\s\S]*?)```+/g;
+  let match;
+  while ((match = fenceRegex.exec(text)) !== null) {
+    const content = match[1].trim();
+    if (content.startsWith('{')) {
+      return content;
+    }
+  }
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '{') {
+      let depth = 0;
+      let inString = false;
+      let escape = false;
+      for (let j = i; j < text.length; j++) {
+        const ch = text[j];
+        if (inString) {
+          if (escape) {
+            escape = false;
+          } else if (ch === '\\') {
+            escape = true;
+          } else if (ch === '"') {
+            inString = false;
+          }
+        } else {
+          if (ch === '"') {
+            inString = true;
+            escape = false;
+          } else if (ch === '{') {
+            depth++;
+          } else if (ch === '}') {
+            depth--;
+            if (depth === 0) {
+              return text.slice(i, j + 1);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return null;
 }
 
 /**
@@ -38,7 +92,42 @@ export function extractJsonBlock(text) {
  * @returns {{ trip: Trip|null, errors: string[] }}
  */
 export function planFromAiText(text, places) {
-  throw new Error('TODO(T2): planFromAiText');
-}
+  const jsonText = extractJsonBlock(text);
+  if (!jsonText) {
+    return { trip: null, errors: ['No plan found in the text.'] };
+  }
 
-void parseTrip;
+  let data;
+  try {
+    data = JSON.parse(jsonText);
+  } catch {
+    return { trip: null, errors: ['The plan is not valid JSON.'] };
+  }
+
+  if (data && typeof data === 'object' && Array.isArray(data.days) && Array.isArray(places)) {
+    for (const day of data.days) {
+      if (day && typeof day === 'object' && Array.isArray(day.items)) {
+        for (const item of day.items) {
+          if (item && typeof item === 'object') {
+            const hasPlace = typeof item.place === 'string' && item.place.trim().length > 0;
+            if (!hasPlace && typeof item.name === 'string') {
+              const target = item.name.trim().toLowerCase();
+              if (target) {
+                const match = places.find(p => {
+                  const en = typeof p?.name?.en === 'string' ? p.name.en.trim().toLowerCase() : '';
+                  const zh = typeof p?.name?.zh_TW === 'string' ? p.name.zh_TW.trim().toLowerCase() : '';
+                  return target === en || target === zh;
+                });
+                if (match) {
+                  item.place = match.id;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return parseTrip(data);
+}
