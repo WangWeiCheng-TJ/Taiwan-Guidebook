@@ -14,7 +14,7 @@ Collected from usage review. Fix together at the end unless noted. Newest decisi
 
 ## Places
 
-- **Must-see reasons** exist only for Chihkan Tower. Generate `foreign_visitor_guide.must_see` for the other places with `scripts/generate_spot.py`, then review (they are factual claims).
+- Must-see reasons: done for all six places (agy wrote them from each entry; reviewed). New places need them too: update `scripts/generate_spot.py` to produce `must_see`.
 - **Knowledge topics** (Taiwanese folk religion, Wenchang / Kuixing, temple layout...): design in `docs/ARCHITECTURE.md`, phase 3.
 
 ## App
