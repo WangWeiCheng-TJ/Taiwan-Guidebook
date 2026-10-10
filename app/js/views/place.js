@@ -107,8 +107,9 @@ function isAppleDevice() {
 }
 
 /**
- * "Useful here": a few phrases picked by the kind of place, compact (Chinese + meaning + Show),
- * with a link to the full category on the Phrases tab.
+ * "Useful here": a few phrases picked by the kind of place. Tapping a row opens it in a sheet
+ * (data-action="phrase-sheet"); "More phrases" opens the whole category in a sheet
+ * (data-action="phrases-sheet" data-group), so the user never leaves this page.
  * @param {import('../state.js').AppState} s
  * @param {import('../types.js').Place} p
  * @returns {string}
@@ -118,11 +119,11 @@ function usefulPhrases(s, p) {
   const list = phrasesForPlace(p, s.data.phrases);
   if (!list.length) return '';
   return `<h2>${tr(L, 'usefulHere')}</h2>
-    ${list.map(ph => `<div class="row spread phrase-row">
+    ${list.map(ph => `<button class="phrase-row" data-action="phrase-sheet" data-id="${esc(ph.id)}">
       <span><span class="zh-inline" lang="zh-TW">${esc(ph.zh_TW)}</span> <span class="muted small">${esc(ph.en)}</span></span>
-      <button class="btn small" data-action="show-phrase" data-id="${esc(ph.id)}">${tr(L, 'show')}</button>
-    </div>`).join('')}
-    <p class="small"><a href="#/phrases/${mainGroupForPlace(p)}">${tr(L, 'morePhrases')}</a></p>`;
+      <span class="chev" aria-hidden="true">›</span>
+    </button>`).join('')}
+    <button class="linklike small" data-action="phrases-sheet" data-group="${mainGroupForPlace(p)}">${tr(L, 'morePhrases')}</button>`;
 }
 
 /**

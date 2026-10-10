@@ -75,3 +75,25 @@ export function speak(text) {
   speechSynthesis.cancel();
   speechSynthesis.speak(u);
 }
+
+/**
+ * Bottom sheet over the current page: keeps the page and its scroll position underneath.
+ * Clicks inside are dispatched by main.js like clicks in #view.
+ * @param {string} title  plain text
+ * @param {string} html   trusted markup; callers must esc() any data inside
+ * @returns {void}
+ */
+export function openSheet(title, html) {
+  const el = document.getElementById('sheet');
+  el.querySelector('.sheet-title').textContent = title;
+  el.querySelector('.sheet-body').innerHTML = html;
+  el.querySelector('.sheet-body').scrollTop = 0;
+  el.hidden = false;
+  document.body.classList.add('no-scroll');
+}
+
+/** @returns {void} */
+export function closeSheet() {
+  document.getElementById('sheet').hidden = true;
+  document.body.classList.remove('no-scroll');
+}

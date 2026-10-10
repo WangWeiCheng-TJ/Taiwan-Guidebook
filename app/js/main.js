@@ -9,13 +9,14 @@ import { LOG_KEY, emptyDraft, validateDraft, makeEntry, newId, removeEntry, merg
 import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
-import { toast, copyText, showBig, hideBig, speak } from './ui.js';
+import { toast, copyText, showBig, hideBig, speak, openSheet, closeSheet } from './ui.js';
 import { tr, trMsg, LANG_KEY, otherLang } from './lang.js';
 import { renderExplore } from './views/explore.js';
 import { renderPlace, driverCard } from './views/place.js';
 import { renderLog } from './views/log.js';
 import { renderAsk, askContext } from './views/ask.js';
-import { renderPhrases, renderTips, phraseCard } from './views/reference.js';
+import { renderPhrases, renderTips, phraseCard, phraseCardFull } from './views/reference.js';
+import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 
 const view = document.getElementById('view');
 
@@ -56,7 +57,7 @@ function render() {
   view.innerHTML = (views[tab] || views.explore)();
 }
 
-window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
+window.addEventListener('hashchange', () => { closeSheet(); render(); window.scrollTo(0, 0); });
 
 // ---------- State changes ----------
 
@@ -154,6 +155,16 @@ function exportLog() {
 const actions = {
   locate: () => locateMe(),
   'clear-location': () => { state.pos = null; render(); },
+  'phrase-sheet': el => {
+    const ph = state.data.phrases.find(x => x.id === el.dataset.id);
+    if (ph) openSheet(ph.en, phraseCardFull(ph, state.lang));
+  },
+  'phrases-sheet': el => {
+    const g = PHRASE_GROUPS.find(x => x.id === el.dataset.group);
+    if (!g) return;
+    openSheet(`${g.icon} ${tr(state.lang, `cat.${g.id}`)}`, phrasesIn(state.data.phrases, g.id).map(ph => phraseCardFull(ph, state.lang)).join(''));
+  },
+  'close-sheet': () => closeSheet(),
   city: el => { state.exploreCity = el.dataset.city; render(); },
   driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
   'show-phrase': el => showBig(phraseCard(state.data.phrases.find(x => x.id === el.dataset.id))),
@@ -201,12 +212,19 @@ const actions = {
   },
 };
 
-view.addEventListener('click', e => {
+function dispatchClick(e) {
   const el = e.target.closest('[data-action]');
   if (el && actions[el.dataset.action]) {
     e.preventDefault();
     actions[el.dataset.action](el);
   }
+}
+view.addEventListener('click', dispatchClick);
+document.getElementById('sheet').addEventListener('click', dispatchClick);
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!document.getElementById('bigcard').hidden) hideBig();
+  else closeSheet();
 });
 
 document.getElementById('bigcard').addEventListener('click', hideBig);
