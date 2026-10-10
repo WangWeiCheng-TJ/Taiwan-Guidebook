@@ -7,6 +7,8 @@ import { writeJSON } from './storage.js';
 import { loadGuidebook, placeById } from './data.js';
 import { LOG_KEY, emptyDraft, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
 import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel } from './prompt.js';
+import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
+import { planFromAiText } from './aiplan.js';
 import { toast, copyText, showBig, hideBig, speak } from './ui.js';
 import { renderExplore } from './views/explore.js';
 import { renderPlace, driverCard } from './views/place.js';
@@ -59,6 +61,32 @@ window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); }
 /** Persist the log; tell the user if the device refused. */
 function saveLog() {
   if (!writeJSON(LOG_KEY, state.log)) toast('Could not save on this device (storage blocked or full).');
+}
+
+/**
+ * Replace (or remove, with null) the current plan and persist it.
+ * @param {import('./types.js').Trip|null} trip
+ */
+function setTrip(trip) {
+  state.trip = trip;
+  state.tripDate = null;
+  state.pasteOpen = false;
+  if (!writeJSON(TRIP_KEY, trip)) toast('Could not save on this device (storage blocked or full).');
+}
+
+/** Load a plan shared as ?trip=<https url>, then drop the parameter so reloads don't refetch. */
+async function loadSharedTrip() {
+  const url = tripUrlFrom(location.search);
+  if (!url) return;
+  history.replaceState(null, '', location.pathname + location.hash);
+  const { trip, errors } = await loadTrip(url);
+  if (trip) {
+    setTrip(trip);
+    toast(`Plan loaded: ${trip.title}`);
+    render();
+  } else {
+    toast(errors[0]);
+  }
 }
 
 function locateMe() {
@@ -144,6 +172,22 @@ const actions = {
   },
   export: () => exportLog(),
   mode: el => { state.ask.mode = el.dataset.mode; render(); },
+  'paste-plan': () => {
+    const text = view.querySelector('[data-input="ai-answer"]')?.value || '';
+    const { trip, errors } = planFromAiText(text, places());
+    if (!trip) return toast(errors[0]);
+    setTrip(trip);
+    toast(`Plan loaded: ${trip.title}`);
+    render();
+  },
+  'paste-plan-again': () => { state.pasteOpen = true; render(); },
+  'cancel-paste': () => { state.pasteOpen = false; render(); },
+  'clear-trip': () => {
+    if (!confirm('Remove this plan from the phone?')) return;
+    setTrip(null);
+    render();
+  },
+  'trip-day': el => { state.tripDate = el.dataset.date; render(); },
   'copy-prompt': async () => {
     const ok = await copyText(buildAskPrompt(askContext(state)));
     toast(ok ? 'Copied. Now paste it into your AI app.' : 'Copy failed. Select the preview text instead.');
@@ -168,6 +212,7 @@ view.addEventListener('change', async e => {
     case 'day': state.ask.day = el.value; refreshQuestion(); break;
     case 'area': state.ask.area = el.value; render(); break;
     case 'include-log': state.ask.includeLog = el.checked; refreshPreview(); break;
+    case 'want-plan': state.ask.wantPlan = el.checked; refreshPreview(); break;
     case 'import': await importLog(el.files[0]); break;
   }
   if (el.form?.dataset.form === 'log' && el.name) {
@@ -212,6 +257,7 @@ async function init() {
     return;
   }
   render();
+  await loadSharedTrip();
 }
 
 if ('serviceWorker' in navigator) {

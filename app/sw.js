@@ -3,7 +3,7 @@
 // When guidebook.json changes in the background, open pages get a 'data-updated' message.
 // Bump CACHE when the SHELL list changes.
 
-const CACHE = 'tg-v1';
+const CACHE = 'tg-v2';
 const DATA = 'data/guidebook.json';
 const SHELL = [
   './',
@@ -29,6 +29,7 @@ const SHELL = [
   'js/views/log.js',
   'js/views/ask.js',
   'js/views/reference.js',
+  'js/views/trip.js',
   'js/trip.js',
   'js/aiplan.js',
   'js/i18n.js',
@@ -36,7 +37,10 @@ const SHELL = [
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  // cache: 'reload' bypasses the HTTP cache, or a host's max-age could precache stale files
+  e.waitUntil(caches.open(CACHE)
+    .then(c => c.addAll(SHELL.map(u => new Request(u, { cache: 'reload' }))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
@@ -58,7 +62,7 @@ async function staleWhileRevalidate(e) {
   const isData = new URL(e.request.url).pathname.endsWith(DATA);
   const cached = await cache.match(e.request, { ignoreSearch: true });
 
-  const refresh = fetch(e.request).then(async res => {
+  const refresh = fetch(e.request, { cache: 'no-cache' }).then(async res => {
     if (res.ok) {
       if (isData && cached) {
         const [oldText, newText] = await Promise.all([cached.clone().text(), res.clone().text()]);

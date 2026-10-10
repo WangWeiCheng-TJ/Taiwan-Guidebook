@@ -54,5 +54,5 @@ Only summaries go into the area prompt. A full place entry is about 7.6 KB bilin
 ## Phases
 
 1. **POC (done):** offline PWA, places with distance sort, place detail, show-to-driver, navigation links, trip log with export/import, phrases, tips, Ask AI (near me / plan a day).
-2. **Specified, not implemented** (`docs/SPEC.md`): T1 itineraries and `?trip=<url>`, T2 paste the AI's answer back as an itinerary, T3 trip UI, T4a i18n building blocks.
+2. **Itineraries (done):** load a plan from `?trip=<https url>` or paste the AI's answer back (Ask AI, "Ask for a plan I can paste back"); plan shown on My trip, today's stops on Explore, and fed into later Ask AI prompts. T4a i18n building blocks pending (`docs/SPEC.md`).
 3. Later: T4b switch data to per-language maps (`{ "zh_TW": ..., "en": ... }`); `story` type linking several places; optional embedded map.

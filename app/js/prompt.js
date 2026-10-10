@@ -4,6 +4,8 @@ import { addDays } from './util.js';
 import { distanceTo, fmtKm, sortByDistance } from './geo.js';
 import { cities, districtsOf } from './data.js';
 import { dayNumber, entryName } from './triplog.js';
+import { tripBlock } from './trip.js';
+import { planRequestSuffix } from './aiplan.js';
 
 /** @typedef {import('./types.js').Place} Place */
 /** @typedef {import('./types.js').Pos} Pos */
@@ -105,12 +107,13 @@ export function defaultQuestion(mode, day, area) {
  * @param {Place} place
  * @param {number} index        0-based; printed as index + 1
  * @param {number|null} distKm  printed when not null
+ * @param {boolean} [withId]    append " [id: <id>]" so the AI can reference the place in a JSON plan
  * @returns {string}
  */
-export function placeBrief(place, index, distKm) {
+export function placeBrief(place, index, distKm, withId = false) {
   const g = place.foreign_visitor_guide || {};
   const lines = [
-    `${index + 1}. ${place.name.en} (${place.name.zh_TW}), ${place.location.district_en}, ${place.location.city_en}${distKm != null ? `, ${fmtKm(distKm)} away` : ''}`,
+    `${index + 1}. ${place.name.en} (${place.name.zh_TW}), ${place.location.district_en}, ${place.location.city_en}${distKm != null ? `, ${fmtKm(distKm)} away` : ''}${withId ? ` [id: ${place.id}]` : ''}`,
     `   ${place.summary.en}`,
   ];
   if (g.must_see_spots_en?.length) lines.push(`   Don't miss: ${g.must_see_spots_en.join('; ')}`);
@@ -141,9 +144,11 @@ export function logBlock(log, places) {
  * 1. who/when (+ trip day number if the log is not empty)
  * 2. near: where I am (GPS rounded to 3 decimals, or the picked place) / plan: area and date
  * 3. trip log (only if includeLog and not empty)
- * 4. guidebook places (near: within radius or 3 nearest fallback; plan: areaPlaces)
- * 5. "guidebook is limited, suggest other places too"
- * 6. "My question: ..." (ctx.question, or defaultQuestion when null)
+ * 4. the loaded plan for the target date (near: today; plan: today/tomorrow), if ctx.trip has that day
+ * 5. guidebook places (near: within radius or 3 nearest fallback; plan: areaPlaces); with ids when wantPlan
+ * 6. "guidebook is limited, suggest other places too"
+ * 7. "My question: ..." (ctx.question, or defaultQuestion when null)
+ * 8. planRequestSuffix() when wantPlan
  * @param {AskContext} ctx
  * @returns {string}
  */
@@ -181,12 +186,16 @@ export function buildAskPrompt(ctx) {
 
   const log = ctx.includeLog ? logBlock(ctx.log, ctx.places) : '';
   if (log) parts.push(log);
+  const targetDate = ctx.mode === 'plan' && ctx.day === 'tomorrow' ? addDays(ctx.today, 1) : ctx.today;
+  const plan = ctx.trip ? tripBlock(ctx.trip, ctx.places, targetDate) : '';
+  if (plan) parts.push(plan);
   if (list.length) {
-    parts.push(`${listTitle}\n${list.map((p, i) => placeBrief(p, i, withDistance ? distanceTo(p, ctx.pos) : null)).join('\n')}`);
+    parts.push(`${listTitle}\n${list.map((p, i) => placeBrief(p, i, withDistance ? distanceTo(p, ctx.pos) : null, !!ctx.wantPlan)).join('\n')}`);
   }
   parts.push('My guidebook only covers selected historical and cultural sites, so also suggest other places (food, cafés, parks, markets, shopping) where they fit.');
   const question = ctx.question ?? defaultQuestion(ctx.mode, ctx.day, areaLabel(ctx.area, ctx.customArea));
   parts.push(`My question: ${question}`);
+  if (ctx.wantPlan) parts.push(planRequestSuffix());
   return parts.join('\n\n');
 }
 

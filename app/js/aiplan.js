@@ -1,6 +1,4 @@
-// TASK T2 (see docs/SPEC.md): turn an AI chat answer back into a Trip the app can show.
-// Implement the bodies; do not change names, parameters or return shapes.
-// Contract tests: tests/tasks/aiplan.test.js
+// Turn an AI chat answer back into a Trip the app can show. Contract tests: tests/tasks/aiplan.test.js
 
 import { parseTrip } from './trip.js';
 
@@ -15,10 +13,11 @@ import { parseTrip } from './trip.js';
  */
 export function planRequestSuffix() {
   return [
-    'Format your suggested itinerary as exactly one ```json fenced code block in the Trip shape, using guidebook ids in "place" when a stop is in the guidebook and "name" otherwise.',
-    'Example (one line):',
+    'After your answer, add the plan as exactly one ```json code block so I can load it into my travel app.',
+    'Use the real date(s) of the plan. For a place from my guidebook list, put its [id: ...] value in "place"; for anything else, put its name in "name". "time" (HH:MM) and "note" are optional.',
+    'Shape (example values):',
     '```json',
-    '{"title":"Day trip","days":[{"date":"2026-11-04","items":[{"time":"09:00","place":"chihkan-tower","note":"visit"},{"name":"Curry shop"}]}]}',
+    '{"title":"Tainan day","days":[{"date":"YYYY-MM-DD","items":[{"time":"09:00","place":"chihkan-tower","note":"go early"},{"time":"12:00","name":"Lunch at a beef soup shop"}]}]}',
     '```',
   ].join('\n');
 }

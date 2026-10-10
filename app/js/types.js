@@ -79,6 +79,8 @@
  * @property {LogEntry[]} log
  * @property {Place[]} places
  * @property {string} today      YYYY-MM-DD, injected so tests are deterministic
+ * @property {Trip|null} [trip]  loaded itinerary; its day for the target date is added to the prompt
+ * @property {boolean} [wantPlan] ask the AI for a JSON plan to paste back (adds place ids and instructions)
  *
  * @typedef {Object} TripItem    (phase 2) one stop in an itinerary
  * @property {string} [place]    guidebook place id

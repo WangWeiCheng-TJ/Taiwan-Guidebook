@@ -40,8 +40,8 @@ Both green, plus the manual checks listed under the task. To run the app locally
 | `ui.js` | DOM | `toast`, `copyText`, `showBig`, `hideBig`, `speak` |
 | `views/*.js` | pure | One render function per screen |
 | `main.js` | wiring | Router, event dispatch, persistence, service worker registration |
-| `trip.js` | **T1 stub** | Itineraries |
-| `aiplan.js` | **T2 stub** | Paste an AI answer back as a trip |
+| `trip.js` | pure + fetch | Itineraries: validate, resolve, load from URL, prompt text (T1, done) |
+| `aiplan.js` | pure | Paste an AI answer back as a trip (T2, done) |
 | `i18n.js` | **T4a stub** | Per-language text lookup |
 
 Routes: `#/explore`, `#/place/<id>`, `#/log`, `#/log/<placeId>` (prefills the form), `#/ask`, `#/phrases`, `#/tips`.
@@ -50,7 +50,7 @@ Storage keys: `tg.log.v1` (LogEntry[]), `tg.trip.v1` (Trip, from T3).
 
 ## Tasks
 
-Do them in order. T1, T2 and T4a are pure functions with contract tests; T3 is UI wiring with manual checks.
+Status: T1, T2, T3 done. T4a pending. T1 and T2 were implemented by Antigravity CLI and reviewed; T3 by Claude. Sample plan for `?trip=`: `docs/sample-trip.json`.
 
 ### T1: itineraries (`app/js/trip.js`)
 

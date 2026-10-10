@@ -1,9 +1,10 @@
-import { esc, stars } from '../util.js';
+import { esc, stars, today } from '../util.js';
 import { dayNumber, entryName, groupByDate } from '../triplog.js';
 import { places } from '../state.js';
+import { renderTripSection } from './trip.js';
 
 /**
- * My trip tab (#/log): entry form bound to s.draft, entries grouped by day (newest first), backup.
+ * My trip tab (#/log): the plan (renderTripSection), then the notes: entry form bound to s.draft, entries grouped by day (newest first), backup.
  * Form: <form data-form="log"> with fields date, placeId, name, note; star buttons data-action="star" data-n.
  * The free-text name field ([data-other]) is hidden when a guidebook place is selected.
  * Emits: data-action="delete-entry" data-id, "export"; data-change="import" (file input).
@@ -18,6 +19,9 @@ export function renderLog(s) {
 
   return `
     <h1>My trip</h1>
+    ${renderTripSection(s, today())}
+
+    <h2>Notes</h2>
     <p class="muted small">Saved only on this phone. Ask AI adds these notes to your question, so it learns what you like and what you don't.</p>
 
     <form class="card stack" data-form="log">

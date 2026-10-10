@@ -9,7 +9,7 @@ import { locationPanel } from './common.js';
  * @returns {import('../types.js').AskContext}
  */
 export function askContext(s) {
-  return { ...s.ask, pos: s.pos, log: s.log, places: places(), today: today() };
+  return { ...s.ask, pos: s.pos, log: s.log, places: places(), today: today(), trip: s.trip };
 }
 
 /**
@@ -26,7 +26,7 @@ export function questionText(s) {
  * Ask AI tab (#/ask): mode switch, mode fields, question, include-notes toggle, copy button, live preview.
  * near mode: location panel + radius (data-change="radius").
  * plan mode: day (data-change="day"), area select (data-change="area"), custom area input (data-input="custom-area").
- * Shared: data-input="question", data-change="include-log", data-action="mode" data-mode, data-action="copy-prompt".
+ * Shared: data-input="question", data-change="include-log" | "want-plan", data-action="mode" data-mode, data-action="copy-prompt".
  * The preview lives in #prompt-preview so main.js can refresh it without re-rendering (keeps input focus).
  * @param {import('../state.js').AppState} s
  * @returns {string}
@@ -77,6 +77,10 @@ export function renderAsk(s) {
       <label class="row" style="color:var(--text)">
         <input type="checkbox" data-change="include-log" ${a.includeLog ? 'checked' : ''} style="width:auto">
         Include my trip notes (${s.log.length})
+      </label>
+      <label class="row" style="color:var(--text)">
+        <input type="checkbox" data-change="want-plan" ${a.wantPlan ? 'checked' : ''} style="width:auto">
+        Ask for a plan I can paste back
       </label>
       <button class="btn primary" data-action="copy-prompt">Copy question</button>
       <div class="row small">

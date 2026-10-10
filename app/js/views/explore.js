@@ -1,4 +1,5 @@
-import { esc, clip } from '../util.js';
+import { esc, clip, today } from '../util.js';
+import { renderTodayCard } from './trip.js';
 import { distanceTo, fmtKm, sortByDistance } from '../geo.js';
 import { cities } from '../data.js';
 import { places } from '../state.js';
@@ -22,6 +23,7 @@ export function renderExplore(s) {
 
   return `
     <h1>Explore</h1>
+    ${renderTodayCard(s, today())}
     ${locationPanel(s)}
     <div class="chips">${chips}</div>
     ${list.map(p => {

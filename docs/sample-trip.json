@@ -1,0 +1,23 @@
+{
+  "title": "Sample: two days of old Taiwan",
+  "days": [
+    {
+      "date": "2026-11-04",
+      "title": "Tainan, the old capital",
+      "items": [
+        { "time": "09:00", "place": "chihkan-tower", "note": "Go early, before the tour groups" },
+        { "time": "10:30", "place": "tainan-confucius-temple" },
+        { "time": "12:30", "name": "Lunch: beef soup or milkfish congee nearby" }
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "title": "Taipei and Tamsui",
+      "items": [
+        { "time": "10:00", "place": "dadaocheng-dihua-street", "note": "Tea tasting on Dihua Street" },
+        { "time": "15:00", "place": "fort-san-domingo" },
+        { "time": "17:30", "name": "Sunset at Tamsui riverside" }
+      ]
+    }
+  ]
+}

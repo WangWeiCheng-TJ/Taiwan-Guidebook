@@ -162,3 +162,12 @@ pre.prompt {
   background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; z-index: 30; font-size: 15px;
   max-width: calc(100% - 32px);
 }
+
+/* Trip plan */
+.plan .chips { margin-bottom: 0; }
+ol.stops { list-style: none; padding: 0; margin: 6px 0 0; }
+ol.stops li { padding: 8px 0; border-top: 1px solid var(--line); }
+ol.stops li:first-child { border-top: 0; }
+ol.stops .time { display: inline-block; min-width: 3.2em; font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; }
+.card.today { border-color: var(--accent); background: var(--accent-soft); }
+.card.today .meta { color: var(--accent); font-weight: 600; }
