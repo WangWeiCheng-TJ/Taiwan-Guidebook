@@ -45,3 +45,6 @@ Thumbs.db
 # Local test scratchpads
 scratch/
 temp/
+
+# Isolated worktrees for delegated agents
+.worktrees/
