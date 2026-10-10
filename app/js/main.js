@@ -50,7 +50,7 @@ function render() {
     place: () => renderPlace(state, arg),
     log: () => renderLog(state),
     ask: () => renderAsk(state),
-    phrases: () => renderPhrases(state),
+    phrases: () => renderPhrases(state, arg),
     tips: () => renderTips(state),
   };
   view.innerHTML = (views[tab] || views.explore)();

@@ -187,3 +187,19 @@ ol.stops .time { display: inline-block; min-width: 3.2em; font-variant-numeric: 
 .zp.tone b { color: var(--warm); }
 .zp.tone i { color: var(--warm); }
 .topbar .actions { display: flex; gap: 8px; align-items: center; }
+
+/* Phrase category tiles */
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 8px; }
+.tile {
+  display: grid; justify-items: start; gap: 4px; padding: 18px 16px; min-height: 110px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  color: var(--text); text-decoration: none;
+}
+.tile:active { background: var(--accent-soft); }
+.tile-icon { font-size: 30px; line-height: 1; }
+.tile-label { font-size: 18px; font-weight: 650; }
+.tile-count { font-size: 13px; color: var(--muted); }
+
+/* Compact phrase rows on a place page */
+.phrase-row { padding: 8px 0; border-top: 1px solid var(--line); flex-wrap: nowrap; }
+.zh-inline { font-size: 18px; font-weight: 600; }

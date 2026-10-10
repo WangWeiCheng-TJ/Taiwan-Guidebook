@@ -3,7 +3,7 @@
 // When guidebook.json changes in the background, open pages get a 'data-updated' message.
 // Bump CACHE when the SHELL list changes.
 
-const CACHE = 'tg-v4';
+const CACHE = 'tg-v5';
 const DATA = 'data/guidebook.json';
 const SHELL = [
   './',
@@ -35,6 +35,7 @@ const SHELL = [
   'js/i18n.js',
   'js/zhuyin.js',
   'js/lang.js',
+  'js/phrases.js',
   DATA,
 ];
 

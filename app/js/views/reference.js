@@ -3,6 +3,7 @@
 import { esc } from '../util.js';
 import { tr, localized } from '../lang.js';
 import { alignZhuyin, spokenTones } from '../zhuyin.js';
+import { PHRASE_GROUPS, phrasesIn } from '../phrases.js';
 
 const TONE_MARK = { 1: '', 2: 'ˊ', 3: 'ˇ', 4: 'ˋ', 5: '˙' };
 
@@ -46,30 +47,54 @@ export function zhuyinBlock(ph) {
 /**
  * Phrases tab (#/phrases): grouped by category; each card shows the meaning, then the Chinese
  * with Zhuyin broken down symbol by symbol.
- * Emits: data-action="speak" (only when speechSynthesis exists) | "show-phrase", data-id = phrase id.
+ * Without a group (#/phrases): big category tiles linking to #/phrases/<group>.
+ * With a group: that group's phrase cards.
  * @param {import('../state.js').AppState} s
+ * @param {string} [group]  a PHRASE_GROUPS id
  * @returns {string}
  */
-export function renderPhrases(s) {
+export function renderPhrases(s, group) {
   const L = s.lang;
-  const canSpeak = typeof speechSynthesis !== 'undefined';
+  const known = PHRASE_GROUPS.find(g => g.id === group);
+  if (!known) {
+    return `
+      <h1>${tr(L, 'phrases')}</h1>
+      <p class="muted small">${tr(L, 'pickCategory')}</p>
+      <div class="tiles">${PHRASE_GROUPS.map(g => `
+        <a class="tile" href="#/phrases/${g.id}">
+          <span class="tile-icon">${g.icon}</span>
+          <span class="tile-label">${tr(L, `cat.${g.id}`)}</span>
+          <span class="tile-count">${phrasesIn(s.data.phrases, g.id).length}</span>
+        </a>`).join('')}
+      </div>`;
+  }
   return `
-    <h1>${tr(L, 'phrases')}</h1>
+    <a href="#/phrases" class="small">${tr(L, 'allCategories')}</a>
+    <h1>${known.icon} ${tr(L, `cat.${known.id}`)}</h1>
     <p class="muted small">${tr(L, 'phrasesIntro')}<br>${tr(L, 'toneLegend')}</p>
-    ${groupBy(s.data.phrases, p => p.category).map(([cat, list]) => `
-      <h2>${tr(L, `cat.${cat}`)}</h2>
-      ${list.map(ph => `<div class="card phrase">
-        <div class="row spread">
-          <span class="meta">${esc(ph.en)}</span>
-          <span class="row">
-            ${canSpeak ? `<button class="btn small" data-action="speak" data-id="${esc(ph.id)}">${tr(L, 'play')}</button>` : ''}
-            <button class="btn small" data-action="show-phrase" data-id="${esc(ph.id)}">${tr(L, 'show')}</button>
-          </span>
-        </div>
-        ${zhuyinBlock(ph)}
-      </div>`).join('')}
-    `).join('')}
+    ${phrasesIn(s.data.phrases, known.id).map(ph => phraseCardFull(ph, L)).join('')}
   `;
+}
+
+/**
+ * One phrase: meaning, buttons, then Chinese with Zhuyin and per-symbol pronunciation.
+ * Emits: data-action="speak" (only when speechSynthesis exists) | "show-phrase", data-id = phrase id.
+ * @param {import('../types.js').Phrase & { zhuyin: string }} ph
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+export function phraseCardFull(ph, L) {
+  const canSpeak = typeof speechSynthesis !== 'undefined';
+  return `<div class="card phrase">
+    <div class="row spread">
+      <span class="meta">${esc(ph.en)}</span>
+      <span class="row">
+        ${canSpeak ? `<button class="btn small" data-action="speak" data-id="${esc(ph.id)}">${tr(L, 'play')}</button>` : ''}
+        <button class="btn small" data-action="show-phrase" data-id="${esc(ph.id)}">${tr(L, 'show')}</button>
+      </span>
+    </div>
+    ${zhuyinBlock(ph)}
+  </div>`;
 }
 
 /**

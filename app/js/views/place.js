@@ -5,6 +5,7 @@ import { notesFor } from '../triplog.js';
 import { places } from '../state.js';
 import { tr, localized, localizedList } from '../lang.js';
 import { placeName } from './common.js';
+import { phrasesForPlace, mainGroupForPlace } from '../phrases.js';
 
 /**
  * Place page (#/place/<id>): header, badges, summary, action buttons, the user's notes,
@@ -49,7 +50,7 @@ export function renderPlace(s, id) {
       <a class="btn" href="#/log/${esc(p.id)}">${tr(L, 'wasHere')}</a>
       <button class="btn" data-action="copy-place" data-id="${esc(p.id)}">${tr(L, 'copyAi')}</button>
     </div>
-    <p class="small"><a href="${esc(links.apple)}" target="_blank" rel="noopener">${tr(L, 'appleMaps')}</a></p>
+    ${isAppleDevice() ? `<p class="small"><a href="${esc(links.apple)}" target="_blank" rel="noopener">${tr(L, 'appleMaps')}</a></p>` : ''}
 
     ${notes.length ? `<div class="panel small"><b>${tr(L, 'yourNotes')}</b>${notes.map(e =>
       `<div>${esc(e.date)} <span class="starline">${stars(e.stars)}</span> ${esc(e.note)}</div>`).join('')}</div>` : ''}
@@ -58,6 +59,8 @@ export function renderPlace(s, id) {
     ${etiquette ? `<h2>${tr(L, 'etiquette')}</h2><p>${esc(etiquette)}</p>` : ''}
     ${bestTime ? `<h2>${tr(L, 'bestTime')}</h2><p>${esc(bestTime)}</p>` : ''}
     ${transport ? `<h2>${tr(L, 'gettingThere')}</h2><p>${esc(transport)}</p>` : ''}
+
+    ${usefulPhrases(s, p)}
 
     <details>
       <summary>${tr(L, 'story')}</summary>
@@ -70,6 +73,34 @@ export function renderPlace(s, id) {
       <ul class="timeline">${p.timeline.map(t => `<li><b>${esc(t.year_or_era)}</b>${esc(localized(t, 'event', L))}</li>`).join('')}</ul>
     </details>` : ''}
   `;
+}
+
+/**
+ * Apple Maps is offered only on iPhone/iPad (including iPadOS, which reports itself as a Mac with touch).
+ * @returns {boolean}
+ */
+function isAppleDevice() {
+  if (typeof navigator === 'undefined') return false;
+  return /iPhone|iPad|iPod/.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+}
+
+/**
+ * "Useful here": a few phrases picked by the kind of place, compact (Chinese + meaning + Show),
+ * with a link to the full category on the Phrases tab.
+ * @param {import('../state.js').AppState} s
+ * @param {import('../types.js').Place} p
+ * @returns {string}
+ */
+function usefulPhrases(s, p) {
+  const L = s.lang;
+  const list = phrasesForPlace(p, s.data.phrases);
+  if (!list.length) return '';
+  return `<h2>${tr(L, 'usefulHere')}</h2>
+    ${list.map(ph => `<div class="row spread phrase-row">
+      <span><span class="zh-inline" lang="zh-TW">${esc(ph.zh_TW)}</span> <span class="muted small">${esc(ph.en)}</span></span>
+      <button class="btn small" data-action="show-phrase" data-id="${esc(ph.id)}">${tr(L, 'show')}</button>
+    </div>`).join('')}
+    <p class="small"><a href="#/phrases/${mainGroupForPlace(p)}">${tr(L, 'morePhrases')}</a></p>`;
 }
 
 /**
