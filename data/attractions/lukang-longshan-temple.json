@@ -84,7 +84,49 @@
     "recommended_duration_min": 75,
     "transportation_en": "Take Taiwan High Speed Rail to Taichung Station, then transfer to Changhua Bus No. 6936 (Taiwan Tourist Shuttle Lukang Line) directly to Lukang, followed by a 10-minute walk through the heritage alleyways.",
     "transportation_zh": "搭乘高鐵至台中站，轉乘彰化客運6936（台灣好行鹿港祈福線）至鹿港，步行約10分鐘即可到達。",
-    "best_time_to_visit": "Mid-morning (9:00 AM - 11:30 AM) when gentle sunlight beams filter through the incense smoke and timber latticework."
+    "best_time_to_visit": "Mid-morning (9:00 AM - 11:30 AM) when gentle sunlight beams filter through the incense smoke and timber latticework.",
+    "must_see": [
+      {
+        "name": {
+          "en": "The jaw-dropping Octagonal Caisson Ceiling (look straight up beneath the theater stage)",
+          "zh_TW": "戲台正上方八卦八角迴旋式懸臂藻井（臺灣木構極品）"
+        },
+        "why": {
+          "en": "Taiwan's earliest and largest surviving wooden caisson ceiling, assembled above the theater stage with interlocking bracket joints without using a single nail.",
+          "zh_TW": "位於戲台正上方，全由精密榫卯斗栱懸臂疊組而成，不耗一釘一鐵，是臺灣現存年代最早且跨距最大的木作藻井。"
+        }
+      },
+      {
+        "name": {
+          "en": "Three-Bay Five-Door Front Hall featuring intricate openwork wood relief panels",
+          "zh_TW": "三川殿五門木雕隔扇鏤空透雕"
+        },
+        "why": {
+          "en": "Crafted by master woodcarvers from Quanzhou using aged Chinese fir. The screens feature intricate Qing-dynasty openwork carvings of flowers, figures, and birds.",
+          "zh_TW": "由泉州惠安名匠以福建杉木精雕而成，五門木雕隔扇呈現精湛的花鳥與人物鏤空透雕工藝。"
+        }
+      },
+      {
+        "name": {
+          "en": "Qing-dynasty solid bluestone guardian lions with smiling masculine/feminine expressions",
+          "zh_TW": "三川殿前清代青斗石刻抱鼓石與石獅"
+        },
+        "why": {
+          "en": "Carved from imported Quanzhou bluestone during the Qing Dynasty. These guardian lions and drum stones stand in front of the front hall with expressive, smiling facial features.",
+          "zh_TW": "立於三川殿前，由清代泉州青斗石雕琢而成，帶有生動微笑表情，包含石獅與抱鼓石雕刻。"
+        }
+      },
+      {
+        "name": {
+          "en": "The peaceful Rear Hall courtyard with ancient banyan trees and stone water cisterns",
+          "zh_TW": "後殿寧靜後花園與古井庭院"
+        },
+        "why": {
+          "en": "A tranquil Buddhist sanctuary located at the rear of the three-hall complex. Ancient trees and historic stone cisterns offer a quiet space for contemplation.",
+          "zh_TW": "位於三進院落後方的寧靜庭院，有老樹與古井相伴，為這座佛教聖剎提供了清幽沉靜的氛圍。"
+        }
+      }
+    ]
   },
   "tags": [
     "timber_architecture",

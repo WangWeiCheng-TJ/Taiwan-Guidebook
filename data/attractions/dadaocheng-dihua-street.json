@@ -84,7 +84,49 @@
     "recommended_duration_min": 150,
     "transportation_en": "Take Taipei MRT Green Line to 'Beimen Station' (Exit 3) or Orange Line to 'Daqiaotou Station' (Exit 1), followed by a 7-minute stroll into Dihua Street.",
     "transportation_zh": "搭乘台北捷運松山新店線至『北門站』3號出口，或中和新蘆線至『大橋頭站』1號出口，步行約7分鐘即達迪化街商圈。",
-    "best_time_to_visit": "Afternoon (1:00 PM - 6:00 PM) when all heritage cafes and boutiques are bustling, followed by river sunset at Dadaocheng Wharf."
+    "best_time_to_visit": "Afternoon (1:00 PM - 6:00 PM) when all heritage cafes and boutiques are bustling, followed by river sunset at Dadaocheng Wharf.",
+    "must_see": [
+      {
+        "name": {
+          "en": "Taipei Xiahai City God Temple (famed worldwide for the Chinese Matchmaker God Yuelao)",
+          "zh_TW": "台北霞海城隍廟（月老靈驗享譽國際）"
+        },
+        "why": {
+          "en": "Globally famous for its matchmaker deity Yuelao, where visitors come to pray for love. An English guide brochure is available at the counter to help you follow the ritual.",
+          "zh_TW": "這裡以祈求良緣的月老聞名國際。廟方服務處備有英文解說單，可引導參拜求姻緣的流程。"
+        }
+      },
+      {
+        "name": {
+          "en": "Traditional 3-courtyard historic shophouses with hidden garden cafes and tea studios",
+          "zh_TW": "三進式長條老街屋天井文創茶館（如合勝堂、進益採買等）"
+        },
+        "why": {
+          "en": "These elongated historic shophouses run deep with tranquil central courtyards once used for workshops and storage. Today, they house artisanal cafes and tea studios.",
+          "zh_TW": "傳統長條形街屋深達數十公尺並帶有寧靜天井，過去前店中坊後倉，如今進駐了文創咖啡館與茶館。"
+        }
+      },
+      {
+        "name": {
+          "en": "Yongle Fabric Market (Taiwan's largest textile and tailor paradise)",
+          "zh_TW": "永樂布業商場（全臺最大布料批發與旗袍手工藝中心）"
+        },
+        "why": {
+          "en": "Taiwan's largest textile and tailor center, rooted in Dadaocheng's prosperous history of textile merchants. Visitors can explore countless fabric vendors and tailoring crafts.",
+          "zh_TW": "這裡是全臺最大的布料批發與手工裁縫中心，承襲了大稻埕繁榮的布商歷史背景。"
+        }
+      },
+      {
+        "name": {
+          "en": "Dadaocheng Wharf (Pier 5 container market and sunset bike path along Tamsui River)",
+          "zh_TW": "大稻埕碼頭（PIER5貨櫃市集與淡水河夕陽自行車道）"
+        },
+        "why": {
+          "en": "Located along the Tamsui River where Dadaocheng first grew as a trading port. It features a container market and a riverside cycling path that are ideal for watching the sunset.",
+          "zh_TW": "坐落於大稻埕發跡的淡水河畔，擁有貨櫃市集與河岸自行車道，是欣賞河岸夕陽的絕佳去處。"
+        }
+      }
+    ]
   },
   "tags": [
     "tea_trade",

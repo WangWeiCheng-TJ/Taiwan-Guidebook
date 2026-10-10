@@ -90,7 +90,49 @@
     "recommended_duration_min": 180,
     "transportation_en": "Take Taipei MRT Blue/Brown Line to 'Zhongxiao Fuxing Station' (Exit 2) and ride Keelung Bus 1062 directly to Jiufen Old Street (approx. 70 mins), or take TRA Train to Ruifang Station and transfer to Bus 788, 827, or 965.",
     "transportation_zh": "搭乘台北捷運至『忠孝復興站』2號出口轉乘基隆客運1062直達九份老街；或搭火車至瑞芳站轉乘公車788、827、965號。",
-    "best_time_to_visit": "Late afternoon (4:00 PM - 8:00 PM) to watch sunset turn into twilight when red lanterns illuminate the mountain."
+    "best_time_to_visit": "Late afternoon (4:00 PM - 8:00 PM) to watch sunset turn into twilight when red lanterns illuminate the mountain.",
+    "must_see": [
+      {
+        "name": {
+          "en": "Shuqi Road stone stairways illuminated by glowing red lanterns at twilight",
+          "zh_TW": "豎崎路陡峭階梯與傍晚點亮之紅燈籠"
+        },
+        "why": {
+          "en": "A steep hillside walkway of over 300 stone steps lined with traditional teahouses. At twilight, the glowing red lanterns create Jiufen's signature cinematic atmosphere.",
+          "zh_TW": "由三百多階陡峭石階組成的山城步道，兩側林立著老茶樓。傍晚紅燈籠點亮時，營造出九份經典的電影氛圍。"
+        }
+      },
+      {
+        "name": {
+          "en": "A-Mei Teahouse (famed for its nostalgic tiered wooden structure overlooking the sea)",
+          "zh_TW": "阿妹茶樓與九份海景品茗時光"
+        },
+        "why": {
+          "en": "A nostalgic tiered wooden teahouse facing the sea, iconic to Jiufen. Visitors can enjoy traditional Gongfu tea brewing while taking in panoramic ocean and mountain views.",
+          "zh_TW": "依山面海的經典木造茶樓，是九份的代表性地標。旅客可在此體驗正統功夫茶道，同時飽覽山海美景。"
+        }
+      },
+      {
+        "name": {
+          "en": "Shengping Theater (Taiwan's earliest modern theater in mining history, built in 1934)",
+          "zh_TW": "昇平戲院（1934年建造之北臺灣最早現代戲院）"
+        },
+        "why": {
+          "en": "Built in 1934, this is northern Taiwan's earliest modern theater from the mining boom. It stands as a reminder of Jiufen's heyday as Asia's gold capital.",
+          "zh_TW": "建於1934年，是北臺灣最早的現代戲院，見證了九份在淘金全盛時期作為東亞金都的繁華歲月。"
+        }
+      },
+      {
+        "name": {
+          "en": "Jinguashi Gold Museum (touch a 220kg 99.9% pure solid gold bullion ingot)",
+          "zh_TW": "金瓜石黃金博物館（親手觸摸220公斤999純金大金磚與日式四連棟）"
+        },
+        "why": {
+          "en": "Showcases the mining heritage of the area, where visitors can touch a 220-kilogram 99.9% pure gold ingot. The grounds also feature preserved 1930s Japanese timber residences.",
+          "zh_TW": "展示當地的採礦與煉金歷史，館內可親手觸摸220公斤的純金磚，園區並保存了1930年代的日式木造四連棟宿舍。"
+        }
+      }
+    ]
   },
   "tags": [
     "gold_rush",

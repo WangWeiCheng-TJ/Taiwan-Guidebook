@@ -91,7 +91,49 @@
     "recommended_duration_min": 60,
     "transportation_en": "Take Tainan City Bus No. 2, 88, or Taiwan Tourist Shuttle 99 to 'Confucius Temple' stop, or take an easy 12-minute walk from Hayashi Department Store / National Museum of Taiwan Literature.",
     "transportation_zh": "搭乘大台南公車2號、88號至『孔廟』站下車；或從國立臺灣文學館/林百貨步行約5分鐘。",
-    "best_time_to_visit": "Early morning (8:30 AM - 10:30 AM) when the tree-shaded courtyards are peaceful and illuminated by soft sunlight."
+    "best_time_to_visit": "Early morning (8:30 AM - 10:30 AM) when the tree-shaded courtyards are peaceful and illuminated by soft sunlight.",
+    "must_see": [
+      {
+        "name": {
+          "en": "'First Academy of Taiwan' (全臺首學) wooden entrance plaque",
+          "zh_TW": "東大門『全臺首學』橫匾"
+        },
+        "why": {
+          "en": "Hung at the eastern gate, this famous plaque marks Taiwan's earliest official academy, founded in 1665 to begin institutional civil education on the island.",
+          "zh_TW": "懸掛於東大門，標誌著這座創立於1665年的臺灣最早官辦學府，也是全臺儒家文教體系的起點。"
+        }
+      },
+      {
+        "name": {
+          "en": "Dacheng Hall interior featuring 15+ Imperial & Presidential Honor Boards",
+          "zh_TW": "大成殿內歷代清朝皇帝與歷任總統御匾群"
+        },
+        "why": {
+          "en": "Dacheng Hall houses an extraordinary collection of calligraphic honor plaques bestowed by eight Qing emperors and modern presidents, spanning four centuries.",
+          "zh_TW": "大成殿內懸掛著清代八位皇帝與歷任總統親筆賜贈的珍貴匾額群，貫穿了近四百年的歷史遞嬗。"
+        }
+      },
+      {
+        "name": {
+          "en": "Minglun Hall (Hall of Moral Brightness) housing ancient Zhao Mengfu calligraphy stone rubbings",
+          "zh_TW": "明倫堂與趙孟頫書法石刻《大學》全文"
+        },
+        "why": {
+          "en": "Serving as the lecture hall within the classical 'School on the Left' layout, Minglun Hall houses ancient stone rubbings of calligraphy by Zhao Mengfu.",
+          "zh_TW": "作為『左學右廟』格局中的講學堂，堂內珍藏了趙孟頫書法的《大學》全文石刻。"
+        }
+      },
+      {
+        "name": {
+          "en": "Three-story Wenchang Pavilion (God of Literature Pagoda)",
+          "zh_TW": "三層樓古典文昌閣與泮池古樹庭園"
+        },
+        "why": {
+          "en": "A classical three-story pavilion rebuilt during the Qing Dynasty in 1715, dedicated to the God of Literature alongside the Crescent Pond and shaded grounds.",
+          "zh_TW": "於清康熙年間（1715年）重修的三層古典樓閣，供奉文昌帝君，周圍環繞著泮池與老樹庭園。"
+        }
+      }
+    ]
   },
   "tags": [
     "confucianism",

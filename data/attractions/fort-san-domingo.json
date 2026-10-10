@@ -97,7 +97,49 @@
     "recommended_duration_min": 90,
     "transportation_en": "Take Taipei Metro (MRT) Red Line to the terminal 'Tamsui Station', then transfer to Bus R26, 836, or 857 to 'Fort San Domingo (紅毛城)' stop, or enjoy a scenic 15-minute riverside walk from the station.",
     "transportation_zh": "搭乘台北捷運淡水信義線至『淡水站』，轉乘公車紅26、836至『紅毛城(真理大學)站』，或沿淡水金色水岸步道步行約15分鐘。",
-    "best_time_to_visit": "Late afternoon (3:30 PM - 5:30 PM) to catch the golden hour light on the red bricks and the famous Tamsui sunset."
+    "best_time_to_visit": "Late afternoon (3:30 PM - 5:30 PM) to catch the golden hour light on the red bricks and the famous Tamsui sunset.",
+    "must_see": [
+      {
+        "name": {
+          "en": "Dutch-era underground prison cells and defensive ramparts",
+          "zh_TW": "主堡荷蘭地牢與厚重穹頂防禦結構"
+        },
+        "why": {
+          "en": "Built by the Dutch in 1644 with stone walls up to 1.9 meters thick. It features bombproof barrel-vaulted ceilings and preserved underground prison cells.",
+          "zh_TW": "荷蘭人於1644年以石材建造，牆體厚達1.9公尺，設有防砲轟的拱頂與保留至今的地牢。"
+        }
+      },
+      {
+        "name": {
+          "en": "Victorian consular dining room with English fireplace and Minton floor tiles",
+          "zh_TW": "英國領事官邸壁爐、僕役呼叫鈴與英國進口彩釉地磚"
+        },
+        "why": {
+          "en": "Completed in 1891 as a British consular residence, showcasing Victorian verandah architecture. It preserves an English fireplace, servant call bells, and imported British Minton floor tiles.",
+          "zh_TW": "英國領事官邸落成於1891年，展現維多利亞建築美學，保存了英式壁爐、僕役呼叫鈴與英國進口彩釉地磚。"
+        }
+      },
+      {
+        "name": {
+          "en": "17th-century muzzle-loading bronze and iron cannons placed in the courtyard",
+          "zh_TW": "庭園中清代嘉慶年間鑄造的古砲群"
+        },
+        "why": {
+          "en": "Displayed in the courtyard, these historic cannons reflect the fortress's long role in maritime coastal defense.",
+          "zh_TW": "陳列於庭園中的古砲群，見證了這座堡壘漫長的海防要塞歷史。"
+        }
+      },
+      {
+        "name": {
+          "en": "Hilltop panoramic lookout facing the Tamsui River mouth and Mount Guanyin",
+          "zh_TW": "俯瞰淡水河口與觀音山日落的眺望平台"
+        },
+        "why": {
+          "en": "This scenic vantage point overlooks the mouth of the Tamsui River and Mount Guanyin. It offers one of the best locations to view the famous Tamsui sunset.",
+          "zh_TW": "此處可俯瞰淡水河口與對岸觀音山，是欣賞著名的淡水夕陽與河海景致的絕佳平台。"
+        }
+      }
+    ]
   },
   "tags": [
     "colonial_fortress",
