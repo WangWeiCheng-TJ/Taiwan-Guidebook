@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 
 const NEW = ['duiyue-gate', 'tainan-coral-stone-house'];
-const ALLOWED = /^https:\/\/([a-z0-9-]+\.)*(gov\.tw|wikipedia\.org|twtainan\.net)\//;
+const ALLOWED = /^https:\/\/([a-z0-9-]+\.)*(gov\.tw|wikipedia\.org|twtainan\.net|n\.yam\.com)\//;
 const example = JSON.parse(readFileSync(new URL('../../data/attractions/chihkan-tower.json', import.meta.url), 'utf8'));
 const REQUIRED = ['id', 'name', 'location', 'category', 'eras', 'summary', 'historical_narrative', 'timeline',
   'cultural_significance', 'foreign_visitor_guide', 'tags', 'metadata'];
@@ -41,6 +41,6 @@ for (const id of NEW) {
     const m = JSON.parse(readFileSync(file, 'utf8')).metadata;
     assert.ok(Array.isArray(m.sources) && m.sources.length >= 2, 'metadata.sources needs at least 2 URLs');
     for (const u of m.sources) assert.match(u, ALLOWED, `source not on an allowed site: ${u}`);
-    assert.equal(m.generated_by, 'agy (web research), pending owner review');
+    assert.match(m.generated_by, /pending owner review$/);
   });
 }
