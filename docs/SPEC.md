@@ -54,7 +54,7 @@ Status: T1, T2, T3 done. T4a pending. T1 and T2 were implemented by Antigravity 
 
 ### T1: itineraries (`app/js/trip.js`)
 
-Implement every function in the file. The JSDoc on each function is the spec; `tests/tasks/trip.test.js` is the contract.
+Implement every function in the file. The JSDoc on each function is the spec; `tests/core/trip.test.js` is the contract.
 
 | Function | Input | Output |
 |---|---|---|

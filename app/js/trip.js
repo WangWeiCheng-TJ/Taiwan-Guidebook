@@ -1,5 +1,5 @@
 // Itineraries: validate, resolve against the guidebook, load from a URL, format for prompts.
-// Pure functions except loadTrip (network). Contract tests: tests/tasks/trip.test.js
+// Pure functions except loadTrip (network). Contract tests: tests/core/trip.test.js
 
 import { placeById } from './data.js';
 

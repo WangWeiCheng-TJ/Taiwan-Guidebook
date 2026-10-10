@@ -1,0 +1,3 @@
+# LF everywhere: agents on Windows write CRLF, which breaks exact-match edits and pollutes diffs.
+* text=auto eol=lf
+*.png binary

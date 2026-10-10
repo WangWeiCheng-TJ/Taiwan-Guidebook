@@ -1,4 +1,4 @@
-// Turn an AI chat answer back into a Trip the app can show. Contract tests: tests/tasks/aiplan.test.js
+// Turn an AI chat answer back into a Trip the app can show. Contract tests: tests/core/aiplan.test.js
 
 import { parseTrip } from './trip.js';
 

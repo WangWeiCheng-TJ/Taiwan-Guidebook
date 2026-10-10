@@ -1,5 +1,5 @@
 // Language-agnostic text lookup for the per-language data format.
-// Contract tests: tests/tasks/i18n.test.js
+// Contract tests: tests/core/i18n.test.js
 
 /** @typedef {Object<string, string|string[]>} Localized  e.g. { "en": "...", "zh_TW": "...", "de": "..." } */
 
