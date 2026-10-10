@@ -26,6 +26,8 @@ WEB_OUTPUT_FILE = BASE_DIR / "web" / "taiwan_attractions.json"
 SCHEMA_FILE = BASE_DIR / "schema" / "attraction.schema.json"
 PHRASES_FILE = DATA_DIR / "phrases.json"
 TIPS_FILE = DATA_DIR / "tips.json"
+FOOD_DIR = DATA_DIR / "food"
+FOOD_KINDS = {"taiwanese", "beef_noodles", "ramen", "japanese", "international", "sweets", "bar"}
 APP_OUTPUT_FILE = BASE_DIR / "app" / "data" / "guidebook.json"
 
 
@@ -200,11 +202,31 @@ def load_list(path: Path, required: list[str]) -> list[dict]:
     return entries
 
 
+def load_food() -> list[dict]:
+    """Owner's food picks, one file per city: data/food/<city>.json."""
+    cities = []
+    for path in sorted(FOOD_DIR.glob("*.json")) if FOOD_DIR.exists() else []:
+        with open(path, "r", encoding="utf-8") as f:
+            city = json.load(f)
+        for key in ("city_en", "city_zh", "picks"):
+            if key not in city:
+                print(f"❌ [INVALID] {path.name}: missing {key}")
+                sys.exit(1)
+        seen = set()
+        for pick in city["picks"]:
+            if not pick.get("id") or not pick.get("name") or pick.get("kind") not in FOOD_KINDS or pick["id"] in seen:
+                print(f"❌ [INVALID] {path.name}: bad pick {pick}")
+                sys.exit(1)
+            seen.add(pick["id"])
+        cities.append(city)
+    return cities
+
+
 def build_app_bundle(attractions: list[dict]) -> dict:
     """Write the single offline bundle consumed by the PWA in app/."""
     phrases = load_list(PHRASES_FILE, ["id", "category", "en", "zh_TW", "zhuyin", "pinyin"])
     tips = load_list(TIPS_FILE, ["id", "scope", "category", "title_en", "body_en"])
-    content = {"places": attractions, "phrases": phrases, "tips": tips}
+    content = {"places": attractions, "phrases": phrases, "tips": tips, "food": load_food()}
     # Content hash, so the app can tell when the data actually changed
     version = hashlib.sha256(
         json.dumps(content, ensure_ascii=False, sort_keys=True).encode("utf-8")

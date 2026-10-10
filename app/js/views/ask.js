@@ -1,5 +1,7 @@
 import { esc, today } from '../util.js';
-import { areaLabel, areaOptions, buildAskPrompt, defaultQuestion } from '../prompt.js';
+import { areaLabel, areaOptions, areaPlaces, buildAskPrompt, defaultQuestion } from '../prompt.js';
+import { foodFor } from '../data.js';
+import { distanceTo, sortByDistance } from '../geo.js';
 import { places } from '../state.js';
 import { tr } from '../lang.js';
 import { locationPanel } from './common.js';
@@ -10,7 +12,26 @@ import { locationPanel } from './common.js';
  * @returns {import('../types.js').AskContext}
  */
 export function askContext(s) {
-  return { ...s.ask, pos: s.pos, log: s.log, places: places(), today: today(), trip: s.trip, lang: s.lang };
+  return { ...s.ask, pos: s.pos, log: s.log, places: places(), today: today(), trip: s.trip, lang: s.lang,
+    food: foodFor(s.data?.food, askCity(s)) };
+}
+
+/**
+ * The city the question is about, for the owner's food picks: the planned area's city, the picked city,
+ * or the city of the nearest guidebook place when it is within 15 km of GPS.
+ * @param {import('../state.js').AppState} s
+ * @returns {string|null}
+ */
+function askCity(s) {
+  const a = s.ask;
+  if (a.mode === 'plan') {
+    if (a.area.startsWith('city:')) return a.area.slice(5);
+    if (a.area.startsWith('district:')) return a.area.slice(9).split('|')[0];
+    return areaPlaces(places(), a.area, a.customArea)[0]?.location.city_en || null;
+  }
+  if (s.pos?.city) return s.pos.city;
+  const nearest = s.pos && sortByDistance(places(), s.pos)[0];
+  return nearest && distanceTo(nearest, s.pos) <= 15 ? nearest.location.city_en : null;
 }
 
 /**

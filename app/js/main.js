@@ -18,6 +18,7 @@ import { renderLog } from './views/log.js';
 import { renderAsk, askContext } from './views/ask.js';
 import { renderPhrases, renderTips, phraseCard, phraseCardFull } from './views/reference.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
+import { foodSheet, findPick } from './views/food.js';
 
 const view = document.getElementById('view');
 
@@ -167,6 +168,14 @@ const actions = {
     openSheet(`${g.icon} ${tr(state.lang, `cat.${g.id}`)}`, phrasesIn(state.data.phrases, g.id).map(ph => phraseCardFull(ph, state.lang)).join(''));
   },
   'close-sheet': () => closeSheet(),
+  'food-sheet': el => {
+    const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
+    if (f) openSheet(tr(state.lang, 'foodPick'), foodSheet(f.city, f.pick, state.lang));
+  },
+  'food-driver': el => {
+    const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
+    if (f) showBig(`<div class="big">${esc(f.pick.name)}</div><div class="mid">${esc(f.city.city_zh)}</div><div class="mid">請帶我到這裡，謝謝。</div><div class="hint">"Please take me here, thank you."</div>`);
+  },
   city: el => { state.exploreCity = el.dataset.city; render(); },
   driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
   'show-phrase': el => showBig(phraseCard(state.data.phrases.find(x => x.id === el.dataset.id))),

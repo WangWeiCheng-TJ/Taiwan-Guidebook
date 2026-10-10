@@ -151,6 +151,7 @@ export function logBlock(log, places) {
  * 3. trip log (only if includeLog and not empty)
  * 4. the loaded plan for the target date (near: today; plan: today/tomorrow), if ctx.trip has that day
  * 5. guidebook places (near: within radius or 3 nearest fallback; plan: areaPlaces); with ids when wantPlan
+ * 5b. the owner's food picks for the city in question (ctx.food), if any
  * 6. "guidebook is limited, suggest other places too"
  * 7. "My question: ..." (ctx.question, or defaultQuestion in ctx.lang when null)
  * 8. "Please reply in Traditional Chinese (Taiwan)." when ctx.lang is zh_TW
@@ -198,6 +199,8 @@ export function buildAskPrompt(ctx) {
   if (list.length) {
     parts.push(`${listTitle}\n${list.map((p, i) => placeBrief(p, i, withDistance ? distanceTo(p, ctx.pos) : null, !!ctx.wantPlan)).join('\n')}`);
   }
+  const food = foodBlock(ctx.food || null);
+  if (food) parts.push(food);
   parts.push('My guidebook only covers selected historical and cultural sites, so also suggest other places (food, cafés, parks, markets, shopping) where they fit.');
   const question = ctx.question ?? defaultQuestion(ctx.mode, ctx.day, areaLabel(ctx.area, ctx.customArea), ctx.lang);
   parts.push(`My question: ${question}`);
@@ -250,4 +253,25 @@ export function buildExplainPrompt({ text, context = '', source = '', lang = 'en
   if (source) lines.push(lang === 'zh_TW' ? `出處：${source}` : `From: ${source}`);
   if (lang === 'zh_TW') lines.push('Please reply in Traditional Chinese (Taiwan).');
   return lines.join('\n\n');
+}
+
+const FOOD_KIND_EN = {
+  taiwanese: 'Taiwanese local food', beef_noodles: 'beef noodles', ramen: 'ramen', japanese: 'Japanese',
+  international: 'international', sweets: 'desserts', bar: 'bar',
+};
+
+/**
+ * The owner's food picks as prompt text, grouped by kind. "" when there are none.
+ * @param {import('./data.js').FoodCity|null} city
+ * @returns {string}
+ */
+export function foodBlock(city) {
+  if (!city || !city.picks.length) return '';
+  const byKind = new Map();
+  for (const p of city.picks) {
+    if (!byKind.has(p.kind)) byKind.set(p.kind, []);
+    byKind.get(p.kind).push(p.name + (p.hint ? ` (${p.hint.en.replace(/\.$/, '')})` : ''));
+  }
+  const lines = [...byKind].map(([k, names]) => `- ${FOOD_KIND_EN[k] || k}: ${names.join('; ')}`);
+  return `Places to eat that a local friend recommends in ${city.city_en} (names as on Google Maps; look up where they are, and suggest ones that fit my plan):\n${lines.join('\n')}`;
 }

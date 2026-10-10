@@ -85,6 +85,7 @@
  * @property {Trip|null} [trip]  loaded itinerary; its day for the target date is added to the prompt
  * @property {boolean} [wantPlan] ask the AI for a JSON plan to paste back (adds place ids and instructions)
  * @property {'en'|'zh_TW'} [lang] UI language: picks the default question and asks the AI to reply in it
+ * @property {import('./data.js').FoodCity|null} [food] owner's food picks for the city the question is about
  *
  * @typedef {Object} TripItem    (phase 2) one stop in an itinerary
  * @property {string} [place]    guidebook place id

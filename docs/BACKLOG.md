@@ -22,3 +22,10 @@ Collected from usage review. Fix together at the end unless noted. Newest decisi
 - Test on real phones: needs an https URL (GitHub Pages or similar). Ask before publishing.
 - Place cards are text only; consider a photo per place (licensing!).
 - Tab bar icons are text glyphs.
+
+## Food picks
+
+- Names are Chinese only; for European readers add an English line per pick (what it is / what to order). Owner to approve any tip text: personal notes stay out of the public repo.
+- No coordinates: picks aren't sorted by distance. Navigate searches Google Maps by name. A one-time geocoding step would enable "near me".
+- Pending decision: Western-food group (27 Pizza Italy, PIZZA FACE, 溫度窯烤, 紅眼披薩, ALMONd 漢堡) and FULA 巴斯克 left out for now.
+- Historic sites from the same list: 兌悅門 and 台南硓𥑮石．芳宅 (temporarily closed) to be added as full attractions.

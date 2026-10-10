@@ -5,6 +5,7 @@ import { places } from '../state.js';
 import { tr, localized } from '../lang.js';
 import { locationPanel, placeName } from './common.js';
 import { renderTodayCard } from './trip.js';
+import { renderFoodSection } from './food.js';
 
 /**
  * Explore tab (#/explore): today's plan card, location panel, city filter chips, place cards.
@@ -44,5 +45,6 @@ export function renderExplore(s) {
         <p>${esc(clip(localized(p, 'summary', L), 150))}</p>
       </a>`;
     }).join('') || `<p class="muted">${tr(L, 'noPlaces')}</p>`}
+    ${renderFoodSection(s)}
   `;
 }

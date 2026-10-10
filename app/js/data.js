@@ -55,3 +55,28 @@ export function cityCenter(places, city) {
   if (!pts.length) return null;
   return { lat: pts.reduce((s, c) => s + c.lat, 0) / pts.length, lng: pts.reduce((s, c) => s + c.lng, 0) / pts.length };
 }
+
+/**
+ * @typedef {{ id: string, name: string, kind: string, hint?: { en: string, zh_TW: string } }} FoodPick
+ * @typedef {{ city_en: string, city_zh: string, picks: FoodPick[] }} FoodCity
+ */
+
+/**
+ * The owner's food picks for a city ([] when none).
+ * @param {FoodCity[]|undefined} food  guidebook.food
+ * @param {string|null|undefined} city city_en
+ * @returns {FoodCity|null}
+ */
+export function foodFor(food, city) {
+  return (food || []).find(c => c.city_en === city) || null;
+}
+
+/**
+ * Google Maps search by name + city (the picks have no coordinates); opens the Maps app on phones.
+ * @param {FoodPick} pick
+ * @param {FoodCity} city
+ * @returns {string}
+ */
+export function foodMapsLink(pick, city) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${pick.name} ${city.city_zh}`)}`;
+}
