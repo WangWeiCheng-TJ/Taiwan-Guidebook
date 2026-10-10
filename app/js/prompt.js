@@ -229,3 +229,25 @@ export function buildPlacePrompt(place, notes) {
     'My question: ',
   ].filter(Boolean).join('\n\n');
 }
+
+/**
+ * Question for "select text, ask AI what it means".
+ * @param {{ text: string, context?: string, source?: string, lang?: 'en'|'zh_TW' }} q
+ *   text     the selected words (trimmed; cut to 80 characters)
+ *   context  the sentence or paragraph around it (cut to 300 characters); omitted when empty or equal to text
+ *   source   where it was read, e.g. a place name or page title
+ *   lang     UI language: the question is written in it and the AI is asked to reply in it
+ * @returns {string}
+ */
+export function buildExplainPrompt({ text, context = '', source = '', lang = 'en' }) {
+  const cut = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+  const t = cut(text.trim().replace(/\s+/g, ' '), 80);
+  const c = cut(context.trim().replace(/\s+/g, ' '), 300);
+  const lines = lang === 'zh_TW'
+    ? [`我在台灣旅行，正在看旅遊手冊。這裡的「${t}」是什麼意思？請用簡單的話解釋；如果是中文，也告訴我怎麼唸。`]
+    : [`I'm a visitor in Taiwan reading my travel guide. What does "${t}" mean here? Explain it simply, and if it's Chinese, tell me how to pronounce it.`];
+  if (c && c !== t) lines.push(lang === 'zh_TW' ? `上下文：「${c}」` : `Context: "${c}"`);
+  if (source) lines.push(lang === 'zh_TW' ? `出處：${source}` : `From: ${source}`);
+  if (lang === 'zh_TW') lines.push('Please reply in Traditional Chinese (Taiwan).');
+  return lines.join('\n\n');
+}

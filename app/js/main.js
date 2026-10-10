@@ -6,10 +6,11 @@ import { today } from './util.js';
 import { writeJSON } from './storage.js';
 import { loadGuidebook, placeById, cityCenter } from './data.js';
 import { LOG_KEY, emptyDraft, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
-import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel } from './prompt.js';
+import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
 import { toast, copyText, showBig, hideBig, speak, openSheet, closeSheet } from './ui.js';
+import { esc } from './util.js';
 import { tr, trMsg, LANG_KEY, otherLang } from './lang.js';
 import { renderExplore } from './views/explore.js';
 import { renderPlace, driverCard } from './views/place.js';
@@ -157,7 +158,8 @@ const actions = {
   'clear-location': () => { state.pos = null; render(); },
   'phrase-sheet': el => {
     const ph = state.data.phrases.find(x => x.id === el.dataset.id);
-    if (ph) openSheet(ph.en, phraseCardFull(ph, state.lang));
+    const g = ph && PHRASE_GROUPS.find(x => x.id === ph.category);
+    if (ph) openSheet(g ? `${g.icon} ${tr(state.lang, `cat.${g.id}`)}` : '', phraseCardFull(ph, state.lang));
   },
   'phrases-sheet': el => {
     const g = PHRASE_GROUPS.find(x => x.id === el.dataset.group);
@@ -283,6 +285,53 @@ view.addEventListener('submit', e => {
   state.draft = emptyDraft(state.draft.date);
   toast(tr(state.lang, 'saved'));
   render();
+});
+
+// ---------- Select text, ask AI what it means ----------
+// Mobile browsers don't let a page add items to the native selection menu, so a separate
+// button floats above the tab bar while text inside the app is selected.
+
+const askbar = document.getElementById('askbar');
+let selection = null; // { text, context, source }, kept because tapping the button may clear the selection
+
+function sourceOf() {
+  const { tab, arg } = parseRoute(location.hash);
+  const p = tab === 'place' && placeById(places(), arg);
+  return p ? p.name.en : document.querySelector('#view h1')?.textContent?.trim() || '';
+}
+
+let selTimer;
+document.addEventListener('selectionchange', () => {
+  clearTimeout(selTimer);
+  selTimer = setTimeout(() => {
+    const sel = document.getSelection();
+    const text = sel ? sel.toString().trim() : '';
+    const node = sel && sel.anchorNode;
+    const inApp = node && (view.contains(node) || document.getElementById('sheet').contains(node));
+    if (!text || !inApp || text.length > 200) { askbar.hidden = true; return; }
+    const block = (node.nodeType === 1 ? node : node.parentElement)?.closest('p, li, summary, .card, details, .zc, h1, h2') || node.parentElement;
+    selection = { text, context: block ? block.textContent : '', source: sourceOf() };
+    const short = text.length > 16 ? text.slice(0, 15) + '…' : text;
+    askbar.textContent = tr(state.lang, 'askAbout', { t: short });
+    askbar.hidden = false;
+  }, 250);
+});
+
+askbar.addEventListener('click', async () => {
+  if (!selection) return;
+  const prompt = buildExplainPrompt({ ...selection, lang: state.lang });
+  const ok = await copyText(prompt);
+  askbar.hidden = true;
+  document.getSelection()?.removeAllRanges();
+  openSheet(tr(state.lang, 'explainTitle'), `
+    <p class="small ${ok ? '' : 'muted'}">${tr(state.lang, ok ? 'explainCopied' : 'copyFailPreview')}</p>
+    <div class="row small" style="margin-bottom:10px">
+      <span class="muted">${tr(state.lang, 'thenOpen')}</span>
+      <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+      <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>
+      <a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>
+    </div>
+    <pre class="prompt">${esc(prompt)}</pre>`);
 });
 
 // ---------- Online status, data, service worker ----------

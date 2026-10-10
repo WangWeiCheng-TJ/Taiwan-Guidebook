@@ -53,6 +53,7 @@ const STRINGS = {
     pickCategory: 'What do you need to say?', allCategories: '‹ All categories', usefulHere: 'Useful here', morePhrases: 'More phrases ›',
     'cat.top': 'Most used', 'cat.basics': 'Basics', 'cat.food': 'Food', 'cat.transport': 'Transport', 'cat.shopping': 'Shopping', 'cat.emergency': 'Emergency',
     tips: 'Good to know', 'cat.safety': 'Safety', 'cat.daily-life': 'Daily life', 'cat.money': 'Money', 'cat.culture': 'Culture',
+    askAbout: '✦ Ask AI: “{t}”', explainTitle: 'Ask AI', explainCopied: 'Copied. Paste it into your AI app.',
     guideUpdated: 'Guide updated.', tapClose: 'Tap anywhere to close', close: 'Close',
   },
   zh_TW: {
@@ -89,6 +90,7 @@ const STRINGS = {
     pickCategory: '你想說什麼？', allCategories: '‹ 所有類別', usefulHere: '這裡用得到的話', morePhrases: '更多常用語 ›',
     'cat.top': '最常用', 'cat.basics': '基本', 'cat.food': '餐飲', 'cat.transport': '交通', 'cat.shopping': '購物', 'cat.emergency': '緊急',
     tips: '旅遊須知', 'cat.safety': '安全', 'cat.daily-life': '日常生活', 'cat.money': '金錢', 'cat.culture': '文化',
+    askAbout: '✦ 問 AI：「{t}」', explainTitle: '問 AI', explainCopied: '已複製，貼到你的 AI 就可以問了。',
     guideUpdated: '手冊已更新。', tapClose: '點任何地方關閉', close: '關閉',
   },
 };
