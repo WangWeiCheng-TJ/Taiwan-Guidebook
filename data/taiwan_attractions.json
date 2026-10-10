@@ -3,7 +3,7 @@
     "title": "Taiwan Historical & Cultural Attractions Open Database",
     "title_zh": "臺灣景點歷史沿革與文化旅遊資料庫",
     "version": "1.0.0",
-    "total_count": 6,
+    "total_count": 8,
     "generated_at": "2026-08-31",
     "license": "CC-BY-4.0",
     "repository": "https://github.com/WangWeiCheng-TJ/Taiwan-Guidebook"
@@ -322,6 +322,153 @@
         "source": "Taipei City Department of Cultural Affairs & URS Historic Preservation Project",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
         "last_updated": "2026-08-31"
+      }
+    },
+    {
+      "id": "duiyue-gate",
+      "name": {
+        "zh_TW": "兌悅門",
+        "en": "Duiyue Gate"
+      },
+      "location": {
+        "city_zh": "臺南市",
+        "city_en": "Tainan City",
+        "district_zh": "中西區",
+        "district_en": "West Central District",
+        "address_zh": "臺南市中西區文賢路與信義街口",
+        "address_en": "Corner of Wenxian Rd. and Xinyi St., West Central Dist., Tainan City",
+        "coordinates": {
+          "lat": 23.00075,
+          "lng": 120.19436
+        }
+      },
+      "category": "historical_fortress",
+      "eras": [
+        "Qing Dynasty (1683–1895)",
+        "Japanese Colonial Era (1895–1945)",
+        "Post-WWII & Modern Era (1945–present)"
+      ],
+      "established_year": 1835,
+      "heritage_status": "National Monument (國定古蹟)",
+      "summary": {
+        "zh_TW": "清道光十五年（1835年）增建、隔年完工的府城西方外城城門，基座以硓𥑮石砌成，俗稱「硓𥑮石城」。它是臺南現存四座城門中唯一還能通行的，至今仍是巷弄居民日常進出的通道。",
+        "en": "A gate of Tainan's western outer city wall, begun in 1835 and finished the next year, with a base of coral stone that gave it the nickname 'coral-stone wall'. Of Tainan's four surviving city gates it is the only one still used as a passage: locals walk through it every day."
+      },
+      "historical_narrative": {
+        "zh_TW": "清道光十二年（1832年）張丙之役後，官方在臺灣各城增建半月城，臺灣府城因此築起西方外城，範圍從小西門延伸到小北門，並把大西門包在裡面。兌悅門在道光十五年增建，隔年完工，因位於正西方，以八卦中代表西方的「兌」卦命名。它隨著五條港之一的新港墘港而興起。日治時期城牆因開闢道路而拆除，城門保留下來，成為西方外城三座城門中唯一僅存的一座。戰後城門被民房包圍，一度被榕樹覆蓋，如今已清除。2020年底，兌悅門與大南門、大東門、城垣殘跡、巽方砲台以「台灣府城城門及城垣殘跡」名義通過文資審議，升格為國定古蹟。",
+        "en": "After the Zhang Bing uprising of 1832, the Qing government added half-moon walls to Taiwan's cities, and Tainan gained a western outer wall running from the Little West Gate to the Little North Gate and enclosing the Great West Gate. Duiyue Gate was added in 1835 and completed the following year. It faces due west and is named after dui (兌), the trigram for the west in the eight trigrams. It grew up with Xingangkan Harbor, one of the city's Five Canals (五條港). In the Japanese era the walls were torn down for roads but the gate was kept, the only one of the western outer wall's three gates to survive. After the war houses closed in around it and a banyan tree grew over it; the tree has since been cleared. At the end of 2020 it passed heritage review together with the Great South Gate, the Great East Gate, remaining wall sections and the Xunfang Battery, and was upgraded to a national monument."
+      },
+      "timeline": [
+        {
+          "year_or_era": "1832",
+          "era_category": "Qing Dynasty",
+          "event_zh": "張丙之役後，府城增建西方外城。",
+          "event_en": "After the Zhang Bing uprising, a western outer wall is added to the city."
+        },
+        {
+          "year_or_era": "1835",
+          "era_category": "Qing Dynasty",
+          "event_zh": "兌悅門動工增建，隔年完工。",
+          "event_en": "Duiyue Gate is added; it is completed the following year."
+        },
+        {
+          "year_or_era": "1895–1945",
+          "era_category": "Japanese Colonial",
+          "event_zh": "城牆因開闢道路拆除，城門保留，成為西方外城唯一僅存的城門。",
+          "event_en": "The walls are torn down for roads; the gate survives as the only one left of the western outer wall."
+        },
+        {
+          "year_or_era": "2020",
+          "era_category": "Modern Era",
+          "event_zh": "以「台灣府城城門及城垣殘跡」名義通過文資審議，升格為國定古蹟。",
+          "event_en": "Passes heritage review as part of the 'Taiwan Prefecture City Gates and Wall Remains' and is upgraded to a national monument."
+        }
+      ],
+      "cultural_significance": {
+        "why_it_matters_zh": "府城西方外城唯一留下的城門，也是臺南現存城門中唯一仍在日常使用的通道，見證五條港時代的城市邊界。",
+        "why_it_matters_en": "The only surviving gate of Tainan's western outer wall and the only one of the city's old gates still in everyday use, it marks where the city ended in the days of the Five Canals.",
+        "architectural_highlights_zh": "城門高約四公尺、厚約三公尺，門洞寬約三公尺。台座應是以硓𥑮石砌成，上方砌紅磚、以白灰粉刷，內部為夯土，牆角以花崗岩補強。西立面比東立面略高，設有垛牆與槍口，東立面則沒有槍口。",
+        "architectural_highlights_en": "About four metres high and three metres thick, with a passage about three metres wide. The base is thought to be coral stone, topped with red brick finished in lime plaster over a rammed-earth core, with granite reinforcing the corners. The west face is slightly taller than the east and has battlements and gun ports; the east face has no gun ports.",
+        "intangible_culture_zh": "居民稱城門一帶為「甕城腳」，出入城的街道稱「硓𥑮石街」，也就是今天的信義街。據傳門洞像弓、巷道像箭，形成「箭煞」，因此在城門旁供奉石獅爺鎮煞，石獅爺至今仍在門邊。",
+        "intangible_culture_en": "Locals called the area around the gate Àng-siâ-kha, and the street through it Coral Stone Street, today's Xinyi Street. A legend says the arch looked like a bow and the lane like an arrow, aiming bad luck outward, so a stone lion guardian was set up beside the gate; it is still there."
+      },
+      "foreign_visitor_guide": {
+        "etiquette_tips_en": "The gate sits in a residential lane and is still a working passage: keep your voice down, don't climb on the walls, and step aside for scooters coming through.",
+        "etiquette_tips_zh": "城門位在住宅巷弄裡，也仍是通行要道：請放低音量、不要攀爬城牆，並讓路給穿越的機車。",
+        "must_see_spots_en": [
+          "Walk through the gate passage",
+          "Battlements and gun ports on the west face",
+          "Coral-stone base",
+          "Stone lion guardian beside the gate"
+        ],
+        "must_see_spots_zh": [
+          "親自走過城門門洞",
+          "西立面的垛牆與槍口",
+          "硓𥑮石台座",
+          "城門旁的石獅爺"
+        ],
+        "must_see": [
+          {
+            "name": {
+              "en": "Walk through the gate passage",
+              "zh_TW": "親自走過城門門洞"
+            },
+            "why": {
+              "en": "Of Tainan's four surviving city gates, this is the only one you can still walk through as a street.",
+              "zh_TW": "臺南現存四座城門中，只有這一座還能當成街道穿越。"
+            }
+          },
+          {
+            "name": {
+              "en": "Battlements and gun ports on the west face",
+              "zh_TW": "西立面的垛牆與槍口"
+            },
+            "why": {
+              "en": "The outward-facing west side was built slightly taller and armed with gun ports; compare it with the plainer east side.",
+              "zh_TW": "朝外的西立面蓋得比較高，還設有槍口；可以對照比較樸素的東立面。"
+            }
+          },
+          {
+            "name": {
+              "en": "Coral-stone base",
+              "zh_TW": "硓𥑮石台座"
+            },
+            "why": {
+              "en": "The coral stone at the base is where the gate's nickname, the coral-stone wall, comes from.",
+              "zh_TW": "台座的硓𥑮石，就是「硓𥑮石城」這個俗稱的由來。"
+            }
+          },
+          {
+            "name": {
+              "en": "Stone lion guardian beside the gate",
+              "zh_TW": "城門旁的石獅爺"
+            },
+            "why": {
+              "en": "Placed, so the legend goes, to block the bad luck of the bow-shaped arch and arrow-straight lane. It still stands by the gate.",
+              "zh_TW": "傳說是為了鎮住弓形門洞與箭形巷道形成的「箭煞」而設，至今仍在門邊。"
+            }
+          }
+        ],
+        "recommended_duration_min": 20,
+        "transportation_en": "About 1 km west of Chihkan Tower, roughly a 15-minute walk through the old town.",
+        "transportation_zh": "在赤崁樓西邊約一公里，穿過老城區步行約15分鐘。",
+        "best_time_to_visit": "Any time: it is open all day and free to visit."
+      },
+      "tags": [
+        "city_gate",
+        "qing_city_wall",
+        "coral_stone",
+        "five_canals",
+        "tainan_old_capital",
+        "national_monument"
+      ],
+      "metadata": {
+        "sources": [
+          "https://zh.wikipedia.org/wiki/%E5%85%8C%E6%82%85%E9%96%80",
+          "https://www.twtainan.net/zh-tw/attractions/detail/681"
+        ],
+        "generated_by": "agy draft, rewritten by Claude from the listed sources; pending owner review",
+        "last_updated": "2026-10-11"
       }
     },
     {
@@ -924,6 +1071,146 @@
         "source": "Tainan Confucius Temple Foundation & Bureau of Cultural Heritage",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
         "last_updated": "2026-08-31"
+      }
+    },
+    {
+      "id": "tainan-coral-stone-house",
+      "name": {
+        "zh_TW": "台南硓𥑮石芳宅",
+        "en": "Tainan Coral Stone House (former Huang Residence)"
+      },
+      "location": {
+        "city_zh": "臺南市",
+        "city_en": "Tainan City",
+        "district_zh": "中西區",
+        "district_en": "West Central District",
+        "address_zh": "臺南市中西區信義街46巷",
+        "address_en": "Lane 46, Xinyi St., West Central Dist., Tainan City",
+        "coordinates": {
+          "lat": 23.00075,
+          "lng": 120.19436
+        }
+      },
+      "category": "traditional_residence",
+      "eras": [
+        "Japanese Colonial Era (1895–1945)",
+        "Post-WWII & Modern Era (1945–present)"
+      ],
+      "established_year": 1926,
+      "summary": {
+        "zh_TW": "日治時期由黃氏家族興建的宅邸，以咾咕石、紅磚與洗石子為主要建材，中央是四合院、兩側是街屋，立面帶西式裝飾。荒廢多年後以「最小介入」方式修復，2025年6月以建築展覽空間重新開放。目前暫時關閉，開放時間公告於官方社群。",
+        "en": "A family house built by the Huang family in the Japanese era from coral stone, red brick and washed terrazzo: a courtyard house in the middle, shophouses on each side and a Western-style decorated front. Left empty for years, it was restored with minimal intervention and reopened in June 2025 as an architecture exhibition space. It is temporarily closed for now; opening times are posted on its official social media."
+      },
+      "historical_narrative": {
+        "zh_TW": "這裡位在清代五條港的新港墘一帶。來自屏東林邊的黃孫快家族在此落腳、購地建宅，起造於1926年（另有報導說是1930年代的昭和年間）。原址本來有兩棟狹長的二進街屋和一座三合院，黃家大幅改建：保留左右兩側的街屋形式作為店面，中央蓋起四合院作為家族起居空間。進入21世紀後黃家後代遷離，宅邸逐漸荒廢，之後由義昌文教基金會董事長許志鋒購得，委由原型建築修復。修復以最低限度補強、新舊共生為原則，新增木構屋頂，取消原有樓梯、改以兩座紅色迴旋梯連通上下樓，並保留原本的木門窗與鐵花窗。2025年6月重新開放，以展覽與講座為主，首展由成功大學建築系策劃。",
+        "en": "The house stands in the old Xingangkan area of the Qing-era Five Canals. The Huang family, led by Huang Sun-kuai from Linbian in Pingtung, settled here and built it from 1926 (one report places it in the 1930s, the Showa era). The site already held two long, narrow two-section shophouses and a three-sided courtyard house. The Huangs rebuilt it: they kept the shophouse fronts on both sides as shops and put a four-sided courtyard house in the middle for the family. In the 21st century the family moved away and the house fell into disrepair, until Hsu Chih-feng (許志鋒), chairman of the 義昌 Cultural and Educational Foundation, bought it and had it restored by the architecture firm 原型建築. The restoration used minimal reinforcement and let old and new coexist: a new timber roof, the old staircase replaced by two red spiral stairs, and the original wooden doors, windows and iron window grilles kept. It reopened in June 2025 for exhibitions and talks, with a first show curated by the architecture department of National Cheng Kung University."
+      },
+      "timeline": [
+        {
+          "year_or_era": "1926",
+          "era_category": "Japanese Colonial",
+          "event_zh": "黃孫快家族購地建宅（另有報導記為1930年代）。",
+          "event_en": "The Huang family buys the land and builds the house (one report says the 1930s)."
+        },
+        {
+          "year_or_era": "2000s",
+          "era_category": "Modern Era",
+          "event_zh": "黃家後代遷離，宅邸逐漸荒廢。",
+          "event_en": "The family moves away and the house falls into disrepair."
+        },
+        {
+          "year_or_era": "2025",
+          "era_category": "Modern Era",
+          "event_zh": "修復完成，6月以建築展覽空間重新開放。",
+          "event_en": "Restoration complete; reopens in June as an architecture exhibition space."
+        }
+      ],
+      "cultural_significance": {
+        "why_it_matters_zh": "一座從家族宅邸變成建築展覽空間的老屋，修復刻意讓新舊結構並存，是看台南老屋再生手法的好例子。",
+        "why_it_matters_en": "An old family home turned architecture gallery, restored so that old and new structure sit side by side: a good place to see how Tainan brings old houses back to life.",
+        "architectural_highlights_zh": "主要建材為咾咕石、紅磚與洗石子；正身為鋼筋混凝土加強磚造，立面採用西式裝飾。一樓為客廳，二樓有公媽廳與臥室，屋後有八角形水池。修復新增的木構屋頂引入自然光，兩座紅色迴旋梯連通上下樓。",
+        "architectural_highlights_en": "Built mainly of coral stone, red brick and washed terrazzo, with a reinforced brick main block and Western-style decoration on the front. Living room downstairs, ancestral hall and bedrooms upstairs, and an octagonal pond at the back. The restoration added a timber roof that lets daylight in and two red spiral staircases.",
+        "intangible_culture_zh": "據說屋內的幾座花崗石花架可能來自清代武舉人胡澄淵的舊居。",
+        "intangible_culture_en": "A few granite flower stands in the house are said to have come from the former home of Hu Cheng-yuan, a Qing-dynasty military degree holder."
+      },
+      "foreign_visitor_guide": {
+        "etiquette_tips_en": "Temporarily closed for now; check its official social media for opening times before you go. When open, it is an exhibition space: follow the staff's guidance on photos.",
+        "etiquette_tips_zh": "目前暫時關閉，出發前請先看官方社群公告的開放時間。開放時是展覽空間，拍照請依現場人員指示。",
+        "must_see_spots_en": [
+          "Two red spiral staircases",
+          "New timber roof letting in daylight",
+          "Coral stone, red brick and terrazzo walls",
+          "Octagonal pond at the back"
+        ],
+        "must_see_spots_zh": [
+          "兩座紅色迴旋梯",
+          "引入自然光的新木構屋頂",
+          "咾咕石、紅磚與洗石子牆面",
+          "屋後的八角形水池"
+        ],
+        "must_see": [
+          {
+            "name": {
+              "en": "Two red spiral staircases",
+              "zh_TW": "兩座紅色迴旋梯"
+            },
+            "why": {
+              "en": "They replaced the original staircase in the restoration, the most visible sign of its new-and-old approach.",
+              "zh_TW": "修復時取代原本的樓梯，是新舊共生手法最醒目的地方。"
+            }
+          },
+          {
+            "name": {
+              "en": "New timber roof letting in daylight",
+              "zh_TW": "引入自然光的新木構屋頂"
+            },
+            "why": {
+              "en": "Added in the restoration on top of the old structure, it brings natural light into the upper floor.",
+              "zh_TW": "修復時在舊結構上新增的木構屋頂，把自然光引進二樓。"
+            }
+          },
+          {
+            "name": {
+              "en": "Coral stone, red brick and terrazzo walls",
+              "zh_TW": "咾咕石、紅磚與洗石子牆面"
+            },
+            "why": {
+              "en": "The house's main building materials, and where its coral-stone name comes from.",
+              "zh_TW": "老宅的主要建材，也是「硓𥑮石」這個名字的由來。"
+            }
+          },
+          {
+            "name": {
+              "en": "Octagonal pond at the back",
+              "zh_TW": "屋後的八角形水池"
+            },
+            "why": {
+              "en": "An original feature of the family house behind the courtyard.",
+              "zh_TW": "黃家宅邸原有的設計，位在四合院後方。"
+            }
+          }
+        ],
+        "recommended_duration_min": 45,
+        "transportation_en": "In a lane off Xinyi Street, a short walk from Duiyue Gate at the street's west end.",
+        "transportation_zh": "位在信義街的巷子裡，從信義街西端的兌悅門步行不遠。",
+        "best_time_to_visit": "Check opening times on its official social media first: it is temporarily closed."
+      },
+      "tags": [
+        "old_house_revival",
+        "coral_stone",
+        "architecture_exhibition",
+        "five_canals",
+        "tainan_old_capital",
+        "temporarily_closed"
+      ],
+      "metadata": {
+        "sources": [
+          "https://zh.wikipedia.org/wiki/%E4%BF%A1%E7%BE%A9%E8%A1%97%E5%92%BE%E5%92%95%E7%9F%B3%E9%BB%83%E5%AE%85",
+          "https://n.yam.com/Article/20250925878006"
+        ],
+        "coordinates_note": "Approximate: Duiyue Gate's position (same street). The exact point is not in the sources, and they disagree on the house number (No. 15 vs No. 17, Lane 46).",
+        "generated_by": "agy draft, rewritten by Claude from the listed sources; pending owner review",
+        "last_updated": "2026-10-11"
       }
     }
   ]
