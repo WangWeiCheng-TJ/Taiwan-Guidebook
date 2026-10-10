@@ -17,7 +17,9 @@ test('foodFor and maps link', () => {
 test('foodBlock groups by kind and carries hints', () => {
   const b = foodBlock(tainan);
   assert.match(b, /^Places to eat that a local friend recommends in Tainan City/);
-  assert.match(b, /- Taiwanese local food: 柯家蚵嗲; 入街 \(Closes early when sold out\)/);
+  assert.ok(b.includes('\n- Tainan specialties: 柯家蚵嗲 (oyster fritters); 府城黃家蝦捲 (shrimp rolls)'));
+  assert.ok(b.includes('- Taiwanese local food: 入街 (Closes early when sold out)'));
+  assert.ok(b.indexOf('Tainan specialties') < b.indexOf('Taiwanese local food'));
   assert.equal(foodBlock(null), '');
   assert.equal(foodBlock({ city_en: 'X', city_zh: 'X', picks: [] }), '');
 });

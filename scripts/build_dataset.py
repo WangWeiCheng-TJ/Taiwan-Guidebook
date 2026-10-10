@@ -214,7 +214,9 @@ def load_food() -> list[dict]:
                 sys.exit(1)
         seen = set()
         for pick in city["picks"]:
-            if not pick.get("id") or not pick.get("name") or pick.get("kind") not in FOOD_KINDS or pick["id"] in seen:
+            bad_dish = "dish" in pick and not (isinstance(pick["dish"], dict) and pick["dish"].get("en") and pick["dish"].get("zh_TW"))
+            bad_local = not isinstance(pick.get("local", False), bool)
+            if not pick.get("id") or not pick.get("name") or pick.get("kind") not in FOOD_KINDS or pick["id"] in seen or bad_local or bad_dish:
                 print(f"❌ [INVALID] {path.name}: bad pick {pick}")
                 sys.exit(1)
             seen.add(pick["id"])
