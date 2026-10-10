@@ -1,5 +1,4 @@
 // Zhuyin (Bopomofo) pronunciation, broken down symbol by symbol with a romanization for each.
-// TASK (delegated): implement the bodies; do not change names, parameters or return shapes.
 // Contract tests: tests/tasks/zhuyin.test.js
 
 /**
@@ -16,7 +15,14 @@
  * Exactly these 37 keys.
  * @type {Readonly<Record<string, string>>}
  */
-export const ZHUYIN_ROMAN = Object.freeze({});
+export const ZHUYIN_ROMAN = Object.freeze({
+  ㄅ: 'b', ㄆ: 'p', ㄇ: 'm', ㄈ: 'f', ㄉ: 'd', ㄊ: 't', ㄋ: 'n', ㄌ: 'l', ㄍ: 'g', ㄎ: 'k', ㄏ: 'h',
+  ㄐ: 'j', ㄑ: 'q', ㄒ: 'x', ㄓ: 'zh', ㄔ: 'ch', ㄕ: 'sh', ㄖ: 'r', ㄗ: 'z', ㄘ: 'c', ㄙ: 's',
+  ㄧ: 'i', ㄨ: 'u', ㄩ: 'ü', ㄚ: 'a', ㄛ: 'o', ㄜ: 'e', ㄝ: 'ê', ㄞ: 'ai', ㄟ: 'ei', ㄠ: 'ao', ㄡ: 'ou',
+  ㄢ: 'an', ㄣ: 'en', ㄤ: 'ang', ㄥ: 'eng', ㄦ: 'er',
+});
+
+const TONES = { 'ˉ': 1, 'ˊ': 2, 'ˇ': 3, 'ˋ': 4, '˙': 5 };
 
 /**
  * Parse one syllable written in Zhuyin.
@@ -30,7 +36,25 @@ export const ZHUYIN_ROMAN = Object.freeze({});
  * @returns {Syllable|null}  null when empty, no symbols, an unknown character, or more than one tone mark
  */
 export function parseSyllable(syllable) {
-  throw new Error('TODO: parseSyllable');
+  const s = syllable.trim();
+  if (!s) return null;
+  let tone = null;
+  const parts = [];
+  for (const ch of s) {
+    if (ch in TONES) {
+      if (tone !== null) return null;
+      tone = TONES[ch];
+    } else if (ch in ZHUYIN_ROMAN) {
+      parts.push({ symbol: ch, roman: ZHUYIN_ROMAN[ch] });
+    } else {
+      return null;
+    }
+  }
+  if (!parts.length) return null;
+  if (parts.length === 1 && 'ㄓㄔㄕㄖㄗㄘㄙ'.includes(parts[0].symbol)) {
+    parts[0].roman += 'i';
+  }
+  return { parts, tone: tone ?? 1 };
 }
 
 /**
@@ -43,5 +67,14 @@ export function parseSyllable(syllable) {
  *                                or any syllable fails parseSyllable
  */
 export function alignZhuyin(zh, zhuyin) {
-  throw new Error('TODO: alignZhuyin');
+  const syllables = zhuyin.trim() ? zhuyin.trim().split(/\s+/) : [];
+  const hanChars = [...zh].filter(c => /\p{Script=Han}/u.test(c));
+  if (syllables.length !== hanChars.length) return null;
+  const parsed = syllables.map(parseSyllable);
+  if (parsed.some(s => !s)) return null;
+  let i = 0;
+  return [...zh].map(char => ({
+    char,
+    syllable: /\p{Script=Han}/u.test(char) ? parsed[i++] : null,
+  }));
 }
