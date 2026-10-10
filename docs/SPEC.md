@@ -83,6 +83,7 @@ Contract changes allowed in this task, and only these:
 
 - `types.js`: `AskContext` gains `trip: Trip | null` and `wantPlan: boolean`.
 - `state.js`: `state.trip` (loaded from `TRIP_KEY` at startup) and `state.ask.wantPlan = false`.
+- `prompt.js` `placeBrief`: gains a 4th parameter `withId: boolean` (default `false`). When true, the first line ends with ` [id: <place id>]` so the AI can fill `"place"` in a pasted-back plan. `buildAskPrompt` passes `ctx.wantPlan`. Without this the AI never sees ids and paste-back can only match exact names.
 - `prompt.js` `buildAskPrompt`: when `ctx.trip` has a day for the target date (near mode: `ctx.today`; plan mode: today or tomorrow per `ctx.day`), insert `tripBlock(...)` as a paragraph right after the trip log paragraph. When `ctx.wantPlan`, append `planRequestSuffix()` as the last paragraph. Existing `tests/core/prompt.test.js` must stay green (both new fields absent or null/false means the old output); add new tests for the two new paragraphs.
 
 New view `app/js/views/trip.js`:
@@ -97,7 +98,7 @@ New view `app/js/views/trip.js`:
 
 `main.js` additions:
 - On startup: `tripUrlFrom(location.search)`; if present, `loadTrip`, then on success save to `TRIP_KEY`, set `state.trip`, toast "Plan loaded: <title>"; on failure toast the first error and keep any stored trip.
-- `paste-plan`: `planFromAiText(textarea value, places())`; on success save and render, on failure toast the first error.
+- `paste-plan`: `planFromAiText(textarea value, places())`; on success save and render, on failure toast the first error. (Known gap from T1: `parseTrip` messages don't say which day or stop failed, e.g. "Each stop must have a place id or a name." Prefix them with the position, e.g. "Day 2, stop 3: ...", as part of this task.)
 - `clear-trip`: confirm, then remove from storage and state.
 - Ask tab: checkbox `data-change="want-plan"` labelled "Ask for a plan I can paste back"; `askContext()` passes `trip` and `wantPlan`.
 - `sw.js`: add `js/views/trip.js` to `SHELL`, bump `CACHE`.
