@@ -50,7 +50,8 @@
  * @property {number} lat
  * @property {number} lng
  * @property {'gps'|'pick'} source   gps = device location, pick = user chose a place
- * @property {string} label          shown to the user ("your location" or a place name)
+ * @property {string} label          place name (English) for prompts, or "your location"
+ * @property {string} [placeId]      set when source is 'pick', so the UI can show the name in its language
  *
  * @typedef {Object} LogEntry    One line of the personal trip log (stored on device only)
  * @property {string} id         unique, stable across export/import
@@ -81,6 +82,7 @@
  * @property {string} today      YYYY-MM-DD, injected so tests are deterministic
  * @property {Trip|null} [trip]  loaded itinerary; its day for the target date is added to the prompt
  * @property {boolean} [wantPlan] ask the AI for a JSON plan to paste back (adds place ids and instructions)
+ * @property {'en'|'zh_TW'} [lang] UI language: picks the default question and asks the AI to reply in it
  *
  * @typedef {Object} TripItem    (phase 2) one stop in an itinerary
  * @property {string} [place]    guidebook place id

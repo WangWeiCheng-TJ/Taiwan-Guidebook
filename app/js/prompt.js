@@ -93,9 +93,14 @@ export function nearPlaces(places, pos, radius) {
  * @param {'near'|'plan'} mode
  * @param {'today'|'tomorrow'} day
  * @param {string} area  areaLabel() result, may be ""
+ * @param {'en'|'zh_TW'} [lang]  language of the suggested question
  * @returns {string}
  */
-export function defaultQuestion(mode, day, area) {
+export function defaultQuestion(mode, day, area, lang = 'en') {
+  if (lang === 'zh_TW') {
+    if (mode === 'near') return '接下來幾個小時，在這附近可以做什麼？請考慮我的喜好。';
+    return `請幫我規劃${day === 'today' ? '今天' : '明天'}${area ? `在 ${area} ` : ''}的行程：幾個順路的地點，加上吃飯的地方。請考慮我的喜好。`;
+  }
   if (mode === 'near') {
     return 'What should I do in the next few hours around here? Keep my likes and dislikes in mind.';
   }
@@ -147,8 +152,9 @@ export function logBlock(log, places) {
  * 4. the loaded plan for the target date (near: today; plan: today/tomorrow), if ctx.trip has that day
  * 5. guidebook places (near: within radius or 3 nearest fallback; plan: areaPlaces); with ids when wantPlan
  * 6. "guidebook is limited, suggest other places too"
- * 7. "My question: ..." (ctx.question, or defaultQuestion when null)
- * 8. planRequestSuffix() when wantPlan
+ * 7. "My question: ..." (ctx.question, or defaultQuestion in ctx.lang when null)
+ * 8. "Please reply in Traditional Chinese (Taiwan)." when ctx.lang is zh_TW
+ * 9. planRequestSuffix() when wantPlan
  * @param {AskContext} ctx
  * @returns {string}
  */
@@ -193,8 +199,9 @@ export function buildAskPrompt(ctx) {
     parts.push(`${listTitle}\n${list.map((p, i) => placeBrief(p, i, withDistance ? distanceTo(p, ctx.pos) : null, !!ctx.wantPlan)).join('\n')}`);
   }
   parts.push('My guidebook only covers selected historical and cultural sites, so also suggest other places (food, cafés, parks, markets, shopping) where they fit.');
-  const question = ctx.question ?? defaultQuestion(ctx.mode, ctx.day, areaLabel(ctx.area, ctx.customArea));
+  const question = ctx.question ?? defaultQuestion(ctx.mode, ctx.day, areaLabel(ctx.area, ctx.customArea), ctx.lang);
   parts.push(`My question: ${question}`);
+  if (ctx.lang === 'zh_TW') parts.push('Please reply in Traditional Chinese (Taiwan).');
   if (ctx.wantPlan) parts.push(planRequestSuffix());
   return parts.join('\n\n');
 }

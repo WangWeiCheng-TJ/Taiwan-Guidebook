@@ -17,8 +17,11 @@
 </head>
 <body>
   <header class="topbar">
-    <a href="#/explore" class="brand">Taiwan Guidebook</a>
-    <span id="net-status" class="net" hidden>Offline</span>
+    <a href="#/explore" class="brand" id="brand">Taiwan Guidebook</a>
+    <div class="actions">
+      <span id="net-status" class="net" hidden>Offline</span>
+      <button id="lang-toggle" class="btn small" type="button" aria-label="Language">中文</button>
+    </div>
   </header>
 
   <main id="view" class="view" aria-live="polite">
@@ -26,11 +29,11 @@
   </main>
 
   <nav class="tabbar" aria-label="Sections">
-    <a href="#/explore" data-tab="explore"><span class="ico">⌖</span>Explore</a>
-    <a href="#/log" data-tab="log"><span class="ico">✎</span>My trip</a>
-    <a href="#/ask" data-tab="ask"><span class="ico">✦</span>Ask AI</a>
-    <a href="#/phrases" data-tab="phrases"><span class="ico">文</span>Phrases</a>
-    <a href="#/tips" data-tab="tips"><span class="ico">i</span>Tips</a>
+    <a href="#/explore" data-tab="explore"><span class="ico">⌖</span><span data-label>Explore</span></a>
+    <a href="#/log" data-tab="log"><span class="ico">✎</span><span data-label>My trip</span></a>
+    <a href="#/ask" data-tab="ask"><span class="ico">✦</span><span data-label>Ask AI</span></a>
+    <a href="#/phrases" data-tab="phrases"><span class="ico">文</span><span data-label>Phrases</span></a>
+    <a href="#/tips" data-tab="tips"><span class="ico">i</span><span data-label>Tips</span></a>
   </nav>
 
   <div id="bigcard" class="bigcard" hidden role="dialog" aria-modal="true"></div>

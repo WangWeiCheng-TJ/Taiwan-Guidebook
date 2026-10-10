@@ -1,0 +1,164 @@
+// UI language: string table, content accessors, initial choice. Pure except nothing (no DOM).
+
+import { t, tList } from './i18n.js';
+
+/** @typedef {'en'|'zh_TW'} Lang */
+
+export const LANGS = /** @type {const} */ (['en', 'zh_TW']);
+export const LANG_KEY = 'tg.lang.v1';
+
+/**
+ * Language to start with: the saved choice, else Chinese for a zh-* browser, else English.
+ * @param {unknown} stored     value read from storage
+ * @param {string} [navLang]   navigator.language
+ * @returns {Lang}
+ */
+export function initialLang(stored, navLang = '') {
+  if (LANGS.includes(/** @type {any} */ (stored))) return /** @type {Lang} */ (stored);
+  return navLang.toLowerCase().startsWith('zh') ? 'zh_TW' : 'en';
+}
+
+const STRINGS = {
+  en: {
+    brand: 'Taiwan Guidebook', offline: 'Offline', switchTo: '中文', loadFail: 'Could not load the guide. Connect to the internet once so it can be saved for offline use.',
+    'tab.explore': 'Explore', 'tab.log': 'My trip', 'tab.ask': 'Ask AI', 'tab.phrases': 'Phrases', 'tab.tips': 'Tips',
+    distancesFrom: 'Distances from <b>{label}</b>', update: 'Update', useLocation: 'Use my location', nearPick: "or I'm near…",
+    choosePlace: 'Choose a place', yourLocation: 'your location', locating: 'Finding your location…',
+    noGeo: 'Location is not available on this device.', geoFail: 'Could not get your location. Pick a place instead.',
+    explore: 'Explore', all: 'All', visited: 'Visited', noPlaces: 'No places yet.',
+    allPlaces: '‹ All places', away: '{d} away', since: 'Since {y}', minutes: '~{n} min', navigate: 'Navigate',
+    driver: 'Show to driver', wasHere: 'I was here', copyAi: 'Copy for AI', appleMaps: 'Open in Apple Maps',
+    yourNotes: 'Your notes', dontMiss: "Don't miss", etiquette: 'Etiquette', bestTime: 'Best time', gettingThere: 'Getting there',
+    story: 'The story', whyMatters: 'Why it matters.', lookFor: 'Look for.', timeline: 'Timeline', notFound: 'Place not found.', back: 'Back',
+    copiedPlace: 'Copied. Paste it into your AI app and add your question.', copyFail: 'Copy failed.',
+    myTrip: 'My trip', notes: 'Notes', notesIntro: "Saved only on this phone. Ask AI adds these notes to your question, so it learns what you like and what you don't.",
+    date: 'Date', where: 'Where', elsewhere: 'Somewhere else (type below)', nameLabel: 'Name of the place, food, or activity',
+    namePh: 'e.g. Curry shop near Yongkang St.', rating: 'Rating (optional)', note: 'Note', notePh: 'e.g. Too salty for me. Loved the old street.',
+    save: 'Save', saved: 'Saved.', nothingLogged: 'Nothing logged yet.', dayN: 'day {n}', backup: 'Backup',
+    backupIntro: 'Move your notes to another phone, or keep a copy.', export: 'Export', import: 'Import',
+    deleteNote: 'Delete this note?', imported: 'Imported {n} new note(s).', badImport: 'That file is not a trip log export.',
+    storageFail: 'Could not save on this device (storage blocked or full).',
+    myPlan: 'My plan', pasteIntro: 'In <a href="#/ask">Ask AI</a>, tick <b>Ask for a plan I can paste back</b>, send it to your AI, then paste its whole answer here.',
+    pastePh: "Paste the AI's answer here", loadPlan: 'Load plan', cancel: 'Cancel', replacePlan: 'Replace plan', removePlan: 'Remove plan',
+    days: '{n} day(s)', today: 'today', nothingPlanned: 'Nothing planned for this day.', notInGuide: 'not in guidebook',
+    todaysPlan: "Today's plan", planLoaded: 'Plan loaded: {t}', removePlanConfirm: 'Remove this plan from the phone?',
+    askTitle: 'Ask AI', askIntro: 'Builds a question with your trip notes and guidebook places. Copy it, then paste into ChatGPT, Claude, Gemini or any AI you use.',
+    nearMe: 'Near me now', planDay: 'Plan a day', within: 'Within', when: 'When', tomorrow: 'Tomorrow', todayOpt: 'Today',
+    area: 'Area', typeArea: 'Type an area…', areaName: 'Area name', areaPh: "e.g. Da'an District, Taipei",
+    yourQuestion: 'Your question', includeNotes: 'Include my trip notes ({n})', wantPlan: 'Ask for a plan I can paste back',
+    copyQuestion: 'Copy question', thenOpen: 'Then open:', preview: 'Preview',
+    copied: 'Copied. Now paste it into your AI app.', copyFailPreview: 'Copy failed. Select the preview text instead.',
+    phrases: 'Phrases', phrasesIntro: "Tap <b>Show</b> to display it big for the person you're talking to.", play: '▶ Play', show: 'Show',
+    toneLegend: 'Tones: 1 high · 2 rising · 3 dip · 4 falling · 5 light',
+    'cat.basics': 'Basics', 'cat.food': 'Food', 'cat.transport': 'Transport', 'cat.shopping': 'Shopping', 'cat.emergency': 'Emergency',
+    tips: 'Good to know', 'cat.safety': 'Safety', 'cat.daily-life': 'Daily life', 'cat.money': 'Money', 'cat.culture': 'Culture',
+    guideUpdated: 'Guide updated.', tapClose: 'Tap anywhere to close', close: 'Close',
+  },
+  zh_TW: {
+    brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
+    'tab.explore': '探索', 'tab.log': '我的旅程', 'tab.ask': '問 AI', 'tab.phrases': '常用語', 'tab.tips': '須知',
+    distancesFrom: '距離以 <b>{label}</b> 計算', update: '更新', useLocation: '使用我的位置', nearPick: '或選擇我在哪附近…',
+    choosePlace: '選擇地點', yourLocation: '目前位置', locating: '正在取得位置…',
+    noGeo: '這台裝置無法使用定位。', geoFail: '無法取得位置，請改選一個地點。',
+    explore: '探索', all: '全部', visited: '去過', noPlaces: '目前還沒有景點。',
+    allPlaces: '‹ 所有景點', away: '距離 {d}', since: '建於 {y}', minutes: '約 {n} 分鐘', navigate: '導航',
+    driver: '給司機看', wasHere: '我去過', copyAi: '複製給 AI', appleMaps: '用 Apple 地圖開啟',
+    yourNotes: '我的筆記', dontMiss: '必看', etiquette: '參訪禮儀', bestTime: '最佳時段', gettingThere: '交通方式',
+    story: '歷史故事', whyMatters: '為什麼重要：', lookFor: '看點：', timeline: '年表', notFound: '找不到這個景點。', back: '返回',
+    copiedPlace: '已複製。貼到你的 AI，再加上你的問題。', copyFail: '複製失敗。',
+    myTrip: '我的旅程', notes: '筆記', notesIntro: '只存在這支手機上。問 AI 時會附上這些筆記，讓 AI 知道你喜歡和不喜歡什麼。',
+    date: '日期', where: '地點', elsewhere: '其他地方（在下方輸入）', nameLabel: '地點、食物或活動名稱',
+    namePh: '例如：永康街附近的咖哩店', rating: '評分（可不填）', note: '筆記', notePh: '例如：對我來說太鹹。老街很喜歡。',
+    save: '儲存', saved: '已儲存。', nothingLogged: '還沒有紀錄。', dayN: '第 {n} 天', backup: '備份',
+    backupIntro: '把筆記搬到另一支手機，或留一份備份。', export: '匯出', import: '匯入',
+    deleteNote: '刪除這則筆記？', imported: '已匯入 {n} 則新筆記。', badImport: '這不是旅程筆記的匯出檔。',
+    storageFail: '無法儲存在這台裝置上（儲存空間被封鎖或已滿）。',
+    myPlan: '我的行程', pasteIntro: '在<a href="#/ask">問 AI</a>勾選<b>請 AI 給我可以貼回來的行程</b>，送給你的 AI，再把它的完整回答貼在這裡。',
+    pastePh: '把 AI 的回答貼在這裡', loadPlan: '載入行程', cancel: '取消', replacePlan: '換一份行程', removePlan: '移除行程',
+    days: '{n} 天', today: '今天', nothingPlanned: '這天沒有安排。', notInGuide: '不在手冊中',
+    todaysPlan: '今天的行程', planLoaded: '已載入行程：{t}', removePlanConfirm: '要從手機移除這份行程嗎？',
+    askTitle: '問 AI', askIntro: '把你的旅程筆記和手冊裡的景點組成一個問題。複製後貼到 ChatGPT、Claude、Gemini 或任何你用的 AI。',
+    nearMe: '我附近', planDay: '規劃一天', within: '範圍', when: '時間', tomorrow: '明天', todayOpt: '今天',
+    area: '區域', typeArea: '自行輸入區域…', areaName: '區域名稱', areaPh: '例如：台北市大安區',
+    yourQuestion: '你的問題', includeNotes: '附上我的旅程筆記（{n}）', wantPlan: '請 AI 給我可以貼回來的行程',
+    copyQuestion: '複製問題', thenOpen: '接著打開：', preview: '預覽',
+    copied: '已複製，現在貼到你的 AI。', copyFailPreview: '複製失敗，請直接選取預覽的文字。',
+    phrases: '常用語', phrasesIntro: '點<b>顯示</b>，把字放大給對方看。', play: '▶ 播放', show: '顯示',
+    toneLegend: '聲調：1 一聲 · 2 二聲 · 3 三聲 · 4 四聲 · 5 輕聲',
+    'cat.basics': '基本', 'cat.food': '餐飲', 'cat.transport': '交通', 'cat.shopping': '購物', 'cat.emergency': '緊急',
+    tips: '旅遊須知', 'cat.safety': '安全', 'cat.daily-life': '日常生活', 'cat.money': '金錢', 'cat.culture': '文化',
+    guideUpdated: '手冊已更新。', tapClose: '點任何地方關閉', close: '關閉',
+  },
+};
+
+// Messages produced by pure modules (in English) that the UI shows as toasts.
+const MESSAGES_ZH = {
+  'Pick a place or type a name.': '請選擇地點或輸入名稱。',
+  'Add a rating or a note.': '請給個評分或寫一句筆記。',
+  'No plan found in the text.': '在這段文字裡找不到行程。',
+  'The plan is not valid JSON.': '行程的格式不正確（不是有效的 JSON）。',
+  'The trip file is not valid JSON.': '行程檔的格式不正確（不是有效的 JSON）。',
+  'Could not load the trip. Check your connection.': '無法載入行程，請檢查網路連線。',
+};
+
+/**
+ * A UI string with {name} placeholders filled. Falls back to English, then to the key itself.
+ * Values are inserted as is: escape data before passing it in when the result goes into HTML.
+ * @param {Lang} lang
+ * @param {string} key
+ * @param {Record<string, string|number>} [vars]
+ * @returns {string}
+ */
+export function tr(lang, key, vars = {}) {
+  const s = STRINGS[lang]?.[key] ?? STRINGS.en[key] ?? key;
+  return s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
+}
+
+/**
+ * Translate a known English message from a pure module; unknown messages stay English.
+ * @param {Lang} lang
+ * @param {string} msg
+ * @returns {string}
+ */
+export function trMsg(lang, msg) {
+  return lang === 'zh_TW' ? MESSAGES_ZH[msg] ?? msg : msg;
+}
+
+/**
+ * Content text in the chosen language. Works with both data formats:
+ * - per-language map:  obj[key] = { en, zh_TW, ... }   (schema v2, and name/summary today)
+ * - paired fields:     obj[key + '_en'], obj[key + '_zh'] (schema v1)
+ * - plain string:      obj[key] (not translated) is returned as is
+ * Falls back to English, then any language.
+ * @param {Record<string, any>|null|undefined} obj
+ * @param {string} key
+ * @param {Lang} lang
+ * @returns {string}
+ */
+export function localized(obj, key, lang) {
+  if (!obj) return '';
+  if (obj[key] !== undefined) return t(obj[key], lang);
+  return t({ en: obj[`${key}_en`], zh_TW: obj[`${key}_zh`] }, lang);
+}
+
+/**
+ * List version of localized(), e.g. must_see_spots.
+ * @param {Record<string, any>|null|undefined} obj
+ * @param {string} key
+ * @param {Lang} lang
+ * @returns {string[]}
+ */
+export function localizedList(obj, key, lang) {
+  if (!obj) return [];
+  if (obj[key] !== undefined) return tList(obj[key], lang);
+  return tList({ en: obj[`${key}_en`], zh_TW: obj[`${key}_zh`] }, lang);
+}
+
+/**
+ * The other language, for the switch button.
+ * @param {Lang} lang
+ * @returns {Lang}
+ */
+export function otherLang(lang) {
+  return lang === 'en' ? 'zh_TW' : 'en';
+}

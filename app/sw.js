@@ -34,6 +34,7 @@ const SHELL = [
   'js/aiplan.js',
   'js/i18n.js',
   'js/zhuyin.js',
+  'js/lang.js',
   DATA,
 ];
 

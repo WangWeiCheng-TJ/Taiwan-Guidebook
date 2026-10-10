@@ -4,83 +4,107 @@
     "scope": "global",
     "category": "safety",
     "title_en": "Emergency numbers",
-    "body_en": "Police: 110. Fire and ambulance: 119. Both work from any phone."
+    "body_en": "Police: 110. Fire and ambulance: 119. Both work from any phone.",
+    "title_zh": "緊急電話",
+    "body_zh": "報警：110。消防和救護車：119。任何電話都能撥打。"
   },
   {
     "id": "mrt-no-eating",
     "scope": "global",
     "category": "transport",
     "title_en": "No eating or drinking on the MRT",
-    "body_en": "Past the yellow line at the ticket gates, eating, drinking (even water) and chewing gum are banned and can be fined. Finish your bubble tea before the gate."
+    "body_en": "Past the yellow line at the ticket gates, eating, drinking (even water) and chewing gum are banned and can be fined. Finish your bubble tea before the gate.",
+    "title_zh": "捷運上禁止飲食",
+    "body_zh": "過了閘門的黃線之後，禁止吃東西、喝東西（連水也不行）和嚼口香糖，違者可能被罰款。珍奶請在進站前喝完。"
   },
   {
     "id": "priority-seats",
     "scope": "global",
     "category": "transport",
     "title_en": "Priority seats",
-    "body_en": "The dark blue seats on trains and buses are for the elderly, pregnant passengers and people with disabilities. Many locals leave them empty even when the train is full."
+    "body_en": "The dark blue seats on trains and buses are for the elderly, pregnant passengers and people with disabilities. Many locals leave them empty even when the train is full.",
+    "title_zh": "博愛座",
+    "body_zh": "捷運和公車上的深藍色座位是給長者、孕婦和行動不便的人。很多人即使車廂客滿也會讓它空著。"
   },
   {
     "id": "easycard",
     "scope": "global",
     "category": "transport",
     "title_en": "Get an EasyCard",
-    "body_en": "A stored-value card for MRT, buses, YouBike and convenience stores. Buy and top it up at MRT stations or any 7-Eleven / FamilyMart."
+    "body_en": "A stored-value card for MRT, buses, YouBike and convenience stores. Buy and top it up at MRT stations or any 7-Eleven / FamilyMart.",
+    "title_zh": "辦一張悠遊卡",
+    "body_zh": "儲值卡，可以搭捷運、公車、YouBike，也能在便利商店付款。在捷運站或任何 7-Eleven、全家都能購買和加值。"
   },
   {
     "id": "convenience-stores",
     "scope": "global",
     "category": "daily-life",
     "title_en": "Convenience stores do everything",
-    "body_en": "7-Eleven and FamilyMart sell hot food and drinks, top up cards, have ATMs, print documents and pay bills. There is one on almost every corner."
+    "body_en": "7-Eleven and FamilyMart sell hot food and drinks, top up cards, have ATMs, print documents and pay bills. There is one on almost every corner.",
+    "title_zh": "便利商店什麼都有",
+    "body_zh": "7-Eleven 和全家有熱食和飲料，可以加值、提款、列印文件、繳費，幾乎每個街角都有一家。"
   },
   {
     "id": "cash",
     "scope": "global",
     "category": "money",
     "title_en": "Carry some cash",
-    "body_en": "Night market stalls, small eateries and traditional shops are often cash only. Cards work in malls, chains and most hotels."
+    "body_en": "Night market stalls, small eateries and traditional shops are often cash only. Cards work in malls, chains and most hotels.",
+    "title_zh": "身上帶點現金",
+    "body_zh": "夜市攤販、小吃店和傳統店家常常只收現金。百貨、連鎖店和大部分飯店可以刷卡。"
   },
   {
     "id": "tipping",
     "scope": "global",
     "category": "money",
     "title_en": "No tipping",
-    "body_en": "Tipping is not expected. Sit-down restaurants may add a 10% service charge to the bill."
+    "body_en": "Tipping is not expected. Sit-down restaurants may add a 10% service charge to the bill.",
+    "title_zh": "不用給小費",
+    "body_zh": "台灣沒有給小費的習慣。坐著用餐的餐廳可能會在帳單上加收 10% 服務費。"
   },
   {
     "id": "trash",
     "scope": "global",
     "category": "daily-life",
     "title_en": "Few public bins",
-    "body_en": "Public trash bins are rare. Keep a small bag for your trash; convenience stores and MRT stations usually have bins. Garbage trucks play classical music (often Für Elise) so residents know to come out."
+    "body_en": "Public trash bins are rare. Keep a small bag for your trash; convenience stores and MRT stations usually have bins. Garbage trucks play classical music (often Für Elise) so residents know to come out.",
+    "title_zh": "公共垃圾桶很少",
+    "body_zh": "路上很少有垃圾桶，隨身帶個小袋子裝垃圾；便利商店和捷運站通常有。垃圾車會播放古典音樂（常常是〈給愛麗絲〉），提醒居民出來倒垃圾。"
   },
   {
     "id": "tap-water",
     "scope": "global",
     "category": "daily-life",
     "title_en": "Don't drink from the tap",
-    "body_en": "Locals boil or filter tap water. Many stations, museums and hotels have free filtered water dispensers, so bring a bottle."
+    "body_en": "Locals boil or filter tap water. Many stations, museums and hotels have free filtered water dispensers, so bring a bottle.",
+    "title_zh": "自來水不要直接喝",
+    "body_zh": "台灣人會把自來水煮開或過濾後再喝。很多車站、博物館和飯店有免費的飲水機，帶個水壺就好。"
   },
   {
     "id": "temple-etiquette",
     "scope": "global",
     "category": "culture",
     "title_en": "Temple basics",
-    "body_en": "Step over the raised door threshold, never on it. Facing the temple, enter through the right-hand (dragon) door and leave through the left-hand (tiger) door. Ask before photographing people praying."
+    "body_en": "Step over the raised door threshold, never on it. Facing the temple, enter through the right-hand (dragon) door and leave through the left-hand (tiger) door. Ask before photographing people praying.",
+    "title_zh": "寺廟基本禮儀",
+    "body_zh": "跨過門檻，不要踩在門檻上。面對廟門，從右邊（龍門）進、左邊（虎門）出。拍攝正在拜拜的人之前先詢問。"
   },
   {
     "id": "scooters",
     "scope": "global",
     "category": "safety",
     "title_en": "Watch for scooters",
-    "body_en": "Scooters are everywhere and turning vehicles do not always yield to pedestrians, even on a green light. Look both ways twice. Sidewalks under shop arcades can be uneven."
+    "body_en": "Scooters are everywhere and turning vehicles do not always yield to pedestrians, even on a green light. Look both ways twice. Sidewalks under shop arcades can be uneven.",
+    "title_zh": "小心機車",
+    "body_zh": "機車到處都是，轉彎的車輛不一定會禮讓行人，即使是綠燈也一樣。過馬路前多看兩次。騎樓下的人行道可能高低不平。"
   },
   {
     "id": "queueing",
     "scope": "global",
     "category": "culture",
     "title_en": "Queue on the marked lines",
-    "body_en": "At MRT platforms people wait in lines marked on the floor beside the doors and let passengers off first."
+    "body_en": "At MRT platforms people wait in lines marked on the floor beside the doors and let passengers off first.",
+    "title_zh": "照地上的線排隊",
+    "body_zh": "捷運月台上，大家會在車門兩側地上標示的線排隊，先讓車上的人下車。"
   }
 ]

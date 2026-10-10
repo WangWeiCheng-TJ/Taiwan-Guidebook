@@ -4,6 +4,7 @@ import { readJSON } from './storage.js';
 import { today } from './util.js';
 import { LOG_KEY, emptyDraft } from './triplog.js';
 import { TRIP_KEY, parseTrip } from './trip.js';
+import { LANG_KEY, initialLang } from './lang.js';
 
 /** @typedef {import('./types.js').Guidebook} Guidebook */
 /** @typedef {import('./types.js').Pos} Pos */
@@ -12,6 +13,7 @@ import { TRIP_KEY, parseTrip } from './trip.js';
 
 /**
  * @typedef {Object} AppState
+ * @property {import('./lang.js').Lang} lang  UI and content language, persisted under LANG_KEY
  * @property {Guidebook|null} data   null until loaded
  * @property {Pos|null} pos          not persisted: location is re-acquired each session
  * @property {LogEntry[]} log        persisted under LOG_KEY
@@ -27,6 +29,7 @@ import { TRIP_KEY, parseTrip } from './trip.js';
 
 /** @type {AppState} */
 export const state = {
+  lang: initialLang(readJSON(LANG_KEY, null), typeof navigator === 'undefined' ? '' : navigator.language),
   data: null,
   pos: null,
   log: readJSON(LOG_KEY, []),

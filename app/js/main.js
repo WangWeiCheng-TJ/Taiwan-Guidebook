@@ -10,6 +10,7 @@ import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel } from './
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
 import { toast, copyText, showBig, hideBig, speak } from './ui.js';
+import { tr, trMsg, LANG_KEY, otherLang } from './lang.js';
 import { renderExplore } from './views/explore.js';
 import { renderPlace, driverCard } from './views/place.js';
 import { renderLog } from './views/log.js';
@@ -40,6 +41,7 @@ function render() {
     history.replaceState(null, '', '#/log');
   }
 
+  renderChrome();
   document.querySelectorAll('.tabbar a').forEach(a =>
     a.classList.toggle('active', a.dataset.tab === tab || (tab === 'place' && a.dataset.tab === 'explore')));
 
@@ -60,7 +62,7 @@ window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); }
 
 /** Persist the log; tell the user if the device refused. */
 function saveLog() {
-  if (!writeJSON(LOG_KEY, state.log)) toast('Could not save on this device (storage blocked or full).');
+  if (!writeJSON(LOG_KEY, state.log)) toast(tr(state.lang, 'storageFail'));
 }
 
 /**
@@ -71,7 +73,7 @@ function setTrip(trip) {
   state.trip = trip;
   state.tripDate = null;
   state.pasteOpen = false;
-  if (!writeJSON(TRIP_KEY, trip)) toast('Could not save on this device (storage blocked or full).');
+  if (!writeJSON(TRIP_KEY, trip)) toast(tr(state.lang, 'storageFail'));
 }
 
 /** Load a plan shared as ?trip=<https url>, then drop the parameter so reloads don't refetch. */
@@ -82,22 +84,22 @@ async function loadSharedTrip() {
   const { trip, errors } = await loadTrip(url);
   if (trip) {
     setTrip(trip);
-    toast(`Plan loaded: ${trip.title}`);
+    toast(tr(state.lang, 'planLoaded', { t: trip.title }));
     render();
   } else {
-    toast(errors[0]);
+    toast(trMsg(state.lang, errors[0]));
   }
 }
 
 function locateMe() {
-  if (!('geolocation' in navigator)) return toast('Location is not available on this device.');
-  toast('Finding your location…');
+  if (!('geolocation' in navigator)) return toast(tr(state.lang, 'noGeo'));
+  toast(tr(state.lang, 'locating'));
   navigator.geolocation.getCurrentPosition(
     pos => {
       state.pos = { lat: pos.coords.latitude, lng: pos.coords.longitude, source: 'gps', label: 'your location' };
       render();
     },
-    () => toast('Could not get your location. Pick a place instead.'),
+    () => toast(tr(state.lang, 'geoFail')),
     { enableHighAccuracy: true, timeout: 15000, maximumAge: 120000 }
   );
 }
@@ -105,7 +107,7 @@ function locateMe() {
 function pickLocation(id) {
   const p = placeById(places(), id);
   if (!p) return;
-  state.pos = { ...p.location.coordinates, source: 'pick', label: p.name.en };
+  state.pos = { ...p.location.coordinates, source: 'pick', label: p.name.en, placeId: p.id };
   render();
 }
 
@@ -119,7 +121,7 @@ function refreshQuestion() {
   if (state.ask.question === null) {
     const q = view.querySelector('[data-input="question"]');
     const a = state.ask;
-    if (q) q.value = defaultQuestion(a.mode, a.day, areaLabel(a.area, a.customArea));
+    if (q) q.value = defaultQuestion(a.mode, a.day, areaLabel(a.area, a.customArea), state.lang);
   }
   refreshPreview();
 }
@@ -130,10 +132,10 @@ async function importLog(file) {
     const { log, added } = mergeImport(state.log, JSON.parse(await file.text()));
     state.log = log;
     saveLog();
-    toast(`Imported ${added} new note${added === 1 ? '' : 's'}.`);
+    toast(tr(state.lang, 'imported', { n: added }));
     render();
   } catch {
-    toast('That file is not a trip log export.');
+    toast(tr(state.lang, 'badImport'));
   }
 }
 
@@ -157,7 +159,7 @@ const actions = {
   'copy-place': async el => {
     const p = placeById(places(), el.dataset.id);
     const ok = await copyText(buildPlacePrompt(p, notesFor(state.log, p.id)));
-    toast(ok ? 'Copied. Paste it into your AI app and add your question.' : 'Copy failed.');
+    toast(tr(state.lang, ok ? 'copiedPlace' : 'copyFail'));
   },
   star: el => {
     const n = Number(el.dataset.n);
@@ -165,7 +167,7 @@ const actions = {
     view.querySelectorAll('.stars button').forEach(b => b.classList.toggle('on', Number(b.dataset.n) <= state.draft.stars));
   },
   'delete-entry': el => {
-    if (!confirm('Delete this note?')) return;
+    if (!confirm(tr(state.lang, 'deleteNote'))) return;
     state.log = removeEntry(state.log, el.dataset.id);
     saveLog();
     render();
@@ -175,22 +177,22 @@ const actions = {
   'paste-plan': () => {
     const text = view.querySelector('[data-input="ai-answer"]')?.value || '';
     const { trip, errors } = planFromAiText(text, places());
-    if (!trip) return toast(errors[0]);
+    if (!trip) return toast(trMsg(state.lang, errors[0]));
     setTrip(trip);
-    toast(`Plan loaded: ${trip.title}`);
+    toast(tr(state.lang, 'planLoaded', { t: trip.title }));
     render();
   },
   'paste-plan-again': () => { state.pasteOpen = true; render(); },
   'cancel-paste': () => { state.pasteOpen = false; render(); },
   'clear-trip': () => {
-    if (!confirm('Remove this plan from the phone?')) return;
+    if (!confirm(tr(state.lang, 'removePlanConfirm'))) return;
     setTrip(null);
     render();
   },
   'trip-day': el => { state.tripDate = el.dataset.date; render(); },
   'copy-prompt': async () => {
     const ok = await copyText(buildAskPrompt(askContext(state)));
-    toast(ok ? 'Copied. Now paste it into your AI app.' : 'Copy failed. Select the preview text instead.');
+    toast(tr(state.lang, ok ? 'copied' : 'copyFailPreview'));
   },
 };
 
@@ -203,6 +205,26 @@ view.addEventListener('click', e => {
 });
 
 document.getElementById('bigcard').addEventListener('click', hideBig);
+
+// Language switch in the top bar: visible on every screen.
+document.getElementById('lang-toggle').addEventListener('click', () => {
+  state.lang = otherLang(state.lang);
+  writeJSON(LANG_KEY, state.lang);
+  if (state.ask.question === null) refreshQuestion();
+  render();
+});
+
+/** Top bar, tab labels and <html lang> in the current language (they live outside #view). */
+function renderChrome() {
+  const L = state.lang;
+  document.documentElement.lang = L === 'zh_TW' ? 'zh-Hant-TW' : 'en';
+  document.getElementById('brand').textContent = tr(L, 'brand');
+  document.getElementById('net-status').textContent = tr(L, 'offline');
+  document.getElementById('lang-toggle').textContent = tr(L, 'switchTo');
+  document.querySelectorAll('.tabbar a').forEach(a => {
+    a.querySelector('[data-label]').textContent = tr(L, `tab.${a.dataset.tab}`);
+  });
+}
 
 view.addEventListener('change', async e => {
   const el = e.target;
@@ -232,11 +254,11 @@ view.addEventListener('submit', e => {
   if (e.target.dataset.form !== 'log') return;
   e.preventDefault();
   const error = validateDraft(state.draft);
-  if (error) return toast(error);
+  if (error) return toast(trMsg(state.lang, error));
   state.log = [...state.log, makeEntry(state.draft, newId(), today())];
   saveLog();
   state.draft = emptyDraft(state.draft.date);
-  toast('Saved.');
+  toast(tr(state.lang, 'saved'));
   render();
 });
 
@@ -253,7 +275,7 @@ async function init() {
   try {
     state.data = await loadGuidebook();
   } catch {
-    view.innerHTML = '<p>Could not load the guide. Connect to the internet once so it can be saved for offline use.</p>';
+    view.innerHTML = `<p>${tr(state.lang, 'loadFail')}</p>`;
     return;
   }
   render();
@@ -268,7 +290,7 @@ if ('serviceWorker' in navigator) {
     try {
       state.data = await loadGuidebook();
       render();
-      toast('Guide updated.');
+      toast(tr(state.lang, 'guideUpdated'));
     } catch { /* keep the current data */ }
   });
 }

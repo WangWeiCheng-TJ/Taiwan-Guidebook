@@ -174,3 +174,16 @@ ol.stops li:first-child { border-top: 0; }
 ol.stops .time { display: inline-block; min-width: 3.2em; font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; }
 .card.today { border-color: var(--accent); background: var(--accent-soft); }
 .card.today .meta { color: var(--accent); font-weight: 600; }
+
+/* Zhuyin breakdown: character over symbols, each symbol over its romanization */
+.zy { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 8px; align-items: flex-end; }
+.zc { display: flex; flex-direction: column; align-items: center; }
+.zc .han { font-size: 26px; font-weight: 600; line-height: 1.2; }
+.zc.punct .han { color: var(--muted); }
+.zc .syl { display: flex; gap: 2px; }
+.zp { display: flex; flex-direction: column; align-items: center; min-width: 1.1em; }
+.zp b { font-size: 15px; font-weight: 500; line-height: 1.3; }
+.zp i { font-style: normal; font-size: 11px; color: var(--accent); line-height: 1.2; }
+.zp.tone b { color: var(--warm); }
+.zp.tone i { color: var(--warm); }
+.topbar .actions { display: flex; gap: 8px; align-items: center; }
