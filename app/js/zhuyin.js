@@ -80,7 +80,6 @@ export function alignZhuyin(zh, zhuyin) {
 }
 
 /**
- * TASK (delegated): implement. Contract tests: tests/tasks/tones.test.js
  *
  * The tones as actually spoken (tone sandhi), one entry per item of `aligned`; null for punctuation.
  * Input tones are the dictionary (citation) tones from the Zhuyin. Rules, applied in this order:
@@ -96,5 +95,18 @@ export function alignZhuyin(zh, zhuyin) {
  * @returns {(1|2|3|4|5|null)[]}
  */
 export function spokenTones(aligned) {
-  throw new Error('TODO: spokenTones');
+  const tones = aligned.map(a => a.syllable?.tone ?? null);
+  for (let i = 0; i < aligned.length; i++) {
+    if (aligned[i].char === '不' && tones[i] === 4 && tones[i + 1] === 4) {
+      tones[i] = 2;
+    }
+  }
+  for (let i = 0; i < aligned.length; i++) {
+    if (aligned[i].char === '一' && tones[i] === 1) {
+      const n = tones[i + 1];
+      if (n === 4) tones[i] = 2;
+      else if (n === 1 || n === 2 || n === 3) tones[i] = 4;
+    }
+  }
+  return tones.map((t, i) => (t === 3 && tones[i + 1] === 3 ? 2 : t));
 }
