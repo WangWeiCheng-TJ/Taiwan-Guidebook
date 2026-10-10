@@ -58,7 +58,8 @@ export function hideBig() {
 
 /**
  * Speak Chinese text with the device's TTS (works offline when a zh voice is installed).
- * Prefers a zh-TW voice, then any zh voice, then the browser default.
+ * Prefers a Taiwan Mandarin voice, then any other Mandarin voice. Never a Cantonese voice
+ * (zh-HK / yue): it would read Mandarin phrases wrongly. With no Mandarin voice, the browser decides.
  * @param {string} text
  * @returns {void}
  */
@@ -67,7 +68,9 @@ export function speak(text) {
   u.lang = 'zh-TW';
   u.rate = 0.85;
   const voices = speechSynthesis.getVoices();
-  const v = voices.find(v => v.lang === 'zh-TW') || voices.find(v => v.lang.startsWith('zh'));
+  const norm = l => l.toLowerCase().replace('_', '-');
+  const mandarin = voices.filter(v => /^(zh|cmn)/.test(norm(v.lang)) && !/^(zh-hk|zh-mo|yue)/.test(norm(v.lang)));
+  const v = mandarin.find(v => norm(v.lang) === 'zh-tw') || mandarin[0];
   if (v) u.voice = v;
   speechSynthesis.cancel();
   speechSynthesis.speak(u);

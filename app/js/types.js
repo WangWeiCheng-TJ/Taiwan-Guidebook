@@ -29,6 +29,8 @@
  * @property {string} en
  * @property {string} zh_TW
  * @property {string} pinyin
+ * @property {string} zhuyin   one syllable per Han character, space-separated (source of truth for pronunciation)
+ * @property {string} [tts]    respelling fed to the voice engine when it mispronounces zh_TW
  *
  * @typedef {Object} Tip
  * @property {string} id

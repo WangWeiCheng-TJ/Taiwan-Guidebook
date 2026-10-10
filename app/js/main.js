@@ -155,7 +155,10 @@ const actions = {
   city: el => { state.exploreCity = el.dataset.city; render(); },
   driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
   'show-phrase': el => showBig(phraseCard(state.data.phrases.find(x => x.id === el.dataset.id))),
-  speak: el => speak(state.data.phrases.find(x => x.id === el.dataset.id).zh_TW),
+  speak: el => {
+    const ph = state.data.phrases.find(x => x.id === el.dataset.id);
+    speak(ph.tts || ph.zh_TW); // tts: respelling for phrases the voice engine mispronounces
+  },
   'copy-place': async el => {
     const p = placeById(places(), el.dataset.id);
     const ok = await copyText(buildPlacePrompt(p, notesFor(state.log, p.id)));

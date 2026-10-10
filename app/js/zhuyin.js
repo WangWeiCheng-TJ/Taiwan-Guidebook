@@ -1,5 +1,5 @@
-// Zhuyin (Bopomofo) pronunciation, broken down symbol by symbol with a romanization for each.
-// Contract tests: tests/tasks/zhuyin.test.js
+// Zhuyin (Bopomofo) pronunciation: parse, align to characters, convert to Hanyu Pinyin.
+// Contract tests: tests/core/zhuyin.test.js
 
 /**
  * @typedef {{ symbol: string, roman: string }} ZhuyinPart
@@ -77,4 +77,24 @@ export function alignZhuyin(zh, zhuyin) {
     char,
     syllable: /\p{Script=Han}/u.test(char) ? parsed[i++] : null,
   }));
+}
+
+/**
+ * TASK (delegated): implement. Contract tests: tests/tasks/pinyin.test.js
+ *
+ * Whole-syllable Hanyu Pinyin with a tone mark, e.g. ㄋㄧˇ → "nǐ", ㄉㄨㄟˋ → "duì", ˙ㄒㄧㄝ → "xie".
+ * Standard spelling rules:
+ * - No initial: ㄧ→y (ㄧ alone "yi", ㄧㄣ "yin", ㄧㄥ "ying", else y + rest: ㄧㄠ "yao", ㄧㄝ "ye", ㄧㄡ "you"),
+ *   ㄨ→w (ㄨ alone "wu", else w + rest: ㄨㄛ "wo", ㄨㄟ "wei", ㄨㄣ "wen", ㄨㄥ "weng"),
+ *   ㄩ→yu (ㄩ "yu", ㄩㄝ "yue", ㄩㄢ "yuan", ㄩㄣ "yun", ㄩㄥ "yong").
+ * - With an initial: ㄧㄡ→iu, ㄧㄣ→in, ㄧㄥ→ing, ㄨㄟ→ui, ㄨㄣ→un, ㄨㄥ→ong, ㄩㄥ→iong;
+ *   ㄩ is written u after ㄐㄑㄒ (ㄑㄩ "qu", ㄐㄩㄝ "jue") but stays ü after ㄋㄌ (ㄌㄩ "lü", ㄋㄩ "nü").
+ * - ㄝ inside ㄧㄝ/ㄩㄝ is "e". Standalone ㄓㄔㄕㄖㄗㄘㄙ give zhi chi shi ri zi ci si.
+ * - Tone mark (ā á ǎ à, etc.; ǖ ǘ ǚ ǜ for ü) goes on: a if present, else e, else the o of "ou",
+ *   else the last vowel (so "iu" marks u, "ui" marks i). Tone 5 has no mark.
+ * @param {Syllable} syllable  from parseSyllable
+ * @returns {string}
+ */
+export function toPinyin(syllable) {
+  throw new Error('TODO: toPinyin');
 }
