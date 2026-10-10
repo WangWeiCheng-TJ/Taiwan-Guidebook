@@ -452,7 +452,8 @@
         "recommended_duration_min": 20,
         "transportation_en": "About 1 km west of Chihkan Tower, roughly a 15-minute walk through the old town.",
         "transportation_zh": "在赤崁樓西邊約一公里，穿過老城區步行約15分鐘。",
-        "best_time_to_visit": "Any time: it is open all day and free to visit."
+        "best_time_to_visit": "Any time: it is open all day and free to visit.",
+        "free_entry": true
       },
       "tags": [
         "city_gate",

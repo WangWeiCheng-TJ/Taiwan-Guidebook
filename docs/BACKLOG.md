@@ -1,31 +1,37 @@
 # Backlog
 
-Collected from usage review. Fix together at the end unless noted. Newest decisions on top within each section.
+Collected from usage review. Newest status on top within each section.
+
+## Needs the owner (decisions or review)
+
+- **Review the two new Tainan places** (兌悅門, 台南硓𥑮石芳宅). agy's draft had invented or wrong facts; Claude rewrote both from the sources listed in each file's `metadata.sources` and kept the hedges the sources use. Open points:
+  - 芳宅 coordinates are approximate (兌悅門's point, same street); sources disagree on the house number (信義街46巷 15 vs 17) and on the build date (1926 vs 1930s).
+  - 兌悅門 is listed as 國定古蹟: the 2020 review upgraded it; Wikipedia says the formal announcement was still to follow.
+- **Free entry**: only 兌悅門 has `foreign_visitor_guide.free_entry: true` (from its source). Temples and other places don't say, so they still get ticket phrases. Fill in where you know.
+- **Party size** ("how many of us"): templated phrases ("{n}張票", 兩 not 二) and "We are {n} people" in Ask AI prompts. For now the ticket phrase is fixed at two (兩張票).
+- **Most-used phrase list** (8 phrases, `"top": true` in `data/phrases.json`).
+- **Food picks**: ALMONd 漢堡 and FULA 巴斯克 left out with the pizza places; 入街 and 阿富師 not marked as Tainan specialties (unclear what they're known for); any personal tips you want published.
 
 ## Phrases
 
-- **"Useful here" should be situational, not generic.** Drop thank you / excuse me / I don't speak Chinese from place suggestions; keep "where is the toilet". Add situational phrases first (they don't exist yet): two tickets please, where do I buy tickets, can I take photos here, is there an English guide, what time do you close. Then tune `PLACE_PHRASES` in `app/js/phrases.js` (and mark generic phrases so `phrasesForPlace` skips them).
-- **Party size.** A "how many of us" setting (stored on the phone like the notes). Uses:
-  - templated phrases: "{n} tickets", "a table for {n}". Chinese uses 兩 (ㄌㄧㄤˇ) for 2 with measure words, not 二, so the template must swap characters and zhuyin together, not insert a digit.
-  - Ask AI prompt: "We are {n} people."
-- **Most-used list** (8 phrases, `"top": true` in `data/phrases.json`): user to review.
-- **Mispronunciations by the device voice**: listen to all phrases on a phone; for any that sound wrong, add a `tts` respelling in `data/phrases.json` (display stays unchanged).
+- Done: situational "sightseeing" phrases (tickets, photos, closing time, English introduction) and food extras (table for two, English menu, recommendations); "useful here" skips generic phrases and skips ticket phrases at free places.
+- 兌悅門 is open all day but still gets "what time do you close?": a place-level "always open" flag would fix it.
+- Mispronunciations by the device voice: listen on a phone; add a `tts` respelling where needed.
 - Zhuyin and per-symbol romanization may be too small on phones (15px / 11px).
 
 ## Places
 
-- Must-see reasons: done for all six places (agy wrote them from each entry; reviewed). New places need them too: update `scripts/generate_spot.py` to produce `must_see`.
-- **Knowledge topics** (Taiwanese folk religion, Wenchang / Kuixing, temple layout...): design in `docs/ARCHITECTURE.md`, phase 3.
+- Must-see reasons: done for all eight places. `scripts/generate_spot.py` now asks for them, with stricter no-invention rules; its output is marked "pending owner review".
+- Researched content (agy or Gemini) must be checked against sources before merging; a source-quote check script would make that cheaper if many places get added.
+- Knowledge topics (Taiwanese folk religion, Wenchang / Kuixing, temple layout...): design in `docs/ARCHITECTURE.md`.
+
+## Food picks
+
+- Names are Chinese only; an English line per pick (what it is / what to order) would help European readers.
+- No coordinates: picks aren't sorted by distance; Navigate searches Google Maps by name.
 
 ## App
 
 - Test on real phones: needs an https URL (GitHub Pages or similar). Ask before publishing.
 - Place cards are text only; consider a photo per place (licensing!).
 - Tab bar icons are text glyphs.
-
-## Food picks
-
-- Names are Chinese only; for European readers add an English line per pick (what it is / what to order). Owner to approve any tip text: personal notes stay out of the public repo.
-- No coordinates: picks aren't sorted by distance. Navigate searches Google Maps by name. A one-time geocoding step would enable "near me".
-- Pending decision: Western-food group (27 Pizza Italy, PIZZA FACE, 溫度窯烤, 紅眼披薩, ALMONd 漢堡) and FULA 巴斯克 left out for now.
-- Historic sites from the same list: 兌悅門 and 台南硓𥑮石．芳宅 (temporarily closed) to be added as full attractions.
