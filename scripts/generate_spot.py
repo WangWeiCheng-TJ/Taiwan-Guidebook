@@ -119,6 +119,13 @@ The output MUST BE PURE JSON complying strictly with the following schema:
     "etiquette_tips_zh": "外國旅客參觀文化禮儀須知",
     "must_see_spots_en": ["Bullet 1", "Bullet 2", "Bullet 3", "Bullet 4"],
     "must_see_spots_zh": ["看點一", "看點二", "看點三", "看點四"],
+    "must_see": [
+      {
+        "name": {"en": "Exactly the same text as must_see_spots_en[0]", "zh_TW": "與 must_see_spots_zh[0] 完全相同"},
+        "why": {"en": "1-2 sentences: why a first-time visitor should look at it", "zh_TW": "1-2 句：為什麼第一次來的人值得看"}
+      }
+    ],
+    "free_entry": "true only if you are certain visiting is free; otherwise omit this field",
     "recommended_duration_min": 60,
     "transportation_en": "Step-by-step public transit instructions from major stations/MRT",
     "transportation_zh": "大眾運輸交通指引",
@@ -126,8 +133,8 @@ The output MUST BE PURE JSON complying strictly with the following schema:
   },
   "tags": ["3 to 8 lowercase_underscore_tags"],
   "metadata": {
-    "source": "Bureau of Cultural Heritage & Official Historical Archives",
-    "generated_by": "Gemini AI Historical Curation Engine",
+    "sources": ["URLs of official or encyclopedic pages that support the facts, if you know them; otherwise []"],
+    "generated_by": "Gemini (generate_spot.py), pending owner review",
     "last_updated": "YYYY-MM-DD"
   }
 }
@@ -137,6 +144,9 @@ CRITICAL RULES:
 2. Coordinates must be realistic latitude and longitude numbers in Taiwan.
 3. eras array must ONLY use items from the specified 6 exact era strings.
 4. Provide genuine historical depth, avoiding superficial tourism marketing fluff.
+5. Never invent facts. Dates, heritage designations, awards, owners, prices and opening hours must be ones you are sure of; if unsure, leave them out or keep the sentence general. Do not upgrade claims (e.g. "the only one in Tainan" must not become "the only one in Taiwan").
+6. must_see has one item per must_see_spots_en entry, in the same order, and its why only uses facts stated elsewhere in this JSON.
+7. Every entry is reviewed by the owner before publishing; accuracy matters more than completeness.
 """
 
 
