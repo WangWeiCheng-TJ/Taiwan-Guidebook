@@ -220,6 +220,12 @@ def load_food() -> list[dict]:
                 print(f"❌ [INVALID] {path.name}: bad pick {pick}")
                 sys.exit(1)
             seen.add(pick["id"])
+        for dish in city.get("to_try", []):
+            d = dish.get("dish") or {}
+            if not dish.get("id") or not d.get("en") or not d.get("zh_TW") or dish["id"] in seen:
+                print(f"❌ [INVALID] {path.name}: bad to_try entry {dish}")
+                sys.exit(1)
+            seen.add(dish["id"])
         cities.append(city)
     return cities
 

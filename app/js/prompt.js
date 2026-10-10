@@ -266,7 +266,7 @@ const FOOD_KIND_EN = {
  * @returns {string}
  */
 export function foodBlock(city) {
-  if (!city || !city.picks.length) return '';
+  if (!city || !(city.picks.length || (city.to_try || []).length)) return '';
   const byKind = new Map();
   for (const p of city.picks) {
     const k = p.local ? 'local' : p.kind;
@@ -278,5 +278,7 @@ export function foodBlock(city) {
   const kindName = k => (k === 'local' ? city.local_label?.en || 'local specialties' : FOOD_KIND_EN[k] || k);
   const order = ['local', ...Object.keys(FOOD_KIND_EN)];
   const lines = [...byKind].sort(([a], [b]) => order.indexOf(a) - order.indexOf(b)).map(([k, names]) => `- ${kindName(k)}: ${names.join('; ')}`);
+  const toTry = (city.to_try || []).map(d => `${d.dish.zh_TW} (${d.dish.en.toLowerCase()})`);
+  if (toTry.length) lines.push(`- Local dishes I want to try, no shop chosen yet (recommend good places): ${toTry.join('; ')}`);
   return `Places to eat that a local friend recommends in ${city.city_en} (names as on Google Maps; look up where they are, and suggest ones that fit my plan):\n${lines.join('\n')}`;
 }

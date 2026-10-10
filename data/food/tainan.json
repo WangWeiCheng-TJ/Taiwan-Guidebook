@@ -1,7 +1,7 @@
 {
   "city_en": "Tainan City",
   "city_zh": "臺南市",
-  "local_label": {"en": "Tainan specialties", "zh_TW": "台南特色"},
+  "local_label": { "en": "Tainan specialties", "zh_TW": "台南特色" },
   "picks": [
     { "id": "ke-jia-oyster-fritter", "name": "柯家蚵嗲", "kind": "taiwanese", "local": true, "dish": {"en": "Oyster fritters", "zh_TW": "蚵嗲"} },
     { "id": "ru-jie", "name": "入街", "kind": "taiwanese", "hint": {"en": "Closes early when sold out.", "zh_TW": "售完提早打烊。"} },
@@ -10,7 +10,6 @@
     { "id": "mu-mu-seafood-congee", "name": "木木海產粥", "kind": "taiwanese", "local": true, "dish": {"en": "Seafood congee", "zh_TW": "海產粥"} },
     { "id": "shan-mo-shi", "name": "鱔魔師", "kind": "taiwanese", "local": true, "dish": {"en": "Eel dishes", "zh_TW": "鱔魚料理"} },
     { "id": "lao-wang-xia-mian", "name": "老王下麵 牛肉麵專賣店", "kind": "beef_noodles" },
-    { "id": "jie-mao-beef-noodles", "name": "洁茂牛肉麵館", "kind": "beef_noodles" },
     { "id": "er-bao-jia-ramen", "name": "而寶家拉麵", "kind": "ramen", "hint": {"en": "If driving, park at Xiaokang Park (小康公園).", "zh_TW": "開車請導航「小康公園」停車。"} },
     { "id": "he-ye-ramen", "name": "賀也拉麵（育樂街）", "kind": "ramen" },
     { "id": "bailu-ramen", "name": "白露拉麵 bailu ramen", "kind": "ramen" },
@@ -27,5 +26,12 @@
     { "id": "rou-yu-jue-xing-satay", "name": "肉 慾 覺 醒（南洋Sate_food）", "kind": "international" },
     { "id": "yi-xun-yi-hui-dessert", "name": "一旬一會甜點工作室", "kind": "sweets", "hint": {"en": "Check opening days on their Facebook page (pinned post).", "zh_TW": "營業日請看粉專置頂文。"} },
     { "id": "key-mem-bar", "name": "岐門酒吧 KEY MEM Wine & Cocktail", "kind": "bar" }
+  ],
+  "to_try": [
+    { "id": "milkfish", "dish": {"en": "Milkfish", "zh_TW": "虱目魚"} },
+    { "id": "fish-skin-soup", "dish": {"en": "Fish skin soup", "zh_TW": "魚皮湯"} },
+    { "id": "migao", "dish": {"en": "Sticky rice (migao)", "zh_TW": "米糕"} },
+    { "id": "beef-soup", "dish": {"en": "Beef soup", "zh_TW": "牛肉湯"} },
+    { "id": "guoshao-yimian", "dish": {"en": "Pot-cooked yi noodles", "zh_TW": "鍋燒意麵"} }
   ]
 }

@@ -20,6 +20,9 @@ test('foodBlock groups by kind and carries hints', () => {
   assert.ok(b.includes('\n- Tainan specialties: 柯家蚵嗲 (oyster fritters); 府城黃家蝦捲 (shrimp rolls)'));
   assert.ok(b.includes('- Taiwanese local food: 入街 (Closes early when sold out)'));
   assert.ok(b.indexOf('Tainan specialties') < b.indexOf('Taiwanese local food'));
+  assert.ok(b.includes('- Local dishes I want to try, no shop chosen yet (recommend good places): 虱目魚 (milkfish); 魚皮湯 (fish skin soup)'));
+  assert.ok(!b.includes('洁茂'));
+  assert.ok(foodBlock({ city_en: 'X', city_zh: 'X', picks: [], to_try: [{ id: 'a', dish: { en: 'Milkfish', zh_TW: '虱目魚' } }] }).includes('虱目魚'));
   assert.equal(foodBlock(null), '');
   assert.equal(foodBlock({ city_en: 'X', city_zh: 'X', picks: [] }), '');
 });

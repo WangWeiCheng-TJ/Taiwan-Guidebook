@@ -18,8 +18,9 @@ export function renderFoodSection(s) {
   return cities.map(c => {
     const name = L === 'zh_TW' ? c.city_zh : c.city_en;
     // Local specialties first, then by kind; a pick appears once.
+    const toTry = c.to_try || [];
     const groups = [['local', c.picks.filter(p => p.local)], ...FOOD_KINDS.map(k => [k, c.picks.filter(p => p.kind === k && !p.local)])]
-      .filter(([, list]) => list.length);
+      .filter(([k, list]) => list.length || (k === 'local' && toTry.length));
     const label = k => (k === 'local' ? localLabel(c, L) : tr(L, `food.${k}`));
     return `<details class="food" ${s.exploreCity === c.city_en ? 'open' : ''}>
       <summary>🍜 ${tr(L, 'foodPicksIn', { city: esc(name) })} <span class="muted small">(${c.picks.length})</span></summary>
@@ -28,7 +29,10 @@ export function renderFoodSection(s) {
         <div class="food-kind${k === 'local' ? ' local' : ''}">${esc(label(k))}</div>
         ${list.map(p => `<button class="phrase-row" data-action="food-sheet" data-city="${esc(c.city_en)}" data-id="${esc(p.id)}">
           <span><span class="zh-inline" lang="zh-TW">${esc(p.name)}</span>${p.dish ? ` <span class="muted small">${esc(L === 'zh_TW' ? p.dish.zh_TW : p.dish.en)}</span>` : ''}</span><span class="chev" aria-hidden="true">›</span>
-        </button>`).join('')}`).join('')}
+        </button>`).join('')}
+        ${k === 'local' ? toTry.map(d => `<button class="phrase-row" data-action="dish-sheet" data-city="${esc(c.city_en)}" data-id="${esc(d.id)}">
+          <span><span class="zh-inline" lang="zh-TW">${esc(d.dish.zh_TW)}</span>${L === 'zh_TW' ? '' : ` <span class="muted small">${esc(d.dish.en)}</span>`} <span class="badge warm">${tr(L, 'shopTbd')}</span></span><span class="chev" aria-hidden="true">›</span>
+        </button>`).join('') : ''}`).join('')}
     </details>`;
   }).join('');
 }
@@ -52,6 +56,23 @@ export function foodSheet(city, p, L) {
       <button class="btn" data-action="food-driver" data-city="${esc(city.city_en)}" data-id="${esc(p.id)}">${tr(L, 'driver')}</button>
     </div>
     <p class="muted small">${tr(L, 'foodNoAddress')}</p>`;
+}
+
+/**
+ * Sheet for a dish with no shop chosen yet: Navigate searches Google Maps for the dish in that city.
+ * @param {import('../data.js').FoodCity} city
+ * @param {{ id: string, dish: { en: string, zh_TW: string } }} d
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+export function dishSheet(city, d, L) {
+  const q = encodeURIComponent(`${d.dish.zh_TW} ${city.city_zh}`);
+  return `
+    <div class="big-name" lang="zh-TW">${esc(d.dish.zh_TW)}</div>
+    ${L === 'zh_TW' ? '' : `<div class="dish">${esc(d.dish.en)}</div>`}
+    <div class="muted">${esc(localLabel(city, L))} · ${esc(L === 'zh_TW' ? city.city_zh : city.city_en)}</div>
+    <p>${tr(L, 'shopTbdIntro')}</p>
+    <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">${tr(L, 'findNearby')}</a>`;
 }
 
 /**

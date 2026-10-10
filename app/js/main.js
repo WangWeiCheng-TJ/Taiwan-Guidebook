@@ -18,7 +18,8 @@ import { renderLog } from './views/log.js';
 import { renderAsk, askContext } from './views/ask.js';
 import { renderPhrases, renderTips, phraseCard, phraseCardFull } from './views/reference.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
-import { foodSheet, findPick } from './views/food.js';
+import { foodSheet, findPick, dishSheet } from './views/food.js';
+import { foodFor } from './data.js';
 
 const view = document.getElementById('view');
 
@@ -171,6 +172,11 @@ const actions = {
   'food-sheet': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
     if (f) openSheet(tr(state.lang, 'foodPick'), foodSheet(f.city, f.pick, state.lang));
+  },
+  'dish-sheet': el => {
+    const c = foodFor(state.data.food, el.dataset.city);
+    const d = c && (c.to_try || []).find(x => x.id === el.dataset.id);
+    if (d) openSheet(tr(state.lang, 'foodPick'), dishSheet(c, d, state.lang));
   },
   'food-driver': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
