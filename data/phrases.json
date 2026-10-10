@@ -1,0 +1,30 @@
+[
+  { "id": "hello", "category": "basics", "en": "Hello", "zh_TW": "你好", "pinyin": "nǐ hǎo" },
+  { "id": "thank-you", "category": "basics", "en": "Thank you", "zh_TW": "謝謝", "pinyin": "xièxie" },
+  { "id": "excuse-me", "category": "basics", "en": "Excuse me / Sorry", "zh_TW": "不好意思", "pinyin": "bù hǎoyìsi" },
+  { "id": "no-chinese", "category": "basics", "en": "I don't speak Chinese", "zh_TW": "我不會說中文", "pinyin": "wǒ bú huì shuō zhōngwén" },
+  { "id": "toilet", "category": "basics", "en": "Where is the toilet?", "zh_TW": "請問廁所在哪裡？", "pinyin": "qǐngwèn cèsuǒ zài nǎlǐ?" },
+
+  { "id": "this-one", "category": "food", "en": "I'd like this one", "zh_TW": "我要這個", "pinyin": "wǒ yào zhège" },
+  { "id": "not-spicy", "category": "food", "en": "Not spicy, please", "zh_TW": "不要辣，謝謝", "pinyin": "bú yào là, xièxie" },
+  { "id": "less-salt", "category": "food", "en": "Less salt, please", "zh_TW": "少鹽，謝謝", "pinyin": "shǎo yán, xièxie" },
+  { "id": "half-sugar-less-ice", "category": "food", "en": "Half sugar, less ice (drinks)", "zh_TW": "半糖少冰", "pinyin": "bàn táng shǎo bīng" },
+  { "id": "vegetarian", "category": "food", "en": "I'm vegetarian", "zh_TW": "我吃素", "pinyin": "wǒ chī sù" },
+  { "id": "peanut-allergy", "category": "food", "en": "I'm allergic to peanuts", "zh_TW": "我對花生過敏", "pinyin": "wǒ duì huāshēng guòmǐn" },
+  { "id": "eat-here", "category": "food", "en": "To eat here", "zh_TW": "內用", "pinyin": "nèi yòng" },
+  { "id": "takeaway", "category": "food", "en": "Takeaway", "zh_TW": "外帶", "pinyin": "wài dài" },
+  { "id": "bill", "category": "food", "en": "The bill, please", "zh_TW": "請幫我結帳", "pinyin": "qǐng bāng wǒ jiézhàng" },
+
+  { "id": "take-me-here", "category": "transport", "en": "Please take me to this address", "zh_TW": "請帶我到這個地址", "pinyin": "qǐng dài wǒ dào zhège dìzhǐ" },
+  { "id": "stop-here", "category": "transport", "en": "Please stop here", "zh_TW": "請在這裡停", "pinyin": "qǐng zài zhèlǐ tíng" },
+  { "id": "where-mrt", "category": "transport", "en": "Where is the MRT station?", "zh_TW": "請問捷運站在哪裡？", "pinyin": "qǐngwèn jiéyùn zhàn zài nǎlǐ?" },
+
+  { "id": "how-much", "category": "shopping", "en": "How much is it?", "zh_TW": "多少錢？", "pinyin": "duōshǎo qián?" },
+  { "id": "card-ok", "category": "shopping", "en": "Can I pay by card?", "zh_TW": "可以刷卡嗎？", "pinyin": "kěyǐ shuākǎ ma?" },
+  { "id": "no-bag", "category": "shopping", "en": "I don't need a bag", "zh_TW": "我不需要袋子", "pinyin": "wǒ bù xūyào dàizi" },
+
+  { "id": "help", "category": "emergency", "en": "Help!", "zh_TW": "救命！", "pinyin": "jiùmìng!" },
+  { "id": "ambulance", "category": "emergency", "en": "Please call an ambulance", "zh_TW": "請幫我叫救護車", "pinyin": "qǐng bāng wǒ jiào jiùhùchē" },
+  { "id": "hospital", "category": "emergency", "en": "I need to go to a hospital", "zh_TW": "我需要去醫院", "pinyin": "wǒ xūyào qù yīyuàn" },
+  { "id": "lost", "category": "emergency", "en": "I'm lost", "zh_TW": "我迷路了", "pinyin": "wǒ mílù le" }
+]

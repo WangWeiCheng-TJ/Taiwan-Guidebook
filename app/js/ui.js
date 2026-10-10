@@ -1,0 +1,74 @@
+// Small DOM side effects shared by views and main.js.
+
+let toastTimer;
+
+/**
+ * Show a short message above the tab bar for ~2.6 s. Replaces any visible toast.
+ * @param {string} msg
+ * @returns {void}
+ */
+export function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 2600);
+}
+
+/**
+ * Copy to clipboard. Falls back to execCommand for older iOS / non-secure contexts.
+ * @param {string} text
+ * @returns {Promise<boolean>} true when copied
+ */
+export async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch { ok = false; }
+    ta.remove();
+    return ok;
+  }
+}
+
+/**
+ * Full-screen high-contrast card for showing text to a driver or shopkeeper.
+ * Tapping anywhere closes it (wired in main.js).
+ * @param {string} html  trusted markup; callers must esc() any data inside
+ * @returns {void}
+ */
+export function showBig(html) {
+  const el = document.getElementById('bigcard');
+  el.innerHTML = `<button class="btn close">Close</button>${html}<div class="hint">Tap anywhere to close</div>`;
+  el.hidden = false;
+}
+
+/** @returns {void} */
+export function hideBig() {
+  document.getElementById('bigcard').hidden = true;
+}
+
+/**
+ * Speak Chinese text with the device's TTS (works offline when a zh voice is installed).
+ * Prefers a zh-TW voice, then any zh voice, then the browser default.
+ * @param {string} text
+ * @returns {void}
+ */
+export function speak(text) {
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'zh-TW';
+  u.rate = 0.85;
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => v.lang === 'zh-TW') || voices.find(v => v.lang.startsWith('zh'));
+  if (v) u.voice = v;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}

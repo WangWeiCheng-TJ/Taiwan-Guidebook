@@ -1,0 +1,230 @@
+// Entry point: routing, event dispatch, persistence, service worker.
+// This is the only module that mutates `state` or writes storage.
+
+import { state, places } from './state.js';
+import { today } from './util.js';
+import { writeJSON } from './storage.js';
+import { loadGuidebook, placeById } from './data.js';
+import { LOG_KEY, emptyDraft, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
+import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel } from './prompt.js';
+import { toast, copyText, showBig, hideBig, speak } from './ui.js';
+import { renderExplore } from './views/explore.js';
+import { renderPlace, driverCard } from './views/place.js';
+import { renderLog } from './views/log.js';
+import { renderAsk, askContext } from './views/ask.js';
+import { renderPhrases, renderTips, phraseCard } from './views/reference.js';
+
+const view = document.getElementById('view');
+
+// ---------- Routing ----------
+// #/explore | #/place/<id> | #/log | #/log/<placeId> (prefill) | #/ask | #/phrases | #/tips
+
+/**
+ * @param {string} hash  location.hash
+ * @returns {{ tab: string, arg: string }}
+ */
+function parseRoute(hash) {
+  const [route, arg = ''] = hash.replace(/^#\/?/, '').split('/');
+  return { tab: route || 'explore', arg: decodeURIComponent(arg) };
+}
+
+/** Render the current route into #view and highlight the tab. */
+function render() {
+  if (!state.data) return;
+  const { tab, arg } = parseRoute(location.hash);
+
+  if (tab === 'log' && arg && placeById(places(), arg)) {
+    state.draft = { ...state.draft, placeId: arg, name: '' };
+    history.replaceState(null, '', '#/log');
+  }
+
+  document.querySelectorAll('.tabbar a').forEach(a =>
+    a.classList.toggle('active', a.dataset.tab === tab || (tab === 'place' && a.dataset.tab === 'explore')));
+
+  const views = {
+    explore: () => renderExplore(state),
+    place: () => renderPlace(state, arg),
+    log: () => renderLog(state),
+    ask: () => renderAsk(state),
+    phrases: () => renderPhrases(state),
+    tips: () => renderTips(state),
+  };
+  view.innerHTML = (views[tab] || views.explore)();
+}
+
+window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
+
+// ---------- State changes ----------
+
+/** Persist the log; tell the user if the device refused. */
+function saveLog() {
+  if (!writeJSON(LOG_KEY, state.log)) toast('Could not save on this device (storage blocked or full).');
+}
+
+function locateMe() {
+  if (!('geolocation' in navigator)) return toast('Location is not available on this device.');
+  toast('Finding your location…');
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      state.pos = { lat: pos.coords.latitude, lng: pos.coords.longitude, source: 'gps', label: 'your location' };
+      render();
+    },
+    () => toast('Could not get your location. Pick a place instead.'),
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 120000 }
+  );
+}
+
+function pickLocation(id) {
+  const p = placeById(places(), id);
+  if (!p) return;
+  state.pos = { ...p.location.coordinates, source: 'pick', label: p.name.en };
+  render();
+}
+
+function refreshPreview() {
+  const el = document.getElementById('prompt-preview');
+  if (el) el.textContent = buildAskPrompt(askContext(state));
+}
+
+/** Keep the suggested question in sync with area/day until the user edits it. */
+function refreshQuestion() {
+  if (state.ask.question === null) {
+    const q = view.querySelector('[data-input="question"]');
+    const a = state.ask;
+    if (q) q.value = defaultQuestion(a.mode, a.day, areaLabel(a.area, a.customArea));
+  }
+  refreshPreview();
+}
+
+async function importLog(file) {
+  if (!file) return;
+  try {
+    const { log, added } = mergeImport(state.log, JSON.parse(await file.text()));
+    state.log = log;
+    saveLog();
+    toast(`Imported ${added} new note${added === 1 ? '' : 's'}.`);
+    render();
+  } catch {
+    toast('That file is not a trip log export.');
+  }
+}
+
+function exportLog() {
+  const blob = new Blob([JSON.stringify(exportPayload(state.log, new Date()), null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `taiwan-trip-log-${today()}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+// ---------- Event dispatch (views declare data-action / data-change / data-input) ----------
+
+const actions = {
+  locate: () => locateMe(),
+  city: el => { state.exploreCity = el.dataset.city; render(); },
+  driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
+  'show-phrase': el => showBig(phraseCard(state.data.phrases.find(x => x.id === el.dataset.id))),
+  speak: el => speak(state.data.phrases.find(x => x.id === el.dataset.id).zh_TW),
+  'copy-place': async el => {
+    const p = placeById(places(), el.dataset.id);
+    const ok = await copyText(buildPlacePrompt(p, notesFor(state.log, p.id)));
+    toast(ok ? 'Copied. Paste it into your AI app and add your question.' : 'Copy failed.');
+  },
+  star: el => {
+    const n = Number(el.dataset.n);
+    state.draft.stars = state.draft.stars === n ? 0 : n;
+    view.querySelectorAll('.stars button').forEach(b => b.classList.toggle('on', Number(b.dataset.n) <= state.draft.stars));
+  },
+  'delete-entry': el => {
+    if (!confirm('Delete this note?')) return;
+    state.log = removeEntry(state.log, el.dataset.id);
+    saveLog();
+    render();
+  },
+  export: () => exportLog(),
+  mode: el => { state.ask.mode = el.dataset.mode; render(); },
+  'copy-prompt': async () => {
+    const ok = await copyText(buildAskPrompt(askContext(state)));
+    toast(ok ? 'Copied. Now paste it into your AI app.' : 'Copy failed. Select the preview text instead.');
+  },
+};
+
+view.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]');
+  if (el && actions[el.dataset.action]) {
+    e.preventDefault();
+    actions[el.dataset.action](el);
+  }
+});
+
+document.getElementById('bigcard').addEventListener('click', hideBig);
+
+view.addEventListener('change', async e => {
+  const el = e.target;
+  switch (el.dataset.change) {
+    case 'pick-location': pickLocation(el.value); break;
+    case 'radius': state.ask.radius = Number(el.value); refreshPreview(); break;
+    case 'day': state.ask.day = el.value; refreshQuestion(); break;
+    case 'area': state.ask.area = el.value; render(); break;
+    case 'include-log': state.ask.includeLog = el.checked; refreshPreview(); break;
+    case 'import': await importLog(el.files[0]); break;
+  }
+  if (el.form?.dataset.form === 'log' && el.name) {
+    state.draft[el.name] = el.value;
+    if (el.name === 'placeId') view.querySelector('[data-other]').hidden = !!el.value;
+  }
+});
+
+view.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.input === 'question') { state.ask.question = el.value; refreshPreview(); }
+  if (el.dataset.input === 'custom-area') { state.ask.customArea = el.value; refreshQuestion(); }
+  if (el.form?.dataset.form === 'log' && el.name) state.draft[el.name] = el.value;
+});
+
+view.addEventListener('submit', e => {
+  if (e.target.dataset.form !== 'log') return;
+  e.preventDefault();
+  const error = validateDraft(state.draft);
+  if (error) return toast(error);
+  state.log = [...state.log, makeEntry(state.draft, newId(), today())];
+  saveLog();
+  state.draft = emptyDraft(state.draft.date);
+  toast('Saved.');
+  render();
+});
+
+// ---------- Online status, data, service worker ----------
+
+function updateNet() {
+  document.getElementById('net-status').hidden = navigator.onLine;
+}
+window.addEventListener('online', updateNet);
+window.addEventListener('offline', updateNet);
+
+async function init() {
+  updateNet();
+  try {
+    state.data = await loadGuidebook();
+  } catch {
+    view.innerHTML = '<p>Could not load the guide. Connect to the internet once so it can be saved for offline use.</p>';
+    return;
+  }
+  render();
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+  // sw.js posts this after a background refresh brought a different guidebook.json
+  navigator.serviceWorker.addEventListener('message', async e => {
+    if (e.data?.type !== 'data-updated') return;
+    try {
+      state.data = await loadGuidebook();
+      render();
+      toast('Guide updated.');
+    } catch { /* keep the current data */ }
+  });
+}
+
+init();

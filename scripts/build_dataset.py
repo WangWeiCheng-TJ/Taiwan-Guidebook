@@ -9,6 +9,8 @@ import os
 import sys
 import json
 import glob
+import hashlib
+from datetime import date
 from pathlib import Path
 
 # Ensure UTF-8 stdout on Windows
@@ -22,6 +24,9 @@ ATTRACTIONS_DIR = DATA_DIR / "attractions"
 OUTPUT_FILE = DATA_DIR / "taiwan_attractions.json"
 WEB_OUTPUT_FILE = BASE_DIR / "web" / "taiwan_attractions.json"
 SCHEMA_FILE = BASE_DIR / "schema" / "attraction.schema.json"
+PHRASES_FILE = DATA_DIR / "phrases.json"
+TIPS_FILE = DATA_DIR / "tips.json"
+APP_OUTPUT_FILE = BASE_DIR / "app" / "data" / "guidebook.json"
 
 
 def validate_basic(data: dict, filename: str) -> list[str]:
@@ -167,9 +172,48 @@ def build():
     with open(WEB_OUTPUT_FILE, "w", encoding="utf-8") as web_out_f:
         json.dump(compiled_dataset, web_out_f, ensure_ascii=False, indent=2)
 
+    app_bundle = build_app_bundle(attractions)
+
     print(f"\n🎉 Successfully compiled {len(attractions)} attractions into:")
     print(f"   -> {OUTPUT_FILE} ({os.path.getsize(OUTPUT_FILE) / 1024:.2f} KB)")
     print(f"   -> {WEB_OUTPUT_FILE} ({os.path.getsize(WEB_OUTPUT_FILE) / 1024:.2f} KB)")
+    print(f"   -> {APP_OUTPUT_FILE} ({os.path.getsize(APP_OUTPUT_FILE) / 1024:.2f} KB, "
+          f"{len(app_bundle['phrases'])} phrases, {len(app_bundle['tips'])} tips, version {app_bundle['version']})")
+
+
+def load_list(path: Path, required: list[str]) -> list[dict]:
+    """Load a JSON array of entries and check required keys and unique ids."""
+    if not path.exists():
+        return []
+    with open(path, "r", encoding="utf-8") as f:
+        entries = json.load(f)
+    seen = set()
+    for entry in entries:
+        missing = [k for k in required if k not in entry]
+        if missing:
+            print(f"❌ [INVALID] {path.name}: entry {entry.get('id', '?')} missing {missing}")
+            sys.exit(1)
+        if entry["id"] in seen:
+            print(f"❌ [INVALID] {path.name}: duplicate id {entry['id']}")
+            sys.exit(1)
+        seen.add(entry["id"])
+    return entries
+
+
+def build_app_bundle(attractions: list[dict]) -> dict:
+    """Write the single offline bundle consumed by the PWA in app/."""
+    phrases = load_list(PHRASES_FILE, ["id", "category", "en", "zh_TW", "pinyin"])
+    tips = load_list(TIPS_FILE, ["id", "scope", "category", "title_en", "body_en"])
+    content = {"places": attractions, "phrases": phrases, "tips": tips}
+    # Content hash, so the app can tell when the data actually changed
+    version = hashlib.sha256(
+        json.dumps(content, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:12]
+    bundle = {"version": version, "generated_at": date.today().isoformat(), **content}
+    APP_OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(APP_OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(bundle, f, ensure_ascii=False, separators=(",", ":"))
+    return bundle
 
 
 if __name__ == "__main__":

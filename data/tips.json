@@ -1,0 +1,86 @@
+[
+  {
+    "id": "emergency-numbers",
+    "scope": "global",
+    "category": "safety",
+    "title_en": "Emergency numbers",
+    "body_en": "Police: 110. Fire and ambulance: 119. Both work from any phone."
+  },
+  {
+    "id": "mrt-no-eating",
+    "scope": "global",
+    "category": "transport",
+    "title_en": "No eating or drinking on the MRT",
+    "body_en": "Past the yellow line at the ticket gates, eating, drinking (even water) and chewing gum are banned and can be fined. Finish your bubble tea before the gate."
+  },
+  {
+    "id": "priority-seats",
+    "scope": "global",
+    "category": "transport",
+    "title_en": "Priority seats",
+    "body_en": "The dark blue seats on trains and buses are for the elderly, pregnant passengers and people with disabilities. Many locals leave them empty even when the train is full."
+  },
+  {
+    "id": "easycard",
+    "scope": "global",
+    "category": "transport",
+    "title_en": "Get an EasyCard",
+    "body_en": "A stored-value card for MRT, buses, YouBike and convenience stores. Buy and top it up at MRT stations or any 7-Eleven / FamilyMart."
+  },
+  {
+    "id": "convenience-stores",
+    "scope": "global",
+    "category": "daily-life",
+    "title_en": "Convenience stores do everything",
+    "body_en": "7-Eleven and FamilyMart sell hot food and drinks, top up cards, have ATMs, print documents and pay bills. There is one on almost every corner."
+  },
+  {
+    "id": "cash",
+    "scope": "global",
+    "category": "money",
+    "title_en": "Carry some cash",
+    "body_en": "Night market stalls, small eateries and traditional shops are often cash only. Cards work in malls, chains and most hotels."
+  },
+  {
+    "id": "tipping",
+    "scope": "global",
+    "category": "money",
+    "title_en": "No tipping",
+    "body_en": "Tipping is not expected. Sit-down restaurants may add a 10% service charge to the bill."
+  },
+  {
+    "id": "trash",
+    "scope": "global",
+    "category": "daily-life",
+    "title_en": "Few public bins",
+    "body_en": "Public trash bins are rare. Keep a small bag for your trash; convenience stores and MRT stations usually have bins. Garbage trucks play classical music (often Für Elise) so residents know to come out."
+  },
+  {
+    "id": "tap-water",
+    "scope": "global",
+    "category": "daily-life",
+    "title_en": "Don't drink from the tap",
+    "body_en": "Locals boil or filter tap water. Many stations, museums and hotels have free filtered water dispensers, so bring a bottle."
+  },
+  {
+    "id": "temple-etiquette",
+    "scope": "global",
+    "category": "culture",
+    "title_en": "Temple basics",
+    "body_en": "Step over the raised door threshold, never on it. Facing the temple, enter through the right-hand (dragon) door and leave through the left-hand (tiger) door. Ask before photographing people praying."
+  },
+  {
+    "id": "scooters",
+    "scope": "global",
+    "category": "safety",
+    "title_en": "Watch for scooters",
+    "body_en": "Scooters are everywhere and turning vehicles do not always yield to pedestrians, even on a green light. Look both ways twice. Sidewalks under shop arcades can be uneven."
+  },
+  {
+    "id": "queueing",
+    "scope": "global",
+    "category": "culture",
+    "title_en": "Queue on the marked lines",
+    "body_en": "At MRT platforms people wait in lines marked on the floor beside the doors and let passengers off first."
+  }
+]

@@ -49,6 +49,18 @@ Taiwan-Guidebook/
 
 ---
 
+## 📱 離線旅遊 App (PWA)
+
+`app/` 是給旅客用的手機版離線 App：附近景點、給司機看的地址卡、常用語、注意事項、個人旅行筆記，以及把筆記加附近景點組成問題、貼給自己 AI 的「Ask AI」。架構與決策見 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)，待實作的函式規格見 [docs/SPEC.md](docs/SPEC.md)。
+
+```bash
+python scripts/build_dataset.py      # 產生 app/data/guidebook.json
+python -m http.server 8765 --directory app
+npm test                             # 函式契約測試 (Node 22+)
+```
+
+---
+
 ## 🚀 快速開始 (Quick Start)
 
 ### 1. 檢視 Web 預覽器
