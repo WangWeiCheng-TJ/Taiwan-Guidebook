@@ -42,3 +42,16 @@ export function cities(places) {
 export function districtsOf(places, city) {
   return [...new Set(places.filter(p => p.location.city_en === city).map(p => p.location.district_en))].sort();
 }
+
+/**
+ * Rough centre of a city: the average coordinates of its guidebook places.
+ * Used when the user picks a city instead of sharing GPS.
+ * @param {Place[]} places
+ * @param {string} city  city_en
+ * @returns {import('./types.js').LatLng|null}  null when the city has no places
+ */
+export function cityCenter(places, city) {
+  const pts = places.filter(p => p.location.city_en === city).map(p => p.location.coordinates);
+  if (!pts.length) return null;
+  return { lat: pts.reduce((s, c) => s + c.lat, 0) / pts.length, lng: pts.reduce((s, c) => s + c.lng, 0) / pts.length };
+}

@@ -22,8 +22,8 @@ const STRINGS = {
   en: {
     brand: 'Taiwan Guidebook', offline: 'Offline', switchTo: '中文', loadFail: 'Could not load the guide. Connect to the internet once so it can be saved for offline use.',
     'tab.explore': 'Explore', 'tab.log': 'My trip', 'tab.ask': 'Ask AI', 'tab.phrases': 'Phrases', 'tab.tips': 'Tips',
-    distancesFrom: 'Distances from <b>{label}</b>', update: 'Update', useLocation: 'Use my location', nearPick: "or I'm near…",
-    choosePlace: 'Choose a place', yourLocation: 'your location', locating: 'Finding your location…',
+    distancesFrom: 'Distances from <b>{label}</b>', update: 'Update', change: 'Change', useLocation: 'Use my location', nearPick: "or I'm in…",
+    choosePlace: 'Choose a city', yourLocation: 'your location', locating: 'Finding your location…',
     noGeo: 'Location is not available on this device.', geoFail: 'Could not get your location. Pick a place instead.',
     explore: 'Explore', all: 'All', visited: 'Visited', noPlaces: 'No places yet.',
     allPlaces: '‹ All places', away: '{d} away', since: 'Since {y}', minutes: '~{n} min', navigate: 'Navigate',
@@ -58,8 +58,8 @@ const STRINGS = {
   zh_TW: {
     brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
     'tab.explore': '探索', 'tab.log': '我的旅程', 'tab.ask': '問 AI', 'tab.phrases': '常用語', 'tab.tips': '須知',
-    distancesFrom: '距離以 <b>{label}</b> 計算', update: '更新', useLocation: '使用我的位置', nearPick: '或選擇我在哪附近…',
-    choosePlace: '選擇地點', yourLocation: '目前位置', locating: '正在取得位置…',
+    distancesFrom: '距離以 <b>{label}</b> 計算', update: '更新', change: '更換', useLocation: '使用我的位置', nearPick: '或選擇我在哪個城市…',
+    choosePlace: '選擇城市', yourLocation: '目前位置', locating: '正在取得位置…',
     noGeo: '這台裝置無法使用定位。', geoFail: '無法取得位置，請改選一個地點。',
     explore: '探索', all: '全部', visited: '去過', noPlaces: '目前還沒有景點。',
     allPlaces: '‹ 所有景點', away: '距離 {d}', since: '建於 {y}', minutes: '約 {n} 分鐘', navigate: '導航',

@@ -172,7 +172,7 @@ export function buildAskPrompt(ctx) {
         const nearest = sortByDistance(ctx.places, ctx.pos)[0];
         parts.push(`I'm at GPS ${ctx.pos.lat.toFixed(3)}, ${ctx.pos.lng.toFixed(3)}${nearest ? `, closest guidebook place: ${nearest.name.en} in ${nearest.location.district_en}, ${nearest.location.city_en}` : ''}.`);
       } else {
-        parts.push(`I'm near ${ctx.pos.label}.`);
+        parts.push(`I'm in ${ctx.pos.label} (no GPS; distances are from the middle of the city).`);
       }
     } else {
       parts.push('(Location not set.)');

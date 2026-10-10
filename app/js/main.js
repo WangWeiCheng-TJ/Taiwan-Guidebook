@@ -4,7 +4,7 @@
 import { state, places } from './state.js';
 import { today } from './util.js';
 import { writeJSON } from './storage.js';
-import { loadGuidebook, placeById } from './data.js';
+import { loadGuidebook, placeById, cityCenter } from './data.js';
 import { LOG_KEY, emptyDraft, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
 import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
@@ -104,10 +104,11 @@ function locateMe() {
   );
 }
 
-function pickLocation(id) {
-  const p = placeById(places(), id);
-  if (!p) return;
-  state.pos = { ...p.location.coordinates, source: 'pick', label: p.name.en, placeId: p.id };
+function pickLocation(city) {
+  const center = cityCenter(places(), city);
+  if (!center) return;
+  state.pos = { ...center, source: 'pick', label: city, city };
+  state.exploreCity = city;
   render();
 }
 
@@ -152,6 +153,7 @@ function exportLog() {
 
 const actions = {
   locate: () => locateMe(),
+  'clear-location': () => { state.pos = null; render(); },
   city: el => { state.exploreCity = el.dataset.city; render(); },
   driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
   'show-phrase': el => showBig(phraseCard(state.data.phrases.find(x => x.id === el.dataset.id))),

@@ -51,9 +51,9 @@
  * @typedef {Object} Pos         Where distances are measured from
  * @property {number} lat
  * @property {number} lng
- * @property {'gps'|'pick'} source   gps = device location, pick = user chose a place
- * @property {string} label          place name (English) for prompts, or "your location"
- * @property {string} [placeId]      set when source is 'pick', so the UI can show the name in its language
+ * @property {'gps'|'pick'} source   gps = device location, pick = user chose a city
+ * @property {string} label          city_en for prompts when picked, or "your location"
+ * @property {string} [city]         city_en when source is 'pick' (position = cityCenter), so the UI can show the name in its language
  *
  * @typedef {Object} LogEntry    One line of the personal trip log (stored on device only)
  * @property {string} id         unique, stable across export/import

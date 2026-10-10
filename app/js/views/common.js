@@ -4,7 +4,7 @@
 
 import { esc } from '../util.js';
 import { places } from '../state.js';
-import { placeById } from '../data.js';
+import { cities } from '../data.js';
 import { tr, localized } from '../lang.js';
 
 /**
@@ -18,23 +18,36 @@ export function placeName(p, lang) {
 }
 
 /**
+ * City name in the UI language, looked up from any guidebook place in that city.
+ * @param {string} city  city_en
+ * @param {import('../lang.js').Lang} lang
+ * @returns {string}
+ */
+export function cityName(city, lang) {
+  const p = places().find(x => x.location.city_en === city);
+  return p ? localized(p.location, 'city', lang) : city;
+}
+
+/**
  * "Distances from X [Update]" when a position is set,
- * otherwise "Use my location" plus a place picker as fallback.
- * Emits: data-action="locate", data-change="pick-location" (value = place id).
+ * otherwise "Use my location" plus a city picker as fallback (fewer options than listing places).
+ * Emits: data-action="locate" | "clear-location", data-change="pick-location" (value = city_en).
  * @param {import('../state.js').AppState} s
  * @returns {string}
  */
 export function locationPanel(s) {
   const L = s.lang;
   if (s.pos) {
-    const picked = s.pos.placeId && placeById(places(), s.pos.placeId);
-    const label = picked ? placeName(picked, L) : tr(L, 'yourLocation');
+    const label = s.pos.city ? cityName(s.pos.city, L) : tr(L, 'yourLocation');
     return `<div class="panel row spread small">
       <span>${tr(L, 'distancesFrom', { label: esc(label) })}</span>
-      <button class="btn small" data-action="locate">${tr(L, 'update')}</button>
+      <span class="row">
+        ${s.pos.city ? `<button class="btn small" data-action="clear-location">${tr(L, 'change')}</button>` : ''}
+        <button class="btn small" data-action="locate">${tr(L, s.pos.city ? 'useLocation' : 'update')}</button>
+      </span>
     </div>`;
   }
-  const options = places().map(p => `<option value="${esc(p.id)}">${esc(placeName(p, L))}</option>`).join('');
+  const options = cities(places()).map(c => `<option value="${esc(c)}">${esc(cityName(c, L))}</option>`).join('');
   return `<div class="panel stack small">
     <button class="btn primary" data-action="locate">⌖ ${tr(L, 'useLocation')}</button>
     <label>${tr(L, 'nearPick')}
