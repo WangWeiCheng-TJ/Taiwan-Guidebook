@@ -24,28 +24,68 @@
     },
     "name": {
       "type": "object",
-      "required": ["zh_TW", "en"],
+      "required": [
+        "zh_TW",
+        "en"
+      ],
       "properties": {
-        "zh_TW": { "type": "string", "description": "Traditional Chinese name" },
-        "en": { "type": "string", "description": "English name" }
+        "zh_TW": {
+          "type": "string",
+          "description": "Traditional Chinese name"
+        },
+        "en": {
+          "type": "string",
+          "description": "English name"
+        }
       }
     },
     "location": {
       "type": "object",
-      "required": ["city_zh", "city_en", "district_zh", "district_en", "address_zh", "address_en", "coordinates"],
+      "required": [
+        "city_zh",
+        "city_en",
+        "district_zh",
+        "district_en",
+        "address_zh",
+        "address_en",
+        "coordinates"
+      ],
       "properties": {
-        "city_zh": { "type": "string" },
-        "city_en": { "type": "string" },
-        "district_zh": { "type": "string" },
-        "district_en": { "type": "string" },
-        "address_zh": { "type": "string" },
-        "address_en": { "type": "string" },
+        "city_zh": {
+          "type": "string"
+        },
+        "city_en": {
+          "type": "string"
+        },
+        "district_zh": {
+          "type": "string"
+        },
+        "district_en": {
+          "type": "string"
+        },
+        "address_zh": {
+          "type": "string"
+        },
+        "address_en": {
+          "type": "string"
+        },
         "coordinates": {
           "type": "object",
-          "required": ["lat", "lng"],
+          "required": [
+            "lat",
+            "lng"
+          ],
           "properties": {
-            "lat": { "type": "number", "minimum": 21.0, "maximum": 27.0 },
-            "lng": { "type": "number", "minimum": 118.0, "maximum": 123.0 }
+            "lat": {
+              "type": "number",
+              "minimum": 21,
+              "maximum": 27
+            },
+            "lng": {
+              "type": "number",
+              "minimum": 118,
+              "maximum": 123
+            }
           }
         }
       }
@@ -80,7 +120,10 @@
       "minItems": 1
     },
     "established_year": {
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "description": "Year of establishment or earliest construction if known"
     },
     "heritage_status": {
@@ -89,70 +132,190 @@
     },
     "summary": {
       "type": "object",
-      "required": ["zh_TW", "en"],
+      "required": [
+        "zh_TW",
+        "en"
+      ],
       "properties": {
-        "zh_TW": { "type": "string" },
-        "en": { "type": "string" }
+        "zh_TW": {
+          "type": "string"
+        },
+        "en": {
+          "type": "string"
+        }
       }
     },
     "historical_narrative": {
       "type": "object",
-      "required": ["zh_TW", "en"],
+      "required": [
+        "zh_TW",
+        "en"
+      ],
       "properties": {
-        "zh_TW": { "type": "string", "description": "In-depth historical context in Traditional Chinese" },
-        "en": { "type": "string", "description": "In-depth historical narrative contextualized for international readers" }
+        "zh_TW": {
+          "type": "string",
+          "description": "In-depth historical context in Traditional Chinese"
+        },
+        "en": {
+          "type": "string",
+          "description": "In-depth historical narrative contextualized for international readers"
+        }
       }
     },
     "timeline": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["year_or_era", "event_zh", "event_en"],
+        "required": [
+          "year_or_era",
+          "event_zh",
+          "event_en"
+        ],
         "properties": {
-          "year_or_era": { "type": "string" },
-          "era_category": { "type": "string" },
-          "event_zh": { "type": "string" },
-          "event_en": { "type": "string" }
+          "year_or_era": {
+            "type": "string"
+          },
+          "era_category": {
+            "type": "string"
+          },
+          "event_zh": {
+            "type": "string"
+          },
+          "event_en": {
+            "type": "string"
+          }
         }
       },
       "minItems": 1
     },
     "cultural_significance": {
       "type": "object",
-      "required": ["why_it_matters_en", "why_it_matters_zh", "architectural_highlights_en", "architectural_highlights_zh"],
+      "required": [
+        "why_it_matters_en",
+        "why_it_matters_zh",
+        "architectural_highlights_en",
+        "architectural_highlights_zh"
+      ],
       "properties": {
-        "why_it_matters_en": { "type": "string" },
-        "why_it_matters_zh": { "type": "string" },
-        "architectural_highlights_en": { "type": "string" },
-        "architectural_highlights_zh": { "type": "string" },
-        "intangible_culture_en": { "type": "string" },
-        "intangible_culture_zh": { "type": "string" }
+        "why_it_matters_en": {
+          "type": "string"
+        },
+        "why_it_matters_zh": {
+          "type": "string"
+        },
+        "architectural_highlights_en": {
+          "type": "string"
+        },
+        "architectural_highlights_zh": {
+          "type": "string"
+        },
+        "intangible_culture_en": {
+          "type": "string"
+        },
+        "intangible_culture_zh": {
+          "type": "string"
+        }
       }
     },
     "foreign_visitor_guide": {
       "type": "object",
-      "required": ["etiquette_tips_en", "must_see_spots_en", "recommended_duration_min", "transportation_en"],
+      "required": [
+        "etiquette_tips_en",
+        "must_see_spots_en",
+        "recommended_duration_min",
+        "transportation_en"
+      ],
       "properties": {
-        "etiquette_tips_en": { "type": "string" },
-        "etiquette_tips_zh": { "type": "string" },
-        "must_see_spots_en": { "type": "array", "items": { "type": "string" } },
-        "must_see_spots_zh": { "type": "array", "items": { "type": "string" } },
-        "recommended_duration_min": { "type": "integer" },
-        "transportation_en": { "type": "string" },
-        "transportation_zh": { "type": "string" },
-        "best_time_to_visit": { "type": "string" }
+        "etiquette_tips_en": {
+          "type": "string"
+        },
+        "etiquette_tips_zh": {
+          "type": "string"
+        },
+        "must_see_spots_en": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "must_see_spots_zh": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommended_duration_min": {
+          "type": "integer"
+        },
+        "transportation_en": {
+          "type": "string"
+        },
+        "transportation_zh": {
+          "type": "string"
+        },
+        "best_time_to_visit": {
+          "type": "string"
+        },
+        "must_see": {
+          "type": "array",
+          "description": "Must-see items with why each matters (shown expandable). Preferred over must_see_spots_*.",
+          "items": {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "object",
+                "required": [
+                  "en"
+                ],
+                "properties": {
+                  "en": {
+                    "type": "string"
+                  },
+                  "zh_TW": {
+                    "type": "string"
+                  }
+                }
+              },
+              "why": {
+                "type": "object",
+                "required": [
+                  "en"
+                ],
+                "properties": {
+                  "en": {
+                    "type": "string"
+                  },
+                  "zh_TW": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "tags": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "metadata": {
       "type": "object",
       "properties": {
-        "source": { "type": "string" },
-        "generated_by": { "type": "string" },
-        "last_updated": { "type": "string" }
+        "source": {
+          "type": "string"
+        },
+        "generated_by": {
+          "type": "string"
+        },
+        "last_updated": {
+          "type": "string"
+        }
       }
     }
   }

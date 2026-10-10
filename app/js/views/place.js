@@ -25,7 +25,6 @@ export function renderPlace(s, id) {
   const d = distanceTo(p, s.pos);
   const links = mapsLinks(p);
   const notes = notesFor(s.log, p.id);
-  const mustSee = localizedList(g, 'must_see_spots', L);
   const etiquette = localized(g, 'etiquette_tips', L);
   const bestTime = localized(g, 'best_time_to_visit', L);
   const transport = localized(g, 'transportation', L);
@@ -55,7 +54,7 @@ export function renderPlace(s, id) {
     ${notes.length ? `<div class="panel small"><b>${tr(L, 'yourNotes')}</b>${notes.map(e =>
       `<div>${esc(e.date)} <span class="starline">${stars(e.stars)}</span> ${esc(e.note)}</div>`).join('')}</div>` : ''}
 
-    ${mustSee.length ? `<h2>${tr(L, 'dontMiss')}</h2><ul class="plain">${mustSee.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+    ${mustSeeSection(g, L)}
     ${etiquette ? `<h2>${tr(L, 'etiquette')}</h2><p>${esc(etiquette)}</p>` : ''}
     ${bestTime ? `<h2>${tr(L, 'bestTime')}</h2><p>${esc(bestTime)}</p>` : ''}
     ${transport ? `<h2>${tr(L, 'gettingThere')}</h2><p>${esc(transport)}</p>` : ''}
@@ -73,6 +72,29 @@ export function renderPlace(s, id) {
       <ul class="timeline">${p.timeline.map(t => `<li><b>${esc(t.year_or_era)}</b>${esc(localized(t, 'event', L))}</li>`).join('')}</ul>
     </details>` : ''}
   `;
+}
+
+/**
+ * "Don't miss": tap an item to see why it matters (foreign_visitor_guide.must_see).
+ * Older entries only have must_see_spots_*: shown as a plain list.
+ * @param {Record<string, any>} g  foreign_visitor_guide
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+function mustSeeSection(g, L) {
+  if (Array.isArray(g.must_see) && g.must_see.length) {
+    return `<h2>${tr(L, 'dontMiss')}</h2>
+      <p class="muted small">${tr(L, 'tapWhy')}</p>
+      ${g.must_see.map(m => {
+        const name = esc(localized(m, 'name', L));
+        const why = localized(m, 'why', L);
+        return why
+          ? `<details class="must"><summary>${name}</summary><p>${esc(why)}</p></details>`
+          : `<div class="must plain">${name}</div>`;
+      }).join('')}`;
+  }
+  const list = localizedList(g, 'must_see_spots', L);
+  return list.length ? `<h2>${tr(L, 'dontMiss')}</h2><ul class="plain">${list.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
 }
 
 /**

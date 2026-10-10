@@ -203,3 +203,12 @@ ol.stops .time { display: inline-block; min-width: 3.2em; font-variant-numeric: 
 /* Compact phrase rows on a place page */
 .phrase-row { padding: 8px 0; border-top: 1px solid var(--line); flex-wrap: nowrap; }
 .zh-inline { font-size: 18px; font-weight: 600; }
+
+/* Don't miss: tap to expand why */
+details.must { margin: 6px 0; padding: 10px 14px; }
+details.must summary { font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+details.must summary::-webkit-details-marker { display: none; }
+details.must summary::after { content: '+'; color: var(--accent); font-weight: 700; }
+details.must[open] summary::after { content: '−'; }
+details.must p { margin: 8px 0 0; color: var(--text); }
+.must.plain { padding: 8px 2px; border-top: 1px solid var(--line); }

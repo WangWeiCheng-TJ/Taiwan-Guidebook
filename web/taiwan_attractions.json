@@ -122,7 +122,49 @@
         "recommended_duration_min": 75,
         "transportation_en": "From Tainan Railway Station, walk 15 minutes down Chenggong Road or take City Bus No. 3, 5, 88, or 99 directly to 'Chihkan Tower' (赤崁樓) stop.",
         "transportation_zh": "由臺南火車站前站出發，步行約15分鐘，或搭乘大台南公車3路、5路、88路、99路至『赤崁樓』站即達。",
-        "best_time_to_visit": "Late afternoon leading into nightfall; the complex is beautifully illuminated with atmospheric spotlights after 6:00 PM."
+        "best_time_to_visit": "Late afternoon leading into nightfall; the complex is beautifully illuminated with atmospheric spotlights after 6:00 PM.",
+        "must_see": [
+          {
+            "name": {
+              "en": "Original 17th-century Dutch brick bastion gate and underground passageway entrance",
+              "zh_TW": "荷蘭時代原始普羅民遮城紅磚城門與神秘地道傳說入口"
+            },
+            "why": {
+              "en": "The only part of the 1653 Dutch fort still standing. Its walls were laid with a mortar of glutinous rice, sugar syrup and crushed oyster shells.",
+              "zh_TW": "1653 年荷蘭普羅民遮城留存至今的部分。城牆用糯米、糖水和蚵殼灰調成的灰漿砌成。"
+            }
+          },
+          {
+            "name": {
+              "en": "Row of 9 imperial dragon-turtle (Bixi) steles granted by Emperor Qianlong",
+              "zh_TW": "乾隆御製九座贔屭馱碑群"
+            },
+            "why": {
+              "en": "Granted by Emperor Qianlong after the Lin Shuangwen rebellion was put down (1788). Each stele rides on a bixi, the turtle-like son of the dragon. Rubbing its nose is said to bring luck; touch gently.",
+              "zh_TW": "清乾隆皇帝在平定林爽文事件後（1788 年）御賜。每座石碑由形似烏龜的贔屭馱著。據說摸贔屭的鼻子會帶來好運，請輕輕摸。"
+            }
+          },
+          {
+            "name": {
+              "en": "Statue and shrine of Kui Xing holding a calligraphy brush atop an Ao fish",
+              "zh_TW": "二樓文昌閣魁星爺神像與祈願魁星筆"
+            },
+            "why": {
+              "en": "Kuixing is the god of examinations. Students come to pray for good results before exams, so you will often see offerings here. Keep your voice down.",
+              "zh_TW": "魁星爺掌管考運，考生會在考前來祈求金榜題名，常看得到供品。參觀時請放低音量。"
+            }
+          },
+          {
+            "name": {
+              "en": "Penghu Academy (Penghu Shuyuan) gate and surviving Qing wooden structure",
+              "zh_TW": "蓬壺書院遺存門廳與清代儒學講堂遺跡"
+            },
+            "why": {
+              "en": "What remains of a Qing-dynasty academy built on the site: the fort later became a place of Confucian learning.",
+              "zh_TW": "清代在此興建的蓬壺書院所留下的門廳，見證這裡後來成為儒學教育的場所。"
+            }
+          }
+        ]
       },
       "tags": [
         "voc_dutch",
