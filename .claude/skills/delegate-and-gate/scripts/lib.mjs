@@ -127,6 +127,8 @@ export function checkScope(changed, allow) {
   return { outside, testsTouched };
 }
 
+export const DEFAULT_UI_PATHS = ['app/js/views/', 'app/sw.js', 'app/index.html', 'app/app.css'];
+
 /**
  * Risk flags that mean "Claude should read the code even though checks passed".
  * Only ADDED diff lines (starting with "+" but not "+++") are inspected for content flags.
@@ -149,11 +151,12 @@ export function reviewFlags(numstat, diff, opts = {}) {
   const totalAdded = numstat.reduce((sum, r) => sum + (r.added || 0), 0);
   if (totalAdded > maxAdded) flags.push(`Large change: ${totalAdded} lines added.`);
 
-  const uiFiles = new Set(['app/sw.js', 'app/index.html', 'app/app.css']);
+  const uiPaths = (opts.uiPaths ?? DEFAULT_UI_PATHS).map(p => p.replaceAll('\\', '/'));
   const seenFiles = new Set();
   for (const { file } of numstat) {
     const norm = file.replaceAll('\\', '/');
-    if ((norm.startsWith('app/js/views/') || uiFiles.has(norm)) && !seenFiles.has(norm)) {
+    const isUi = uiPaths.some(p => p.endsWith('/') ? norm.startsWith(p) : norm === p);
+    if (isUi && !seenFiles.has(norm)) {
       seenFiles.add(norm);
       flags.push(`Touches UI or offline code: ${norm}`);
     }
