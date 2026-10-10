@@ -295,6 +295,10 @@
               }
             }
           }
+        },
+        "free_entry": {
+          "type": "boolean",
+          "description": "True when visiting costs nothing (from a source). Free places get no ticket phrases."
         }
       }
     },

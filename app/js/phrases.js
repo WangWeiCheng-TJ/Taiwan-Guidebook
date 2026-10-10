@@ -6,6 +6,7 @@
 /** Tiles on the Phrases tab, in display order. "top" is the hand-picked most-used set. */
 export const PHRASE_GROUPS = [
   { id: 'top', icon: '⭐' },
+  { id: 'sightseeing', icon: '🎫' },
   { id: 'food', icon: '🍜' },
   { id: 'transport', icon: '🚕' },
   { id: 'shopping', icon: '🛍️' },
@@ -18,17 +19,17 @@ export const PHRASE_GROUPS = [
  * Keys are attraction categories from schema/attraction.schema.json.
  */
 const PLACE_PHRASES = {
-  historic_street_district: ['food', 'shopping'],
-  natural_cultural_landscape: ['food', 'transport'],
-  industrial_heritage: ['food', 'transport'],
-  temple_shrine: ['basics'],
-  traditional_residence: ['basics'],
-  indigenous_cultural_site: ['basics', 'food'],
-  memorial_museum: ['basics', 'shopping'],
-  historical_fortress: ['basics', 'shopping'],
-  colonial_architecture: ['basics', 'shopping'],
+  historic_street_district: ['food', 'shopping', 'sightseeing'],
+  natural_cultural_landscape: ['food', 'sightseeing', 'transport'],
+  industrial_heritage: ['sightseeing', 'food', 'transport'],
+  temple_shrine: ['sightseeing', 'basics'],
+  traditional_residence: ['sightseeing', 'basics'],
+  indigenous_cultural_site: ['sightseeing', 'basics', 'food'],
+  memorial_museum: ['sightseeing', 'basics'],
+  historical_fortress: ['sightseeing', 'basics'],
+  colonial_architecture: ['sightseeing', 'basics'],
 };
-const DEFAULT_PLACE_PHRASES = ['basics', 'transport'];
+const DEFAULT_PLACE_PHRASES = ['sightseeing', 'basics', 'transport'];
 
 /**
  * Phrases in a group: "top" = phrases flagged top, otherwise phrases of that category. Data order is kept.
@@ -41,8 +42,11 @@ export function phrasesIn(phrases, group) {
 }
 
 /**
- * Up to n phrases useful at this place: categories from PLACE_PHRASES (default basics + transport),
- * in that order, most-used phrases first within each category.
+ * Up to n phrases useful at this place, taken from the categories in PLACE_PHRASES in turns
+ * (first category first in each round), most-used phrases first within a category, so every
+ * relevant category gets a say. Generic phrases (hello, thank you...) are skipped: they are useful
+ * everywhere, so they say nothing about this place. Ticket phrases are skipped at free places
+ * (foreign_visitor_guide.free_entry, or a historic street).
  * @param {Place} place
  * @param {Phrase[]} phrases
  * @param {number} [n]
@@ -50,11 +54,16 @@ export function phrasesIn(phrases, group) {
  */
 export function phrasesForPlace(place, phrases, n = 5) {
   const cats = PLACE_PHRASES[place.category] || DEFAULT_PLACE_PHRASES;
-  const ranked = cats.flatMap(c => {
-    const inCat = phrases.filter(p => p.category === c);
+  const free = place.foreign_visitor_guide?.free_entry === true || place.category === 'historic_street_district';
+  const queues = cats.map(c => {
+    const inCat = phrases.filter(p => p.category === c && !p.generic && !(free && p.ticket));
     return [...inCat.filter(p => p.top), ...inCat.filter(p => !p.top)];
   });
-  return ranked.slice(0, n);
+  const out = [];
+  while (out.length < n && queues.some(q => q.length)) {
+    for (const q of queues) if (q.length && out.length < n) out.push(q.shift());
+  }
+  return out;
 }
 
 /**

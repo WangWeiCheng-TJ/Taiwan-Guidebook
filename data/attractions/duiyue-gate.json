@@ -83,26 +83,51 @@
     ],
     "must_see": [
       {
-        "name": { "en": "Walk through the gate passage", "zh_TW": "親自走過城門門洞" },
-        "why": { "en": "Of Tainan's four surviving city gates, this is the only one you can still walk through as a street.", "zh_TW": "臺南現存四座城門中，只有這一座還能當成街道穿越。" }
+        "name": {
+          "en": "Walk through the gate passage",
+          "zh_TW": "親自走過城門門洞"
+        },
+        "why": {
+          "en": "Of Tainan's four surviving city gates, this is the only one you can still walk through as a street.",
+          "zh_TW": "臺南現存四座城門中，只有這一座還能當成街道穿越。"
+        }
       },
       {
-        "name": { "en": "Battlements and gun ports on the west face", "zh_TW": "西立面的垛牆與槍口" },
-        "why": { "en": "The outward-facing west side was built slightly taller and armed with gun ports; compare it with the plainer east side.", "zh_TW": "朝外的西立面蓋得比較高，還設有槍口；可以對照比較樸素的東立面。" }
+        "name": {
+          "en": "Battlements and gun ports on the west face",
+          "zh_TW": "西立面的垛牆與槍口"
+        },
+        "why": {
+          "en": "The outward-facing west side was built slightly taller and armed with gun ports; compare it with the plainer east side.",
+          "zh_TW": "朝外的西立面蓋得比較高，還設有槍口；可以對照比較樸素的東立面。"
+        }
       },
       {
-        "name": { "en": "Coral-stone base", "zh_TW": "硓𥑮石台座" },
-        "why": { "en": "The coral stone at the base is where the gate's nickname, the coral-stone wall, comes from.", "zh_TW": "台座的硓𥑮石，就是「硓𥑮石城」這個俗稱的由來。" }
+        "name": {
+          "en": "Coral-stone base",
+          "zh_TW": "硓𥑮石台座"
+        },
+        "why": {
+          "en": "The coral stone at the base is where the gate's nickname, the coral-stone wall, comes from.",
+          "zh_TW": "台座的硓𥑮石，就是「硓𥑮石城」這個俗稱的由來。"
+        }
       },
       {
-        "name": { "en": "Stone lion guardian beside the gate", "zh_TW": "城門旁的石獅爺" },
-        "why": { "en": "Placed, so the legend goes, to block the bad luck of the bow-shaped arch and arrow-straight lane. It still stands by the gate.", "zh_TW": "傳說是為了鎮住弓形門洞與箭形巷道形成的「箭煞」而設，至今仍在門邊。" }
+        "name": {
+          "en": "Stone lion guardian beside the gate",
+          "zh_TW": "城門旁的石獅爺"
+        },
+        "why": {
+          "en": "Placed, so the legend goes, to block the bad luck of the bow-shaped arch and arrow-straight lane. It still stands by the gate.",
+          "zh_TW": "傳說是為了鎮住弓形門洞與箭形巷道形成的「箭煞」而設，至今仍在門邊。"
+        }
       }
     ],
     "recommended_duration_min": 20,
     "transportation_en": "About 1 km west of Chihkan Tower, roughly a 15-minute walk through the old town.",
     "transportation_zh": "在赤崁樓西邊約一公里，穿過老城區步行約15分鐘。",
-    "best_time_to_visit": "Any time: it is open all day and free to visit."
+    "best_time_to_visit": "Any time: it is open all day and free to visit.",
+    "free_entry": true
   },
   "tags": [
     "city_gate",
