@@ -1,7 +1,7 @@
 // Contract for scripts/agy/lib.mjs. Do not edit these tests to make them pass.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseAgyJson, summarizeTests, checkScope, reviewFlags, decide, retryPrompt } from '../../scripts/agy/lib.mjs';
+import { parseAgyJson, summarizeTests, checkScope, reviewFlags, decide, retryPrompt } from '../../.claude/skills/delegate-and-gate/scripts/lib.mjs';
 
 test('parseAgyJson takes the last JSON line with a status', () => {
   const out = [

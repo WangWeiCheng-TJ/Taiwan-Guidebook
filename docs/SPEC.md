@@ -25,6 +25,25 @@ uv run --no-project --python 3.12 python -m unittest discover -s tests/py
 
 Both green, plus the manual checks listed under the task. To run the app locally, serve `app/` on localhost (for example `python -m http.server 8765 --directory app`; a service worker needs localhost or https).
 
+## Delegating a task to Antigravity CLI
+
+Claude writes the contract (JSDoc stub + tests in `tests/tasks/`), agy writes the code, a script gates it:
+
+```bash
+npm run -s agy -- run --task t5 --allow app/js/foo.js --test "node --test tests/tasks/foo.test.js" --prompt "Implement the bodies in app/js/foo.js; JSDoc is the spec."
+```
+
+The script works in `.worktrees/agy-<task>`, retries failing checks in the same agy conversation (`--retries`, default 2), always re-runs `tests/core`, and prints one report with a verdict:
+
+| Verdict | Meaning | Claude does |
+|---|---|---|
+| `accept` | checks pass, no risk flags | commit and merge without reading the code |
+| `accept, review queued` | checks pass, only low-risk flags (size, UI files) | merge; the files go to `.agy/review-queue.json` |
+| `review now` | flags that can't wait: `innerHTML`/`eval`, or changes to `types.js`, `SPEC.md`, `schema/` | read the diff before merging |
+| `reject` | checks failed after retries, files outside `--allow`, tests touched, or nothing changed | read the report, fix the prompt or the code |
+
+Batch review: `npm run -s agy -- queue` lists each queued file once with a `git diff <base> HEAD -- <file>` covering every round of changes, so code that changed several times is read once, in its latest form. Clear reviewed files with `--clear <file>`. The queue must be empty before a public release. When a finished task's tests pass, move them from `tests/tasks/` to `tests/core/`.
+
 ## Module map (`app/js/`)
 
 | Module | Kind | Responsibility |

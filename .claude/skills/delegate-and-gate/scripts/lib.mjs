@@ -1,5 +1,5 @@
-// Pure helpers for scripts/agy-task.mjs: parse agy output, gate the result, decide whether Claude must read the code.
-// Contract tests: tests/tasks/agy-lib.test.js
+// Pure helpers for agy-task.mjs: parse agy output, gate the result, decide whether Claude must read the code.
+// Contract tests: tests/core/agy-lib.test.js (in the Taiwan-Guidebook repo)
 
 /**
  * @typedef {Object} AgyResult
@@ -132,14 +132,15 @@ export function checkScope(changed, allow) {
  * Only ADDED diff lines (starting with "+" but not "+++") are inspected for content flags.
  * Flags, in this order, each at most once:
  * - total added lines > opts.maxAdded (default 150)      → "Large change: <n> lines added."
- * - a file under app/js/views/, or app/sw.js, app/index.html, app/app.css
- *                                                        → "Touches UI or offline code: <file>" (one flag per file)
+ * - a file matching opts.uiPaths                         → "Touches UI or offline code: <file>" (one flag per file)
+ *   uiPaths entries are exact repo-relative paths, or directory prefixes ending in "/".
+ *   Default (when opts.uiPaths is undefined): DEFAULT_UI_PATHS. An empty array disables this flag.
  * - an added line contains "innerHTML"                   → "Uses innerHTML: check escaping."
  * - an added line contains "eval(" or "new Function("    → "Uses eval or new Function."
  * - an added line contains "TODO" or "FIXME"             → "Leaves a TODO or FIXME."
  * @param {NumstatRow[]} numstat
  * @param {string} diff   unified diff text
- * @param {{ maxAdded?: number }} [opts]
+ * @param {{ maxAdded?: number, uiPaths?: string[] }} [opts]
  * @returns {string[]}
  */
 export function reviewFlags(numstat, diff, opts = {}) {

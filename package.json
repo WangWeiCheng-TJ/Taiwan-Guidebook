@@ -5,6 +5,7 @@
   "scripts": {
     "test": "node --test \"tests/**/*.test.js\"",
     "test:core": "node --test \"tests/core/*.test.js\"",
-    "test:tasks": "node --test \"tests/tasks/*.test.js\""
+    "test:tasks": "node --test \"tests/tasks/*.test.js\"",
+    "agy": "node .claude/skills/delegate-and-gate/scripts/agy-task.mjs"
   }
 }

@@ -1,0 +1,5 @@
+{
+  "coreTest": "npm run -s test:core",
+  "nowFiles": "^(app/js/types\\.js|docs/SPEC\\.md|schema/)",
+  "maxAdded": 150
+}
