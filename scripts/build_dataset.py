@@ -202,7 +202,7 @@ def load_list(path: Path, required: list[str]) -> list[dict]:
 
 def build_app_bundle(attractions: list[dict]) -> dict:
     """Write the single offline bundle consumed by the PWA in app/."""
-    phrases = load_list(PHRASES_FILE, ["id", "category", "en", "zh_TW", "pinyin"])
+    phrases = load_list(PHRASES_FILE, ["id", "category", "en", "zh_TW", "zhuyin", "pinyin"])
     tips = load_list(TIPS_FILE, ["id", "scope", "category", "title_en", "body_en"])
     content = {"places": attractions, "phrases": phrases, "tips": tips}
     # Content hash, so the app can tell when the data actually changed
