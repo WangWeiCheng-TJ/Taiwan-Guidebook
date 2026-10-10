@@ -78,3 +78,23 @@ export function alignZhuyin(zh, zhuyin) {
     syllable: /\p{Script=Han}/u.test(char) ? parsed[i++] : null,
   }));
 }
+
+/**
+ * TASK (delegated): implement. Contract tests: tests/tasks/tones.test.js
+ *
+ * The tones as actually spoken (tone sandhi), one entry per item of `aligned`; null for punctuation.
+ * Input tones are the dictionary (citation) tones from the Zhuyin. Rules, applied in this order:
+ * 1. 不 (char "不", tone 4) before a tone-4 syllable → 2.               不要 4 4 → 2 4;  不好 4 3 stays.
+ * 2. 一 (char "一", tone 1) before tone 4 → 2; before tone 1, 2 or 3 → 4; otherwise (last, before
+ *    neutral or punctuation) stays 1.                                   一個 → 2 4; 一天 → 4 1.
+ * 3. Third-tone runs: in every run of consecutive tone-3 syllables (after rules 1 and 2), all but the
+ *    last become 2.                                                     你好 3 3 → 2 3; 我很好 3 3 3 → 2 2 3.
+ * "Next"/"consecutive" means the next item in `aligned`: punctuation (null) breaks a run and is not
+ * a "next syllable" for rules 1 and 2. Neutral tone (5) is never changed and breaks third-tone runs.
+ * Does not mutate its input.
+ * @param {AlignedChar[]} aligned  from alignZhuyin
+ * @returns {(1|2|3|4|5|null)[]}
+ */
+export function spokenTones(aligned) {
+  throw new Error('TODO: spokenTones');
+}
