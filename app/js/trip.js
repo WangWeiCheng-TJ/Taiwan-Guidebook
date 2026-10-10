@@ -11,6 +11,59 @@ import { placeById } from './data.js';
 
 export const TRIP_KEY = 'tg.trip.v1';
 
+const isObj = v => Boolean(v && typeof v === 'object' && !Array.isArray(v));
+
+function parseItem(item, errors) {
+  if (!isObj(item)) {
+    errors.push('Each stop must be an object.');
+    return null;
+  }
+  const clean = {};
+  for (const key of ['place', 'name']) {
+    if (item[key] !== undefined) {
+      if (typeof item[key] !== 'string') errors.push(`Stop ${key} must be a string.`);
+      else if (item[key].trim()) clean[key] = item[key].trim();
+    }
+  }
+  if (!clean.place && !clean.name) {
+    errors.push('Each stop must have a place id or a name.');
+  }
+  if (item.time !== undefined) {
+    const t = typeof item.time === 'string' ? item.time.trim() : '';
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(t)) errors.push('Stop time must be in HH:MM format.');
+    else clean.time = t;
+  }
+  if (item.note !== undefined) {
+    if (typeof item.note !== 'string') errors.push('Stop note must be a string.');
+    else if (item.note.trim()) clean.note = item.note.trim();
+  }
+  return clean;
+}
+
+function parseDay(day, errors) {
+  if (!isObj(day)) {
+    errors.push('Trip day must be an object.');
+    return null;
+  }
+  const date = typeof day.date === 'string' ? day.date.trim() : '';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) errors.push('Trip day date must match YYYY-MM-DD.');
+  if (!Array.isArray(day.items)) errors.push('Trip day items must be a list.');
+
+  /** @type {TripDay} */
+  const cleanDay = { date, items: [] };
+  if (day.title !== undefined) {
+    if (typeof day.title !== 'string') errors.push('Trip day title must be a string.');
+    else if (day.title.trim()) cleanDay.title = day.title.trim();
+  }
+  if (Array.isArray(day.items)) {
+    for (const it of day.items) {
+      const item = parseItem(it, errors);
+      if (item) cleanDay.items.push(item);
+    }
+  }
+  return cleanDay;
+}
+
 /**
  * Validate untrusted JSON (a file, a URL, or an AI answer) as a Trip.
  *
@@ -28,7 +81,28 @@ export const TRIP_KEY = 'tg.trip.v1';
  * @returns {{ trip: Trip|null, errors: string[] }}  trip is null when errors is non-empty
  */
 export function parseTrip(raw) {
-  throw new Error('TODO(T1): parseTrip');
+  if (!isObj(raw)) return { trip: null, errors: ['The trip must be a JSON object.'] };
+
+  /** @type {string[]} */
+  const errors = [];
+  const title = typeof raw.title === 'string' ? raw.title.trim() : '';
+  if (!title) errors.push('The trip must have a title.');
+  if (!Array.isArray(raw.days) || raw.days.length === 0) {
+    errors.push('The trip must have at least one day.');
+  }
+
+  /** @type {TripDay[]} */
+  const days = [];
+  if (Array.isArray(raw.days)) {
+    for (const d of raw.days) {
+      const day = parseDay(d, errors);
+      if (day) days.push(day);
+    }
+  }
+
+  if (errors.length) return { trip: null, errors };
+  days.sort((a, b) => a.date.localeCompare(b.date));
+  return { trip: { title, days }, errors: [] };
 }
 
 /**
@@ -41,7 +115,14 @@ export function parseTrip(raw) {
  * @returns {{ place: Place|null, label: string, missing: boolean }}
  */
 export function resolveItem(item, places) {
-  throw new Error('TODO(T1): resolveItem');
+  if (item.place) {
+    const place = placeById(places, item.place);
+    if (place) {
+      return { place, label: place.name.en, missing: false };
+    }
+    return { place: null, label: item.name || item.place, missing: true };
+  }
+  return { place: null, label: item.name || '', missing: false };
 }
 
 /**
@@ -50,7 +131,8 @@ export function resolveItem(item, places) {
  * @returns {TripDay|null}  the day with that date, or null
  */
 export function tripDayFor(trip, date) {
-  throw new Error('TODO(T1): tripDayFor');
+  if (!trip || !Array.isArray(trip.days)) return null;
+  return trip.days.find(d => d.date === date) || null;
 }
 
 /**
@@ -60,7 +142,19 @@ export function tripDayFor(trip, date) {
  * @returns {string|null}  decoded URL, or null if absent or not https
  */
 export function tripUrlFrom(search) {
-  throw new Error('TODO(T1): tripUrlFrom');
+  if (typeof search !== 'string' || !search) return null;
+  try {
+    const params = new URLSearchParams(search);
+    const val = params.get('trip');
+    if (!val) return null;
+    const u = new URL(val);
+    if (u.protocol === 'https:') {
+      return val;
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -70,7 +164,22 @@ export function tripUrlFrom(search) {
  * @returns {Promise<{ trip: Trip|null, errors: string[] }>}
  */
 export async function loadTrip(url, fetchFn = fetch) {
-  throw new Error('TODO(T1): loadTrip');
+  try {
+    const res = await fetchFn(url);
+    if (!res || !res.ok) {
+      const status = res?.status ? ` (HTTP ${res.status})` : '';
+      return { trip: null, errors: [`Could not load the trip${status}.`] };
+    }
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      return { trip: null, errors: ['The trip file is not valid JSON.'] };
+    }
+    return parseTrip(data);
+  } catch {
+    return { trip: null, errors: ['Could not load the trip. Check your connection.'] };
+  }
 }
 
 /**
@@ -86,8 +195,17 @@ export async function loadTrip(url, fetchFn = fetch) {
  * @returns {string}
  */
 export function tripBlock(trip, places, date) {
-  throw new Error('TODO(T1): tripBlock');
-}
+  if (!trip) return '';
+  const day = tripDayFor(trip, date);
+  if (!day) return '';
 
-// Keeps the import used until resolveItem is implemented.
-void placeById;
+  const header = `My plan for ${date}${day.title ? ` (${day.title})` : ''}:`;
+  const lines = [header];
+  for (const item of day.items || []) {
+    const { label } = resolveItem(item, places);
+    const timePrefix = item.time ? `${item.time} ` : '';
+    const noteSuffix = item.note ? `, ${item.note}` : '';
+    lines.push(`- ${timePrefix}${label}${noteSuffix}`);
+  }
+  return lines.join('\n');
+}
