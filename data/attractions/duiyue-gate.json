@@ -1,0 +1,123 @@
+{
+  "id": "duiyue-gate",
+  "name": {
+    "zh_TW": "兌悅門",
+    "en": "Duiyue Gate"
+  },
+  "location": {
+    "city_zh": "臺南市",
+    "city_en": "Tainan City",
+    "district_zh": "中西區",
+    "district_en": "West Central District",
+    "address_zh": "臺南市中西區文賢路與信義街口",
+    "address_en": "Corner of Wenxian Rd. and Xinyi St., West Central Dist., Tainan City",
+    "coordinates": {
+      "lat": 23.00075,
+      "lng": 120.19436
+    }
+  },
+  "category": "historical_fortress",
+  "eras": [
+    "Qing Dynasty (1683–1895)",
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1835,
+  "heritage_status": "National Monument (國定古蹟)",
+  "summary": {
+    "zh_TW": "清道光十五年（1835年）增建、隔年完工的府城西方外城城門，基座以硓𥑮石砌成，俗稱「硓𥑮石城」。它是臺南現存四座城門中唯一還能通行的，至今仍是巷弄居民日常進出的通道。",
+    "en": "A gate of Tainan's western outer city wall, begun in 1835 and finished the next year, with a base of coral stone that gave it the nickname 'coral-stone wall'. Of Tainan's four surviving city gates it is the only one still used as a passage: locals walk through it every day."
+  },
+  "historical_narrative": {
+    "zh_TW": "清道光十二年（1832年）張丙之役後，官方在臺灣各城增建半月城，臺灣府城因此築起西方外城，範圍從小西門延伸到小北門，並把大西門包在裡面。兌悅門在道光十五年增建，隔年完工，因位於正西方，以八卦中代表西方的「兌」卦命名。它隨著五條港之一的新港墘港而興起。日治時期城牆因開闢道路而拆除，城門保留下來，成為西方外城三座城門中唯一僅存的一座。戰後城門被民房包圍，一度被榕樹覆蓋，如今已清除。2020年底，兌悅門與大南門、大東門、城垣殘跡、巽方砲台以「台灣府城城門及城垣殘跡」名義通過文資審議，升格為國定古蹟。",
+    "en": "After the Zhang Bing uprising of 1832, the Qing government added half-moon walls to Taiwan's cities, and Tainan gained a western outer wall running from the Little West Gate to the Little North Gate and enclosing the Great West Gate. Duiyue Gate was added in 1835 and completed the following year. It faces due west and is named after dui (兌), the trigram for the west in the eight trigrams. It grew up with Xingangkan Harbor, one of the city's Five Canals (五條港). In the Japanese era the walls were torn down for roads but the gate was kept, the only one of the western outer wall's three gates to survive. After the war houses closed in around it and a banyan tree grew over it; the tree has since been cleared. At the end of 2020 it passed heritage review together with the Great South Gate, the Great East Gate, remaining wall sections and the Xunfang Battery, and was upgraded to a national monument."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1832",
+      "era_category": "Qing Dynasty",
+      "event_zh": "張丙之役後，府城增建西方外城。",
+      "event_en": "After the Zhang Bing uprising, a western outer wall is added to the city."
+    },
+    {
+      "year_or_era": "1835",
+      "era_category": "Qing Dynasty",
+      "event_zh": "兌悅門動工增建，隔年完工。",
+      "event_en": "Duiyue Gate is added; it is completed the following year."
+    },
+    {
+      "year_or_era": "1895–1945",
+      "era_category": "Japanese Colonial",
+      "event_zh": "城牆因開闢道路拆除，城門保留，成為西方外城唯一僅存的城門。",
+      "event_en": "The walls are torn down for roads; the gate survives as the only one left of the western outer wall."
+    },
+    {
+      "year_or_era": "2020",
+      "era_category": "Modern Era",
+      "event_zh": "以「台灣府城城門及城垣殘跡」名義通過文資審議，升格為國定古蹟。",
+      "event_en": "Passes heritage review as part of the 'Taiwan Prefecture City Gates and Wall Remains' and is upgraded to a national monument."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "府城西方外城唯一留下的城門，也是臺南現存城門中唯一仍在日常使用的通道，見證五條港時代的城市邊界。",
+    "why_it_matters_en": "The only surviving gate of Tainan's western outer wall and the only one of the city's old gates still in everyday use, it marks where the city ended in the days of the Five Canals.",
+    "architectural_highlights_zh": "城門高約四公尺、厚約三公尺，門洞寬約三公尺。台座應是以硓𥑮石砌成，上方砌紅磚、以白灰粉刷，內部為夯土，牆角以花崗岩補強。西立面比東立面略高，設有垛牆與槍口，東立面則沒有槍口。",
+    "architectural_highlights_en": "About four metres high and three metres thick, with a passage about three metres wide. The base is thought to be coral stone, topped with red brick finished in lime plaster over a rammed-earth core, with granite reinforcing the corners. The west face is slightly taller than the east and has battlements and gun ports; the east face has no gun ports.",
+    "intangible_culture_zh": "居民稱城門一帶為「甕城腳」，出入城的街道稱「硓𥑮石街」，也就是今天的信義街。據傳門洞像弓、巷道像箭，形成「箭煞」，因此在城門旁供奉石獅爺鎮煞，石獅爺至今仍在門邊。",
+    "intangible_culture_en": "Locals called the area around the gate Àng-siâ-kha, and the street through it Coral Stone Street, today's Xinyi Street. A legend says the arch looked like a bow and the lane like an arrow, aiming bad luck outward, so a stone lion guardian was set up beside the gate; it is still there."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "The gate sits in a residential lane and is still a working passage: keep your voice down, don't climb on the walls, and step aside for scooters coming through.",
+    "etiquette_tips_zh": "城門位在住宅巷弄裡，也仍是通行要道：請放低音量、不要攀爬城牆，並讓路給穿越的機車。",
+    "must_see_spots_en": [
+      "Walk through the gate passage",
+      "Battlements and gun ports on the west face",
+      "Coral-stone base",
+      "Stone lion guardian beside the gate"
+    ],
+    "must_see_spots_zh": [
+      "親自走過城門門洞",
+      "西立面的垛牆與槍口",
+      "硓𥑮石台座",
+      "城門旁的石獅爺"
+    ],
+    "must_see": [
+      {
+        "name": { "en": "Walk through the gate passage", "zh_TW": "親自走過城門門洞" },
+        "why": { "en": "Of Tainan's four surviving city gates, this is the only one you can still walk through as a street.", "zh_TW": "臺南現存四座城門中，只有這一座還能當成街道穿越。" }
+      },
+      {
+        "name": { "en": "Battlements and gun ports on the west face", "zh_TW": "西立面的垛牆與槍口" },
+        "why": { "en": "The outward-facing west side was built slightly taller and armed with gun ports; compare it with the plainer east side.", "zh_TW": "朝外的西立面蓋得比較高，還設有槍口；可以對照比較樸素的東立面。" }
+      },
+      {
+        "name": { "en": "Coral-stone base", "zh_TW": "硓𥑮石台座" },
+        "why": { "en": "The coral stone at the base is where the gate's nickname, the coral-stone wall, comes from.", "zh_TW": "台座的硓𥑮石，就是「硓𥑮石城」這個俗稱的由來。" }
+      },
+      {
+        "name": { "en": "Stone lion guardian beside the gate", "zh_TW": "城門旁的石獅爺" },
+        "why": { "en": "Placed, so the legend goes, to block the bad luck of the bow-shaped arch and arrow-straight lane. It still stands by the gate.", "zh_TW": "傳說是為了鎮住弓形門洞與箭形巷道形成的「箭煞」而設，至今仍在門邊。" }
+      }
+    ],
+    "recommended_duration_min": 20,
+    "transportation_en": "About 1 km west of Chihkan Tower, roughly a 15-minute walk through the old town.",
+    "transportation_zh": "在赤崁樓西邊約一公里，穿過老城區步行約15分鐘。",
+    "best_time_to_visit": "Any time: it is open all day and free to visit."
+  },
+  "tags": [
+    "city_gate",
+    "qing_city_wall",
+    "coral_stone",
+    "five_canals",
+    "tainan_old_capital",
+    "national_monument"
+  ],
+  "metadata": {
+    "sources": [
+      "https://zh.wikipedia.org/wiki/%E5%85%8C%E6%82%85%E9%96%80",
+      "https://www.twtainan.net/zh-tw/attractions/detail/681"
+    ],
+    "generated_by": "agy draft, rewritten by Claude from the listed sources; pending owner review",
+    "last_updated": "2026-10-11"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "id": "tainan-coral-stone-house",
+  "name": {
+    "zh_TW": "台南硓𥑮石芳宅",
+    "en": "Tainan Coral Stone House (former Huang Residence)"
+  },
+  "location": {
+    "city_zh": "臺南市",
+    "city_en": "Tainan City",
+    "district_zh": "中西區",
+    "district_en": "West Central District",
+    "address_zh": "臺南市中西區信義街46巷",
+    "address_en": "Lane 46, Xinyi St., West Central Dist., Tainan City",
+    "coordinates": {
+      "lat": 23.00075,
+      "lng": 120.19436
+    }
+  },
+  "category": "traditional_residence",
+  "eras": [
+    "Japanese Colonial Era (1895–1945)",
+    "Post-WWII & Modern Era (1945–present)"
+  ],
+  "established_year": 1926,
+  "summary": {
+    "zh_TW": "日治時期由黃氏家族興建的宅邸，以咾咕石、紅磚與洗石子為主要建材，中央是四合院、兩側是街屋，立面帶西式裝飾。荒廢多年後以「最小介入」方式修復，2025年6月以建築展覽空間重新開放。目前暫時關閉，開放時間公告於官方社群。",
+    "en": "A family house built by the Huang family in the Japanese era from coral stone, red brick and washed terrazzo: a courtyard house in the middle, shophouses on each side and a Western-style decorated front. Left empty for years, it was restored with minimal intervention and reopened in June 2025 as an architecture exhibition space. It is temporarily closed for now; opening times are posted on its official social media."
+  },
+  "historical_narrative": {
+    "zh_TW": "這裡位在清代五條港的新港墘一帶。來自屏東林邊的黃孫快家族在此落腳、購地建宅，起造於1926年（另有報導說是1930年代的昭和年間）。原址本來有兩棟狹長的二進街屋和一座三合院，黃家大幅改建：保留左右兩側的街屋形式作為店面，中央蓋起四合院作為家族起居空間。進入21世紀後黃家後代遷離，宅邸逐漸荒廢，之後由義昌文教基金會董事長許志鋒購得，委由原型建築修復。修復以最低限度補強、新舊共生為原則，新增木構屋頂，取消原有樓梯、改以兩座紅色迴旋梯連通上下樓，並保留原本的木門窗與鐵花窗。2025年6月重新開放，以展覽與講座為主，首展由成功大學建築系策劃。",
+    "en": "The house stands in the old Xingangkan area of the Qing-era Five Canals. The Huang family, led by Huang Sun-kuai from Linbian in Pingtung, settled here and built it from 1926 (one report places it in the 1930s, the Showa era). The site already held two long, narrow two-section shophouses and a three-sided courtyard house. The Huangs rebuilt it: they kept the shophouse fronts on both sides as shops and put a four-sided courtyard house in the middle for the family. In the 21st century the family moved away and the house fell into disrepair, until Hsu Chih-feng (許志鋒), chairman of the 義昌 Cultural and Educational Foundation, bought it and had it restored by the architecture firm 原型建築. The restoration used minimal reinforcement and let old and new coexist: a new timber roof, the old staircase replaced by two red spiral stairs, and the original wooden doors, windows and iron window grilles kept. It reopened in June 2025 for exhibitions and talks, with a first show curated by the architecture department of National Cheng Kung University."
+  },
+  "timeline": [
+    {
+      "year_or_era": "1926",
+      "era_category": "Japanese Colonial",
+      "event_zh": "黃孫快家族購地建宅（另有報導記為1930年代）。",
+      "event_en": "The Huang family buys the land and builds the house (one report says the 1930s)."
+    },
+    {
+      "year_or_era": "2000s",
+      "era_category": "Modern Era",
+      "event_zh": "黃家後代遷離，宅邸逐漸荒廢。",
+      "event_en": "The family moves away and the house falls into disrepair."
+    },
+    {
+      "year_or_era": "2025",
+      "era_category": "Modern Era",
+      "event_zh": "修復完成，6月以建築展覽空間重新開放。",
+      "event_en": "Restoration complete; reopens in June as an architecture exhibition space."
+    }
+  ],
+  "cultural_significance": {
+    "why_it_matters_zh": "一座從家族宅邸變成建築展覽空間的老屋，修復刻意讓新舊結構並存，是看台南老屋再生手法的好例子。",
+    "why_it_matters_en": "An old family home turned architecture gallery, restored so that old and new structure sit side by side: a good place to see how Tainan brings old houses back to life.",
+    "architectural_highlights_zh": "主要建材為咾咕石、紅磚與洗石子；正身為鋼筋混凝土加強磚造，立面採用西式裝飾。一樓為客廳，二樓有公媽廳與臥室，屋後有八角形水池。修復新增的木構屋頂引入自然光，兩座紅色迴旋梯連通上下樓。",
+    "architectural_highlights_en": "Built mainly of coral stone, red brick and washed terrazzo, with a reinforced brick main block and Western-style decoration on the front. Living room downstairs, ancestral hall and bedrooms upstairs, and an octagonal pond at the back. The restoration added a timber roof that lets daylight in and two red spiral staircases.",
+    "intangible_culture_zh": "據說屋內的幾座花崗石花架可能來自清代武舉人胡澄淵的舊居。",
+    "intangible_culture_en": "A few granite flower stands in the house are said to have come from the former home of Hu Cheng-yuan, a Qing-dynasty military degree holder."
+  },
+  "foreign_visitor_guide": {
+    "etiquette_tips_en": "Temporarily closed for now; check its official social media for opening times before you go. When open, it is an exhibition space: follow the staff's guidance on photos.",
+    "etiquette_tips_zh": "目前暫時關閉，出發前請先看官方社群公告的開放時間。開放時是展覽空間，拍照請依現場人員指示。",
+    "must_see_spots_en": [
+      "Two red spiral staircases",
+      "New timber roof letting in daylight",
+      "Coral stone, red brick and terrazzo walls",
+      "Octagonal pond at the back"
+    ],
+    "must_see_spots_zh": [
+      "兩座紅色迴旋梯",
+      "引入自然光的新木構屋頂",
+      "咾咕石、紅磚與洗石子牆面",
+      "屋後的八角形水池"
+    ],
+    "must_see": [
+      {
+        "name": { "en": "Two red spiral staircases", "zh_TW": "兩座紅色迴旋梯" },
+        "why": { "en": "They replaced the original staircase in the restoration, the most visible sign of its new-and-old approach.", "zh_TW": "修復時取代原本的樓梯，是新舊共生手法最醒目的地方。" }
+      },
+      {
+        "name": { "en": "New timber roof letting in daylight", "zh_TW": "引入自然光的新木構屋頂" },
+        "why": { "en": "Added in the restoration on top of the old structure, it brings natural light into the upper floor.", "zh_TW": "修復時在舊結構上新增的木構屋頂，把自然光引進二樓。" }
+      },
+      {
+        "name": { "en": "Coral stone, red brick and terrazzo walls", "zh_TW": "咾咕石、紅磚與洗石子牆面" },
+        "why": { "en": "The house's main building materials, and where its coral-stone name comes from.", "zh_TW": "老宅的主要建材，也是「硓𥑮石」這個名字的由來。" }
+      },
+      {
+        "name": { "en": "Octagonal pond at the back", "zh_TW": "屋後的八角形水池" },
+        "why": { "en": "An original feature of the family house behind the courtyard.", "zh_TW": "黃家宅邸原有的設計，位在四合院後方。" }
+      }
+    ],
+    "recommended_duration_min": 45,
+    "transportation_en": "In a lane off Xinyi Street, a short walk from Duiyue Gate at the street's west end.",
+    "transportation_zh": "位在信義街的巷子裡，從信義街西端的兌悅門步行不遠。",
+    "best_time_to_visit": "Check opening times on its official social media first: it is temporarily closed."
+  },
+  "tags": [
+    "old_house_revival",
+    "coral_stone",
+    "architecture_exhibition",
+    "five_canals",
+    "tainan_old_capital",
+    "temporarily_closed"
+  ],
+  "metadata": {
+    "sources": [
+      "https://zh.wikipedia.org/wiki/%E4%BF%A1%E7%BE%A9%E8%A1%97%E5%92%BE%E5%92%95%E7%9F%B3%E9%BB%83%E5%AE%85",
+      "https://n.yam.com/Article/20250925878006"
+    ],
+    "coordinates_note": "Approximate: Duiyue Gate's position (same street). The exact point is not in the sources, and they disagree on the house number (No. 15 vs No. 17, Lane 46).",
+    "generated_by": "agy draft, rewritten by Claude from the listed sources; pending owner review",
+    "last_updated": "2026-10-11"
+  }
+}
