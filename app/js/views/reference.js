@@ -2,7 +2,7 @@
 
 import { esc } from '../util.js';
 import { tr, localized } from '../lang.js';
-import { alignZhuyin } from '../zhuyin.js';
+import { alignZhuyin, spokenTones } from '../zhuyin.js';
 
 const TONE_MARK = { 1: '', 2: 'ˊ', 3: 'ˇ', 4: 'ˋ', 5: '˙' };
 
@@ -33,10 +33,13 @@ export function zhuyinBlock(ph) {
   let aligned = null;
   try { aligned = alignZhuyin(ph.zh_TW, ph.zhuyin); } catch { aligned = null; }
   if (!aligned) return `<div class="zhbig">${esc(ph.zh_TW)}</div><div class="py">${esc(ph.zhuyin)}</div>`;
-  return `<div class="zy" lang="zh-TW">${aligned.map(({ char, syllable }) => syllable ? `
+  // Zhuyin shows dictionary tones; the number under it is the tone actually spoken (after sandhi).
+  let spoken;
+  try { spoken = spokenTones(aligned); } catch { spoken = aligned.map(a => a.syllable?.tone ?? null); }
+  return `<div class="zy" lang="zh-TW">${aligned.map(({ char, syllable }, i) => syllable ? `
     <div class="zc">
       <div class="han">${esc(char)}</div>
-      <div class="syl">${syllable.parts.map(p => `<span class="zp"><b>${esc(p.symbol)}</b><i>${esc(p.roman)}</i></span>`).join('')}<span class="zp tone t${syllable.tone}"><b>${TONE_MARK[syllable.tone] || '&nbsp;'}</b><i>${syllable.tone}</i></span></div>
+      <div class="syl">${syllable.parts.map(p => `<span class="zp"><b>${esc(p.symbol)}</b><i>${esc(p.roman)}</i></span>`).join('')}<span class="zp tone"><b>${TONE_MARK[syllable.tone] || '&nbsp;'}</b><i>${spoken[i]}</i></span></div>
     </div>` : `<div class="zc punct"><div class="han">${esc(char)}</div></div>`).join('')}</div>`;
 }
 
