@@ -16,7 +16,7 @@ import { join } from 'node:path';
 import { parseAgyJson, summarizeTests, checkScope, reviewFlags, decide, retryPrompt } from './lib.mjs';
 
 // Project settings live in .agy/config.json (all optional):
-//   { "coreTest": "npm run -s test:core", "nowFiles": "^(app/js/types\\.js|docs/SPEC\\.md|schema/)", "maxAdded": 150 }
+//   { "coreTest", "nowFiles" (regex), "maxAdded", "uiPaths" (paths or dir/ prefixes), "agy" }
 const ROOT = git(process.cwd(), 'rev-parse', '--show-toplevel').trim();
 const CONFIG_FILE = join(ROOT, '.agy', 'config.json');
 const CONFIG = existsSync(CONFIG_FILE) ? JSON.parse(readFileSync(CONFIG_FILE, 'utf8')) : {};
