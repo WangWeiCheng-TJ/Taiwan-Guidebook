@@ -25,7 +25,8 @@ for (const f of files) {
   });
 
   test(`${f}: nothing else changed`, () => {
-    const base = atBase(f);
+    let base;
+    try { base = atBase(f); } catch { return; } // a new file has no previous version to compare
     if (f === 'chihkan-tower.json') return assert.deepEqual(load(f), base, 'chihkan-tower.json must stay as it is');
     assert.deepEqual(withoutMustSee(load(f)), withoutMustSee(base));
   });
