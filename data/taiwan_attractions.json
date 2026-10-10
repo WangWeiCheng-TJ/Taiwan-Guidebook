@@ -266,7 +266,49 @@
         "recommended_duration_min": 150,
         "transportation_en": "Take Taipei MRT Green Line to 'Beimen Station' (Exit 3) or Orange Line to 'Daqiaotou Station' (Exit 1), followed by a 7-minute stroll into Dihua Street.",
         "transportation_zh": "搭乘台北捷運松山新店線至『北門站』3號出口，或中和新蘆線至『大橋頭站』1號出口，步行約7分鐘即達迪化街商圈。",
-        "best_time_to_visit": "Afternoon (1:00 PM - 6:00 PM) when all heritage cafes and boutiques are bustling, followed by river sunset at Dadaocheng Wharf."
+        "best_time_to_visit": "Afternoon (1:00 PM - 6:00 PM) when all heritage cafes and boutiques are bustling, followed by river sunset at Dadaocheng Wharf.",
+        "must_see": [
+          {
+            "name": {
+              "en": "Taipei Xiahai City God Temple (famed worldwide for the Chinese Matchmaker God Yuelao)",
+              "zh_TW": "台北霞海城隍廟（月老靈驗享譽國際）"
+            },
+            "why": {
+              "en": "Globally famous for its matchmaker deity Yuelao, where visitors come to pray for love. An English guide brochure is available at the counter to help you follow the ritual.",
+              "zh_TW": "這裡以祈求良緣的月老聞名國際。廟方服務處備有英文解說單，可引導參拜求姻緣的流程。"
+            }
+          },
+          {
+            "name": {
+              "en": "Traditional 3-courtyard historic shophouses with hidden garden cafes and tea studios",
+              "zh_TW": "三進式長條老街屋天井文創茶館（如合勝堂、進益採買等）"
+            },
+            "why": {
+              "en": "These elongated historic shophouses run deep with tranquil central courtyards once used for workshops and storage. Today, they house artisanal cafes and tea studios.",
+              "zh_TW": "傳統長條形街屋深達數十公尺並帶有寧靜天井，過去前店中坊後倉，如今進駐了文創咖啡館與茶館。"
+            }
+          },
+          {
+            "name": {
+              "en": "Yongle Fabric Market (Taiwan's largest textile and tailor paradise)",
+              "zh_TW": "永樂布業商場（全臺最大布料批發與旗袍手工藝中心）"
+            },
+            "why": {
+              "en": "Taiwan's largest textile and tailor center, rooted in Dadaocheng's prosperous history of textile merchants. Visitors can explore countless fabric vendors and tailoring crafts.",
+              "zh_TW": "這裡是全臺最大的布料批發與手工裁縫中心，承襲了大稻埕繁榮的布商歷史背景。"
+            }
+          },
+          {
+            "name": {
+              "en": "Dadaocheng Wharf (Pier 5 container market and sunset bike path along Tamsui River)",
+              "zh_TW": "大稻埕碼頭（PIER5貨櫃市集與淡水河夕陽自行車道）"
+            },
+            "why": {
+              "en": "Located along the Tamsui River where Dadaocheng first grew as a trading port. It features a container market and a riverside cycling path that are ideal for watching the sunset.",
+              "zh_TW": "坐落於大稻埕發跡的淡水河畔，擁有貨櫃市集與河岸自行車道，是欣賞河岸夕陽的絕佳去處。"
+            }
+          }
+        ]
       },
       "tags": [
         "tea_trade",
@@ -381,7 +423,49 @@
         "recommended_duration_min": 90,
         "transportation_en": "Take Taipei Metro (MRT) Red Line to the terminal 'Tamsui Station', then transfer to Bus R26, 836, or 857 to 'Fort San Domingo (紅毛城)' stop, or enjoy a scenic 15-minute riverside walk from the station.",
         "transportation_zh": "搭乘台北捷運淡水信義線至『淡水站』，轉乘公車紅26、836至『紅毛城(真理大學)站』，或沿淡水金色水岸步道步行約15分鐘。",
-        "best_time_to_visit": "Late afternoon (3:30 PM - 5:30 PM) to catch the golden hour light on the red bricks and the famous Tamsui sunset."
+        "best_time_to_visit": "Late afternoon (3:30 PM - 5:30 PM) to catch the golden hour light on the red bricks and the famous Tamsui sunset.",
+        "must_see": [
+          {
+            "name": {
+              "en": "Dutch-era underground prison cells and defensive ramparts",
+              "zh_TW": "主堡荷蘭地牢與厚重穹頂防禦結構"
+            },
+            "why": {
+              "en": "Built by the Dutch in 1644 with stone walls up to 1.9 meters thick. It features bombproof barrel-vaulted ceilings and preserved underground prison cells.",
+              "zh_TW": "荷蘭人於1644年以石材建造，牆體厚達1.9公尺，設有防砲轟的拱頂與保留至今的地牢。"
+            }
+          },
+          {
+            "name": {
+              "en": "Victorian consular dining room with English fireplace and Minton floor tiles",
+              "zh_TW": "英國領事官邸壁爐、僕役呼叫鈴與英國進口彩釉地磚"
+            },
+            "why": {
+              "en": "Completed in 1891 as a British consular residence, showcasing Victorian verandah architecture. It preserves an English fireplace, servant call bells, and imported British Minton floor tiles.",
+              "zh_TW": "英國領事官邸落成於1891年，展現維多利亞建築美學，保存了英式壁爐、僕役呼叫鈴與英國進口彩釉地磚。"
+            }
+          },
+          {
+            "name": {
+              "en": "17th-century muzzle-loading bronze and iron cannons placed in the courtyard",
+              "zh_TW": "庭園中清代嘉慶年間鑄造的古砲群"
+            },
+            "why": {
+              "en": "Displayed in the courtyard, these historic cannons reflect the fortress's long role in maritime coastal defense.",
+              "zh_TW": "陳列於庭園中的古砲群，見證了這座堡壘漫長的海防要塞歷史。"
+            }
+          },
+          {
+            "name": {
+              "en": "Hilltop panoramic lookout facing the Tamsui River mouth and Mount Guanyin",
+              "zh_TW": "俯瞰淡水河口與觀音山日落的眺望平台"
+            },
+            "why": {
+              "en": "This scenic vantage point overlooks the mouth of the Tamsui River and Mount Guanyin. It offers one of the best locations to view the famous Tamsui sunset.",
+              "zh_TW": "此處可俯瞰淡水河口與對岸觀音山，是欣賞著名的淡水夕陽與河海景致的絕佳平台。"
+            }
+          }
+        ]
       },
       "tags": [
         "colonial_fortress",
@@ -489,7 +573,49 @@
         "recommended_duration_min": 180,
         "transportation_en": "Take Taipei MRT Blue/Brown Line to 'Zhongxiao Fuxing Station' (Exit 2) and ride Keelung Bus 1062 directly to Jiufen Old Street (approx. 70 mins), or take TRA Train to Ruifang Station and transfer to Bus 788, 827, or 965.",
         "transportation_zh": "搭乘台北捷運至『忠孝復興站』2號出口轉乘基隆客運1062直達九份老街；或搭火車至瑞芳站轉乘公車788、827、965號。",
-        "best_time_to_visit": "Late afternoon (4:00 PM - 8:00 PM) to watch sunset turn into twilight when red lanterns illuminate the mountain."
+        "best_time_to_visit": "Late afternoon (4:00 PM - 8:00 PM) to watch sunset turn into twilight when red lanterns illuminate the mountain.",
+        "must_see": [
+          {
+            "name": {
+              "en": "Shuqi Road stone stairways illuminated by glowing red lanterns at twilight",
+              "zh_TW": "豎崎路陡峭階梯與傍晚點亮之紅燈籠"
+            },
+            "why": {
+              "en": "A steep hillside walkway of over 300 stone steps lined with traditional teahouses. At twilight, the glowing red lanterns create Jiufen's signature cinematic atmosphere.",
+              "zh_TW": "由三百多階陡峭石階組成的山城步道，兩側林立著老茶樓。傍晚紅燈籠點亮時，營造出九份經典的電影氛圍。"
+            }
+          },
+          {
+            "name": {
+              "en": "A-Mei Teahouse (famed for its nostalgic tiered wooden structure overlooking the sea)",
+              "zh_TW": "阿妹茶樓與九份海景品茗時光"
+            },
+            "why": {
+              "en": "A nostalgic tiered wooden teahouse facing the sea, iconic to Jiufen. Visitors can enjoy traditional Gongfu tea brewing while taking in panoramic ocean and mountain views.",
+              "zh_TW": "依山面海的經典木造茶樓，是九份的代表性地標。旅客可在此體驗正統功夫茶道，同時飽覽山海美景。"
+            }
+          },
+          {
+            "name": {
+              "en": "Shengping Theater (Taiwan's earliest modern theater in mining history, built in 1934)",
+              "zh_TW": "昇平戲院（1934年建造之北臺灣最早現代戲院）"
+            },
+            "why": {
+              "en": "Built in 1934, this is northern Taiwan's earliest modern theater from the mining boom. It stands as a reminder of Jiufen's heyday as Asia's gold capital.",
+              "zh_TW": "建於1934年，是北臺灣最早的現代戲院，見證了九份在淘金全盛時期作為東亞金都的繁華歲月。"
+            }
+          },
+          {
+            "name": {
+              "en": "Jinguashi Gold Museum (touch a 220kg 99.9% pure solid gold bullion ingot)",
+              "zh_TW": "金瓜石黃金博物館（親手觸摸220公斤999純金大金磚與日式四連棟）"
+            },
+            "why": {
+              "en": "Showcases the mining heritage of the area, where visitors can touch a 220-kilogram 99.9% pure gold ingot. The grounds also feature preserved 1930s Japanese timber residences.",
+              "zh_TW": "展示當地的採礦與煉金歷史，館內可親手觸摸220公斤的純金磚，園區並保存了1930年代的日式木造四連棟宿舍。"
+            }
+          }
+        ]
       },
       "tags": [
         "gold_rush",
@@ -591,7 +717,49 @@
         "recommended_duration_min": 75,
         "transportation_en": "Take Taiwan High Speed Rail to Taichung Station, then transfer to Changhua Bus No. 6936 (Taiwan Tourist Shuttle Lukang Line) directly to Lukang, followed by a 10-minute walk through the heritage alleyways.",
         "transportation_zh": "搭乘高鐵至台中站，轉乘彰化客運6936（台灣好行鹿港祈福線）至鹿港，步行約10分鐘即可到達。",
-        "best_time_to_visit": "Mid-morning (9:00 AM - 11:30 AM) when gentle sunlight beams filter through the incense smoke and timber latticework."
+        "best_time_to_visit": "Mid-morning (9:00 AM - 11:30 AM) when gentle sunlight beams filter through the incense smoke and timber latticework.",
+        "must_see": [
+          {
+            "name": {
+              "en": "The jaw-dropping Octagonal Caisson Ceiling (look straight up beneath the theater stage)",
+              "zh_TW": "戲台正上方八卦八角迴旋式懸臂藻井（臺灣木構極品）"
+            },
+            "why": {
+              "en": "Taiwan's earliest and largest surviving wooden caisson ceiling, assembled above the theater stage with interlocking bracket joints without using a single nail.",
+              "zh_TW": "位於戲台正上方，全由精密榫卯斗栱懸臂疊組而成，不耗一釘一鐵，是臺灣現存年代最早且跨距最大的木作藻井。"
+            }
+          },
+          {
+            "name": {
+              "en": "Three-Bay Five-Door Front Hall featuring intricate openwork wood relief panels",
+              "zh_TW": "三川殿五門木雕隔扇鏤空透雕"
+            },
+            "why": {
+              "en": "Crafted by master woodcarvers from Quanzhou using aged Chinese fir. The screens feature intricate Qing-dynasty openwork carvings of flowers, figures, and birds.",
+              "zh_TW": "由泉州惠安名匠以福建杉木精雕而成，五門木雕隔扇呈現精湛的花鳥與人物鏤空透雕工藝。"
+            }
+          },
+          {
+            "name": {
+              "en": "Qing-dynasty solid bluestone guardian lions with smiling masculine/feminine expressions",
+              "zh_TW": "三川殿前清代青斗石刻抱鼓石與石獅"
+            },
+            "why": {
+              "en": "Carved from imported Quanzhou bluestone during the Qing Dynasty. These guardian lions and drum stones stand in front of the front hall with expressive, smiling facial features.",
+              "zh_TW": "立於三川殿前，由清代泉州青斗石雕琢而成，帶有生動微笑表情，包含石獅與抱鼓石雕刻。"
+            }
+          },
+          {
+            "name": {
+              "en": "The peaceful Rear Hall courtyard with ancient banyan trees and stone water cisterns",
+              "zh_TW": "後殿寧靜後花園與古井庭院"
+            },
+            "why": {
+              "en": "A tranquil Buddhist sanctuary located at the rear of the three-hall complex. Ancient trees and historic stone cisterns offer a quiet space for contemplation.",
+              "zh_TW": "位於三進院落後方的寧靜庭院，有老樹與古井相伴，為這座佛教聖剎提供了清幽沉靜的氛圍。"
+            }
+          }
+        ]
       },
       "tags": [
         "timber_architecture",
@@ -700,7 +868,49 @@
         "recommended_duration_min": 60,
         "transportation_en": "Take Tainan City Bus No. 2, 88, or Taiwan Tourist Shuttle 99 to 'Confucius Temple' stop, or take an easy 12-minute walk from Hayashi Department Store / National Museum of Taiwan Literature.",
         "transportation_zh": "搭乘大台南公車2號、88號至『孔廟』站下車；或從國立臺灣文學館/林百貨步行約5分鐘。",
-        "best_time_to_visit": "Early morning (8:30 AM - 10:30 AM) when the tree-shaded courtyards are peaceful and illuminated by soft sunlight."
+        "best_time_to_visit": "Early morning (8:30 AM - 10:30 AM) when the tree-shaded courtyards are peaceful and illuminated by soft sunlight.",
+        "must_see": [
+          {
+            "name": {
+              "en": "'First Academy of Taiwan' (全臺首學) wooden entrance plaque",
+              "zh_TW": "東大門『全臺首學』橫匾"
+            },
+            "why": {
+              "en": "Hung at the eastern gate, this famous plaque marks Taiwan's earliest official academy, founded in 1665 to begin institutional civil education on the island.",
+              "zh_TW": "懸掛於東大門，標誌著這座創立於1665年的臺灣最早官辦學府，也是全臺儒家文教體系的起點。"
+            }
+          },
+          {
+            "name": {
+              "en": "Dacheng Hall interior featuring 15+ Imperial & Presidential Honor Boards",
+              "zh_TW": "大成殿內歷代清朝皇帝與歷任總統御匾群"
+            },
+            "why": {
+              "en": "Dacheng Hall houses an extraordinary collection of calligraphic honor plaques bestowed by eight Qing emperors and modern presidents, spanning four centuries.",
+              "zh_TW": "大成殿內懸掛著清代八位皇帝與歷任總統親筆賜贈的珍貴匾額群，貫穿了近四百年的歷史遞嬗。"
+            }
+          },
+          {
+            "name": {
+              "en": "Minglun Hall (Hall of Moral Brightness) housing ancient Zhao Mengfu calligraphy stone rubbings",
+              "zh_TW": "明倫堂與趙孟頫書法石刻《大學》全文"
+            },
+            "why": {
+              "en": "Serving as the lecture hall within the classical 'School on the Left' layout, Minglun Hall houses ancient stone rubbings of calligraphy by Zhao Mengfu.",
+              "zh_TW": "作為『左學右廟』格局中的講學堂，堂內珍藏了趙孟頫書法的《大學》全文石刻。"
+            }
+          },
+          {
+            "name": {
+              "en": "Three-story Wenchang Pavilion (God of Literature Pagoda)",
+              "zh_TW": "三層樓古典文昌閣與泮池古樹庭園"
+            },
+            "why": {
+              "en": "A classical three-story pavilion rebuilt during the Qing Dynasty in 1715, dedicated to the God of Literature alongside the Crescent Pond and shaded grounds.",
+              "zh_TW": "於清康熙年間（1715年）重修的三層古典樓閣，供奉文昌帝君，周圍環繞著泮池與老樹庭園。"
+            }
+          }
+        ]
       },
       "tags": [
         "confucianism",
