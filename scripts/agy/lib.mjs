@@ -1,5 +1,4 @@
 // Pure helpers for scripts/agy-task.mjs: parse agy output, gate the result, decide whether Claude must read the code.
-// TASK (delegated): implement the bodies; do not change names, parameters or return shapes.
 // Contract tests: tests/tasks/agy-lib.test.js
 
 /**
@@ -27,7 +26,38 @@
  * @returns {AgyResult}
  */
 export function parseAgyJson(stdout) {
-  throw new Error('TODO: parseAgyJson');
+  let parsed = null;
+  for (const line of stdout.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) continue;
+    try {
+      const obj = JSON.parse(trimmed);
+      if (obj && typeof obj === 'object' && typeof obj.status === 'string') {
+        parsed = obj;
+      }
+    } catch {}
+  }
+  if (!parsed) {
+    return {
+      conversationId: null,
+      status: 'NO_JSON',
+      response: '',
+      denied: [],
+      usage: null,
+      error: 'No JSON result from agy.',
+    };
+  }
+  return {
+    conversationId: parsed.conversation_id ?? parsed.conversationId ?? null,
+    status: parsed.status,
+    response: parsed.response ?? '',
+    denied: (parsed.denied_actions ?? []).map(a => a?.action ?? a),
+    usage: parsed.usage ? {
+      output: parsed.usage.output_tokens ?? parsed.usage.output,
+      total: parsed.usage.total_tokens ?? parsed.usage.total,
+    } : null,
+    error: parsed.error ?? null,
+  };
 }
 
 /**
@@ -42,7 +72,38 @@ export function parseAgyJson(stdout) {
  * @returns {TestSummary}
  */
 export function summarizeTests(output) {
-  throw new Error('TODO: summarizeTests');
+  const nodePass = output.match(/ℹ pass (\d+)/);
+  const nodeFail = output.match(/ℹ fail (\d+)/);
+  if (nodePass && nodeFail) {
+    const pass = Number(nodePass[1]);
+    const fail = Number(nodeFail[1]);
+    const failing = [];
+    for (const line of output.split('\n')) {
+      const m = line.match(/^\s*✖\s+(.+)$/);
+      if (m && !m[1].startsWith('failing tests')) {
+        const name = m[1].replace(/\s+\([^)]+\)\s*$/, '').trim();
+        if (!failing.includes(name)) failing.push(name);
+      }
+    }
+    return { pass, fail, failing };
+  }
+
+  const pyRan = output.match(/Ran (\d+) tests?/);
+  if (pyRan) {
+    const n = Number(pyRan[1]);
+    const failures = Number(output.match(/failures=(\d+)/)?.[1] || 0);
+    const errors = Number(output.match(/errors=(\d+)/)?.[1] || 0);
+    const fail = failures + errors;
+    const pass = n - fail;
+    const failing = [];
+    for (const line of output.split('\n')) {
+      const m = line.match(/^(?:FAIL|ERROR):\s+(.+?)(?:\s+\(|$)/);
+      if (m && !failing.includes(m[1])) failing.push(m[1]);
+    }
+    return { pass, fail, failing };
+  }
+
+  return { pass: 0, fail: 1, failing: ['(could not read test output)'] };
 }
 
 /**
@@ -54,7 +115,16 @@ export function summarizeTests(output) {
  * @returns {{ outside: string[], testsTouched: string[] }}  outside = not allowed; testsTouched = under "tests/" (even if allowed)
  */
 export function checkScope(changed, allow) {
-  throw new Error('TODO: checkScope');
+  const normAllow = allow.map(a => a.replaceAll('\\', '/'));
+  const outside = [];
+  const testsTouched = [];
+  for (const file of changed) {
+    const norm = file.replaceAll('\\', '/');
+    const isAllowed = normAllow.some(a => a.endsWith('/') ? norm.startsWith(a) : norm === a);
+    if (!isAllowed) outside.push(norm);
+    if (norm.startsWith('tests/')) testsTouched.push(norm);
+  }
+  return { outside, testsTouched };
 }
 
 /**
@@ -73,7 +143,27 @@ export function checkScope(changed, allow) {
  * @returns {string[]}
  */
 export function reviewFlags(numstat, diff, opts = {}) {
-  throw new Error('TODO: reviewFlags');
+  const flags = [];
+  const maxAdded = opts.maxAdded ?? 150;
+  const totalAdded = numstat.reduce((sum, r) => sum + (r.added || 0), 0);
+  if (totalAdded > maxAdded) flags.push(`Large change: ${totalAdded} lines added.`);
+
+  const uiFiles = new Set(['app/sw.js', 'app/index.html', 'app/app.css']);
+  const seenFiles = new Set();
+  for (const { file } of numstat) {
+    const norm = file.replaceAll('\\', '/');
+    if ((norm.startsWith('app/js/views/') || uiFiles.has(norm)) && !seenFiles.has(norm)) {
+      seenFiles.add(norm);
+      flags.push(`Touches UI or offline code: ${norm}`);
+    }
+  }
+
+  const addedLines = diff.split('\n').filter(l => l.startsWith('+') && !l.startsWith('+++'));
+  if (addedLines.some(l => l.includes('innerHTML'))) flags.push('Uses innerHTML: check escaping.');
+  if (addedLines.some(l => l.includes('eval(') || l.includes('new Function('))) flags.push('Uses eval or new Function.');
+  if (addedLines.some(l => l.includes('TODO') || l.includes('FIXME'))) flags.push('Leaves a TODO or FIXME.');
+
+  return flags;
 }
 
 /**
@@ -86,7 +176,9 @@ export function reviewFlags(numstat, diff, opts = {}) {
  * @returns {'accept'|'review'|'reject'}
  */
 export function decide(problems, flags) {
-  throw new Error('TODO: decide');
+  if (problems.length) return 'reject';
+  if (flags.length) return 'review';
+  return 'accept';
 }
 
 /**
@@ -98,5 +190,11 @@ export function decide(problems, flags) {
  * @returns {string}
  */
 export function retryPrompt(failures, maxLines = 40) {
-  throw new Error('TODO: retryPrompt');
+  const parts = ['These checks failed. Fix the implementation, not the tests, then run them again.'];
+  for (const { command, output } of failures) {
+    parts.push('', `$ ${command}`);
+    const lines = output ? output.split(/\r?\n/) : [];
+    parts.push(...(maxLines > 0 ? lines.slice(-maxLines) : []));
+  }
+  return parts.join('\n');
 }
