@@ -56,6 +56,13 @@ def validate_basic(data: dict, filename: str) -> list[str]:
         elif not isinstance(loc["coordinates"], dict) or "lat" not in loc["coordinates"] or "lng" not in loc["coordinates"]:
             errors.append("'coordinates' must have 'lat' and 'lng'")
 
+    # Category must be one of the schema's values (jsonschema isn't always installed)
+    if "category" in data and SCHEMA_FILE.exists():
+        with open(SCHEMA_FILE, "r", encoding="utf-8") as sf:
+            allowed = json.load(sf)["properties"]["category"]["enum"]
+        if data["category"] not in allowed:
+            errors.append(f"'category' {data['category']!r} is not one of {allowed}")
+
     # Timeline checks
     if "timeline" in data:
         if not isinstance(data["timeline"], list) or len(data["timeline"]) == 0:
