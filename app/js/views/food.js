@@ -4,7 +4,7 @@ import { esc } from '../util.js';
 import { tr } from '../lang.js';
 import { foodFor, foodMapsLink } from '../data.js';
 
-export const FOOD_KINDS = ['taiwanese', 'beef_noodles', 'ramen', 'japanese', 'international', 'sweets', 'bar'];
+export const FOOD_KINDS = ['taiwanese', 'hotpot', 'beef_noodles', 'ramen', 'japanese', 'international', 'sweets', 'bar'];
 
 /**
  * Explore section: one collapsible block per city that has picks, open when Explore is filtered to that city.

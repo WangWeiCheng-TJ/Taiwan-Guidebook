@@ -27,7 +27,7 @@ SCHEMA_FILE = BASE_DIR / "schema" / "attraction.schema.json"
 PHRASES_FILE = DATA_DIR / "phrases.json"
 TIPS_FILE = DATA_DIR / "tips.json"
 FOOD_DIR = DATA_DIR / "food"
-FOOD_KINDS = {"taiwanese", "beef_noodles", "ramen", "japanese", "international", "sweets", "bar"}
+FOOD_KINDS = {"taiwanese", "hotpot", "beef_noodles", "ramen", "japanese", "international", "sweets", "bar"}
 APP_OUTPUT_FILE = BASE_DIR / "app" / "data" / "guidebook.json"
 
 

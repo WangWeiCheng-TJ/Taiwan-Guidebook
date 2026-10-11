@@ -256,7 +256,7 @@ export function buildExplainPrompt({ text, context = '', source = '', lang = 'en
 }
 
 const FOOD_KIND_EN = {
-  taiwanese: 'Taiwanese local food', beef_noodles: 'beef noodles', ramen: 'ramen', japanese: 'Japanese',
+  taiwanese: 'Taiwanese local food', hotpot: 'hot pot', beef_noodles: 'beef noodles', ramen: 'ramen', japanese: 'Japanese',
   international: 'international', sweets: 'desserts', bar: 'bar',
 };
 
