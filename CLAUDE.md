@@ -18,6 +18,10 @@ uv run --no-project --python 3.12 python <script.py>   # anything else
 
 `uv` is on PATH and has CPython 3.12 installed. Fallback if `uv` is missing: `D:/Program/python.exe`.
 
+## Notes before data
+
+When the owner mentions a new place, dish, tip or open question, **write it in `docs/notes/<city>.md` first** (Chinese, one file per city; create the file and add it to `docs/notes/README.md` for a new city). Don't edit `data/` unless the owner asks for it: they integrate notes into the data themselves. Ask what an unfamiliar word means rather than guessing (e.g. 魚冊 is a hot pot ingredient, not a source). App or cross-city items go in `docs/BACKLOG.md`.
+
 ## After any change to `data/`
 
 Run `npm run build` (regenerates `app/data/guidebook.json` and validates: categories, food kinds, phrase zhuyin counts) and then `npm test`. Don't commit data changes without a successful build: the app reads the bundle, not the source files.

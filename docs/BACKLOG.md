@@ -1,16 +1,12 @@
 # Backlog
 
-Collected from usage review. Newest status on top within each section.
+App and cross-city items. **City-specific data notes (places, food, free entry, transport) live in [notes/](notes/README.md), one file per city.** Newest status on top within each section.
 
 ## Needs the owner (decisions or review)
 
-- **Review the two new Tainan places** (兌悅門, 台南硓𥑮石芳宅). agy's draft had invented or wrong facts; Claude rewrote both from the sources listed in each file's `metadata.sources` and kept the hedges the sources use. Open points:
-  - 芳宅 coordinates are approximate (兌悅門's point, same street); sources disagree on the house number (信義街46巷 15 vs 17) and on the build date (1926 vs 1930s).
-  - 兌悅門 is listed as 國定古蹟: the 2020 review upgraded it; Wikipedia says the formal announcement was still to follow.
-- **Free entry**: only 兌悅門 has `foreign_visitor_guide.free_entry: true` (from its source). Temples and other places don't say, so they still get ticket phrases. Fill in where you know.
 - **Party size** ("how many of us"): templated phrases ("{n}張票", 兩 not 二) and "We are {n} people" in Ask AI prompts. For now the ticket phrase is fixed at two (兩張票).
 - **Most-used phrase list** (8 phrases, `"top": true` in `data/phrases.json`).
-- **Food picks**: ALMONd 漢堡 and FULA 巴斯克 left out with the pizza places; 入街 and 阿富師 not marked as Tainan specialties (unclear what they're known for); any personal tips you want published.
+- City items to decide: see [notes/tainan.md](notes/tainan.md), [notes/taipei.md](notes/taipei.md), [notes/changhua.md](notes/changhua.md).
 
 ## Phrases
 
