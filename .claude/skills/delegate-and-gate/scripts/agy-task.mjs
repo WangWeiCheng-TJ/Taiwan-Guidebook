@@ -4,6 +4,7 @@
 //   node agy-task.mjs run --task t5 --allow app/js/foo.js,scripts/ --test "node --test tests/tasks/foo.test.js" \
 //        --prompt "Implement ..." [--prompt-file f.md] [--base feat/pwa-poc] [--retries 2] [--timeout 20m] [--model slug]
 //   node agy-task.mjs gate --task t5 --allow ... --test ...     (re-check an existing worktree, no agy call)
+//   node agy-task.mjs finish --task t5                           (after the merge: remove worktree, branch, report)
 //   node agy-task.mjs queue                                      (deferred reviews, grouped by file)
 //   node agy-task.mjs queue --clear <file>... | --clear-all
 //
@@ -11,18 +12,27 @@
 // Verdicts: accept | accept, review queued (low-risk flags deferred) | review now | reject.
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { parseAgyJson, summarizeTests, checkScope, reviewFlags, decide, retryPrompt } from './lib.mjs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  parseAgyJson, summarizeTests, checkScope, reviewFlags, decide, retryPrompt,
+  validTask, parseWorktrees, pathKey, isInside, worktreeAction, planFinish,
+} from './lib.mjs';
 
 // Project settings live in .agy/config.json (all optional):
 //   { "coreTest", "nowFiles" (regex), "maxAdded", "uiPaths" (paths or dir/ prefixes), "agy" }
-const ROOT = git(process.cwd(), 'rev-parse', '--show-toplevel').trim();
+// ROOT is the main worktree (git lists it first), also when called from inside .worktrees/.
+const ROOT = parseWorktrees(git(process.cwd(), 'worktree', 'list', '--porcelain'))[0].path;
 const CONFIG_FILE = join(ROOT, '.agy', 'config.json');
 const CONFIG = existsSync(CONFIG_FILE) ? JSON.parse(readFileSync(CONFIG_FILE, 'utf8')) : {};
 const QUEUE = join(ROOT, '.agy', 'review-queue.json');
 const AGY = process.env.AGY || CONFIG.agy || join(process.env.LOCALAPPDATA || '', 'agy', 'bin', 'agy.exe');
 const CORE_TEST = CONFIG.coreTest || 'npm test';
+// How to call this script again, for hints in messages: "npm run agy --" under npm, else "node <path>".
+const SELF = process.env.npm_lifecycle_script?.includes('agy-task.mjs')
+  ? `npm run ${process.env.npm_lifecycle_event} --`
+  : `node ${relative(process.cwd(), fileURLToPath(import.meta.url)).replaceAll('\\', '/')}`;
 
 // Flags that must not wait for a batch review: security, or things other code builds on.
 const NOW_FLAG = /innerHTML|eval/;
@@ -30,7 +40,8 @@ const NOW_FILE = new RegExp(CONFIG.nowFiles || '^(docs/SPEC\\.md|schema/|.*types
 
 const PREAMBLE = `Ground rules (from docs/SPEC.md): do not change any exported name, parameter or return shape;
 do not edit or delete any test file; no new dependencies; do not commit, push or run git commands that change history;
-only change the files you are told to. Keep code short and readable. Messages shown to users must be plain English sentences.
+only change the files you are told to. Keep code short and readable. Text shown to users is a key in app/js/lang.js
+with both en and zh_TW strings (tests/core/lang.test.js checks both exist), written as plain sentences.
 Finish with a short summary of what you changed and the pass/fail counts of the checks you ran.`;
 
 function args(argv) {
@@ -58,9 +69,29 @@ function git(cwd, ...a) {
   return r.stdout;
 }
 
-function worktree(task, base) {
-  const dir = join(ROOT, '.worktrees', `agy-${task}`);
-  if (!existsSync(dir)) git(ROOT, 'worktree', 'add', '-q', dir, '-b', `agy/${task}`, base);
+/** True when the git command exits 0 (for yes/no questions; output discarded). */
+function gitOk(cwd, ...a) {
+  return spawnSync('git', a, { cwd, stdio: 'ignore' }).status === 0;
+}
+
+/** Paths and names for a task; refuses names that could leave .worktrees/. */
+function taskPaths(task) {
+  if (!validTask(task)) throw new Error('--task is required: letters, digits, ".", "_" or "-", starting with a letter or digit');
+  const rel = `.worktrees/agy-${task}`;
+  return { dir: join(ROOT, rel), rel, branch: `agy/${task}`, finish: `${SELF} finish --task ${task}` };
+}
+
+const branchExists = branch => gitOk(ROOT, 'rev-parse', '--verify', '--quiet', `refs/heads/${branch}`);
+const findWorktree = dir => parseWorktrees(git(ROOT, 'worktree', 'list', '--porcelain')).find(w => pathKey(w.path) === pathKey(dir));
+
+// Reuse only a worktree git knows about; create one only for `run` and only when nothing is in the way.
+function worktree(task, base, create) {
+  const { dir, rel, branch, finish } = taskPaths(task);
+  const w = findWorktree(dir);
+  const s = { registered: !!w, onBranch: w?.branch === `refs/heads/${branch}`, dirExists: existsSync(dir), branchExists: branchExists(branch), create };
+  const a = worktreeAction(s, { dir: rel, branch, finish });
+  if (a.action === 'stop') throw new Error(a.reason);
+  if (a.action === 'create') git(ROOT, 'worktree', 'add', '-q', dir, '-b', branch, base);
   return dir;
 }
 
@@ -142,8 +173,8 @@ function report(r) {
 function run(o, callAgy) {
   if (!o.task || !o.allow) throw new Error('--task and --allow are required');
   const opts = { ...o, allow: String(o.allow).split(',') };
-  const dir = worktree(o.task, o.base || 'HEAD');
-  const base = git(ROOT, 'merge-base', 'HEAD', `agy/${o.task}`).trim();
+  const dir = worktree(o.task, o.base || 'HEAD', callAgy);
+  const base = git(ROOT, 'merge-base', 'HEAD', `refs/heads/agy/${o.task}`).trim();
   let res = { conversationId: null, status: 'SKIPPED', denied: [], usage: null };
   let rounds = 0;
   let c = callAgy ? null : check(dir, opts);
@@ -200,10 +231,51 @@ function queue(o) {
   return 0;
 }
 
+// After the task branch is merged: remove its worktree, branch (-d only) and report. Touches nothing else.
+function finish(o) {
+  const { dir, rel, branch } = taskPaths(o.task);
+  const report = `${dir}.report.json`;
+  const exists = branchExists(branch);
+  const dirExists = existsSync(dir);
+  const w = findWorktree(dir);
+  const plan = planFinish({
+    branchExists: exists,
+    merged: exists && gitOk(ROOT, 'merge-base', '--is-ancestor', `refs/heads/${branch}`, 'HEAD'),
+    cwdInside: isInside(process.cwd(), dir),
+    registered: !!w,
+    onBranch: w?.branch === `refs/heads/${branch}`,
+    dirExists,
+    dirEmpty: dirExists && readdirSync(dir).length === 0,
+    reportExists: existsSync(report),
+  }, { dir: rel, branch });
+  if (!plan.ok) throw new Error(`finish refused: ${plan.reason}`);
+  const sha = git(ROOT, 'rev-parse', '--short', `refs/heads/${branch}`).trim();
+  const steps = {
+    'remove-worktree': () => (git(ROOT, 'worktree', 'remove', dir), `removed worktree ${rel}`),
+    'remove-empty-dir': () => (rmdirSync(dir), `removed empty ${rel}`),
+    'delete-branch': () => (git(ROOT, 'branch', '-d', branch), `deleted branch ${branch} (was ${sha})`),
+    'delete-report': () => (unlinkSync(report), `deleted ${rel}.report.json`),
+  };
+  const done = [];
+  try {
+    for (const step of plan.steps) done.push(steps[step]());
+  } finally {
+    if (done.length) console.log(`finish ${o.task}: ${done.join(', ')}.`);
+  }
+  return 0;
+}
+
+function usage(code) {
+  const lines = readFileSync(new URL(import.meta.url), 'utf8').split(/\r?\n/).slice(1);
+  console.log(lines.slice(0, lines.findIndex(l => !l.startsWith('//'))).join('\n'));
+  return code;
+}
+
+const COMMANDS = { run: o => run(o, true), gate: o => run(o, false), finish, queue };
 const o = args(process.argv.slice(2));
 const cmd = o._[0];
 try {
-  process.exitCode = cmd === 'run' ? run(o, true) : cmd === 'gate' ? run(o, false) : cmd === 'queue' ? queue(o) : (console.log(readFileSync(new URL(import.meta.url), 'utf8').split('\n').slice(1, 12).join('\n')), 2);
+  process.exitCode = Object.hasOwn(COMMANDS, cmd) ? COMMANDS[cmd](o) : usage(o.help ? 0 : 2);
 } catch (e) {
   console.error(`agy-task: ${e.message}`);
   process.exitCode = 2;

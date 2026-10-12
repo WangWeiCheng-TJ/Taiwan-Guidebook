@@ -17,13 +17,22 @@ Claude is the expensive, careful reviewer; the worker agent is the cheap produce
 
 ## What to delegate
 
-Delegate when the task is **pure logic with a contract that tests can check**: parsers, validators, formatters, data transforms, CLI helpers.
+Examples are from the Taiwan-Guidebook repo, where this skill started.
 
-Keep in Claude:
-- Design, specs, and anything other code will build on (interfaces, data formats).
-- UI and browser verification (tests can't see layout; the review is not cheaper).
-- A task that is already mostly done (the handoff prompt costs more than finishing).
+**Delegate:**
+- Pure logic with contract tests: parsers, validators, formatters, transforms, CLI helpers. (T1, T2, T4a, zhuyin and tones all went through cleanly.)
+- Mechanical data transforms and migrations, with a test on the result.
+- Bulk mechanical edits across many files, when a test can check the rule.
+- Content drafted only from facts already in the repo, with a test on its shape and that nothing else changed; Claude then traces each claim back to its source, which is quick because the source is in the same file. (Must-see reasons, commit `9273e74`.)
+- Helper scripts whose logic is pure even if the script fetches (e.g. a source-quote checker): the contract covers the pure part.
+
+**Keep in Claude:**
+- Web fact research, or anything that introduces new facts. The worker invents: one research draft had made-up dates, an award and a source that returned 404, and Claude rewrote both places from the sources (commit `7c77da6`), so nothing was saved.
+- UI, layout and browser checks (tests can't see layout; the review is not cheaper).
+- Design, specs, shared types, schemas: anything other code builds on.
 - Tiny edits (the worker's 5 to 10 minute turnaround is not worth it).
+- Work that is already mostly done (the handoff prompt costs more than finishing).
+- Changes to the gate script itself: it would gate its own replacement. If its pure helpers are delegated anyway, Claude reads the whole diff.
 
 ## Workflow
 
@@ -40,6 +49,7 @@ Keep in Claude:
 | `reject` | checks still failing after retries, files outside the allowlist, tests touched, or nothing changed | read the report; fix the prompt, the contract, or permissions |
 
 5. **Promote** the task's tests from `tests/tasks/` to `tests/core/` once merged, so every later gate re-checks them.
+6. **Clean up** (not from inside the task worktree): `node <skill>/scripts/agy-task.mjs finish --task X` (in Taiwan-Guidebook: `npm run agy -- finish --task X`). It removes `.worktrees/agy-X`, deletes branch `agy/X` with `git branch -d` and deletes the report. It refuses if the branch isn't merged, the worktree has uncommitted changes, or the worktree isn't on `agy/X` (detached commits would be lost). Skipping it has a cost: a leftover registered worktree is silently reused, with its old state, by the next `run` with that name; a leftover branch or unlisted folder makes `run` stop.
 
 ## Never defer these to the batch review
 
@@ -49,7 +59,7 @@ Keep in Claude:
 
 ## Batch review
 
-Low-risk flags go to `.agy/review-queue.json` instead of interrupting work. Code under development changes several times; reviewing each round wastes effort. When the user has spare quota (e.g. at night), run `node scripts/agy-task.mjs queue`: each file appears once with a `git diff <first base> HEAD -- <file>` covering all rounds, so it is read once, in its latest form. Clear reviewed files with `--clear <file>`.
+Low-risk flags go to `.agy/review-queue.json` instead of interrupting work. Code under development changes several times; reviewing each round wastes effort. When the user has spare quota (e.g. at night), run `node <skill>/scripts/agy-task.mjs queue` (in Taiwan-Guidebook: `npm run agy -- queue`): each file appears once with a `git diff <first base> HEAD -- <file>` covering all rounds, so it is read once, in its latest form. Clear reviewed files with `--clear <file>`.
 
 ## Passing tests is not the same as good code
 

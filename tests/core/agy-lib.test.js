@@ -1,4 +1,5 @@
-// Contract for scripts/agy/lib.mjs. Do not edit these tests to make them pass.
+// Contract for .claude/skills/delegate-and-gate/scripts/lib.mjs (the gate helpers). Do not edit these tests to make them pass.
+// Worktree and finish decisions: agy-finish.test.js; configurable UI paths: agy-uipaths.test.js.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parseAgyJson, summarizeTests, checkScope, reviewFlags, decide, retryPrompt } from '../../.claude/skills/delegate-and-gate/scripts/lib.mjs';
