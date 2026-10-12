@@ -111,7 +111,7 @@ def migrate_attraction(old: dict) -> dict:
 
 
 def main(argv: list[str]) -> int:
-    """CLI: python scripts/migrate_i18n.py [--write] [files...]
+    """CLI: uv run --no-project --python 3.12 python scripts/migrate_i18n.py [--write] [files...]
 
     - files default to data/attractions/*.json
     - without --write: print, per file, "would migrate <name>" or "already v2 <name>"; change nothing

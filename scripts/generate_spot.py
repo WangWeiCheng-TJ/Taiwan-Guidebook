@@ -5,10 +5,10 @@ Automatically generates bilingual historical, cultural, architectural, and chron
 travel datasets for attractions in Taiwan conforming to schema/attraction.schema.json.
 
 Usage:
-  python scripts/generate_spot.py "安平古堡"
-  python scripts/generate_spot.py "霧峰林家宅園" --model gemini-2.5-flash
-  python scripts/generate_spot.py --file spots.txt
-  python scripts/generate_spot.py --interactive
+  uv run --no-project --python 3.12 python scripts/generate_spot.py "安平古堡"
+  uv run --no-project --python 3.12 python scripts/generate_spot.py "霧峰林家宅園" --model gemini-2.5-flash
+  uv run --no-project --python 3.12 python scripts/generate_spot.py --file spots.txt
+  uv run --no-project --python 3.12 python scripts/generate_spot.py --interactive
 """
 
 import os
@@ -275,7 +275,7 @@ def main():
         print("Please provide an API key in one of the following ways:")
         print("  1. Create a '.env' file in the project root with: GEMINI_API_KEY=your_key_here")
         print("  2. Set the environment variable: export GEMINI_API_KEY=your_key_here (or $env:GEMINI_API_KEY in PowerShell)")
-        print("  3. Pass via CLI argument: python scripts/generate_spot.py '景點名稱' --api-key your_key_here")
+        print("  3. Pass via CLI argument: uv run --no-project --python 3.12 python scripts/generate_spot.py '景點名稱' --api-key your_key_here")
         print("\nGet a free Gemini API key at: https://aistudio.google.com/app/apikey")
         sys.exit(1)
 
