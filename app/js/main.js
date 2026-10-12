@@ -18,6 +18,7 @@ import { renderLog } from './views/log.js';
 import { renderAsk, askContext } from './views/ask.js';
 import { renderPhrases, renderTips, phraseCard, phraseCardFull } from './views/reference.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
+import { PARTY_KEY, clampParty, withParty } from './party.js';
 import { foodSheet, findPick, dishSheet } from './views/food.js';
 import { foodFor } from './data.js';
 
@@ -78,6 +79,26 @@ function setTrip(trip) {
   state.tripDate = null;
   state.pasteOpen = false;
   if (!writeJSON(TRIP_KEY, trip)) toast(tr(state.lang, 'storageFail'));
+}
+
+/**
+ * Change the party size (clamped), persist it and re-render: phrases and the Ask AI prompt follow it.
+ * @param {number} n
+ */
+function setParty(n) {
+  state.party = clampParty(n);
+  if (!writeJSON(PARTY_KEY, state.party)) toast(tr(state.lang, 'storageFail'));
+  render();
+}
+
+/**
+ * A phrase by id, said for the current party size.
+ * @param {string} id
+ * @returns {import('./types.js').Phrase|undefined}
+ */
+function phraseById(id) {
+  const ph = state.data.phrases.find(x => x.id === id);
+  return ph && withParty(ph, state.party);
 }
 
 /** Load a plan shared as ?trip=<https url>, then drop the parameter so reloads don't refetch. */
@@ -159,14 +180,14 @@ const actions = {
   locate: () => locateMe(),
   'clear-location': () => { state.pos = null; render(); },
   'phrase-sheet': el => {
-    const ph = state.data.phrases.find(x => x.id === el.dataset.id);
+    const ph = phraseById(el.dataset.id);
     const g = ph && PHRASE_GROUPS.find(x => x.id === ph.category);
     if (ph) openSheet(g ? `${g.icon} ${tr(state.lang, `cat.${g.id}`)}` : '', phraseCardFull(ph, state.lang));
   },
   'phrases-sheet': el => {
     const g = PHRASE_GROUPS.find(x => x.id === el.dataset.group);
     if (!g) return;
-    openSheet(`${g.icon} ${tr(state.lang, `cat.${g.id}`)}`, phrasesIn(state.data.phrases, g.id).map(ph => phraseCardFull(ph, state.lang)).join(''));
+    openSheet(`${g.icon} ${tr(state.lang, `cat.${g.id}`)}`, phrasesIn(state.data.phrases, g.id).map(ph => phraseCardFull(withParty(ph, state.party), state.lang)).join(''));
   },
   'close-sheet': () => closeSheet(),
   'food-sheet': el => {
@@ -184,11 +205,16 @@ const actions = {
   },
   city: el => { state.exploreCity = el.dataset.city; render(); },
   driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
-  'show-phrase': el => showBig(phraseCard(state.data.phrases.find(x => x.id === el.dataset.id))),
-  speak: el => {
-    const ph = state.data.phrases.find(x => x.id === el.dataset.id);
-    speak(ph.tts || ph.zh_TW); // tts: respelling for phrases the voice engine mispronounces
+  'show-phrase': el => {
+    const ph = phraseById(el.dataset.id);
+    if (ph) showBig(phraseCard(ph));
   },
+  speak: el => {
+    const ph = phraseById(el.dataset.id);
+    if (ph) speak(ph.tts || ph.zh_TW); // tts: respelling for phrases the voice engine mispronounces
+  },
+  'party-dec': () => setParty(state.party - 1),
+  'party-inc': () => setParty(state.party + 1),
   'copy-place': async el => {
     const p = placeById(places(), el.dataset.id);
     const ok = await copyText(buildPlacePrompt(p, notesFor(state.log, p.id)));

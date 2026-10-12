@@ -60,6 +60,10 @@ const STRINGS = {
     'food.international': 'International', 'food.sweets': 'Desserts', 'food.bar': 'Bar',
     askAbout: '✦ Ask AI: “{t}”', explainTitle: 'Ask AI', explainCopied: 'Copied. Paste it into your AI app.',
     guideUpdated: 'Guide updated.', tapClose: 'Tap anywhere to close', close: 'Close',
+    // party size
+    'party.label': 'People:',
+    'party.dec': 'One person fewer',
+    'party.inc': 'One person more',
   },
   zh_TW: {
     brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
@@ -102,6 +106,10 @@ const STRINGS = {
     'food.international': '異國料理', 'food.sweets': '甜點', 'food.bar': '酒吧',
     askAbout: '✦ 問 AI：「{t}」', explainTitle: '問 AI', explainCopied: '已複製，貼到你的 AI 就可以問了。',
     guideUpdated: '手冊已更新。', tapClose: '點任何地方關閉', close: '關閉',
+    // party size
+    'party.label': '人數：',
+    'party.dec': '少一人',
+    'party.inc': '多一人',
   },
 };
 
