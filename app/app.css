@@ -69,6 +69,8 @@ h2 { font-size: 17px; margin: 24px 0 8px; }
   display: grid; grid-template-columns: repeat(5, 1fr);
   height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
+  /* On wide screens keep the five tabs under the 720px content column */
+  padding-inline: max(0px, calc((100% - 720px) / 2));
   background: var(--surface);
   border-top: 1px solid var(--line);
 }
@@ -76,8 +78,11 @@ h2 { font-size: 17px; margin: 24px 0 8px; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   font-size: 12px; color: var(--muted); text-decoration: none;
 }
-.tabbar a .ico { font-size: 19px; line-height: 1; }
+.tabbar a .ico { display: flex; align-items: center; justify-content: center; height: 24px; }
+.tabbar a .ico svg { display: block; width: 24px; height: 24px; }
 .tabbar a.active { color: var(--accent); font-weight: 600; }
+.tabbar a.active .ico svg { stroke-width: 2.2; }
+.tabbar a:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: 10px; }
 
 .card {
   display: block; background: var(--surface); border: 1px solid var(--line);
@@ -182,8 +187,8 @@ ol.stops .time { display: inline-block; min-width: 3.2em; font-variant-numeric: 
 .zc.punct .han { color: var(--muted); }
 .zc .syl { display: flex; gap: 2px; }
 .zp { display: flex; flex-direction: column; align-items: center; min-width: 1.1em; }
-.zp b { font-size: 15px; font-weight: 500; line-height: 1.3; }
-.zp i { font-style: normal; font-size: 11px; color: var(--accent); line-height: 1.2; }
+.zp b { font-size: 17px; font-weight: 500; line-height: 1.3; }
+.zp i { font-style: normal; font-size: 12.5px; color: var(--accent); line-height: 1.25; }
 .zp.tone b { color: var(--warm); }
 .zp.tone i { color: var(--warm); }
 .topbar .actions { display: flex; gap: 8px; align-items: center; }
@@ -254,5 +259,48 @@ details.food summary { font-size: 17px; }
 .big-name { font-size: 26px; font-weight: 700; line-height: 1.3; margin: 4px 0; }
 .food-kind.local { color: var(--warm); }
 .dish { font-size: 17px; font-weight: 600; color: var(--warm); }
-.food-kind.local { color: var(--warm); }
-.dish { font-size: 17px; font-weight: 600; color: var(--warm); }
+
+/* Place photo (online only) with its mandatory credit line */
+figure.photo { margin: 4px 0 14px; }
+figure.photo img {
+  display: block; width: 100%; max-height: 240px; object-fit: cover;
+  border-radius: var(--radius); background: var(--accent-soft);
+}
+figure.photo figcaption { margin-top: 4px; font-size: 12px; line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; }
+figure.photo figcaption a { color: inherit; }
+
+/* Embedded map: a collapsed button-like row; the iframe only loads when opened (online only) */
+details.map { background: none; border: 0; padding: 0; margin: 12px 0; }
+details.map summary {
+  list-style: none; display: inline-flex; align-items: center; gap: 6px; min-height: 32px;
+  padding: 5px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+details.map summary::-webkit-details-marker { display: none; }
+details.map summary::before { content: '▸'; display: inline-block; color: var(--accent); transition: transform .15s; }
+details.map[open] summary::before { transform: rotate(90deg); }
+details.map[open] summary { margin-bottom: 8px; }
+details.map p { margin: 6px 0 0; }
+.map-embed iframe, details.map iframe {
+  display: block; width: 100%; height: 260px; border: 0;
+  border-radius: var(--radius); background: var(--accent-soft);
+}
+
+/* Party size stepper: "People − 2 +" */
+.party { display: inline-flex; align-items: center; gap: 8px; }
+.party .btn.small { min-width: 36px; justify-content: center; font-size: 18px; line-height: 1; }
+.party output, .party .party-n {
+  min-width: 1.6em; text-align: center; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+
+/* Recommended apps (#/apps) */
+.app-name { font-weight: 650; font-size: 17px; }
+.app-why { margin: 6px 0 0; font-size: 15px; }
+.app-meta { margin-top: 8px; font-size: 13px; color: var(--muted); }
+
+/* Learn (#/learn): topic articles */
+.topic-body { margin: 12px 0 18px; }
+.topic-body p { margin: 0 0 14px; line-height: 1.65; }
+.sources { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
+.sources li { margin: 4px 0; overflow-wrap: anywhere; }
+.sources a { color: inherit; }
