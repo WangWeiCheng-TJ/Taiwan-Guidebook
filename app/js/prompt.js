@@ -146,7 +146,8 @@ export function logBlock(log, places) {
 
 /**
  * The full Ask AI prompt. Paragraphs, in order:
- * 1. who/when (+ trip day number if the log is not empty)
+ * 1. who/when (+ trip day number if the log is not empty), then the party size when ctx.party is a number:
+ *    "I'm traveling alone." (1) or "We are <n> people." (absent/null: no sentence)
  * 2. near: where I am (GPS rounded to 3 decimals, or the picked place) / plan: area and date
  * 3. trip log (only if includeLog and not empty)
  * 4. the loaded plan for the target date (near: today; plan: today/tomorrow), if ctx.trip has that day
@@ -162,7 +163,7 @@ export function logBlock(log, places) {
 export function buildAskPrompt(ctx) {
   const parts = [];
   const day = dayNumber(ctx.log, ctx.today);
-  parts.push(`I'm a visitor traveling in Taiwan. Today is ${ctx.today}${day ? ` (day ${day} of my trip)` : ''}.`);
+  parts.push(`I'm a visitor traveling in Taiwan. Today is ${ctx.today}${day ? ` (day ${day} of my trip)` : ''}.${partySentence(ctx.party)}`);
 
   let list = [];
   let listTitle = '';
@@ -207,6 +208,16 @@ export function buildAskPrompt(ctx) {
   if (ctx.lang === 'zh_TW') parts.push('Please reply in Traditional Chinese (Taiwan).');
   if (ctx.wantPlan) parts.push(planRequestSuffix());
   return parts.join('\n\n');
+}
+
+/**
+ * Party size for the first paragraph of the Ask AI prompt, with a leading space; "" when not a number.
+ * @param {number|null|undefined} n
+ * @returns {string}
+ */
+function partySentence(n) {
+  if (typeof n !== 'number') return '';
+  return n === 1 ? " I'm traveling alone." : ` We are ${n} people.`;
 }
 
 /**

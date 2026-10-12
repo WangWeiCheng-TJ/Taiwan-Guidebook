@@ -4,6 +4,7 @@ import { esc } from '../util.js';
 import { tr, localized } from '../lang.js';
 import { alignZhuyin, spokenTones } from '../zhuyin.js';
 import { PHRASE_GROUPS, phrasesIn } from '../phrases.js';
+import { PARTY_MIN, PARTY_MAX, withParty } from '../party.js';
 
 const TONE_MARK = { 1: '', 2: 'ˊ', 3: 'ˇ', 4: 'ˋ', 5: '˙' };
 
@@ -48,7 +49,8 @@ export function zhuyinBlock(ph) {
  * Phrases tab (#/phrases): grouped by category; each card shows the meaning, then the Chinese
  * with Zhuyin broken down symbol by symbol.
  * Without a group (#/phrases): big category tiles linking to #/phrases/<group>.
- * With a group: that group's phrase cards.
+ * With a group: that group's phrase cards, said for s.party people (withParty), with the party
+ * control on top when any of them changes with the party size.
  * @param {import('../state.js').AppState} s
  * @param {string} [group]  a PHRASE_GROUPS id
  * @returns {string}
@@ -68,12 +70,30 @@ export function renderPhrases(s, group) {
         </a>`).join('')}
       </div>`;
   }
+  const list = phrasesIn(s.data.phrases, known.id);
   return `
     <a href="#/phrases" class="small">${tr(L, 'allCategories')}</a>
     <h1>${known.icon} ${tr(L, `cat.${known.id}`)}</h1>
+    ${list.some(ph => ph.party) ? partyControl(L, s.party) : ''}
     <p class="muted small">${tr(L, 'phrasesIntro')}<br>${tr(L, 'toneLegend')}</p>
-    ${phrasesIn(s.data.phrases, known.id).map(ph => phraseCardFull(ph, L)).join('')}
+    ${list.map(ph => phraseCardFull(withParty(ph, s.party), L)).join('')}
   `;
+}
+
+/**
+ * Compact "People: − 2 +" control. The buttons are disabled at PARTY_MIN / PARTY_MAX.
+ * Emits: data-action="party-dec" | "party-inc".
+ * @param {import('../lang.js').Lang} L
+ * @param {number} n  current party size
+ * @returns {string}
+ */
+export function partyControl(L, n) {
+  return `<div class="row party">
+    <span class="muted small">${tr(L, 'party.label')}</span>
+    <button class="btn small" data-action="party-dec" aria-label="${esc(tr(L, 'party.dec'))}" ${n <= PARTY_MIN ? 'disabled' : ''}>−</button>
+    <b class="party-n" aria-live="polite">${esc(n)}</b>
+    <button class="btn small" data-action="party-inc" aria-label="${esc(tr(L, 'party.inc'))}" ${n >= PARTY_MAX ? 'disabled' : ''}>+</button>
+  </div>`;
 }
 
 /**

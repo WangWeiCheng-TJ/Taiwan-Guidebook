@@ -5,6 +5,7 @@ import { today } from './util.js';
 import { LOG_KEY, emptyDraft } from './triplog.js';
 import { TRIP_KEY, parseTrip } from './trip.js';
 import { LANG_KEY, initialLang } from './lang.js';
+import { PARTY_KEY, clampParty } from './party.js';
 
 /** @typedef {import('./types.js').Guidebook} Guidebook */
 /** @typedef {import('./types.js').Pos} Pos */
@@ -18,6 +19,7 @@ import { LANG_KEY, initialLang } from './lang.js';
  * @property {Pos|null} pos          not persisted: location is re-acquired each session
  * @property {LogEntry[]} log        persisted under LOG_KEY
  * @property {import('./types.js').Trip|null} trip  persisted under TRIP_KEY
+ * @property {number} party        people traveling together, PARTY_MIN..PARTY_MAX; persisted under PARTY_KEY
  * @property {boolean} pasteOpen     My trip: show the "paste AI answer" box even when a plan exists
  * @property {string|null} tripDate  My trip: the plan day the user picked; null = defaultTripDate()
  * @property {string} exploreCity    "all" or a city_en
@@ -34,6 +36,7 @@ export const state = {
   pos: null,
   log: readJSON(LOG_KEY, []),
   trip: parseTrip(readJSON(TRIP_KEY, null)).trip, // re-validated: storage may hold an old or damaged plan
+  party: clampParty(readJSON(PARTY_KEY, 2)),
   pasteOpen: false,
   tripDate: null,
   exploreCity: 'all',

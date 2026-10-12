@@ -5,6 +5,7 @@ import { distanceTo, sortByDistance } from '../geo.js';
 import { places } from '../state.js';
 import { tr } from '../lang.js';
 import { locationPanel } from './common.js';
+import { partyControl } from './reference.js';
 
 /**
  * Collect the AskContext for buildAskPrompt from app state.
@@ -13,7 +14,7 @@ import { locationPanel } from './common.js';
  */
 export function askContext(s) {
   return { ...s.ask, pos: s.pos, log: s.log, places: places(), today: today(), trip: s.trip, lang: s.lang,
-    food: foodFor(s.data?.food, askCity(s)) };
+    party: s.party, food: foodFor(s.data?.food, askCity(s)) };
 }
 
 /**
@@ -45,10 +46,11 @@ export function questionText(s) {
 }
 
 /**
- * Ask AI tab (#/ask): mode switch, mode fields, question, toggles, copy button, live preview.
+ * Ask AI tab (#/ask): mode switch, mode fields, party size, question, toggles, copy button, live preview.
  * near mode: location panel + radius (data-change="radius").
  * plan mode: day (data-change="day"), area select (data-change="area"), custom area input (data-input="custom-area").
- * Shared: data-input="question", data-change="include-log" | "want-plan", data-action="mode" data-mode, data-action="copy-prompt".
+ * Shared: data-action="party-dec" | "party-inc", data-input="question", data-change="include-log" | "want-plan",
+ * data-action="mode" data-mode, data-action="copy-prompt".
  * The preview lives in #prompt-preview so main.js can refresh it without re-rendering (keeps input focus).
  * Area option labels stay English: they are what the AI reads.
  * @param {import('../state.js').AppState} s
@@ -95,6 +97,7 @@ export function renderAsk(s) {
     </div>
     ${modeFields}
     <div class="stack" style="margin-top:12px">
+      ${partyControl(L, s.party)}
       <label>${tr(L, 'yourQuestion')}
         <textarea data-input="question" rows="3">${esc(questionText(s))}</textarea>
       </label>

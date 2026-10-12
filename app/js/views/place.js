@@ -6,6 +6,7 @@ import { places } from '../state.js';
 import { tr, localized, localizedList } from '../lang.js';
 import { placeName } from './common.js';
 import { phrasesForPlace, mainGroupForPlace } from '../phrases.js';
+import { withParty } from '../party.js';
 
 /**
  * Place page (#/place/<id>): header, badges, summary, action buttons, the user's notes,
@@ -107,7 +108,7 @@ function isAppleDevice() {
 }
 
 /**
- * "Useful here": a few phrases picked by the kind of place. Tapping a row opens it in a sheet
+ * "Useful here": a few phrases picked by the kind of place, said for s.party people. Tapping a row opens it in a sheet
  * (data-action="phrase-sheet"); "More phrases" opens the whole category in a sheet
  * (data-action="phrases-sheet" data-group), so the user never leaves this page.
  * @param {import('../state.js').AppState} s
@@ -116,7 +117,7 @@ function isAppleDevice() {
  */
 function usefulPhrases(s, p) {
   const L = s.lang;
-  const list = phrasesForPlace(p, s.data.phrases);
+  const list = phrasesForPlace(p, s.data.phrases).map(ph => withParty(ph, s.party));
   if (!list.length) return '';
   return `<h2>${tr(L, 'usefulHere')}</h2>
     ${list.map(ph => `<button class="phrase-row" data-action="phrase-sheet" data-id="${esc(ph.id)}">
