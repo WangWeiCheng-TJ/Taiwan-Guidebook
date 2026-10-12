@@ -41,6 +41,7 @@ for (const id of NEW) {
     const m = JSON.parse(readFileSync(file, 'utf8')).metadata;
     assert.ok(Array.isArray(m.sources) && m.sources.length >= 2, 'metadata.sources needs at least 2 URLs');
     for (const u of m.sources) assert.match(u, ALLOWED, `source not on an allowed site: ${u}`);
-    assert.match(m.generated_by, /pending owner review$/);
+    // Owner relaxed this on 2026-10-12: the 'pending owner review' marker may be dropped once reviewed.
+    assert.ok(typeof m.generated_by === 'string' && m.generated_by.trim().length > 0, 'metadata.generated_by empty');
   });
 }

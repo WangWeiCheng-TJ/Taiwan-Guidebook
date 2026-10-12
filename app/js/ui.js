@@ -1,5 +1,8 @@
 // Small DOM side effects shared by views and main.js.
 
+import { state } from './state.js';
+import { tr } from './lang.js';
+
 let toastTimer;
 
 /**
@@ -41,13 +44,13 @@ export async function copyText(text) {
 
 /**
  * Full-screen high-contrast card for showing text to a driver or shopkeeper.
- * Tapping anywhere closes it (wired in main.js).
+ * Tapping anywhere closes it (wired in main.js). Button and hint follow the UI language at open time.
  * @param {string} html  trusted markup; callers must esc() any data inside
  * @returns {void}
  */
 export function showBig(html) {
   const el = document.getElementById('bigcard');
-  el.innerHTML = `<button class="btn close">Close</button>${html}<div class="hint">Tap anywhere to close</div>`;
+  el.innerHTML = `<button class="btn close">${tr(state.lang, 'close')}</button>${html}<div class="hint">${tr(state.lang, 'tapClose')}</div>`;
   el.hidden = false;
 }
 

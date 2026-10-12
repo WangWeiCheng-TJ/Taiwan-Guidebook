@@ -57,8 +57,8 @@ export function cityCenter(places, city) {
 }
 
 /**
- * @typedef {{ id: string, name: string, kind: string, hint?: { en: string, zh_TW: string } }} FoodPick
- * @typedef {{ city_en: string, city_zh: string, picks: FoodPick[] }} FoodCity
+ * @typedef {import('./types.js').FoodPick} FoodPick
+ * @typedef {import('./types.js').FoodCity} FoodCity
  */
 
 /**

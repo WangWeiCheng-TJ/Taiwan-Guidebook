@@ -1,6 +1,6 @@
 // Which phrases to show where: category tiles on the Phrases tab, and suggestions on a place page.
 
-/** @typedef {import('./types.js').Phrase & { top?: boolean }} Phrase */
+/** @typedef {import('./types.js').Phrase} Phrase */
 /** @typedef {import('./types.js').Place} Place */
 
 /** Tiles on the Phrases tab, in display order. "top" is the hand-picked most-used set. */

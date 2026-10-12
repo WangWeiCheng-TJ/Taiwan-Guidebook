@@ -24,7 +24,7 @@ import { foodFor } from './data.js';
 const view = document.getElementById('view');
 
 // ---------- Routing ----------
-// #/explore | #/place/<id> | #/log | #/log/<placeId> (prefill) | #/ask | #/phrases | #/tips
+// #/explore | #/place/<id> | #/log | #/log/<placeId> (prefill) | #/ask | #/phrases | #/phrases/<group> | #/tips
 
 /**
  * @param {string} hash  location.hash
