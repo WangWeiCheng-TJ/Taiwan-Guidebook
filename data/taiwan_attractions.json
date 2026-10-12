@@ -4,7 +4,7 @@
     "title_zh": "臺灣景點歷史沿革與文化旅遊資料庫",
     "version": "1.0.0",
     "total_count": 8,
-    "generated_at": "2026-08-31",
+    "generated_at": "2026-10-12",
     "license": "CC-BY-4.0",
     "repository": "https://github.com/WangWeiCheng-TJ/Taiwan-Guidebook"
   },
@@ -355,8 +355,8 @@
         "en": "A gate of Tainan's western outer city wall, begun in 1835 and finished the next year, with a base of coral stone that gave it the nickname 'coral-stone wall'. Of Tainan's four surviving city gates it is the only one still used as a passage: locals walk through it every day."
       },
       "historical_narrative": {
-        "zh_TW": "清道光十二年（1832年）張丙之役後，官方在臺灣各城增建半月城，臺灣府城因此築起西方外城，範圍從小西門延伸到小北門，並把大西門包在裡面。兌悅門在道光十五年增建，隔年完工，因位於正西方，以八卦中代表西方的「兌」卦命名。它隨著五條港之一的新港墘港而興起。日治時期城牆因開闢道路而拆除，城門保留下來，成為西方外城三座城門中唯一僅存的一座。戰後城門被民房包圍，一度被榕樹覆蓋，如今已清除。2020年底，兌悅門與大南門、大東門、城垣殘跡、巽方砲台以「台灣府城城門及城垣殘跡」名義通過文資審議，升格為國定古蹟。",
-        "en": "After the Zhang Bing uprising of 1832, the Qing government added half-moon walls to Taiwan's cities, and Tainan gained a western outer wall running from the Little West Gate to the Little North Gate and enclosing the Great West Gate. Duiyue Gate was added in 1835 and completed the following year. It faces due west and is named after dui (兌), the trigram for the west in the eight trigrams. It grew up with Xingangkan Harbor, one of the city's Five Canals (五條港). In the Japanese era the walls were torn down for roads but the gate was kept, the only one of the western outer wall's three gates to survive. After the war houses closed in around it and a banyan tree grew over it; the tree has since been cleared. At the end of 2020 it passed heritage review together with the Great South Gate, the Great East Gate, remaining wall sections and the Xunfang Battery, and was upgraded to a national monument."
+        "zh_TW": "清道光十二年（1832年）張丙之役後，官方在臺灣各城增建半月城，臺灣府城因此築起西方外城，範圍從小西門延伸到小北門，並把大西門包在裡面。兌悅門在道光十五年增建，隔年完工，因位於正西方，以八卦中代表西方的「兌」卦命名。它隨著五條港之一的新港墘港而興起。日治時期城牆因開闢道路而拆除，城門保留下來，成為西方外城三座城門中唯一僅存的一座。戰後城門被民房包圍，一度被榕樹覆蓋，如今已清除。2020年底，兌悅門與大南門、大東門、城垣殘蹟、巽方砲臺一起通過文資審議；文化部於2023年1月11日公告，將大南門、大東門等六處併入國定古蹟「兌悅門」的範圍，並更名為「臺灣府城城門及城垣殘蹟」。",
+        "en": "After the Zhang Bing uprising of 1832, the Qing government added half-moon walls to Taiwan's cities, and Tainan gained a western outer wall running from the Little West Gate to the Little North Gate and enclosing the Great West Gate. Duiyue Gate was added in 1835 and completed the following year. It faces due west and is named after dui (兌), the trigram for the west in the eight trigrams. It grew up with Xingangkan Harbor, one of the city's Five Canals (五條港). In the Japanese era the walls were torn down for roads but the gate was kept, the only one of the western outer wall's three gates to survive. After the war houses closed in around it and a banyan tree grew over it; the tree has since been cleared. At the end of 2020 it passed heritage review together with the Great South Gate, the Great East Gate, remaining wall sections and the Xunfang Battery. On 11 January 2023 the Ministry of Culture announced that six of those sites were merged into the national monument 'Duiyue Gate', renamed 'Taiwan Prefectural City Gates and Wall Remains' (臺灣府城城門及城垣殘蹟)."
       },
       "timeline": [
         {
@@ -380,8 +380,14 @@
         {
           "year_or_era": "2020",
           "era_category": "Modern Era",
-          "event_zh": "以「台灣府城城門及城垣殘跡」名義通過文資審議，升格為國定古蹟。",
-          "event_en": "Passes heritage review as part of the 'Taiwan Prefecture City Gates and Wall Remains' and is upgraded to a national monument."
+          "event_zh": "與府城其他城門、城垣殘蹟一起通過文資審議。",
+          "event_en": "Passes heritage review together with other Tainan city gates and wall remains."
+        },
+        {
+          "year_or_era": "2023",
+          "era_category": "Modern Era",
+          "event_zh": "文化部公告大南門、大東門等六處併入國定古蹟「兌悅門」範圍，更名為「臺灣府城城門及城垣殘蹟」。",
+          "event_en": "The Ministry of Culture merges six other gate and wall sites into the national monument, renamed 'Taiwan Prefectural City Gates and Wall Remains'."
         }
       ],
       "cultural_significance": {
@@ -466,7 +472,8 @@
       "metadata": {
         "sources": [
           "https://zh.wikipedia.org/wiki/%E5%85%8C%E6%82%85%E9%96%80",
-          "https://www.twtainan.net/zh-tw/attractions/detail/681"
+          "https://www.twtainan.net/zh-tw/attractions/detail/681",
+          "https://culture.tainan.gov.tw/df_ufiles/069/%EF%B9%9D%E5%AE%9A%E7%A8%BF%EF%B9%9E%E9%80%9A%E5%A0%B1%EF%BC%8D112%E5%B9%B4%E9%80%9A%E5%A0%B1.pdf"
         ],
         "generated_by": "agy draft, rewritten by Claude from the listed sources; pending owner review",
         "last_updated": "2026-10-11"
