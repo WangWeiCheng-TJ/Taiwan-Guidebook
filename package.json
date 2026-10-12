@@ -8,6 +8,7 @@
     "test:tasks": "node --test \"tests/tasks/*.test.js\"",
     "agy": "node .claude/skills/delegate-and-gate/scripts/agy-task.mjs",
     "build": "uv run --no-project --with \"jsonschema>=4.20,<5\" --python 3.12 python scripts/build_dataset.py",
-    "test:py": "uv run --no-project --python 3.12 python -m unittest discover -s tests/py"
+    "test:py": "uv run --no-project --python 3.12 python -m unittest discover -s tests/py",
+    "check:sources": "uv run --no-project --with pypdf --python 3.12 python scripts/check_sources.py docs/claims"
   }
 }
