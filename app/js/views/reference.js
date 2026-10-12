@@ -107,14 +107,26 @@ export function phraseCard(ph) {
 }
 
 /**
- * Tips tab (#/tips): grouped by category, in s.lang (falls back to English).
+ * Tips tab (#/tips): two tiles linking to the recommended apps (#/apps) and the knowledge topics (#/learn),
+ * then the tips grouped by category, in s.lang (falls back to English).
  * @param {import('../state.js').AppState} s
  * @returns {string}
  */
 export function renderTips(s) {
   const L = s.lang;
+  const tiles = [
+    { href: '#/apps', icon: '📱', label: tr(L, 'apps.title'), n: (s.data.apps || []).length },
+    { href: '#/learn', icon: '📖', label: tr(L, 'learn.title'), n: (s.data.topics || []).length },
+  ];
   return `
     <h1>${tr(L, 'tips')}</h1>
+    <div class="tiles">${tiles.map(t => `
+      <a class="tile" href="${t.href}">
+        <span class="tile-icon">${t.icon}</span>
+        <span class="tile-label">${t.label}</span>
+        ${t.n ? `<span class="tile-count">${t.n}</span>` : ''}
+      </a>`).join('')}
+    </div>
     ${groupBy(s.data.tips, t => t.category).map(([cat, list]) => `
       <h2>${tr(L, `cat.${cat}`)}</h2>
       ${list.map(t => `<div class="card"><div class="title">${esc(localized(t, 'title', L))}</div><p>${esc(localized(t, 'body', L))}</p></div>`).join('')}

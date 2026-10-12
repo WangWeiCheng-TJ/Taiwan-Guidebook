@@ -1,6 +1,9 @@
 import { esc, stars } from '../util.js';
-import { distanceTo, fmtKm, mapsLinks } from '../geo.js';
+import { distanceTo, fmtKm, mapsLinks, osmEmbedUrl, osmLink } from '../geo.js';
 import { placeById } from '../data.js';
+import { topicsForPlace } from '../topics.js';
+import { topicLink } from './learn.js';
+import { isHttps } from './apps.js';
 import { notesFor } from '../triplog.js';
 import { places } from '../state.js';
 import { tr, localized, localizedList } from '../lang.js';
@@ -8,8 +11,9 @@ import { placeName } from './common.js';
 import { phrasesForPlace, mainGroupForPlace } from '../phrases.js';
 
 /**
- * Place page (#/place/<id>): header, badges, summary, action buttons, the user's notes,
- * practical sections, then the story and timeline collapsed. Content follows s.lang (falls back to English).
+ * Place page (#/place/<id>): header, badges, photo (online only), summary, action buttons, the user's notes,
+ * practical sections with a collapsed map (online only), then the story and timeline collapsed, and
+ * "Learn more" topics. Content follows s.lang (falls back to English).
  * Emits: data-action="driver" | "copy-place" (data-id = place id).
  * Links: Google Maps directions, Apple Maps, #/log/<id> ("I was here" prefills the log form).
  * @param {import('../state.js').AppState} s
@@ -41,6 +45,7 @@ export function renderPlace(s, id) {
       ${p.established_year ? `<span class="badge warm">${tr(L, 'since', { y: esc(p.established_year) })}</span>` : ''}
       ${g.recommended_duration_min ? `<span class="badge warm">${tr(L, 'minutes', { n: esc(g.recommended_duration_min) })}</span>` : ''}
     </div>
+    ${photoFigure(p, L)}
     <p>${esc(localized(p, 'summary', L))}</p>
 
     <div class="row">
@@ -58,6 +63,7 @@ export function renderPlace(s, id) {
     ${etiquette ? `<h2>${tr(L, 'etiquette')}</h2><p>${esc(etiquette)}</p>` : ''}
     ${bestTime ? `<h2>${tr(L, 'bestTime')}</h2><p>${esc(bestTime)}</p>` : ''}
     ${transport ? `<h2>${tr(L, 'gettingThere')}</h2><p>${esc(transport)}</p>` : ''}
+    ${mapSection(p, L)}
 
     ${usefulPhrases(s, p)}
 
@@ -71,6 +77,7 @@ export function renderPlace(s, id) {
       <summary>${tr(L, 'timeline')}</summary>
       <ul class="timeline">${p.timeline.map(t => `<li><b>${esc(t.year_or_era)}</b>${esc(localized(t, 'event', L))}</li>`).join('')}</ul>
     </details>` : ''}
+    ${learnMore(s, p)}
   `;
 }
 
@@ -136,4 +143,54 @@ export function driverCard(p) {
     <div class="mid">${esc(p.location.address_zh)}</div>
     <div class="mid">請帶我到這裡，謝謝。</div>
     <div class="hint">"Please take me here, thank you."</div>`;
+}
+
+/**
+ * The place's photo with its mandatory credit line, or nothing when the photo or its credit is incomplete.
+ * Loaded from Wikimedia (online only): main.js hides the figure when the image fails, e.g. offline.
+ * @param {import('../types.js').Place} p
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+function photoFigure(p, L) {
+  const ph = p.photo;
+  if (!ph || !isHttps(ph.src) || !ph.author || !ph.license) return '';
+  const license = isHttps(ph.license_url)
+    ? `<a href="${esc(ph.license_url)}" target="_blank" rel="noopener">${esc(ph.license)}</a>`
+    : esc(ph.license);
+  const commons = isHttps(ph.page) ? ` · <a href="${esc(ph.page)}" target="_blank" rel="noopener">Wikimedia Commons</a>` : '';
+  return `<figure class="photo">
+      <img class="photo" src="${esc(ph.src)}" loading="lazy" alt="${esc(placeName(p, L))}">
+      <figcaption class="muted small">${tr(L, 'photo.credit', { author: esc(ph.author) })}, ${license}${commons}</figcaption>
+    </figure>`;
+}
+
+/**
+ * Collapsed OpenStreetMap embed around the place, plus a link to the full map. The iframe is lazy, so
+ * nothing is fetched until the user opens the section; it needs a connection.
+ * @param {import('../types.js').Place} p
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+function mapSection(p, L) {
+  const c = p.location.coordinates;
+  return `<details class="map">
+      <summary>${tr(L, 'map.title')}</summary>
+      <div class="map-embed"><iframe loading="lazy" title="${esc(tr(L, 'map.of', { name: placeName(p, L) }))}" src="${esc(osmEmbedUrl(c.lat, c.lng))}"></iframe></div>
+      <p class="small"><a href="${esc(osmLink(c.lat, c.lng))}" target="_blank" rel="noopener">${tr(L, 'map.open')}</a>
+        <span class="muted">· ${tr(L, 'map.online')}</span></p>
+    </details>`;
+}
+
+/**
+ * "Learn more": knowledge topics about this place (topics.js topicsForPlace), as links to #/learn/<id>.
+ * @param {import('../state.js').AppState} s
+ * @param {import('../types.js').Place} p
+ * @returns {string}
+ */
+function learnMore(s, p) {
+  const list = topicsForPlace(p, s.data.topics);
+  if (!list.length) return '';
+  return `<h2>${tr(s.lang, 'learn.more')}</h2>
+    ${list.map(t => topicLink(t, s.lang)).join('')}`;
 }

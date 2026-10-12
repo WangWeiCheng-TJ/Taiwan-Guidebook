@@ -22,8 +22,16 @@
  * @property {{ year_or_era: string, era_category: string, event_zh: string, event_en: string }[]} timeline
  * @property {CulturalSignificance} cultural_significance
  * @property {VisitorGuide} foreign_visitor_guide
- * @property {string[]} tags
+ * @property {string[]} tags                  also link the place to knowledge topics (topics.js)
+ * @property {PlacePhoto} [photo]            shown online only, always with its credit line
  * @property {PlaceMetadata} [metadata]   not shown in the app
+ *
+ * @typedef {Object} PlacePhoto   A freely licensed photo from Wikimedia Commons (cross-origin: never precached)
+ * @property {string} src          https://upload.wikimedia.org/... thumbnail, about 800px wide
+ * @property {string} page         https://commons.wikimedia.org/wiki/File:... (the file's page, linked in the credit)
+ * @property {string} author       plain text
+ * @property {string} license      e.g. "CC BY-SA 4.0"
+ * @property {string} license_url  the license deed, or a public-domain page
  *
  * @typedef {Object} CulturalSignificance   Paired fields, read with lang.js localized()
  * @property {string} why_it_matters_en
@@ -44,6 +52,7 @@
  * @property {string} [transportation_zh]
  * @property {string} [best_time_to_visit] English only
  * @property {boolean} [free_entry]        true only when a source says visiting is free; free places get no ticket phrases
+ * @property {boolean} [always_open]       open all day, every day (a gate, a street): no opening-hours phrases
  *
  * @typedef {Object} MustSee
  * @property {{ en: string, zh_TW?: string }} name
@@ -66,7 +75,16 @@
  * @property {boolean} [top]     in the hand-picked "Most used" set; listed first among place suggestions
  * @property {boolean} [generic] useful anywhere (hello, thank you): never suggested for a particular place
  * @property {boolean} [ticket]  about tickets or entry: not suggested at free places
+ * @property {boolean} [hours]   about opening hours: not suggested at places that are always open
+ * @property {PhraseParty} [party]  the phrase names a party size; en/zh_TW/zhuyin/pinyin are the n=2 form (party.js withParty)
  * @property {string} [tts]    respelling fed to the voice engine when it mispronounces zh_TW (no phrase needs it yet)
+ *
+ * @typedef {Object} PhraseParty   How the number in a phrase is written, so withParty() can swap it for 1..10
+ * @property {string} zh_TW     the number in the phrase, e.g. "兩"; its first occurrence is replaced
+ * @property {string} zhuyin    the same syllable in zhuyin, e.g. "ㄌㄧㄤˇ"
+ * @property {string} pinyin    the same syllable in pinyin, e.g. "liǎng"
+ * @property {string} en_one    English for one, e.g. "One ticket, please"
+ * @property {string} en_other  English for 2..10: {n} = number word ("two"), {N} = capitalized ("Two")
  *
  * @typedef {Object} Tip
  * @property {string} id
@@ -96,6 +114,25 @@
  * @property {FoodPick[]} picks
  * @property {FoodDish[]} [to_try]
  *
+ * @typedef {Object} App        A recommended phone app (data/apps.json, in display order)
+ * @property {string} id         kebab-case, unique
+ * @property {string} category   one of APP_CATEGORIES (app/js/views/apps.js): getting-around, taxi, trains,
+ *                               messaging, language, weather, food
+ * @property {Bilingual} name
+ * @property {Bilingual} why     one or two plain sentences
+ * @property {string} url        https, the app's official page
+ * @property {string[]} platforms  "ios" | "android"
+ *
+ * @typedef {Object} Topic      A knowledge topic (data/topics/<id>.json), e.g. temple layout; read at #/learn/<id>
+ * @property {string} id         kebab-case, unique, the file name
+ * @property {Bilingual} title
+ * @property {Bilingual} summary one sentence
+ * @property {{ en: string[], zh_TW: string[] }} body   paragraphs, read with localizedList()
+ * @property {string[]} tags     place tags: places sharing one are related (topics.js)
+ * @property {string[]} places   attraction ids listed first among the related places
+ * @property {{ sources: string[], generated_by: string, last_updated: string }} metadata
+ *           generated_by ends with "pending owner review" until the owner has checked it (the page says so)
+ *
  * @typedef {Object} Guidebook   app/data/guidebook.json, written by scripts/build_dataset.py
  * @property {string} version    content hash; changes only when content changes
  * @property {string} generated_at  YYYY-MM-DD
@@ -103,6 +140,8 @@
  * @property {Phrase[]} phrases
  * @property {Tip[]} tips
  * @property {FoodCity[]} food   one entry per city with picks
+ * @property {App[]} [apps]      data order; missing in older bundles (views treat it as [])
+ * @property {Topic[]} [topics]  sorted by id; missing in older bundles (views treat it as [])
  *
  * @typedef {{ lat: number, lng: number }} LatLng
  *
@@ -144,6 +183,8 @@
  * @property {boolean} [wantPlan] ask the AI for a JSON plan to paste back (adds place ids and instructions)
  * @property {'en'|'zh_TW'} [lang] UI language: picks the default question and asks the AI to reply in it
  * @property {FoodCity|null} [food] owner's food picks for the city the question is about
+ * @property {number|null} [party] party size 1..10: one sentence ("I'm traveling alone." / "We are <n> people.");
+ *           null or absent adds nothing
  *
  * @typedef {Object} TripItem    one stop in an itinerary
  * @property {string} [place]    guidebook place id
