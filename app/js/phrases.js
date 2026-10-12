@@ -46,7 +46,8 @@ export function phrasesIn(phrases, group) {
  * (first category first in each round), most-used phrases first within a category, so every
  * relevant category gets a say. Generic phrases (hello, thank you...) are skipped: they are useful
  * everywhere, so they say nothing about this place. Ticket phrases are skipped at free places
- * (foreign_visitor_guide.free_entry, or a historic street).
+ * (foreign_visitor_guide.free_entry, or a historic street), and opening-hours phrases at places that
+ * never close (foreign_visitor_guide.always_open).
  * @param {Place} place
  * @param {Phrase[]} phrases
  * @param {number} [n]
@@ -55,8 +56,9 @@ export function phrasesIn(phrases, group) {
 export function phrasesForPlace(place, phrases, n = 5) {
   const cats = PLACE_PHRASES[place.category] || DEFAULT_PLACE_PHRASES;
   const free = place.foreign_visitor_guide?.free_entry === true || place.category === 'historic_street_district';
+  const allDay = place.foreign_visitor_guide?.always_open === true;
   const queues = cats.map(c => {
-    const inCat = phrases.filter(p => p.category === c && !p.generic && !(free && p.ticket));
+    const inCat = phrases.filter(p => p.category === c && !p.generic && !(free && p.ticket) && !(allDay && p.hours));
     return [...inCat.filter(p => p.top), ...inCat.filter(p => !p.top)];
   });
   const out = [];

@@ -1,4 +1,4 @@
-// Pure geography helpers. Works offline: no map tiles, no network.
+// Pure geography helpers. Distances work offline; the OpenStreetMap URLs need a connection to open.
 
 /** @typedef {import('./types.js').LatLng} LatLng */
 /** @typedef {import('./types.js').Place} Place */
@@ -57,4 +57,36 @@ export function mapsLinks(place) {
     google: `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
     apple: `https://maps.apple.com/?daddr=${lat},${lng}&q=${encodeURIComponent(place.name.zh_TW)}`,
   };
+}
+
+/**
+ * A coordinate for a URL: at most 6 decimals (about 10 cm), so sums like 120.2026 - 0.006 don't print
+ * as 120.19659999999999.
+ * @param {number} x  degrees
+ * @returns {string}
+ */
+function deg(x) {
+  return String(Number(x.toFixed(6)));
+}
+
+/**
+ * OpenStreetMap embed (an iframe src) with a marker on the point, about 1.2 km wide. Needs a connection:
+ * the service worker never caches other sites.
+ * @param {number} lat
+ * @param {number} lng
+ * @returns {string}
+ */
+export function osmEmbedUrl(lat, lng) {
+  const bbox = [lng - 0.006, lat - 0.004, lng + 0.006, lat + 0.004].map(deg).join(',');
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
+}
+
+/**
+ * The same point on openstreetmap.org, with a marker, at street zoom.
+ * @param {number} lat
+ * @param {number} lng
+ * @returns {string}
+ */
+export function osmLink(lat, lng) {
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`;
 }

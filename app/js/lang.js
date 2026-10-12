@@ -64,6 +64,17 @@ const STRINGS = {
     'party.label': 'People:',
     'party.dec': 'One person fewer',
     'party.inc': 'One person more',
+    // apps and learn
+    'apps.title': 'Recommended apps', 'apps.intro': 'Apps that make a trip in Taiwan easier. Install them before you go: app stores need a connection.',
+    'apps.open': 'Official page ›', 'apps.none': 'No apps listed yet.', 'apps.ios': 'iOS', 'apps.android': 'Android',
+    'apps.cat.getting-around': 'Getting around', 'apps.cat.taxi': 'Taxis', 'apps.cat.trains': 'Trains', 'apps.cat.messaging': 'Messaging',
+    'apps.cat.language': 'Language', 'apps.cat.weather': 'Weather', 'apps.cat.food': 'Food',
+    'learn.title': 'Learn about Taiwan', 'learn.intro': 'Short background reads that help you make sense of what you see.',
+    'learn.all': '‹ All topics', 'learn.none': 'No topics yet.', 'learn.notFound': 'Topic not found.', 'learn.more': 'Learn more',
+    'learn.places': 'Places', 'learn.sources': 'Sources', 'learn.pending': 'Draft: the guide’s author has not checked this yet.',
+    'learn.backTips': '‹ Good to know',
+    'photo.credit': 'Photo: {author}', 'map.title': 'Map', 'map.of': 'Map of {name}', 'map.open': 'Open in OpenStreetMap',
+    'map.online': 'The map needs an internet connection.',
   },
   zh_TW: {
     brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
@@ -110,6 +121,17 @@ const STRINGS = {
     'party.label': '人數：',
     'party.dec': '少一人',
     'party.inc': '多一人',
+    // apps and learn
+    'apps.title': '推薦 App', 'apps.intro': '讓在台灣旅行更順手的 App。出發前先裝好：下載 App 需要網路。',
+    'apps.open': '官方網頁 ›', 'apps.none': '還沒有推薦的 App。', 'apps.ios': 'iOS', 'apps.android': 'Android',
+    'apps.cat.getting-around': '交通導航', 'apps.cat.taxi': '計程車', 'apps.cat.trains': '火車', 'apps.cat.messaging': '通訊',
+    'apps.cat.language': '語言', 'apps.cat.weather': '天氣', 'apps.cat.food': '美食',
+    'learn.title': '認識台灣', 'learn.intro': '簡短的背景知識，幫你看懂眼前的景點。',
+    'learn.all': '‹ 所有主題', 'learn.none': '目前還沒有主題。', 'learn.notFound': '找不到這個主題。', 'learn.more': '延伸閱讀',
+    'learn.places': '相關景點', 'learn.sources': '資料來源', 'learn.pending': '草稿：手冊作者還沒有審閱這篇。',
+    'learn.backTips': '‹ 旅遊須知',
+    'photo.credit': '照片：{author}', 'map.title': '地圖', 'map.of': '{name}的地圖', 'map.open': '用 OpenStreetMap 開啟',
+    'map.online': '地圖需要網路連線。',
   },
 };
 

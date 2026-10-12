@@ -17,6 +17,8 @@ import { renderPlace, driverCard } from './views/place.js';
 import { renderLog } from './views/log.js';
 import { renderAsk, askContext } from './views/ask.js';
 import { renderPhrases, renderTips, phraseCard, phraseCardFull } from './views/reference.js';
+import { renderApps } from './views/apps.js';
+import { renderLearn } from './views/learn.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
 import { foodSheet, findPick, dishSheet } from './views/food.js';
@@ -26,6 +28,10 @@ const view = document.getElementById('view');
 
 // ---------- Routing ----------
 // #/explore | #/place/<id> | #/log | #/log/<placeId> (prefill) | #/ask | #/phrases | #/phrases/<group> | #/tips
+// | #/apps | #/learn | #/learn/<topicId>
+
+/** Pages without a tab of their own highlight the tab they are reached from. */
+const PARENT_TAB = { place: 'explore', apps: 'tips', learn: 'tips' };
 
 /**
  * @param {string} hash  location.hash
@@ -48,7 +54,7 @@ function render() {
 
   renderChrome();
   document.querySelectorAll('.tabbar a').forEach(a =>
-    a.classList.toggle('active', a.dataset.tab === tab || (tab === 'place' && a.dataset.tab === 'explore')));
+    a.classList.toggle('active', a.dataset.tab === (PARENT_TAB[tab] || tab)));
 
   const views = {
     explore: () => renderExplore(state),
@@ -57,6 +63,8 @@ function render() {
     ask: () => renderAsk(state),
     phrases: () => renderPhrases(state, arg),
     tips: () => renderTips(state),
+    apps: () => renderApps(state),
+    learn: () => renderLearn(state, arg),
   };
   view.innerHTML = (views[tab] || views.explore)();
 }
@@ -271,6 +279,13 @@ document.addEventListener('keydown', e => {
 });
 
 document.getElementById('bigcard').addEventListener('click', hideBig);
+
+// A place photo comes from Wikimedia, which the service worker does not cache: when it fails (offline),
+// hide it together with its credit line. 'error' does not bubble, hence the capture phase.
+view.addEventListener('error', e => {
+  const img = e.target;
+  if (img instanceof HTMLImageElement && img.classList.contains('photo')) img.closest('figure')?.setAttribute('hidden', '');
+}, true);
 
 // Language switch in the top bar: visible on every screen.
 document.getElementById('lang-toggle').addEventListener('click', () => {
