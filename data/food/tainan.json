@@ -9,7 +9,7 @@
     { "id": "huang-jia-shrimp-roll", "name": "府城黃家蝦捲", "kind": "taiwanese", "local": true, "dish": {"en": "Shrimp rolls", "zh_TW": "蝦捲"} },
     { "id": "mu-mu-seafood-congee", "name": "木木海產粥", "kind": "taiwanese", "local": true, "dish": {"en": "Seafood congee", "zh_TW": "海產粥"} },
     { "id": "shan-mo-shi", "name": "鱔魔師", "kind": "taiwanese", "local": true, "dish": {"en": "Eel dishes", "zh_TW": "鱔魚料理"} },
-    { "id": "xiao-hao-zhou-satay-hotpot", "name": "小豪洲沙茶火鍋", "kind": "hotpot", "local": true, "dish": {"en": "Satay hot pot", "zh_TW": "沙茶火鍋"} },
+    { "id": "xiao-hao-zhou-satay-hotpot", "name": "小豪洲沙茶火鍋", "kind": "hotpot", "local": true, "dish": {"en": "Satay hot pot", "zh_TW": "沙茶火鍋"}, "hint": {"en": "For meat, the pork is the better choice.", "zh_TW": "肉類建議點豬肉。"} },
     { "id": "lao-wang-xia-mian", "name": "老王下麵 牛肉麵專賣店", "kind": "beef_noodles" },
     { "id": "er-bao-jia-ramen", "name": "而寶家拉麵", "kind": "ramen", "hint": {"en": "If driving, park at Xiaokang Park (小康公園).", "zh_TW": "開車請導航「小康公園」停車。"} },
     { "id": "he-ye-ramen", "name": "賀也拉麵（育樂街）", "kind": "ramen" },
