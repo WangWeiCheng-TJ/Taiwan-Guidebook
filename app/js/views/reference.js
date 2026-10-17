@@ -127,8 +127,22 @@ export function phraseCard(ph) {
 }
 
 /**
+ * Tips grouped by category: one card per tip.
+ * @param {import('../types.js').Tip[]} tips
+ * @param {string} L
+ * @returns {string}
+ */
+function tipGroups(tips, L) {
+  return groupBy(tips, t => t.category).map(([cat, list]) => `
+      <h2>${tr(L, `cat.${cat}`)}</h2>
+      ${list.map(t => `<div class="card"><div class="title">${esc(localized(t, 'title', L))}</div><p>${esc(localized(t, 'body', L))}</p></div>`).join('')}
+    `).join('');
+}
+
+/**
  * Tips tab (#/tips): two tiles linking to the recommended apps (#/apps) and the knowledge topics (#/learn),
- * then the tips grouped by category, in s.lang (falls back to English).
+ * then the general tips (scope "global"), then one section per city that has its own tips.
+ * A tip's scope is a city_en string or a list of them (e.g. Taipei and New Taipei share a transit tip).
  * @param {import('../state.js').AppState} s
  * @returns {string}
  */
@@ -138,6 +152,13 @@ export function renderTips(s) {
     { href: '#/apps', icon: '📱', label: tr(L, 'apps.title'), n: (s.data.apps || []).length },
     { href: '#/learn', icon: '📖', label: tr(L, 'learn.title'), n: (s.data.topics || []).length },
   ];
+  const scopesOf = t => [].concat(t.scope);
+  const global = s.data.tips.filter(t => scopesOf(t).includes('global'));
+  const cities = [...new Set(s.data.tips.filter(t => !scopesOf(t).includes('global')).flatMap(scopesOf))];
+  const cityName = en => {
+    const p = s.data.places.find(x => x.location.city_en === en);
+    return p ? (L === 'zh_TW' ? p.location.city_zh : p.location.city_en) : en;
+  };
   return `
     <h1>${tr(L, 'tips')}</h1>
     <div class="tiles">${tiles.map(t => `
@@ -147,9 +168,10 @@ export function renderTips(s) {
         ${t.n ? `<span class="tile-count">${t.n}</span>` : ''}
       </a>`).join('')}
     </div>
-    ${groupBy(s.data.tips, t => t.category).map(([cat, list]) => `
-      <h2>${tr(L, `cat.${cat}`)}</h2>
-      ${list.map(t => `<div class="card"><div class="title">${esc(localized(t, 'title', L))}</div><p>${esc(localized(t, 'body', L))}</p></div>`).join('')}
+    ${tipGroups(global, L)}
+    ${cities.map(city => `
+      <h1>${esc(cityName(city))}</h1>
+      ${tipGroups(s.data.tips.filter(t => scopesOf(t).includes(city)), L)}
     `).join('')}
   `;
 }

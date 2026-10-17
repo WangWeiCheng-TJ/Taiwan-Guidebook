@@ -88,7 +88,7 @@
  *
  * @typedef {Object} Tip
  * @property {string} id
- * @property {string} scope      "global" for now; later a city name or place id
+ * @property {string|string[]} scope  "global", or a city_en (or a list of them) for city-specific tips
  * @property {string} category   safety | daily-life | money | culture | transport
  * @property {string} title_en
  * @property {string} title_zh

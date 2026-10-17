@@ -106,5 +106,14 @@
     "body_en": "At MRT platforms people wait in lines marked on the floor beside the doors and let passengers off first.",
     "title_zh": "照地上的線排隊",
     "body_zh": "捷運月台上，大家會在車門兩側地上標示的線排隊，先讓車上的人下車。"
+  },
+  {
+    "id": "taipei-mrt-before-bus",
+    "scope": ["Taipei City", "New Taipei City"],
+    "category": "transport",
+    "title_en": "MRT first, bus second",
+    "body_en": "Take the MRT first. Use buses only where the MRT doesn't reach.",
+    "title_zh": "優先搭捷運，才搭公車",
+    "body_zh": "優先搭捷運，捷運到不了的地方再轉公車。"
   }
 ]
