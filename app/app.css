@@ -304,3 +304,12 @@ details.map p { margin: 6px 0 0; }
 .sources { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
 .sources li { margin: 4px 0; overflow-wrap: anywhere; }
 .sources a { color: inherit; }
+
+/* Tap to hear Chinese */
+.say-btn {
+  appearance: none; border: 1px solid var(--line); background: var(--surface); border-radius: 99px;
+  font-size: 15px; line-height: 1; padding: 6px 8px; margin-left: 6px; vertical-align: middle; cursor: pointer;
+}
+.say-btn:active { background: var(--accent-soft); }
+.zc.say { cursor: pointer; border-radius: 8px; padding: 2px 3px; -webkit-tap-highlight-color: transparent; }
+.zc.say:active, .zc.say.speaking { background: var(--accent-soft); }

@@ -58,6 +58,7 @@ const STRINGS = {
     shopTbd: 'shop TBD', shopTbdIntro: 'A local dish worth trying. The author hasn’t picked a shop yet: look for one nearby, or ask AI.', findNearby: 'Find nearby',
     'food.local': 'Local specialties', 'food.taiwanese': 'Taiwanese local food', 'food.hotpot': 'Hot pot', 'food.beef_noodles': 'Beef noodles', 'food.ramen': 'Ramen', 'food.japanese': 'Japanese',
     'food.international': 'International', 'food.sweets': 'Desserts', 'food.bar': 'Bar',
+    listen: 'Listen', noSpeech: 'This device can’t play speech.', tapToHear: 'Tap a character to hear it.',
     askAbout: '✦ Ask AI: “{t}”', explainTitle: 'Ask AI', explainCopied: 'Copied. Paste it into your AI app.',
     guideUpdated: 'Guide updated.', tapClose: 'Tap anywhere to close', close: 'Close',
     // party size
@@ -115,6 +116,7 @@ const STRINGS = {
     shopTbd: '店家待補', shopTbdIntro: '值得一試的在地小吃，作者還沒選定店家：可以搜尋附近的店，或問 AI。', findNearby: '搜尋附近',
     'food.local': '當地特色', 'food.taiwanese': '台灣小吃', 'food.hotpot': '火鍋', 'food.beef_noodles': '牛肉麵', 'food.ramen': '拉麵', 'food.japanese': '日式',
     'food.international': '異國料理', 'food.sweets': '甜點', 'food.bar': '酒吧',
+    listen: '聽發音', noSpeech: '這台裝置無法播放語音。', tapToHear: '點單一個字可以聽它的發音。',
     askAbout: '✦ 問 AI：「{t}」', explainTitle: '問 AI', explainCopied: '已複製，貼到你的 AI 就可以問了。',
     guideUpdated: '手冊已更新。', tapClose: '點任何地方關閉', close: '關閉',
     // party size

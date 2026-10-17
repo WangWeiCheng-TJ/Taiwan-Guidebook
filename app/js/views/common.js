@@ -55,3 +55,15 @@ export function locationPanel(s) {
     </label>
   </div>`;
 }
+
+/**
+ * 🔊 button that reads Chinese text aloud with the device voice (data-action="say").
+ * "" on devices without speech synthesis, so no dead button is shown.
+ * @param {string} text  Chinese text to speak
+ * @param {import('../lang.js').Lang} lang  UI language, for the button's accessible label
+ * @returns {string}
+ */
+export function sayButton(text, lang) {
+  if (typeof speechSynthesis === 'undefined' || !text) return '';
+  return `<button class="say-btn" type="button" data-action="say" data-say="${esc(text)}" aria-label="${esc(tr(lang, 'listen'))}" title="${esc(tr(lang, 'listen'))}">🔊</button>`;
+}

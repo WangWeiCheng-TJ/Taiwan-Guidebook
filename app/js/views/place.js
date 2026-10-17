@@ -7,7 +7,7 @@ import { isHttps } from './apps.js';
 import { notesFor } from '../triplog.js';
 import { places } from '../state.js';
 import { tr, localized, localizedList } from '../lang.js';
-import { placeName } from './common.js';
+import { placeName, sayButton } from './common.js';
 import { phrasesForPlace, mainGroupForPlace } from '../phrases.js';
 import { withParty } from '../party.js';
 
@@ -38,7 +38,7 @@ export function renderPlace(s, id) {
 
   return `
     <a href="#/explore" class="small">${tr(L, 'allPlaces')}</a>
-    <h1>${esc(placeName(p, L))}</h1>
+    <h1>${esc(placeName(p, L))} ${sayButton(p.name.zh_TW, L)}</h1>
     <div class="zh">${esc(placeName(p, L === 'en' ? 'zh_TW' : 'en'))}</div>
     <div class="muted small">${esc(localized(p.location, 'district', L))}, ${esc(localized(p.location, 'city', L))}${d != null ? ` · ${tr(L, 'away', { d: fmtKm(d) })}` : ''}</div>
     <div class="row" style="margin:10px 0">

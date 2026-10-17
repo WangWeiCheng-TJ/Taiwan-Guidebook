@@ -217,6 +217,10 @@ const actions = {
     const ph = phraseById(el.dataset.id);
     if (ph) showBig(phraseCard(ph));
   },
+  say: el => {
+    if (typeof speechSynthesis === 'undefined') return toast(tr(state.lang, 'noSpeech'));
+    speak(el.dataset.say || el.textContent.trim());
+  },
   speak: el => {
     const ph = phraseById(el.dataset.id);
     if (ph) speak(ph.tts || ph.zh_TW); // tts: respelling for phrases the voice engine mispronounces
@@ -272,6 +276,14 @@ function dispatchClick(e) {
 }
 view.addEventListener('click', dispatchClick);
 document.getElementById('sheet').addEventListener('click', dispatchClick);
+// Keyboard users: Enter or Space on a role=button element (tappable characters) acts like a click.
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('[role="button"][data-action]')) {
+    e.preventDefault();
+    e.target.click();
+    return;
+  }
+});
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (!document.getElementById('bigcard').hidden) hideBig();

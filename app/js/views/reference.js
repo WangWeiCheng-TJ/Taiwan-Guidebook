@@ -39,7 +39,7 @@ export function zhuyinBlock(ph) {
   let spoken;
   try { spoken = spokenTones(aligned); } catch { spoken = aligned.map(a => a.syllable?.tone ?? null); }
   return `<div class="zy" lang="zh-TW">${aligned.map(({ char, syllable }, i) => syllable ? `
-    <div class="zc">
+    <div class="zc say" data-action="say" data-say="${esc(char)}" role="button" tabindex="0">
       <div class="han">${esc(char)}</div>
       <div class="syl">${syllable.parts.map(p => `<span class="zp"><b>${esc(p.symbol)}</b><i>${esc(p.roman)}</i></span>`).join('')}<span class="zp tone"><b>${TONE_MARK[syllable.tone] || '&nbsp;'}</b><i>${spoken[i]}</i></span></div>
     </div>` : `<div class="zc punct"><div class="han">${esc(char)}</div></div>`).join('')}</div>`;
@@ -75,7 +75,7 @@ export function renderPhrases(s, group) {
     <a href="#/phrases" class="small">${tr(L, 'allCategories')}</a>
     <h1>${known.icon} ${tr(L, `cat.${known.id}`)}</h1>
     ${list.some(ph => ph.party) ? partyControl(L, s.party) : ''}
-    <p class="muted small">${tr(L, 'phrasesIntro')}<br>${tr(L, 'toneLegend')}</p>
+    <p class="muted small">${tr(L, 'phrasesIntro')} ${typeof speechSynthesis !== 'undefined' ? tr(L, 'tapToHear') : ''}<br>${tr(L, 'toneLegend')}</p>
     ${list.map(ph => phraseCardFull(withParty(ph, s.party), L)).join('')}
   `;
 }
