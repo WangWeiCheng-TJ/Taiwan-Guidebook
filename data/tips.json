@@ -108,6 +108,15 @@
     "body_zh": "捷運月台上，大家會在車門兩側地上標示的線排隊，先讓車上的人下車。"
   },
   {
+    "id": "tongs-test-clamp",
+    "scope": "global",
+    "category": "daily-life",
+    "title_en": "Test the tongs first",
+    "body_en": "When you get a pair of tongs (夾子), many Taiwanese clamp them empty a couple of times before picking up food.",
+    "title_zh": "夾子先空夾兩下",
+    "body_zh": "拿到夾子，很多台灣人會先空夾兩下，再去夾食物。"
+  },
+  {
     "id": "taipei-mrt-before-bus",
     "scope": ["Taipei City", "New Taipei City"],
     "category": "transport",
