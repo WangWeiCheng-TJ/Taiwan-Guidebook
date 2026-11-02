@@ -2,6 +2,7 @@
 // Pure functions except loadTrip (network). Contract tests: tests/core/trip.test.js
 
 import { placeById } from './data.js';
+import { isIsoDate } from './util.js';
 
 /** @typedef {import('./types.js').Trip} Trip */
 /** @typedef {import('./types.js').TripDay} TripDay */
@@ -49,7 +50,7 @@ function parseDay(day, errors, n) {
     return null;
   }
   const date = typeof day.date === 'string' ? day.date.trim() : '';
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) errors.push(`${where}: date must be YYYY-MM-DD, like 2026-11-04.`);
+  if (!isIsoDate(date)) errors.push(`${where}: date must be YYYY-MM-DD, like 2026-11-04.`);
   if (!Array.isArray(day.items)) errors.push(`${where}: items must be a list.`);
 
   /** @type {TripDay} */
@@ -73,7 +74,8 @@ function parseDay(day, errors, n) {
  * Rules, each failure adds one human-readable message to errors:
  * - raw must be an object with a non-empty string `title`
  * - `days` must be a non-empty array
- * - every day: `date` matches YYYY-MM-DD; `items` is an array (may be empty); `title` optional string
+ * - every day: `date` is a real calendar date written YYYY-MM-DD (not 2026-11-31); `items` is an array
+ *   (may be empty); `title` optional string
  * - every item: has a non-empty string `place` or `name` (or both); `time` if present matches HH:MM
  *   (a one-digit hour such as "9:30" is accepted and padded to "09:30"); `note` if present is a string
  * - an optional field (day `title`; item `place`, `name`, `time`, `note`) set to null counts as absent

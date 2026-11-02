@@ -41,6 +41,15 @@ test('parseTrip: a one-digit hour is padded; other bad times are still rejected'
   }
 });
 
+test('parseTrip rejects dates that do not exist on the calendar', () => {
+  for (const date of ['2026-11-31', '2026-13-01', '2026-02-29', '2026-00-10']) {
+    const { trip, errors } = parseTrip({ title: 'T', days: [{ date, items: [] }] });
+    assert.equal(trip, null, date);
+    assert.deepEqual(errors, ['Day 1: date must be YYYY-MM-DD, like 2026-11-04.'], date);
+  }
+  assert.deepEqual(parseTrip({ title: 'T', days: [{ date: '2028-02-29', items: [] }] }).errors, []);
+});
+
 test('planFromAiText loads an AI answer that uses null for optional keys', () => {
   const answer = '```json\n{"title":"Tainan day","days":[{"date":"2026-11-04","items":[' +
     '{"time":"09:00","place":"chihkan-tower","name":null,"note":"go early"},' +
