@@ -108,7 +108,7 @@
         "etiquette_tips_en": "When visiting the Wenchang Pavilion on the second floor, speak quietly out of respect for worshippers. Rubbing the nose of the Qianlong turtle steles is traditionally believed to bring luck, but please touch gently without scratching the stone surfaces.",
         "etiquette_tips_zh": "參觀二樓文昌閣與魁星殿時請放低音量以示尊重。園區草坪與古蹟本體請愛護維護。",
         "must_see_spots_en": [
-          "Original 17th-century Dutch brick bastion gate and underground passageway entrance",
+          "Original 17th-century Dutch brick bastion gate and the entrance to a legendary secret tunnel",
           "Row of 9 imperial dragon-turtle (Bixi) steles granted by Emperor Qianlong",
           "Statue and shrine of Kui Xing holding a calligraphy brush atop an Ao fish",
           "Penghu Academy (Penghu Shuyuan) gate and surviving Qing wooden structure"
@@ -126,11 +126,11 @@
         "must_see": [
           {
             "name": {
-              "en": "Original 17th-century Dutch brick bastion gate and underground passageway entrance",
+              "en": "Original 17th-century Dutch brick bastion gate and the entrance to a legendary secret tunnel",
               "zh_TW": "荷蘭時代原始普羅民遮城紅磚城門與神秘地道傳說入口"
             },
             "why": {
-              "en": "The only part of the 1653 Dutch fort still standing. Its walls were laid with a mortar of glutinous rice, sugar syrup and crushed oyster shells.",
+              "en": "What survives of the 1653 Dutch fort. Its walls were laid with a mortar of glutinous rice, sugar syrup and crushed oyster shells.",
               "zh_TW": "1653 年荷蘭普羅民遮城留存至今的部分。城牆用糯米、糖水和蚵殼灰調成的灰漿砌成。"
             }
           },
