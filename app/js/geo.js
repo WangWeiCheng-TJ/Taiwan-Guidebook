@@ -18,11 +18,15 @@ export function km(a, b) {
 
 /**
  * Human distance: 0.35 → "350 m", 2.34 → "2.3 km", 12.6 → "13 km".
+ * The unit is chosen after rounding, so 0.9996 is "1.0 km" (not "1000 m") and 9.97 is "10 km" (not "10.0 km").
  * @param {number} d  kilometres
  * @returns {string}
  */
 export function fmtKm(d) {
-  return d < 1 ? `${Math.round(d * 1000)} m` : `${d.toFixed(d < 10 ? 1 : 0)} km`;
+  const m = Math.round(d * 1000);
+  if (m < 1000) return `${m} m`;
+  const tenths = d.toFixed(1);
+  return Number(tenths) < 10 ? `${tenths} km` : `${d.toFixed(0)} km`;
 }
 
 /**
