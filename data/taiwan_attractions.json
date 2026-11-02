@@ -4,7 +4,7 @@
     "title_zh": "臺灣景點歷史沿革與文化旅遊資料庫",
     "version": "1.0.0",
     "total_count": 8,
-    "generated_at": "2026-10-12",
+    "generated_at": "2026-11-03",
     "license": "CC-BY-4.0",
     "repository": "https://github.com/WangWeiCheng-TJ/Taiwan-Guidebook"
   },
@@ -459,7 +459,8 @@
         "transportation_en": "About 1 km west of Chihkan Tower, roughly a 15-minute walk through the old town.",
         "transportation_zh": "在赤崁樓西邊約一公里，穿過老城區步行約15分鐘。",
         "best_time_to_visit": "Any time: it is open all day and free to visit.",
-        "free_entry": true
+        "free_entry": true,
+        "always_open": true
       },
       "tags": [
         "city_gate",
