@@ -1,6 +1,6 @@
 // The personal trip log. Pure functions over LogEntry[]; persistence happens in main.js.
 
-import { daysBetween } from './util.js';
+import { daysBetween, isIsoDate } from './util.js';
 import { placeById } from './data.js';
 
 /** @typedef {import('./types.js').LogEntry} LogEntry */
@@ -75,8 +75,32 @@ export function exportPayload(log, now) {
 }
 
 /**
+ * An imported entry reshaped to the LogEntry contract, or null when it has no usable id or date.
+ * The file may be hand-edited or rewritten by an AI: a rating outside 1..5 becomes null,
+ * text fields that are not strings become "", and a numeric id becomes a string (so it can be deleted).
+ * @param {unknown} raw
+ * @returns {LogEntry|null}
+ */
+function cleanEntry(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const e = /** @type {Record<string, unknown>} */ (raw);
+  const id = typeof e.id === 'number' && Number.isFinite(e.id) ? String(e.id) : e.id;
+  if (typeof id !== 'string' || !id || !isIsoDate(e.date)) return null;
+  const s = typeof e.stars === 'number' ? Math.round(e.stars) : NaN;
+  return {
+    id,
+    date: /** @type {string} */ (e.date),
+    placeId: typeof e.placeId === 'string' && e.placeId ? e.placeId : null,
+    name: typeof e.name === 'string' ? e.name : '',
+    stars: s >= 1 && s <= 5 ? s : null,
+    note: typeof e.note === 'string' ? e.note : '',
+  };
+}
+
+/**
  * Merge an imported file into the log. Accepts an export payload or a bare array.
- * Entries without id or date are skipped; ids already in the log are skipped (no overwrite).
+ * Entries without an id or a real YYYY-MM-DD date are skipped; ids already in the log are skipped (no overwrite).
+ * Kept entries are reshaped to the LogEntry contract (see cleanEntry): stars 1..5 or null, string text fields.
  * @param {LogEntry[]} log
  * @param {unknown} parsed  JSON.parse result of the file
  * @returns {{ log: LogEntry[], added: number }}
@@ -86,7 +110,7 @@ export function mergeImport(log, parsed) {
   const entries = Array.isArray(parsed) ? parsed : parsed && /** @type {any} */ (parsed).entries;
   if (!Array.isArray(entries)) throw new Error('Not a trip log export');
   const ids = new Set(log.map(e => e.id));
-  const fresh = entries.filter(e => e && e.id && e.date && !ids.has(e.id));
+  const fresh = entries.map(cleanEntry).filter(e => e && !ids.has(e.id));
   return { log: [...log, ...fresh], added: fresh.length };
 }
 
