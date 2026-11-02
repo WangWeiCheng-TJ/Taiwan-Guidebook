@@ -137,13 +137,15 @@ export function dayNumber(log, date) {
 
 /**
  * Display name: the guidebook name if the entry points at a known place, else the typed name.
+ * An entry whose place is no longer in the guidebook (renamed or removed, or imported from another
+ * version) has no typed name, so it falls back to its placeId rather than "".
  * @param {LogEntry} entry
  * @param {Place[]} places
  * @returns {string}
  */
 export function entryName(entry, places) {
   const p = entry.placeId && placeById(places, entry.placeId);
-  return p ? p.name.en : entry.name;
+  return p ? p.name.en : entry.name || entry.placeId || '';
 }
 
 /**
