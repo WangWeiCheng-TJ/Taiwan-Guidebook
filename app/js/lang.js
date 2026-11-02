@@ -145,7 +145,37 @@ const MESSAGES_ZH = {
   'The plan is not valid JSON.': '行程的格式不正確（不是有效的 JSON）。',
   'The trip file is not valid JSON.': '行程檔的格式不正確（不是有效的 JSON）。',
   'Could not load the trip. Check your connection.': '無法載入行程，請檢查網路連線。',
+  'Could not load the trip.': '無法載入行程。',
+  'The trip must be a JSON object.': '行程必須是一個 JSON 物件。',
+  'The trip must have a title.': '行程必須有標題（title）。',
+  'The trip must have at least one day.': '行程至少要有一天。',
 };
+
+// parseTrip's messages about one day or stop: "Day 2: …", "Day 2, stop 3: …".
+// 'needs a place id or a name.' stays English: tests/core/lang.test.js pins it as an unknown message.
+const DETAIL_ZH = {
+  'must be an object.': '格式不正確（必須是物件）。',
+  'date must be YYYY-MM-DD, like 2026-11-04.': '日期必須是 YYYY-MM-DD，例如 2026-11-04。',
+  'items must be a list.': 'items 必須是清單。',
+  'title must be text.': 'title 必須是文字。',
+  'place must be text.': 'place 必須是文字。',
+  'name must be text.': 'name 必須是文字。',
+  'time must be HH:MM, like 09:30.': '時間必須是 HH:MM，例如 09:30。',
+  'note must be text.': 'note 必須是文字。',
+};
+
+/**
+ * Chinese for a message with a number in it, or undefined.
+ * @param {string} msg
+ * @returns {string|undefined}
+ */
+function patternZh(msg) {
+  const http = /^Could not load the trip \(HTTP (\d+)\)\.$/.exec(msg);
+  if (http) return `無法載入行程（HTTP ${http[1]}）。`;
+  const day = /^Day (\d+)(?:, stop (\d+))?: (.+)$/.exec(msg);
+  if (day && DETAIL_ZH[day[3]]) return `第 ${day[1]} 天${day[2] ? `第 ${day[2]} 站` : ''}：${DETAIL_ZH[day[3]]}`;
+  return undefined;
+}
 
 /**
  * A UI string with {name} placeholders filled. Falls back to English, then to the key itself.
@@ -167,7 +197,7 @@ export function tr(lang, key, vars = {}) {
  * @returns {string}
  */
 export function trMsg(lang, msg) {
-  return lang === 'zh_TW' ? MESSAGES_ZH[msg] ?? msg : msg;
+  return lang === 'zh_TW' ? MESSAGES_ZH[msg] ?? patternZh(msg) ?? msg : msg;
 }
 
 /**
