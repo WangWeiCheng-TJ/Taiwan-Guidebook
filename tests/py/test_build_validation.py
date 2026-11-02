@@ -207,6 +207,86 @@ class LoadList(unittest.TestCase):
                 build_dataset.load_list(path, ["id", "en"])
 
 
+def tickets(**over) -> dict:
+    """The two-tickets phrase with a party field, as the data would carry it."""
+    phrase = {
+        "id": "two-tickets", "category": "sightseeing", "en": "Two tickets, please", "zh_TW": "請給我兩張票",
+        "zhuyin": "ㄑㄧㄥˇ ㄍㄟˇ ㄨㄛˇ ㄌㄧㄤˇ ㄓㄤ ㄆㄧㄠˋ", "pinyin": "qǐng gěi wǒ liǎng zhāng piào",
+        "party": {"zh_TW": "兩", "zhuyin": "ㄌㄧㄤˇ", "pinyin": "liǎng", "en_one": "One ticket, please",
+                  "en_other": "{N} tickets, please"},
+    }
+    phrase.update(over)
+    return phrase
+
+
+class DataFileCase(unittest.TestCase):
+    """Runs a loader on a temp copy of data/phrases.json or data/tips.json."""
+
+    def run_loader(self, attr, loader, entries):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write_json(Path(tmp) / "list.json", entries)
+            with mock.patch.object(build_dataset, attr, path):
+                return loader()
+
+
+class LoadPhrases(DataFileCase):
+    def load(self, *phrases):
+        return self.run_loader("PHRASES_FILE", build_dataset.load_phrases, list(phrases))
+
+    def test_real_phrases_pass(self):
+        self.assertTrue(build_dataset.load_phrases())
+
+    def test_every_category_of_the_app_is_accepted(self):
+        phrases = [{**tickets(), "id": cat, "category": cat} for cat in build_dataset.PHRASE_CATEGORIES]
+        self.assertEqual(len(self.load(*phrases)), len(phrases))
+
+    def test_unknown_category_is_rejected(self):
+        for cat in ("sightseeing ", "transportation", "top", "", "Food"):
+            with self.subTest(cat=repr(cat)), self.assertRaisesRegex(BuildError, "category"):
+                self.load(tickets(category=cat))
+
+    def test_a_valid_party_field_passes(self):
+        self.assertEqual(len(self.load(tickets())), 1)
+
+    def test_party_must_occur_in_the_phrase(self):
+        bad = {
+            "zh_TW not in the phrase": {"zh_TW": "二"},
+            "zhuyin is not a syllable": {"zhuyin": "ㄌㄧㄤ"},
+            "pinyin not in the phrase": {"pinyin": "èr"},
+            "en_other has no number slot": {"en_other": "Tickets, please"},
+            "missing en_one": {"en_one": ""},
+        }
+        for label, change in bad.items():
+            party = {**tickets()["party"], **change}
+            with self.subTest(label), self.assertRaisesRegex(BuildError, "party"):
+                self.load(tickets(party=party))
+
+    def test_party_must_be_an_object(self):
+        for party in ("兩", None, ["兩"]):
+            with self.subTest(party=party), self.assertRaisesRegex(BuildError, "party"):
+                self.load(tickets(party=party))
+
+
+class LoadTips(DataFileCase):
+    def tip(self, **over):
+        return {"id": "t", "scope": "global", "category": "safety", "title_en": "T", "body_en": "B", **over}
+
+    def load(self, *tips):
+        return self.run_loader("TIPS_FILE", build_dataset.load_tips, list(tips))
+
+    def test_real_tips_pass(self):
+        self.assertTrue(build_dataset.load_tips())
+
+    def test_known_categories_pass(self):
+        tips = [self.tip(id=cat, category=cat) for cat in build_dataset.TIP_CATEGORIES]
+        self.assertEqual(len(self.load(*tips)), len(tips))
+
+    def test_unknown_category_is_rejected(self):
+        for cat in ("etiquette", "daily_life", "Safety", ""):
+            with self.subTest(cat=cat), self.assertRaisesRegex(BuildError, "category"):
+                self.load(self.tip(category=cat))
+
+
 class ValidateBasic(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

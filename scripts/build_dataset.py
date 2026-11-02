@@ -27,6 +27,10 @@ PHRASES_FILE = DATA_DIR / "phrases.json"
 TIPS_FILE = DATA_DIR / "tips.json"
 FOOD_DIR = DATA_DIR / "food"
 FOOD_KINDS = {"taiwanese", "hotpot", "beef_noodles", "ramen", "japanese", "international", "sweets", "bar"}
+# Phrase tiles of the Phrases tab except "top" (PHRASE_GROUPS in app/js/phrases.js) and the tips headings
+# (cat.<category> in app/js/lang.js); tests/core/build-sync.test.js keeps the copies in sync.
+PHRASE_CATEGORIES = ["sightseeing", "food", "transport", "shopping", "emergency", "basics"]
+TIP_CATEGORIES = ["safety", "transport", "daily-life", "money", "culture"]
 APP_OUTPUT_FILE = BASE_DIR / "app" / "data" / "guidebook.json"
 
 
@@ -227,6 +231,56 @@ def food_pick_problems(pick, seen: set) -> list[str]:
     return problems
 
 
+def party_problems(phrase: dict) -> list[str]:
+    """What is wrong with a phrase's `party` field (see withParty in app/js/party.js); [] when fine.
+
+    withParty() swaps party.zh_TW / party.zhuyin / party.pinyin for the number, so each must occur in
+    the phrase, or the English changes with the party size and the Chinese the clerk reads does not.
+    """
+    party = phrase["party"]
+    if not isinstance(party, dict):
+        return ["'party' must be an object"]
+    problems = [f"party.{key} must be a non-empty string"
+                for key in ("zh_TW", "zhuyin", "pinyin", "en_one", "en_other") if not is_text(party.get(key))]
+    if not all(is_text(phrase.get(key)) for key in ("zh_TW", "zhuyin", "pinyin")):
+        problems.append("the phrase's zh_TW, zhuyin and pinyin must be strings")
+    if problems:
+        return problems
+    if party["zh_TW"] not in phrase["zh_TW"]:
+        problems.append(f"party.zh_TW {party['zh_TW']!r} does not occur in zh_TW {phrase['zh_TW']!r}")
+    if party["zhuyin"] not in phrase["zhuyin"].split():
+        problems.append(f"party.zhuyin {party['zhuyin']!r} is not one of the phrase's zhuyin syllables")
+    if party["pinyin"] not in phrase["pinyin"]:
+        problems.append(f"party.pinyin {party['pinyin']!r} does not occur in pinyin {phrase['pinyin']!r}")
+    if "{n}" not in party["en_other"] and "{N}" not in party["en_other"]:
+        problems.append("party.en_other needs {n} or {N} where the number goes")
+    return problems
+
+
+def load_phrases() -> list[dict]:
+    """data/phrases.json: required keys and unique ids, a known category, and a usable `party` when present."""
+    phrases = load_list(PHRASES_FILE, ["id", "category", "en", "zh_TW", "zhuyin", "pinyin"])
+    for phrase in phrases:
+        problems = []
+        if phrase["category"] not in PHRASE_CATEGORIES:
+            problems.append(f"category {phrase['category']!r} is not one of {PHRASE_CATEGORIES}")
+        if "party" in phrase:
+            problems += party_problems(phrase)
+        if problems:
+            raise BuildError(f"[INVALID] {PHRASES_FILE.name}: phrase {phrase['id']}: " + "; ".join(problems))
+    return phrases
+
+
+def load_tips() -> list[dict]:
+    """data/tips.json: required keys and unique ids, and a category that has a heading in the app."""
+    tips = load_list(TIPS_FILE, ["id", "scope", "category", "title_en", "body_en"])
+    for tip in tips:
+        if tip["category"] not in TIP_CATEGORIES:
+            raise BuildError(f"[INVALID] {TIPS_FILE.name}: tip {tip['id']}: category {tip['category']!r} "
+                             f"is not one of {TIP_CATEGORIES}")
+    return tips
+
+
 def load_food() -> list[dict]:
     """Owner's food picks, one file per city: data/food/<city>.json.
 
@@ -344,8 +398,8 @@ def build_app_bundle(attractions: list[dict], previous, today: str) -> dict:
 
     generated_at stays as in `previous` (the current bundle) when the version is unchanged.
     """
-    phrases = load_list(PHRASES_FILE, ["id", "category", "en", "zh_TW", "zhuyin", "pinyin"])
-    tips = load_list(TIPS_FILE, ["id", "scope", "category", "title_en", "body_en"])
+    phrases = load_phrases()
+    tips = load_tips()
     food = load_food()
     check_food_cities(food, attractions)
     content = {"places": attractions, "phrases": phrases, "tips": tips, "food": food}
