@@ -164,6 +164,10 @@ def load_attractions(log=_quiet) -> list[dict]:
                 errors = validate_basic(data, categories)
         except Exception as ex:  # a malformed file must be reported, not crash the build
             errors = [f"Could not validate: {ex}"]
+        # The id is the URL (#/place/<id>) and what log and trip entries point to. Tying it to the unique
+        # file name keeps ids unique, so a renamed copy cannot shadow the original place.
+        if isinstance(data, dict) and data.get("id") != path.stem:
+            errors.append(f"'id' {data.get('id')!r} must equal the file name {path.stem!r}")
 
         if errors:
             log(f"❌ [INVALID] {fname}")
