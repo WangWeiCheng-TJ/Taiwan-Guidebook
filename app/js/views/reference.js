@@ -39,10 +39,27 @@ export function zhuyinBlock(ph) {
   let spoken;
   try { spoken = spokenTones(aligned); } catch { spoken = aligned.map(a => a.syllable?.tone ?? null); }
   return `<div class="zy" lang="zh-TW">${aligned.map(({ char, syllable }, i) => syllable ? `
-    <div class="zc say" data-action="say" data-say="${esc(char)}" role="button" tabindex="0">
+    <div class="zc say" data-action="say" data-say="${esc(sayText(aligned, spoken, i))}" role="button" tabindex="0">
       <div class="han">${esc(char)}</div>
       <div class="syl">${syllable.parts.map(p => `<span class="zp"><b>${esc(p.symbol)}</b><i>${esc(p.roman)}</i></span>`).join('')}<span class="zp tone"><b>${TONE_MARK[syllable.tone] || '&nbsp;'}</b><i>${spoken[i]}</i></span></div>
     </div>` : `<div class="zc punct"><div class="han">${esc(char)}</div></div>`).join('')}</div>`;
+}
+
+/**
+ * What tapping character i says. Alone, a character is read in its dictionary tone, so a character
+ * whose shown (spoken) tone differs is said together with the neighbour that changes it: the next
+ * syllable for tone sandhi (你 → 你好, 不 → 不要), the syllable before for a light tone (謝 → 謝謝).
+ * @param {import('../zhuyin.js').AlignedChar[]} aligned
+ * @param {(number|null)[]} spoken  spokenTones(aligned)
+ * @param {number} i  index of a syllable in aligned
+ * @returns {string}
+ */
+function sayText(aligned, spoken, i) {
+  const han = j => (aligned[j]?.syllable ? aligned[j].char : '');
+  const own = aligned[i].syllable.tone;
+  if (own === 5) return han(i - 1) + aligned[i].char;
+  if (spoken[i] !== own) return aligned[i].char + han(i + 1);
+  return aligned[i].char;
 }
 
 /**
