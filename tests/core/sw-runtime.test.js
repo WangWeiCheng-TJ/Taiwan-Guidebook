@@ -62,7 +62,7 @@ function boot() {
     async delete(name) { return stores.delete(name); },
   };
   const messages = [];
-  const client = { postMessage: m => messages.push(m) };
+  const client = { postMessage: m => messages.push(structuredClone(m)) };
   const handlers = {};
   const self = {
     addEventListener: (type, fn) => { handlers[type] = fn; },
@@ -145,4 +145,21 @@ test('activate deletes only this app\'s old caches, not other apps\' caches on t
   sw.stores.set('other-app-v3', new FakeCache());
   await sw.install();
   assert.deepEqual([...sw.stores.keys()].sort(), [CACHE, 'other-app-v3'].sort());
+});
+
+test('a changed guidebook.json reaches open pages before the fetch event ends', async () => {
+  const sw = boot();
+  await sw.install();
+  sw.server.files.set('/app/data/guidebook.json', '{"version":"2"}');
+  assert.equal(await sw.open('/app/data/guidebook.json', 'cors'), '{"version":"1"}');
+  assert.deepEqual(sw.messages, [{ type: 'data-updated' }]);
+  assert.equal(await sw.open('/app/data/guidebook.json', 'cors'), '{"version":"2"}');
+});
+
+test('an unchanged guidebook.json sends no notice', async () => {
+  const sw = boot();
+  await sw.install();
+  await sw.open('/app/data/guidebook.json', 'cors');
+  await new Promise(r => setTimeout(r, 5));
+  assert.deepEqual(sw.messages, []);
 });

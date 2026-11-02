@@ -82,7 +82,8 @@ async function staleWhileRevalidate(e) {
       if (isData && cached) {
         const [oldText, newText] = await Promise.all([cached.clone().text(), res.clone().text()]);
         await cache.put(key, res.clone());
-        if (oldText !== newText) notify();
+        // awaited, so the message is sent inside waitUntil (the worker may stop once it settles)
+        if (oldText !== newText) await notify();
       } else {
         await cache.put(key, res.clone());
       }
