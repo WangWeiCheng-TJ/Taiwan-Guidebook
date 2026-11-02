@@ -360,7 +360,12 @@ def build_public_dataset(attractions: list[dict], previous, today: str) -> dict:
 
     generated_at stays as in `previous` (the current file) when nothing else changed,
     so rebuilding unchanged data on another day gives an identical file.
+    eras_index and categories_index are the schema's enums, so the open dataset lists what the places can use.
+    Raises BuildError when the schema file is missing.
     """
+    schema = load_schema()
+    if schema is None:
+        raise BuildError(f"{SCHEMA_FILE} is missing: the dataset's eras and categories come from it")
     dataset = {
         "metadata": {
             "title": "Taiwan Historical & Cultural Attractions Open Database",
@@ -371,25 +376,8 @@ def build_public_dataset(attractions: list[dict], previous, today: str) -> dict:
             "license": "CC-BY-4.0",
             "repository": "https://github.com/WangWeiCheng-TJ/Taiwan-Guidebook"
         },
-        "eras_index": [
-            "Prehistoric & Indigenous",
-            "Dutch & Spanish Era (1624–1662)",
-            "Kingdom of Tungning (1661–1683)",
-            "Qing Dynasty (1683–1895)",
-            "Japanese Colonial Era (1895–1945)",
-            "Post-WWII & Modern Era (1945–present)"
-        ],
-        "categories_index": [
-            "historical_fortress",
-            "temple_shrine",
-            "colonial_architecture",
-            "historic_street_district",
-            "industrial_heritage",
-            "indigenous_cultural_site",
-            "memorial_museum",
-            "traditional_residence",
-            "natural_cultural_landscape"
-        ],
+        "eras_index": list(schema["properties"]["eras"]["items"]["enum"]),
+        "categories_index": list(schema["properties"]["category"]["enum"]),
         "attractions": attractions
     }
     if not dataset["metadata"]["generated_at"] or dataset != previous:
