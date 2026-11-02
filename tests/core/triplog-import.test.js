@@ -57,3 +57,12 @@ test('My trip renders after importing a file with an out-of-range rating', () =>
   // A log saved before this fix may still hold such a rating: rendering must not throw either.
   assert.doesNotThrow(() => renderLog({ ...s, log: [entry({ id: 'old', stars: 8 })] }));
 });
+
+test('mergeImport: a file that repeats an id adds it once (the first copy)', () => {
+  const { log, added } = mergeImport([], [entry({ id: '1', note: 'a' }), entry({ id: '1', date: '2026-11-04', note: 'b' })]);
+  assert.equal(added, 1);
+  assert.deepEqual(log.map(e => e.note), ['a']);
+  assert.equal(removeEntry(log, '1').length, 0);
+  // Still skips ids already in the log.
+  assert.equal(mergeImport(log, [entry({ id: '1' }), entry({ id: '2' })]).added, 1);
+});
