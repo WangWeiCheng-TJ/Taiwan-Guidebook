@@ -138,3 +138,11 @@ test('offline, a ?trip= link still opens the cached app page', async () => {
   assert.equal(await sw.open('/app/?trip=https%3A%2F%2Fexample.org%2Fplan.json'), 'page v1');
   assert.equal(await sw.open('/app/data/guidebook.json', 'cors'), '{"version":"1"}');
 });
+
+test('activate deletes only this app\'s old caches, not other apps\' caches on the same origin', async () => {
+  const sw = boot();
+  sw.stores.set('tg-v1', new FakeCache());
+  sw.stores.set('other-app-v3', new FakeCache());
+  await sw.install();
+  assert.deepEqual([...sw.stores.keys()].sort(), [CACHE, 'other-app-v3'].sort());
+});
