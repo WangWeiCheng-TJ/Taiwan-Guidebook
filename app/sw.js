@@ -3,7 +3,7 @@
 // When guidebook.json changes in the background, open pages get a 'data-updated' message.
 // Bump CACHE when the SHELL list changes.
 
-const CACHE = 'tg-v17';
+const CACHE = 'tg-v18';
 const DATA = 'data/guidebook.json';
 const SHELL = [
   './',
@@ -67,17 +67,22 @@ self.addEventListener('fetch', e => {
 
 async function staleWhileRevalidate(e) {
   const cache = await caches.open(CACHE);
-  const isData = new URL(e.request.url).pathname.endsWith(DATA);
-  const cached = await cache.match(e.request, { ignoreSearch: true });
+  // One entry per path, query dropped: a ?trip= open must refresh the cached page, not store
+  // a copy of it under its own URL that a later open could be served and nothing refreshes
+  const url = new URL(e.request.url);
+  url.search = '';
+  const key = url.href;
+  const isData = url.pathname.endsWith(DATA);
+  const cached = await cache.match(key);
 
   const refresh = fetch(e.request, { cache: 'no-cache' }).then(async res => {
     if (res.ok) {
       if (isData && cached) {
         const [oldText, newText] = await Promise.all([cached.clone().text(), res.clone().text()]);
-        await cache.put(e.request, res.clone());
+        await cache.put(key, res.clone());
         if (oldText !== newText) notify();
       } else {
-        await cache.put(e.request, res.clone());
+        await cache.put(key, res.clone());
       }
     }
     return res;
