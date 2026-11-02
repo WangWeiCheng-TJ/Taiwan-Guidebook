@@ -196,30 +196,98 @@ def load_list(path: Path, required: list[str]) -> list[dict]:
     return entries
 
 
+def is_text(value) -> bool:
+    """A string with something in it."""
+    return isinstance(value, str) and bool(value.strip())
+
+
+def is_bilingual(value) -> bool:
+    """An {en, zh_TW} object whose two values are non-empty strings (the app calls string methods on them)."""
+    return isinstance(value, dict) and is_text(value.get("en")) and is_text(value.get("zh_TW"))
+
+
+def food_pick_problems(pick, seen: set) -> list[str]:
+    """What is wrong with one food pick (empty when it is fine). seen: ids already used in the city."""
+    if not isinstance(pick, dict):
+        return ["must be an object"]
+    problems = []
+    if not is_text(pick.get("id")):
+        problems.append("'id' must be a non-empty string")
+    elif pick["id"] in seen:
+        problems.append(f"duplicate id {pick['id']!r}")
+    if not is_text(pick.get("name")):
+        problems.append("'name' must be a non-empty string (the shop name as on Google Maps)")
+    if not (isinstance(pick.get("kind"), str) and pick["kind"] in FOOD_KINDS):
+        problems.append(f"'kind' {pick.get('kind')!r} is not one of {sorted(FOOD_KINDS)}")
+    if not isinstance(pick.get("local", False), bool):
+        problems.append("'local' must be true or false")
+    for key in ("dish", "hint"):  # the Ask AI prompt and the food sheet read .en and .zh_TW of both
+        if key in pick and not is_bilingual(pick[key]):
+            problems.append(f"'{key}' must be an object with non-empty 'en' and 'zh_TW' strings")
+    return problems
+
+
 def load_food() -> list[dict]:
-    """Owner's food picks, one file per city: data/food/<city>.json."""
+    """Owner's food picks, one file per city: data/food/<city>.json.
+
+    Checks the shape of each file; check_food_cities() checks the city names against the places.
+    """
     cities = []
+    seen_cities = {}
     paths = sorted(FOOD_DIR.glob("*.json"), key=lambda p: p.name) if FOOD_DIR.exists() else []
     for path in paths:
         with open(path, "r", encoding="utf-8") as f:
             city = json.load(f)
+        if not isinstance(city, dict):
+            raise BuildError(f"[INVALID] {path.name}: must contain one JSON object")
         for key in ("city_en", "city_zh", "picks"):
             if key not in city:
                 raise BuildError(f"[INVALID] {path.name}: missing {key}")
+        for key in ("city_en", "city_zh"):
+            if not is_text(city[key]):
+                raise BuildError(f"[INVALID] {path.name}: {key} must be a non-empty string")
+        if city["city_en"] in seen_cities:
+            raise BuildError(f"[INVALID] {path.name}: city_en {city['city_en']!r} is already used by {seen_cities[city['city_en']]}")
+        seen_cities[city["city_en"]] = path.name
+        if "local_label" in city and not is_bilingual(city["local_label"]):
+            raise BuildError(f"[INVALID] {path.name}: local_label must be an object with non-empty 'en' and 'zh_TW' strings")
+        if not isinstance(city["picks"], list):
+            raise BuildError(f"[INVALID] {path.name}: picks must be a list")
         seen = set()
         for pick in city["picks"]:
-            bad_dish = "dish" in pick and not (isinstance(pick["dish"], dict) and pick["dish"].get("en") and pick["dish"].get("zh_TW"))
-            bad_local = not isinstance(pick.get("local", False), bool)
-            if not pick.get("id") or not pick.get("name") or pick.get("kind") not in FOOD_KINDS or pick["id"] in seen or bad_local or bad_dish:
-                raise BuildError(f"[INVALID] {path.name}: bad pick {pick}")
+            problems = food_pick_problems(pick, seen)
+            if problems:
+                raise BuildError(f"[INVALID] {path.name}: bad pick {pick}: " + "; ".join(problems))
             seen.add(pick["id"])
         for dish in city.get("to_try", []):
-            d = dish.get("dish") or {}
-            if not dish.get("id") or not d.get("en") or not d.get("zh_TW") or dish["id"] in seen:
+            dish_id = dish.get("id") if isinstance(dish, dict) else None
+            if not is_text(dish_id) or not is_bilingual(dish.get("dish")) or dish_id in seen:
                 raise BuildError(f"[INVALID] {path.name}: bad to_try entry {dish}")
-            seen.add(dish["id"])
+            seen.add(dish_id)
         cities.append(city)
     return cities
+
+
+def check_food_cities(food: list[dict], attractions: list[dict]) -> None:
+    """Each food file names a city the places use, spelled the same way.
+
+    The app matches city_en as an exact string (Explore filter, Ask AI) and shows city_zh next to the
+    places' own, so "Taipei" in food next to "Taipei City" in the places would drop the picks silently.
+    Raises BuildError.
+    """
+    zh_by_en = {}
+    for place in attractions:
+        loc = place.get("location") or {}
+        if loc.get("city_en"):
+            zh_by_en.setdefault(loc["city_en"], set()).add(loc.get("city_zh"))
+    for city in food:
+        en, zh = city["city_en"], city["city_zh"]
+        if en not in zh_by_en:
+            raise BuildError(f"[INVALID] food {en!r}: no attraction has location.city_en {en!r} "
+                             f"(cities in data/attractions: {sorted(zh_by_en)})")
+        if zh not in zh_by_en[en]:
+            raise BuildError(f"[INVALID] food {en!r}: city_zh {zh!r} differs from the places' "
+                             f"{sorted(z for z in zh_by_en[en] if z)}")
 
 
 def content_version(content: dict) -> str:
@@ -278,7 +346,9 @@ def build_app_bundle(attractions: list[dict], previous, today: str) -> dict:
     """
     phrases = load_list(PHRASES_FILE, ["id", "category", "en", "zh_TW", "zhuyin", "pinyin"])
     tips = load_list(TIPS_FILE, ["id", "scope", "category", "title_en", "body_en"])
-    content = {"places": attractions, "phrases": phrases, "tips": tips, "food": load_food()}
+    food = load_food()
+    check_food_cities(food, attractions)
+    content = {"places": attractions, "phrases": phrases, "tips": tips, "food": food}
     version = content_version(content)
     previous = previous or {}
     unchanged = previous.get("version") == version and previous.get("generated_at")

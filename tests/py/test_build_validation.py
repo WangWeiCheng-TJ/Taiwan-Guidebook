@@ -110,6 +110,81 @@ class LoadFood(FoodCase):
                 self.load(good_city(to_try=to_try))
 
 
+class FoodTextFields(FoodCase):
+    """hint, local_label and dish are read as {en, zh_TW} by the food sheet and the Ask AI prompt."""
+
+    def test_hint_must_be_a_bilingual_object(self):
+        cases = {
+            "plain string": "Closes early when sold out.",
+            "only zh_TW": {"zh_TW": "售完提早打烊。"},
+            "only en": {"en": "Closes early."},
+            "empty en": {"en": " ", "zh_TW": "售完提早打烊。"},
+            "non-string value": {"en": ["Closes early."], "zh_TW": "售完提早打烊。"},
+            "null": None,
+        }
+        for label, hint in cases.items():
+            with self.subTest(label), self.assertRaises(BuildError):
+                self.load(good_city(picks=[self.pick(hint=hint)], to_try=[]))
+
+    def test_local_label_must_be_a_bilingual_object(self):
+        for label, value in {"plain string": "Tainan specialties", "only en": {"en": "Tainan specialties"}}.items():
+            with self.subTest(label), self.assertRaises(BuildError):
+                self.load(good_city(local_label=value))
+
+    def test_dish_values_must_be_strings(self):
+        with self.assertRaises(BuildError):
+            self.load(good_city(picks=[self.pick(dish={"en": 5, "zh_TW": "蚵嗲"})], to_try=[]))
+
+    def test_names_and_ids_must_be_strings(self):
+        for label, pick in {"numeric name": self.pick(name=7), "numeric id": self.pick(id=7),
+                            "blank name": self.pick(name="  "), "not an object": "店X"}.items():
+            with self.subTest(label), self.assertRaises(BuildError):
+                self.load(good_city(picks=[pick], to_try=[]))
+
+    def test_city_names_must_be_text(self):
+        for key in ("city_en", "city_zh"):
+            with self.subTest(key=key), self.assertRaises(BuildError):
+                self.load(good_city(**{key: ""}))
+
+    def test_a_city_is_defined_in_one_file_only(self):
+        write_json(self.dir / "a.json", good_city())
+        write_json(self.dir / "b.json", good_city(picks=[self.pick()], to_try=[]))
+        with self.assertRaisesRegex(BuildError, "already used"):
+            build_dataset.load_food()
+
+
+def place_in(city_en: str, city_zh: str) -> dict:
+    return {"id": "x", "location": {"city_en": city_en, "city_zh": city_zh}}
+
+
+class FoodCities(unittest.TestCase):
+    """The app matches food.city_en to place.location.city_en as exact strings."""
+
+    places = [place_in("Tainan City", "臺南市"), place_in("Taipei City", "臺北市"), place_in("Tainan City", "臺南市")]
+
+    def test_matching_cities_pass(self):
+        build_dataset.check_food_cities([good_city(), good_city(city_en="Taipei City", city_zh="臺北市")], self.places)
+        build_dataset.check_food_cities([], self.places)
+
+    def test_city_en_must_be_a_places_city(self):
+        with self.assertRaisesRegex(BuildError, "Taipei"):
+            build_dataset.check_food_cities([good_city(city_en="Taipei", city_zh="臺北市")], self.places)
+
+    def test_city_zh_must_be_the_places_spelling(self):
+        with self.assertRaisesRegex(BuildError, "city_zh"):
+            build_dataset.check_food_cities([good_city(city_zh="台南市")], self.places)
+
+    def test_the_real_data_passes(self):
+        dataset, bundle = build_dataset.compute_outputs()
+        build_dataset.check_food_cities(bundle["food"], dataset["attractions"])
+
+    def test_the_bundle_build_rejects_a_mismatch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_json(Path(tmp) / "taipei.json", good_city(city_en="Taipei", city_zh="臺北市"))
+            with mock.patch.object(build_dataset, "FOOD_DIR", Path(tmp)), self.assertRaises(BuildError):
+                build_dataset.build_app_bundle(self.places, None, "2000-01-01")
+
+
 class LoadList(unittest.TestCase):
     def test_missing_file_is_empty(self):
         with tempfile.TemporaryDirectory() as tmp:
