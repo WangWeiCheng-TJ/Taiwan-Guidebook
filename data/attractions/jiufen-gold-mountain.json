@@ -29,8 +29,8 @@
     "en": "From late Qing railway workers discovering placer gold in 1890 to becoming 'Asia's Gold Capital' during the Japanese era, this mist-shrouded mountain settlement now captivates global travelers with its vertical stairways, teahouse culture, and cinematic nostalgia."
   },
   "historical_narrative": {
-    "zh_TW": "『九份』之名源自清代此地原本僅有九戶人家，每次對外採買日常物資皆需均分『九份』。1890年（光緒十六年），劉銘傳修築臺北至基隆鐵路工人於基隆河下游發現沙金，隨即掀起淘金熱潮，沿河上溯發現九份小金瓜金脈。1895年日本統治臺灣後，將礦權劃分給藤田組與顏雲年創辦之『臺陽礦業』，引進現代化坑道爆破與浮選冶煉技術，金瓜石與九份產金量躍居亞洲之冠，贏得『東亞第一金都』與入夜不夜城『小香港』稱號。1970年代金礦開採殆盡後一度沉寂，直到侯孝賢導演以此為背景拍攝威尼斯影展金獅獎電影《悲情城市》，以獨特的多雨石階梯、紅燈籠老茶樓與無敵山海景致重新驚豔全球。",
-    "en": "Originally a sleepy camphor-farming hamlet of just nine households ('Jiu Fen' literally means 'Nine Portions'), the area was transformed overnight in 1890 when railway workers building the Taipei-Keelung line stumbled upon placer gold flakes. During Japanese colonial rule, industrial extraction by Tanaka and the Taiwanese Taiyang Mining Company yielded unprecedented gold and copper tonnage, elevating Jinguashi-Jiufen to the premier gold producer in East Asia. After mines depleted in the 1970s, the mountain town gained global fame when visionary film director Hou Hsiao-hsien filmed the Venice Golden Lion winner 'A City of Sadness' (1989) here, celebrating its atmospheric staircases, lantern-lit hillside teahouses, and cinematic coastal mist."
+    "zh_TW": "『九份』之名源自清代此地原本僅有九戶人家，每次對外採買日常物資皆需均分『九份』。1890年（光緒十六年），劉銘傳修築臺北至基隆鐵路工人於基隆河下游發現沙金，隨即掀起淘金熱潮，沿河上溯發現九份小金瓜金脈。1895年日本統治臺灣後，以基隆山為界將礦權劃分給藤田組（九份）與田中組（金瓜石）；九份的瑞芳礦山其後由顏雲年承租、1918年買下，1920年併入其『臺陽礦業』。這段期間引進現代化坑道爆破與浮選冶煉技術，金瓜石與九份產金量躍居亞洲之冠，贏得『東亞第一金都』與入夜不夜城『小香港』稱號。1970年代金礦開採殆盡後一度沉寂，直到侯孝賢導演以此為背景拍攝威尼斯影展金獅獎電影《悲情城市》，以獨特的多雨石階梯、紅燈籠老茶樓與無敵山海景致重新驚豔全球。",
+    "en": "Originally a sleepy camphor-farming hamlet of just nine households ('Jiu Fen' literally means 'Nine Portions'), the area was transformed overnight in 1890 when railway workers building the Taipei-Keelung line stumbled upon placer gold flakes. During Japanese colonial rule, industrial extraction by the Japanese firms Fujita-gumi (Jiufen) and Tanaka-gumi (Jinguashi), and later at Jiufen by Yen Yun-nien's Taiyang Mining Company, yielded unprecedented gold and copper tonnage, elevating Jinguashi-Jiufen to the premier gold producer in East Asia. After mines depleted in the 1970s, the mountain town gained global fame when visionary film director Hou Hsiao-hsien filmed the Venice Golden Lion winner 'A City of Sadness' (1989) here, celebrating its atmospheric staircases, lantern-lit hillside teahouses, and cinematic coastal mist."
   },
   "timeline": [
     {
@@ -42,14 +42,14 @@
     {
       "year_or_era": "1896",
       "era_category": "Japanese Colonial",
-      "event_zh": "日本政府頒布臺灣礦業條例，藤田組與田中組進駐現代化機械開採。",
-      "event_en": "Japanese mining conglomerates mechanized extraction, producing tons of pure gold."
+      "event_zh": "日本政府頒布臺灣鑛業規則，以基隆山為界，九份礦權歸藤田組、金瓜石礦權歸田中組，兩組進駐現代化機械開採。",
+      "event_en": "Under Taiwan's new mining rules, the rights were split at Keelung Mountain: Fujita-gumi took Jiufen and Tanaka-gumi took Jinguashi, bringing in mechanized mining."
     },
     {
       "year_or_era": "1914",
       "era_category": "Japanese Colonial",
-      "event_zh": "顏雲年向日商租賃九份礦區，奠定臺灣本土採礦龍頭『臺陽礦業』王國。",
-      "event_en": "Industrialist Yen Yun-nien founded Taiyang Mining, sharing wealth with local miners."
+      "event_zh": "顏雲年向日商藤田組承租整座瑞芳礦山（九份），以三級租包制轉租給其他採金者，奠定臺灣本土採礦龍頭『臺陽礦業』王國。",
+      "event_en": "Industrialist Yen Yun-nien leased Fujita-gumi's entire Ruifang mine at Jiufen and sublet its workings to other miners, laying the foundation of his Taiyang Mining empire."
     },
     {
       "year_or_era": "1971",
@@ -78,13 +78,13 @@
     "must_see_spots_en": [
       "Shuqi Road stone stairways illuminated by glowing red lanterns at twilight",
       "A-Mei Teahouse (famed for its nostalgic tiered wooden structure overlooking the sea)",
-      "Shengping Theater (Taiwan's earliest modern theater in mining history, built in 1934)",
+      "Shengping Theater (built in 1934)",
       "Jinguashi Gold Museum (touch a 220kg 99.9% pure solid gold bullion ingot)"
     ],
     "must_see_spots_zh": [
       "豎崎路陡峭階梯與傍晚點亮之紅燈籠",
       "阿妹茶樓與九份海景品茗時光",
-      "昇平戲院（1934年建造之北臺灣最早現代戲院）",
+      "昇平戲院（1934年建造）",
       "金瓜石黃金博物館（親手觸摸220公斤999純金大金磚與日式四連棟）"
     ],
     "recommended_duration_min": 180,
@@ -114,12 +114,12 @@
       },
       {
         "name": {
-          "en": "Shengping Theater (Taiwan's earliest modern theater in mining history, built in 1934)",
-          "zh_TW": "昇平戲院（1934年建造之北臺灣最早現代戲院）"
+          "en": "Shengping Theater (built in 1934)",
+          "zh_TW": "昇平戲院（1934年建造）"
         },
         "why": {
-          "en": "Built in 1934, this is northern Taiwan's earliest modern theater from the mining boom. It stands as a reminder of Jiufen's heyday as Asia's gold capital.",
-          "zh_TW": "建於1934年，是北臺灣最早的現代戲院，見證了九份在淘金全盛時期作為東亞金都的繁華歲月。"
+          "en": "Built in 1934 as the Shengping-za, its 600 seats once filled for films, Taiwanese opera and glove puppet shows. It stands as a reminder of Jiufen's heyday as Asia's gold capital.",
+          "zh_TW": "建於1934年，原名『昇平座』，全盛時期600個座位常告客滿，上演電影、歌仔戲與布袋戲，見證了九份在淘金全盛時期作為東亞金都的繁華歲月。"
         }
       },
       {
@@ -145,6 +145,14 @@
   "metadata": {
     "source": "New Taipei City Tourism and Travel Department & Gold Museum",
     "generated_by": "Taiwan-Guidebook Curatorial Team",
-    "last_updated": "2026-08-31"
+    "last_updated": "2026-11-03",
+    "sources": [
+      "https://www.gep-jp.ntpc.gov.tw/xmdoc/cont?xsmsid=0G274610119791317059",
+      "https://newtaipei.travel/zh-tw/attractions/detail/110024",
+      "https://newtaipei.travel/en/attractions/detail/112964",
+      "https://spectralcodex.com/datong-taipei-xinwutai-theater/",
+      "https://www.gep.ntpc.gov.tw/files/file_pool/1/0G252597130670114097/Ch03.pdf",
+      "https://www.gep.ntpc.gov.tw/files/file_pool/2/0J140397929203251304/%E6%98%87%E5%B9%B3%E6%88%B2%E9%99%A2%E6%AD%B7%E5%8F%B2%E8%AA%BF%E6%9F%A5%E7%A0%94%E7%A9%B6%E6%A1%88_%E8%AB%96%E8%BF%B0%E7%A8%BF.pdf"
+    ]
   }
 }
