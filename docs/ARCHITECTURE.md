@@ -35,6 +35,8 @@ Instead of feedback, each traveler keeps a short daily log (place or free text, 
 
 The prompt is copied to the clipboard and pasted into whatever AI they use (ChatGPT, Claude, Gemini). No API keys, no cost. The same idea covers any text in the app: select it and an "Ask AI" bar copies a short "what does this mean here?" prompt with its context.
 
+Photos work the same way: the app never handles the image. "About a photo" in Ask AI (and "Ask AI about the menu" on a food pick) copies a prompt for one kind of photo (menu, sign, departure board, ticket machine or form, food label) with the context the app knows (where, party size, the next stop of today's plan, the pick and its dish) and a list of exactly what to give back; the traveler attaches the photo in their AI chat. The app itself makes no claim about any food: it asks the AI to flag pork, beef, seafood, offal, blood and peanuts, and to say when it can't tell.
+
 Only summaries go into the area prompt. A full place entry is about 8-9 KB minified with both languages; pasting the whole database stops working at a few dozen places. Full detail for one place is a separate "Copy for AI" button on that place.
 
 ## App: offline PWA

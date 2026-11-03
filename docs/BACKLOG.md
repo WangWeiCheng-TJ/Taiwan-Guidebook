@@ -14,6 +14,7 @@ Built (on `main`; not hosted yet):
 - Food picks for Tainan, in Explore and Ask AI.
 - Select any text, ask AI what it means (explain-selection).
 - City picker when GPS isn't used.
+- Ask AI about a photo: menu, sign, departure board, ticket machine or form, food label; "Ask AI about the menu" on food pick and dish sheets.
 
 Planned (design in [ARCHITECTURE.md](ARCHITECTURE.md)):
 

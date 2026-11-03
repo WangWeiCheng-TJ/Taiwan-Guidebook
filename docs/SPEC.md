@@ -36,8 +36,8 @@ Claude writes the contract (JSDoc stub + tests in `tests/tasks/`), a worker agen
 
 | Module | Kind | Exports |
 |---|---|---|
-| `types.js` | types only | Shared shapes (`Place`, `Phrase`, `Tip`, `Guidebook`, `Pos`, `LogEntry`, `AskContext`, `Trip`, ...). Changing one is a contract change |
-| `util.js` | pure | `esc`, `clip`, `today`, `addDays`, `daysBetween`, `stars`, `titleCase` |
+| `types.js` | types only | Shared shapes (`Place`, `Phrase`, `Tip`, `Guidebook`, `Pos`, `LogEntry`, `AskContext`, `PhotoContext`, `PhotoShop`, `Trip`, ...). Changing one is a contract change |
+| `util.js` | pure | `esc`, `clip`, `today`, `nowTime` (local HH:MM), `addDays`, `daysBetween`, `stars`, `titleCase` |
 | `geo.js` | pure | `km`, `fmtKm`, `distanceTo`, `gpsDistance` (the distance shown: GPS only, never from a picked city), `sortByDistance`, `mapsLinks`, `osmEmbedUrl`, `osmLink` |
 | `data.js` | pure + fetch | `loadGuidebook`, `placeById`, `cities`, `districtsOf`, `cityCenter`, `foodFor`, `foodMapsLink` |
 | `storage.js` | side effect | `readJSON`, `writeJSON` (never throw) |
@@ -47,10 +47,10 @@ Claude writes the contract (JSDoc stub + tests in `tests/tasks/`), a worker agen
 | `phrases.js` | pure | `PHRASE_GROUPS` (Phrases tab tiles), `phrasesIn`, `phrasesForPlace`, `mainGroupForPlace` |
 | `party.js` | pure | Party size: `PARTY_KEY`, `PARTY_MIN`, `PARTY_MAX`, `clampParty`, `partyChosen` (stored = set by the traveler; the prompt names the party only then), `numberWord`, `withParty` |
 | `triplog.js` | pure | Personal log: `LOG_KEY`, `EXPORT_TYPE`, `emptyDraft`, `draftDate` (a draft date of "" follows today), `validateDraft`, `newId`, `makeEntry`, `removeEntry`, `exportPayload`, `mergeImport`, `firstDate`, `dayNumber`, `entryName`, `groupByDate`, `notesFor` |
-| `trip.js` | pure + fetch | Itineraries: `TRIP_KEY`, `parseTrip` (days sharing a date are merged), `resolveItem`, `tripDayFor`, `defaultTripDate`, `tripUrlFrom`, `loadTrip`, `tripBlock` |
+| `trip.js` | pure + fetch | Itineraries: `TRIP_KEY`, `parseTrip` (days sharing a date are merged), `resolveItem`, `tripDayFor`, `nextStop` (the stop after the last one whose time has passed), `defaultTripDate`, `tripUrlFrom`, `loadTrip`, `tripBlock` |
 | `aiplan.js` | pure | Paste an AI answer back as a trip: `planRequestSuffix`, `extractJsonBlock` (skips the request's own example, so a paste that holds the request still works), `planFromAiText` |
-| `prompt.js` | pure | Ask AI text: `areaOptions`, `areaLabel`, `areaPlaces`, `nearPlaces`, `defaultQuestion`, `placeBrief`, `logBlock`, `buildAskPrompt`, `buildPlacePrompt`, `buildExplainPrompt` (selected text), `foodBlock` |
-| `state.js` | state | The single `state` object (`partySet`: a party size is stored; `draft.date` "" follows today; `pasteText`: the paste box, kept across re-renders), `places()` |
+| `prompt.js` | pure | Ask AI text: `areaOptions`, `areaLabel`, `areaPlaces`, `nearPlaces`, `defaultQuestion`, `placeBrief`, `logBlock`, `buildAskPrompt`, `buildPlacePrompt`, `buildExplainPrompt` (selected text), `foodBlock`, `PHOTO_KINDS`, `buildPhotoPrompt` ("Ask AI about a photo": menu, sign, board, machine, label; the traveler attaches the photo in their AI chat) |
+| `state.js` | state | The single `state` object (`partySet`: a party size is stored; `draft.date` "" follows today; `pasteText`: the paste box, kept across re-renders; `ask.mode` `'photo'` with `ask.photo` (a `PHOTO_KINDS` id) and `ask.photoNote`, not stored), `places()` |
 | `nav.js` | pure | Routing and history decisions: `ROUTES`, `PARENT_TAB`, `parseRoute` (malformed escapes kept as typed; unknown routes are Explore), `activeTab`, `entryKey`, `withKey`, `scrollFor` (Back restores the scroll position), `entryOverlays`, `withOverlays`, `overlayChange` (Back closes the top sheet or big card), `focusSelector` (refocus a control after a re-render) |
 | `ui.js` | DOM | `toast` (#toast is a status live region that stays in the page), `copyText`, `showBig`, `hideBig`, `speak`, `openSheet`, `closeSheet` |
 | `main.js` | wiring | Router, event dispatch, persistence (a failed write shows `storageFail` instead of the success message), language switch, history (scroll and focus per entry; each sheet or big card has its own entry, so Back closes it; the page under it is `inert`), focus after re-renders, the select-text "Ask AI" bar, service worker registration |
@@ -59,22 +59,22 @@ Views (`app/js/views/`), all pure:
 
 | Module | Exports |
 |---|---|
-| `common.js` | `langTag` (`lang=""` value for text in the other language), `placeName`, `cityName`, `locationPanel` (GPS or city picker), `sayButton` |
+| `common.js` | `langTag` (`lang=""` value for text in the other language), `placeName`, `cityName`, `locationPanel` (GPS or city picker), `aiLinks` (ChatGPT, Claude, Gemini), `sayButton` |
 | `explore.js` | `renderExplore` |
 | `place.js` | `renderPlace`, `driverCard` |
 | `log.js` | `renderLog` |
 | `trip.js` | `renderTripSection` (top of My trip), `renderTodayCard` (top of Explore) |
-| `ask.js` | `askContext`, `questionText`, `renderAsk` |
+| `ask.js` | `askContext`, `photoContext` (a food sheet's shop leaves the tab's note out), `currentPrompt` (photo mode: `buildPhotoPrompt`, else `buildAskPrompt`), `questionText`, `renderAsk` (modes Near me now, Plan a day, About a photo) |
 | `reference.js` | `zhuyinBlock`, `renderPhrases`, `phraseCardFull`, `phraseCard`, `renderTips` |
-| `food.js` | `FOOD_KINDS`, `renderFoodSection`, `foodSheet`, `dishSheet`, `foodDriverCard`, `findPick` |
+| `food.js` | `FOOD_KINDS`, `renderFoodSection`, `foodSheet`, `dishSheet` (both with "Ask AI about the menu", `data-action="ask-menu"`), `foodDriverCard`, `findPick`, `menuShop` (the pick or dish as a `PhotoShop`), `menuPromptSheet` (the sheet after copying) |
 
 Python (`scripts/`): `build_dataset.py` (validate `data/`, write the bundle and the public dataset), `generate_spot.py` (Gemini draft of a place), `migrate_i18n.py` (schema v1 to per-language maps; for T4b, not run on `data/`).
 
-Routes: `#/explore`, `#/place/<id>`, `#/log`, `#/log/<placeId>` (prefills the form), `#/ask`, `#/phrases`, `#/phrases/<group>` (a `PHRASE_GROUPS` id), `#/tips`, `#/apps`, `#/learn`, `#/learn/<topicId>`. An unknown route shows Explore and becomes `#/explore`. Query: `?trip=<https URL>` loads a plan once.
+Routes: `#/explore`, `#/place/<id>`, `#/log`, `#/log/<placeId>` (prefills the form), `#/ask` (its mode, including About a photo, is state, not route), `#/phrases`, `#/phrases/<group>` (a `PHRASE_GROUPS` id), `#/tips`, `#/apps`, `#/learn`, `#/learn/<topicId>`. An unknown route shows Explore and becomes `#/explore`. Query: `?trip=<https URL>` loads a plan once.
 
 Accessibility rules for views: text in the language other than the UI's gets `lang="${langTag(...)}"`; labels (`aria-label`, `title`) come from `lang.js`; every control is reachable by keyboard (a hidden file input is opened by a `data-action` button).
 
-Storage keys: `tg.log.v1` (`LogEntry[]`), `tg.trip.v1` (`Trip`), `tg.lang.v1` (`'en' | 'zh_TW'`), `tg.party.v1` (number 1..10, written on the first tap of − or +; absent means not set: phrases use 2 and the Ask AI prompt leaves the party out).
+Storage keys: `tg.log.v1` (`LogEntry[]`), `tg.trip.v1` (`Trip`), `tg.lang.v1` (`'en' | 'zh_TW'`), `tg.party.v1` (number 1..10, written on the first tap of − or +; absent means not set: phrases use 2 and the Ask AI prompt leaves the party out). Not stored: the Ask AI mode, its photo preset and note.
 
 ## Tasks
 
