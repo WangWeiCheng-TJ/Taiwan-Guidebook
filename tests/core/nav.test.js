@@ -98,6 +98,17 @@ test('focusSelector: finds the same control after a re-render', () => {
   assert.equal(focusSelector(el({})), '');
 });
 
+test('focusSelector: a radio button is found by its value, or focus would jump to the first one of its group', () => {
+  const el = attrs => name => (name in attrs ? attrs[name] : null);
+  const radio = value => el({ type: 'radio', name: 'photo-kind', value, 'data-change': 'photo-kind' });
+  assert.equal(focusSelector(radio('board')), '[data-change="photo-kind"][name="photo-kind"][value="board"]');
+  assert.notEqual(focusSelector(radio('board')), focusSelector(radio('menu')));
+  assert.equal(focusSelector(el({ type: 'radio', name: 'x' })), '[name="x"]', 'no value attribute: nothing to add');
+  // A text field's value attribute is only the markup's default and changes with each render: never part of it
+  assert.equal(focusSelector(el({ type: 'text', name: 'note', value: 'abc' })), '[name="note"]');
+  assert.equal(focusSelector(el({ name: 'note', value: 'abc' })), '[name="note"]');
+});
+
 test('focusSelector: quotes, backslashes and line breaks in values stay inside the CSS string', () => {
   const sel = focusSelector(n => (n === 'data-id' ? 'a"b\\c\nd' : null));
   assert.equal(sel, '[data-id="a\\"b\\\\c\\a d"]');

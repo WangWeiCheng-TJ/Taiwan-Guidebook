@@ -128,5 +128,9 @@ export function focusSelector(get) {
     if (v !== null && v !== undefined) parts.push(`[${a}="${cssString(String(v))}"]`);
   }
   if (get('type') === 'submit') parts.push('[type="submit"]');
+  // The radios of one group share their name and data-change: only the value tells them apart (it is fixed
+  // in the markup, unlike the value of a text field, which the reader changes)
+  const value = get('type') === 'radio' ? get('value') : null;
+  if (value !== null && value !== undefined) parts.push(`[value="${cssString(String(value))}"]`);
   return parts.join('');
 }
