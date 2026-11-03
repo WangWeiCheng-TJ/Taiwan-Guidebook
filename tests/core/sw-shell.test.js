@@ -21,3 +21,13 @@ test('sw.js SHELL lists every app module, stylesheet, icon and the data bundle',
   const missing = needed.filter(f => !shell.has(f));
   assert.deepEqual(missing, [], `Add to SHELL in app/sw.js and bump CACHE: ${missing.join(', ')}`);
 });
+
+test('every SHELL entry exists under app/ (one 404 fails cache.addAll and with it the whole install)', () => {
+  const sw = readFileSync(join(appDir, 'sw.js'), 'utf8');
+  const list = sw.match(/const SHELL = \[([\s\S]*?)\];/)[1];
+  const entries = [...list.matchAll(/'([^']+)'/g)].map(m => m[1]).filter(u => u !== './');
+  const present = new Set(walk(appDir).map(f => relative(appDir, f).split('\\').join('/')));
+  const stale = entries.filter(u => !present.has(u));
+  assert.ok(entries.length > 10, 'SHELL list parsed');
+  assert.deepEqual(stale, [], `Remove from SHELL in app/sw.js and bump CACHE: ${stale.join(', ')}`);
+});
