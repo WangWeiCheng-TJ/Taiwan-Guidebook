@@ -7,7 +7,10 @@
   --accent: #0f5f5a;
   --accent-ink: #ffffff;
   --accent-soft: #e2efed;
-  --warm: #c9752a;
+  --warm: #c9752a;          /* fills and large glyphs (rating stars): 3:1 or better on --bg/--surface */
+  --warm-text: #9a5414;     /* warm small text on --bg, --surface or --accent-soft: 4.9:1 or better */
+  --warm-ink: #1d1b18;      /* text on a --warm fill: 5:1 in light, 8:1 in dark */
+  --line-strong: #857f74;   /* edge of a control with no text of its own (field, unselected star): 3:1 or better */
   --danger: #b3261e;
   --radius: 14px;
   --tabbar-h: 64px;
@@ -25,6 +28,8 @@
     --accent-ink: #0b1514;
     --accent-soft: #1f3431;
     --warm: #e9a35e;
+    --warm-text: #e9a35e;
+    --line-strong: #78827d;
     --danger: #f2877f;
   }
 }
@@ -54,7 +59,7 @@ a { color: var(--accent); }
   border-bottom: 1px solid var(--line);
 }
 .brand { font-weight: 700; text-decoration: none; color: var(--text); }
-.net { font-size: 13px; padding: 2px 10px; border-radius: 99px; background: var(--warm); color: #fff; }
+.net { font-size: 13px; padding: 2px 10px; border-radius: 99px; background: var(--warm); color: var(--warm-ink); }
 
 .view { max-width: 720px; margin: 0 auto; padding: 16px; }
 
@@ -114,7 +119,7 @@ h2 { font-size: 17px; margin: 24px 0 8px; }
 .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 
 .badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-.badge.warm { background: transparent; border: 1px solid var(--warm); color: var(--warm); }
+.badge.warm { background: transparent; border: 1px solid var(--warm-text); color: var(--warm-text); }
 
 .panel { background: var(--accent-soft); border-radius: var(--radius); padding: 12px 14px; margin: 0 0 14px; }
 
@@ -131,13 +136,18 @@ form.stack, .stack { display: grid; gap: 10px; }
 label { font-size: 14px; color: var(--muted); display: grid; gap: 4px; }
 input, select, textarea {
   font: inherit; font-size: 16px; color: var(--text); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 10px; padding: 9px 10px; width: 100%;
+  border: 1px solid var(--line-strong); border-radius: 10px; padding: 9px 10px; width: 100%;
 }
 textarea { resize: vertical; min-height: 72px; }
 
-.stars { display: flex; gap: 4px; }
-.stars button { appearance: none; border: 0; background: none; font-size: 26px; line-height: 1; padding: 2px; color: var(--line); cursor: pointer; }
-.stars button.on { color: var(--warm); }
+/* A rating star is a 44px target. Unselected: an outline in --line-strong; selected: filled --warm */
+.stars { display: flex; gap: 0; }
+.stars button {
+  appearance: none; border: 0; background: none; font-size: 26px; line-height: 1; padding: 0; cursor: pointer;
+  min-width: 44px; min-height: 44px;
+  color: transparent; -webkit-text-stroke: 1.5px var(--line-strong);
+}
+.stars button.on { color: var(--warm); -webkit-text-stroke-color: var(--warm); }
 .starline { color: var(--warm); letter-spacing: 1px; }
 
 .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 0 0 14px; }
@@ -231,8 +241,8 @@ ol.stops .time { display: inline-block; min-width: 3.2em; font-variant-numeric: 
 .zp { display: flex; flex-direction: column; align-items: center; min-width: 1.1em; }
 .zp b { font-size: 17px; font-weight: 500; line-height: 1.3; }
 .zp i { font-style: normal; font-size: 12.5px; color: var(--accent); line-height: 1.25; }
-.zp.tone b { color: var(--warm); }
-.zp.tone i { color: var(--warm); }
+.zp.tone b { color: var(--warm-text); }
+.zp.tone i { color: var(--warm-text); }
 .topbar .actions { display: flex; gap: 8px; align-items: center; }
 
 /* Phrase category tiles */
@@ -300,8 +310,8 @@ details.food { margin-top: 18px; }
 details.food summary { font-size: 17px; }
 .food-kind { margin: 14px 0 2px; font-weight: 700; color: var(--accent); font-size: 14px; }
 .big-name { font-size: 26px; font-weight: 700; line-height: 1.3; margin: 4px 0; }
-.food-kind.local { color: var(--warm); }
-.dish { font-size: 17px; font-weight: 600; color: var(--warm); }
+.food-kind.local { color: var(--warm-text); }
+.dish { font-size: 17px; font-weight: 600; color: var(--warm-text); }
 
 /* Place photo (online only) with its mandatory credit line */
 figure.photo { margin: 4px 0 14px; }
