@@ -52,8 +52,9 @@ Claude writes the contract (JSDoc stub + tests in `tests/tasks/`), a worker agen
 | `prompt.js` | pure | Ask AI text: `areaOptions`, `areaLabel`, `areaPlaces`, `nearPlaces`, `defaultQuestion`, `placeBrief`, `logBlock`, `buildAskPrompt`, `buildPlacePrompt`, `buildExplainPrompt` (selected text), `foodBlock`, `PHOTO_KINDS`, `buildPhotoPrompt` ("Ask AI about a photo": menu, sign, board, machine, label; the traveler attaches the photo in their AI chat) |
 | `state.js` | state | The single `state` object (`partySet`: a party size is stored; `draft.date` "" follows today; `pasteText`: the paste box, kept across re-renders; `ask.mode` `'photo'` with `ask.photo` (a `PHOTO_KINDS` id) and `ask.photoNote`, not stored), `places()` |
 | `nav.js` | pure | Routing and history decisions: `ROUTES`, `PARENT_TAB`, `parseRoute` (malformed escapes kept as typed; unknown routes are Explore), `activeTab`, `entryKey`, `withKey`, `scrollFor` (Back restores the scroll position), `entryOverlays`, `withOverlays`, `overlayChange` (Back closes the top sheet or big card), `focusSelector` (refocus a control after a re-render) |
-| `ui.js` | DOM | `toast` (#toast is a status live region that stays in the page), `copyText`, `showBig`, `hideBig`, `speak`, `openSheet`, `closeSheet` |
-| `main.js` | wiring | Router, event dispatch, persistence (a failed write shows `storageFail` instead of the success message), language switch, history (scroll and focus per entry; each sheet or big card has its own entry, so Back closes it; the page under it is `inert`), focus after re-renders, the select-text "Ask AI" bar, service worker registration |
+| `bigcard.js` | pure | The show card (`showBig`): `bigCardHtml` (white panel on a dimmed backdrop: 🔊, rotate-180° toggle and Close above the text), `SAY_RATE`, `SLOW_RATE`, `REPEAT_MS`, `sayRate` (a second 🔊 tap within a few seconds reads slowly), `wakeKeeper` (Screen Wake Lock, browser API passed in; a silent no-op where missing or refused) |
+| `ui.js` | DOM | `toast` (#toast is a status live region that stays in the page), `copyText`, `showBig` (`{ say }`: what 🔊 reads; keeps the screen awake until `hideBig`), `hideBig`, `wakeAgain` (on visibilitychange), `flipBig`, `sayOnCard`, `speak` (optional rate), `openSheet`, `closeSheet` |
+| `main.js` | wiring | Router, event dispatch, persistence (a failed write shows `storageFail` instead of the success message), language switch, history (scroll and focus per entry; each sheet or big card has its own entry, so Back closes it; the page under it is `inert`; the big card closes on Close, Escape, Back or its backdrop, never on a tap on its text), focus after re-renders, the select-text "Ask AI" bar, service worker registration |
 
 Views (`app/js/views/`), all pure:
 
@@ -61,12 +62,12 @@ Views (`app/js/views/`), all pure:
 |---|---|
 | `common.js` | `langTag` (`lang=""` value for text in the other language), `placeName`, `cityName`, `locationPanel` (GPS or city picker), `aiLinks` (ChatGPT, Claude, Gemini), `sayButton` |
 | `explore.js` | `renderExplore` |
-| `place.js` | `renderPlace`, `driverCard` |
+| `place.js` | `renderPlace`, `driverCard`, `driverSay` (what the driver card's 🔊 reads: name and Chinese address) |
 | `log.js` | `renderLog` |
 | `trip.js` | `renderTripSection` (top of My trip), `renderTodayCard` (top of Explore) |
 | `ask.js` | `askContext`, `photoContext` (a food sheet's shop leaves the tab's note out), `currentPrompt` (photo mode: `buildPhotoPrompt`, else `buildAskPrompt`), `questionText`, `renderAsk` (modes Near me now, Plan a day, About a photo) |
-| `reference.js` | `zhuyinBlock`, `renderPhrases`, `phraseCardFull`, `phraseCard`, `renderTips` |
-| `food.js` | `FOOD_KINDS`, `renderFoodSection`, `foodSheet`, `dishSheet` (both with "Ask AI about the menu", `data-action="ask-menu"`), `foodDriverCard`, `findPick`, `menuShop` (the pick or dish as a `PhotoShop`), `menuPromptSheet` (the sheet after copying) |
+| `reference.js` | `zhuyinBlock`, `renderPhrases`, `phraseCardFull`, `phraseCard`, `phraseSay` (the `tts` respelling, else the Chinese), `renderTips` |
+| `food.js` | `FOOD_KINDS`, `renderFoodSection`, `foodSheet`, `dishSheet` (both with "Ask AI about the menu", `data-action="ask-menu"`), `foodDriverCard`, `foodDriverSay` (shop name and city), `findPick`, `menuShop` (the pick or dish as a `PhotoShop`), `menuPromptSheet` (the sheet after copying) |
 
 Python (`scripts/`): `build_dataset.py` (validate `data/`, write the bundle and the public dataset), `generate_spot.py` (Gemini draft of a place), `migrate_i18n.py` (schema v1 to per-language maps; for T4b, not run on `data/`).
 
