@@ -82,6 +82,9 @@ function parseDay(day, errors, n) {
  * - unknown place ids are NOT errors here (resolveItem reports them)
  *
  * Output trip is a clean copy: only known fields kept, strings trimmed, days sorted by date.
+ * Days that share a date (an AI may split one day into "Morning" and "Afternoon") become one day:
+ * their items in input order, their distinct titles joined with " / ". So every date appears once
+ * and tripDayFor finds all of its stops.
  *
  * @param {unknown} raw
  * @returns {{ trip: Trip|null, errors: string[] }}  trip is null when errors is non-empty
@@ -107,8 +110,29 @@ export function parseTrip(raw) {
   }
 
   if (errors.length) return { trip: null, errors };
-  days.sort((a, b) => a.date.localeCompare(b.date));
-  return { trip: { title, days }, errors: [] };
+  return { trip: { title, days: mergeSameDate(days).sort((a, b) => a.date.localeCompare(b.date)) }, errors: [] };
+}
+
+/**
+ * One day per date: a later day with the same date adds its items to the first one, and its title
+ * when it differs. The input days are parseTrip's own clean copies, so they may be changed.
+ * @param {TripDay[]} days
+ * @returns {TripDay[]}
+ */
+function mergeSameDate(days) {
+  /** @type {Map<string, TripDay>} */
+  const byDate = new Map();
+  for (const day of days) {
+    const first = byDate.get(day.date);
+    if (!first) {
+      byDate.set(day.date, day);
+      continue;
+    }
+    first.items.push(...day.items);
+    const titles = first.title ? first.title.split(' / ') : [];
+    if (day.title && !titles.includes(day.title)) first.title = [...titles, day.title].join(' / ');
+  }
+  return [...byDate.values()];
 }
 
 /**
