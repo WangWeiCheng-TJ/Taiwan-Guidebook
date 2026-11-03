@@ -80,8 +80,8 @@
         {
           "year_or_era": "1788",
           "era_category": "Qing Dynasty",
-          "event_zh": "清乾隆帝平定林爽文事件後，賜御製馱碑贔屭石龜九座安置於赤崁樓。",
-          "event_en": "Emperor Qianlong bestowed nine imperial honorific turtle-base steles (Bixi) following the pacification of the Lin Shuangwen rebellion."
+          "event_zh": "清乾隆帝平定林爽文事件後，御製十座贔屭碑立於臺灣；其中九座原立於府城福康安、海蘭察生祠前的碑亭，約在今南門路郵局一帶。",
+          "event_en": "After the Lin Shuangwen rebellion was put down, Emperor Qianlong had ten imperial steles on bixi (turtle) bases made for Taiwan. Nine of them first stood in stele pavilions in front of the shrines to Fu Kang'an and Hai Lan-cha in Tainan, near today's Nanmen Road post office."
         },
         {
           "year_or_era": "1886",
@@ -94,6 +94,12 @@
           "era_category": "Japanese Colonial",
           "event_zh": "日本學者與地方當局拆除雜建，發掘並修復荷蘭原始城壁棱堡殘跡。",
           "event_en": "Japanese architectural historians excavated and conserved the original Dutch bastion masonry walls."
+        },
+        {
+          "year_or_era": "1961",
+          "era_category": "Modern Era",
+          "event_zh": "臺南市長辛文炳籌備鄭成功復臺三百週年慶典時，把1930年起安置在大南門甕城內的九座贔屭碑遷到赤崁樓，此後留在這裡至今。",
+          "event_en": "Preparing for the 300th anniversary of Koxinga's arrival, Tainan's mayor had the nine bixi steles moved to Chihkan Tower from the Great South Gate enclosure, where they had stood since 1930. They have stayed here since."
         }
       ],
       "cultural_significance": {
@@ -177,7 +183,11 @@
       "metadata": {
         "source": "Tainan City Cultural Affairs Bureau & Bureau of Cultural Heritage",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
-        "last_updated": "2026-08-31"
+        "last_updated": "2026-11-03",
+        "sources": [
+          "https://tmach-culture.tainan.gov.tw/warehouse/B4CB5CFC-64EE-4457-91C1-2C1D38F93F8C/7CFAAB5A-8D72-4BF0-8820-AFB89663D777.pdf",
+          "https://tainan400.tainan.gov.tw/upload/resource/files/O%E5%9C%8B%E4%B8%AD%E7%B5%84-%E5%8D%B3%E5%88%BB%E6%95%91%E6%8F%B4.pdf"
+        ]
       }
     },
     {
@@ -259,7 +269,7 @@
         ],
         "must_see_spots_zh": [
           "台北霞海城隍廟（月老靈驗享譽國際）",
-          "三進式長條老街屋天井文創茶館（如合勝堂、進益採買等）",
+          "三進式長條老街屋天井文創茶館",
           "永樂布業商場（全臺最大布料批發與旗袍手工藝中心）",
           "大稻埕碼頭（PIER5貨櫃市集與淡水河夕陽自行車道）"
         ],
@@ -281,7 +291,7 @@
           {
             "name": {
               "en": "Traditional 3-courtyard historic shophouses with hidden garden cafes and tea studios",
-              "zh_TW": "三進式長條老街屋天井文創茶館（如合勝堂、進益採買等）"
+              "zh_TW": "三進式長條老街屋天井文創茶館"
             },
             "why": {
               "en": "These elongated historic shophouses run deep with tranquil central courtyards once used for workshops and storage. Today, they house artisanal cafes and tea studios.",
@@ -321,7 +331,11 @@
       "metadata": {
         "source": "Taipei City Department of Cultural Affairs & URS Historic Preservation Project",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
-        "last_updated": "2026-08-31"
+        "last_updated": "2026-11-03",
+        "sources": [
+          "https://news.pts.org.tw/article/567217",
+          "https://supertaste.tvbs.com.tw/travel/313760"
+        ]
       }
     },
     {
@@ -565,15 +579,15 @@
         "etiquette_tips_en": "Wear comfortable walking shoes as the estate is built on a gentle slope with cobblestones. Photography is allowed, but flash is prohibited inside historic rooms. Preserved historical interior floors require shoe covers or adherence to designated pathways.",
         "etiquette_tips_zh": "園區包含坡道與石階步道，建議穿著舒適步行鞋。室內古蹟展廳禁止使用閃光燈，請依循導覽動線參觀。",
         "must_see_spots_en": [
-          "Dutch-era underground prison cells and defensive ramparts",
+          "British consular prison cells and defensive ramparts",
           "Victorian consular dining room with English fireplace and Minton floor tiles",
-          "17th-century muzzle-loading bronze and iron cannons placed in the courtyard",
+          "Row of 17th–19th-century muzzle-loading cannons beside the main fort and consular residence",
           "Hilltop panoramic lookout facing the Tamsui River mouth and Mount Guanyin"
         ],
         "must_see_spots_zh": [
-          "主堡荷蘭地牢與厚重穹頂防禦結構",
+          "主堡英國領事館地牢與厚重穹頂防禦結構",
           "英國領事官邸壁爐、僕役呼叫鈴與英國進口彩釉地磚",
-          "庭園中清代嘉慶年間鑄造的古砲群",
+          "主堡與領事官邸旁的一排17至19世紀古砲",
           "俯瞰淡水河口與觀音山日落的眺望平台"
         ],
         "recommended_duration_min": 90,
@@ -583,12 +597,12 @@
         "must_see": [
           {
             "name": {
-              "en": "Dutch-era underground prison cells and defensive ramparts",
-              "zh_TW": "主堡荷蘭地牢與厚重穹頂防禦結構"
+              "en": "British consular prison cells and defensive ramparts",
+              "zh_TW": "主堡英國領事館地牢與厚重穹頂防禦結構"
             },
             "why": {
-              "en": "Built by the Dutch in 1644 with stone walls up to 1.9 meters thick. It features bombproof barrel-vaulted ceilings and preserved underground prison cells.",
-              "zh_TW": "荷蘭人於1644年以石材建造，牆體厚達1.9公尺，設有防砲轟的拱頂與保留至今的地牢。"
+              "en": "The Dutch rebuilt the fort in 1644 as a square main fort, stone outside and brick inside, with barrel vaults on both floors. Under consular jurisdiction, the British consulate turned the ground floor into four jail cells with a prisoners' yard to hold foreigners who broke the law in Taiwan.",
+              "zh_TW": "荷蘭人於1644年重建此城，主堡外石內磚，內分上下兩層，採半圓筒形穹窿結構。英國租用為領事館後，將二樓改為辦公室，底樓設4間牢房及放封院，依領事裁判權暫時拘留在臺灣犯罪的外國人。"
             }
           },
           {
@@ -603,12 +617,12 @@
           },
           {
             "name": {
-              "en": "17th-century muzzle-loading bronze and iron cannons placed in the courtyard",
-              "zh_TW": "庭園中清代嘉慶年間鑄造的古砲群"
+              "en": "Row of 17th–19th-century muzzle-loading cannons beside the main fort and consular residence",
+              "zh_TW": "主堡與領事官邸旁的一排17至19世紀古砲"
             },
             "why": {
-              "en": "Displayed in the courtyard, these historic cannons reflect the fortress's long role in maritime coastal defense.",
-              "zh_TW": "陳列於庭園中的古砲群，見證了這座堡壘漫長的海防要塞歷史。"
+              "en": "A row of Chinese and Western muzzle-loading smooth-bore guns from the 17th to the 19th century. The cannon whose barrel is inscribed as cast in the summer of the 18th year of the Jiaqing reign (1813) for the Tamsui garrison was left by the Qing naval garrison stationed in Tamsui, a trace of the town's military past.",
+              "zh_TW": "一排17至19世紀的中西式前膛滑膛古砲。其中砲身鑄有「嘉慶十八年夏奉憲鑄造臺灣北路淡水營大砲」字樣的古砲，為清嘉慶年間駐防淡水的水師守備營所遺留，見證淡水軍事發展的過往。"
             }
           },
           {
@@ -634,7 +648,13 @@
       "metadata": {
         "source": "Bureau of Cultural Heritage, Ministry of Culture, Taiwan & Tamsui Historical Museum",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
-        "last_updated": "2026-08-31"
+        "last_updated": "2026-11-03",
+        "sources": [
+          "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0G253379909569761568/104110191-%E7%B4%85%E6%AF%9B%E5%9F%8E-A4%E4%B8%AD%E6%96%87%E6%91%BA%E9%A0%81-%E5%8F%8D%E9%9D%A2.pdf",
+          "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0M129647813827932684/Fort%20San%20Domingo%202022.pdf",
+          "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0M129646913653498027/%E6%AD%B7%E5%8F%B2%E6%B7%AC%E9%8D%8A%20%E9%A2%A8%E8%8F%AF%E7%9B%A1%E7%8F%BE%E2%80%93%E6%B7%A1%E6%B0%B4%E7%B4%85%E6%AF%9B%E5%9F%8E%E6%91%BA%E9%A0%81.pdf",
+          "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0P057364759406896328/%E5%B8%B6%E4%B8%8D%E8%B5%B0%E7%9A%84%E9%A4%A8%E8%97%8F-%E7%B4%85%E6%AF%9B%E5%9F%8E%E5%9C%92%E5%8D%80%E5%81%B5%E6%8E%A2%E7%AD%86%E8%A8%98.pdf"
+        ]
       }
     },
     {
@@ -668,8 +688,8 @@
         "en": "From late Qing railway workers discovering placer gold in 1890 to becoming 'Asia's Gold Capital' during the Japanese era, this mist-shrouded mountain settlement now captivates global travelers with its vertical stairways, teahouse culture, and cinematic nostalgia."
       },
       "historical_narrative": {
-        "zh_TW": "『九份』之名源自清代此地原本僅有九戶人家，每次對外採買日常物資皆需均分『九份』。1890年（光緒十六年），劉銘傳修築臺北至基隆鐵路工人於基隆河下游發現沙金，隨即掀起淘金熱潮，沿河上溯發現九份小金瓜金脈。1895年日本統治臺灣後，將礦權劃分給藤田組與顏雲年創辦之『臺陽礦業』，引進現代化坑道爆破與浮選冶煉技術，金瓜石與九份產金量躍居亞洲之冠，贏得『東亞第一金都』與入夜不夜城『小香港』稱號。1970年代金礦開採殆盡後一度沉寂，直到侯孝賢導演以此為背景拍攝威尼斯影展金獅獎電影《悲情城市》，以獨特的多雨石階梯、紅燈籠老茶樓與無敵山海景致重新驚豔全球。",
-        "en": "Originally a sleepy camphor-farming hamlet of just nine households ('Jiu Fen' literally means 'Nine Portions'), the area was transformed overnight in 1890 when railway workers building the Taipei-Keelung line stumbled upon placer gold flakes. During Japanese colonial rule, industrial extraction by Tanaka and the Taiwanese Taiyang Mining Company yielded unprecedented gold and copper tonnage, elevating Jinguashi-Jiufen to the premier gold producer in East Asia. After mines depleted in the 1970s, the mountain town gained global fame when visionary film director Hou Hsiao-hsien filmed the Venice Golden Lion winner 'A City of Sadness' (1989) here, celebrating its atmospheric staircases, lantern-lit hillside teahouses, and cinematic coastal mist."
+        "zh_TW": "『九份』之名源自清代此地原本僅有九戶人家，每次對外採買日常物資皆需均分『九份』。1890年（光緒十六年），劉銘傳修築臺北至基隆鐵路工人於基隆河下游發現沙金，隨即掀起淘金熱潮，沿河上溯發現九份小金瓜金脈。1895年日本統治臺灣後，以基隆山為界將礦權劃分給藤田組（九份）與田中組（金瓜石）；九份的瑞芳礦山其後由顏雲年承租、1918年買下，1920年併入其『臺陽礦業』。這段期間引進現代化坑道爆破與浮選冶煉技術，金瓜石與九份產金量躍居亞洲之冠，贏得『東亞第一金都』與入夜不夜城『小香港』稱號。1970年代金礦開採殆盡後一度沉寂，直到侯孝賢導演以此為背景拍攝威尼斯影展金獅獎電影《悲情城市》，以獨特的多雨石階梯、紅燈籠老茶樓與無敵山海景致重新驚豔全球。",
+        "en": "Originally a sleepy camphor-farming hamlet of just nine households ('Jiu Fen' literally means 'Nine Portions'), the area was transformed overnight in 1890 when railway workers building the Taipei-Keelung line stumbled upon placer gold flakes. During Japanese colonial rule, industrial extraction by the Japanese firms Fujita-gumi (Jiufen) and Tanaka-gumi (Jinguashi), and later at Jiufen by Yen Yun-nien's Taiyang Mining Company, yielded unprecedented gold and copper tonnage, elevating Jinguashi-Jiufen to the premier gold producer in East Asia. After mines depleted in the 1970s, the mountain town gained global fame when visionary film director Hou Hsiao-hsien filmed the Venice Golden Lion winner 'A City of Sadness' (1989) here, celebrating its atmospheric staircases, lantern-lit hillside teahouses, and cinematic coastal mist."
       },
       "timeline": [
         {
@@ -681,14 +701,14 @@
         {
           "year_or_era": "1896",
           "era_category": "Japanese Colonial",
-          "event_zh": "日本政府頒布臺灣礦業條例，藤田組與田中組進駐現代化機械開採。",
-          "event_en": "Japanese mining conglomerates mechanized extraction, producing tons of pure gold."
+          "event_zh": "日本政府頒布臺灣鑛業規則，以基隆山為界，九份礦權歸藤田組、金瓜石礦權歸田中組，兩組進駐現代化機械開採。",
+          "event_en": "Under Taiwan's new mining rules, the rights were split at Keelung Mountain: Fujita-gumi took Jiufen and Tanaka-gumi took Jinguashi, bringing in mechanized mining."
         },
         {
           "year_or_era": "1914",
           "era_category": "Japanese Colonial",
-          "event_zh": "顏雲年向日商租賃九份礦區，奠定臺灣本土採礦龍頭『臺陽礦業』王國。",
-          "event_en": "Industrialist Yen Yun-nien founded Taiyang Mining, sharing wealth with local miners."
+          "event_zh": "顏雲年向日商藤田組承租整座瑞芳礦山（九份），以三級租包制轉租給其他採金者，奠定臺灣本土採礦龍頭『臺陽礦業』王國。",
+          "event_en": "Industrialist Yen Yun-nien leased Fujita-gumi's entire Ruifang mine at Jiufen and sublet its workings to other miners, laying the foundation of his Taiyang Mining empire."
         },
         {
           "year_or_era": "1971",
@@ -717,13 +737,13 @@
         "must_see_spots_en": [
           "Shuqi Road stone stairways illuminated by glowing red lanterns at twilight",
           "A-Mei Teahouse (famed for its nostalgic tiered wooden structure overlooking the sea)",
-          "Shengping Theater (Taiwan's earliest modern theater in mining history, built in 1934)",
+          "Shengping Theater (built in 1934)",
           "Jinguashi Gold Museum (touch a 220kg 99.9% pure solid gold bullion ingot)"
         ],
         "must_see_spots_zh": [
           "豎崎路陡峭階梯與傍晚點亮之紅燈籠",
           "阿妹茶樓與九份海景品茗時光",
-          "昇平戲院（1934年建造之北臺灣最早現代戲院）",
+          "昇平戲院（1934年建造）",
           "金瓜石黃金博物館（親手觸摸220公斤999純金大金磚與日式四連棟）"
         ],
         "recommended_duration_min": 180,
@@ -753,12 +773,12 @@
           },
           {
             "name": {
-              "en": "Shengping Theater (Taiwan's earliest modern theater in mining history, built in 1934)",
-              "zh_TW": "昇平戲院（1934年建造之北臺灣最早現代戲院）"
+              "en": "Shengping Theater (built in 1934)",
+              "zh_TW": "昇平戲院（1934年建造）"
             },
             "why": {
-              "en": "Built in 1934, this is northern Taiwan's earliest modern theater from the mining boom. It stands as a reminder of Jiufen's heyday as Asia's gold capital.",
-              "zh_TW": "建於1934年，是北臺灣最早的現代戲院，見證了九份在淘金全盛時期作為東亞金都的繁華歲月。"
+              "en": "Built in 1934 as the Shengping-za, its 600 seats once filled for films, Taiwanese opera and glove puppet shows. It stands as a reminder of Jiufen's heyday as Asia's gold capital.",
+              "zh_TW": "建於1934年，原名『昇平座』，全盛時期600個座位常告客滿，上演電影、歌仔戲與布袋戲，見證了九份在淘金全盛時期作為東亞金都的繁華歲月。"
             }
           },
           {
@@ -784,7 +804,15 @@
       "metadata": {
         "source": "New Taipei City Tourism and Travel Department & Gold Museum",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
-        "last_updated": "2026-08-31"
+        "last_updated": "2026-11-03",
+        "sources": [
+          "https://www.gep-jp.ntpc.gov.tw/xmdoc/cont?xsmsid=0G274610119791317059",
+          "https://newtaipei.travel/zh-tw/attractions/detail/110024",
+          "https://newtaipei.travel/en/attractions/detail/112964",
+          "https://spectralcodex.com/datong-taipei-xinwutai-theater/",
+          "https://www.gep.ntpc.gov.tw/files/file_pool/1/0G252597130670114097/Ch03.pdf",
+          "https://www.gep.ntpc.gov.tw/files/file_pool/2/0J140397929203251304/%E6%98%87%E5%B9%B3%E6%88%B2%E9%99%A2%E6%AD%B7%E5%8F%B2%E8%AA%BF%E6%9F%A5%E7%A0%94%E7%A9%B6%E6%A1%88_%E8%AB%96%E8%BF%B0%E7%A8%BF.pdf"
+        ]
       }
     },
     {
@@ -798,8 +826,8 @@
         "city_en": "Changhua County",
         "district_zh": "鹿港鎮",
         "district_en": "Lukang Township",
-        "address_zh": "彰化縣鹿港鎮金門街109號",
-        "address_en": "No. 109, Jinmen St., Lukang Township, Changhua County",
+        "address_zh": "彰化縣鹿港鎮金門街81號",
+        "address_en": "No. 81, Jinmen St., Lukang Township, Changhua County",
         "coordinates": {
           "lat": 24.0531,
           "lng": 120.4354
@@ -823,10 +851,10 @@
       },
       "timeline": [
         {
-          "year_or_era": "1653",
-          "era_category": "Early Qing",
-          "event_zh": "泉州僧侶肇善禪師迎奉觀音大士神像至鹿港大有街創建草創小廟。",
-          "event_en": "Monk Zhaoshan brought Guanyin statues from Mount Putuo to found an early shrine."
+          "year_or_era": "1646–1661",
+          "era_category": "Late Ming",
+          "event_zh": "相傳明永曆年間，泉州移民迎請觀音菩薩，於鹿港舊河道邊（今大有街一帶）結廬為寺；此說無史料可考。",
+          "event_en": "By tradition, settlers from Quanzhou brought an image of Guanyin and built a simple shrine beside the old river channel (today's Dayou Street) during the Ming Yongli era; no records confirm the date."
         },
         {
           "year_or_era": "1786",
@@ -928,7 +956,15 @@
       "metadata": {
         "source": "Lukang Longshan Temple Foundation & Bureau of Cultural Heritage",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
-        "last_updated": "2026-08-31"
+        "last_updated": "2026-11-03",
+        "sources": [
+          "https://www.taiwan.net.tw/m1.aspx?id=2156&sno=0001016",
+          "https://view.boch.gov.tw/NationalHistorical/itemspage.aspx?id=52",
+          "https://tourism.chcg.gov.tw/AttractionsContent.aspx?id=91&chk=fb6ba20e-68ce-4ef8-80ac-dd3693ecf7d0",
+          "https://www.lungshan-temple.org.tw/index.php?nav=8",
+          "https://taiwangods.moi.gov.tw/html/cultural/3_0011.aspx?i=10",
+          "https://city.gvm.com.tw/article/86673"
+        ]
       }
     },
     {
@@ -1022,8 +1058,8 @@
           "三層樓古典文昌閣與泮池古樹庭園"
         ],
         "recommended_duration_min": 60,
-        "transportation_en": "Take Tainan City Bus No. 2, 88, or Taiwan Tourist Shuttle 99 to 'Confucius Temple' stop, or take an easy 12-minute walk from Hayashi Department Store / National Museum of Taiwan Literature.",
-        "transportation_zh": "搭乘大台南公車2號、88號至『孔廟』站下車；或從國立臺灣文學館/林百貨步行約5分鐘。",
+        "transportation_en": "Take Tainan City Bus 102, 25 or 902 to the 'Confucius Temple' stop (孔廟(臺灣文學館、臺南市美術館1館)), about 130 m from the temple. Taiwan Tourist Shuttle 98 (Fucheng-Taijiang Line) also passes the temple. It is a short walk from Hayashi Department Store / National Museum of Taiwan Literature.",
+        "transportation_zh": "搭乘大臺南公車102、25、902號至『孔廟(臺灣文學館、臺南市美術館1館)』站下車（距孔廟直線約130公尺）；台灣好行98府城台江線亦行經孔廟。從國立臺灣文學館/林百貨步行不遠。",
         "best_time_to_visit": "Early morning (8:30 AM - 10:30 AM) when the tree-shaded courtyards are peaceful and illuminated by soft sunlight.",
         "must_see": [
           {
@@ -1079,7 +1115,12 @@
       "metadata": {
         "source": "Tainan Confucius Temple Foundation & Bureau of Cultural Heritage",
         "generated_by": "Taiwan-Guidebook Curatorial Team",
-        "last_updated": "2026-08-31"
+        "last_updated": "2026-11-03",
+        "sources": [
+          "https://www.nmtl.gov.tw/cp.aspx?n=3800",
+          "https://www.taiwan.net.tw/m1.aspx?id=9638&sNo=0001016",
+          "https://www.taiwantrip.com.tw/Frontend/Route/Select_p?RouteID=R0117"
+        ]
       }
     },
     {
