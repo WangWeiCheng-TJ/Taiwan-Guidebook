@@ -50,8 +50,8 @@
     {
       "year_or_era": "1788",
       "era_category": "Qing Dynasty",
-      "event_zh": "清乾隆帝平定林爽文事件後，賜御製馱碑贔屭石龜九座安置於赤崁樓。",
-      "event_en": "Emperor Qianlong bestowed nine imperial honorific turtle-base steles (Bixi) following the pacification of the Lin Shuangwen rebellion."
+      "event_zh": "清乾隆帝平定林爽文事件後，御製十座贔屭碑立於臺灣；其中九座原立於府城福康安、海蘭察生祠前的碑亭，約在今南門路郵局一帶。",
+      "event_en": "After the Lin Shuangwen rebellion was put down, Emperor Qianlong had ten imperial steles on bixi (turtle) bases made for Taiwan. Nine of them first stood in stele pavilions in front of the shrines to Fu Kang'an and Hai Lan-cha in Tainan, near today's Nanmen Road post office."
     },
     {
       "year_or_era": "1886",
@@ -64,6 +64,12 @@
       "era_category": "Japanese Colonial",
       "event_zh": "日本學者與地方當局拆除雜建，發掘並修復荷蘭原始城壁棱堡殘跡。",
       "event_en": "Japanese architectural historians excavated and conserved the original Dutch bastion masonry walls."
+    },
+    {
+      "year_or_era": "1961",
+      "era_category": "Modern Era",
+      "event_zh": "臺南市長辛文炳籌備鄭成功復臺三百週年慶典時，把1930年起安置在大南門甕城內的九座贔屭碑遷到赤崁樓，此後留在這裡至今。",
+      "event_en": "Preparing for the 300th anniversary of Koxinga's arrival, Tainan's mayor had the nine bixi steles moved to Chihkan Tower from the Great South Gate enclosure, where they had stood since 1930. They have stayed here since."
     }
   ],
   "cultural_significance": {
@@ -147,6 +153,10 @@
   "metadata": {
     "source": "Tainan City Cultural Affairs Bureau & Bureau of Cultural Heritage",
     "generated_by": "Taiwan-Guidebook Curatorial Team",
-    "last_updated": "2026-08-31"
+    "last_updated": "2026-11-03",
+    "sources": [
+      "https://tmach-culture.tainan.gov.tw/warehouse/B4CB5CFC-64EE-4457-91C1-2C1D38F93F8C/7CFAAB5A-8D72-4BF0-8820-AFB89663D777.pdf",
+      "https://tainan400.tainan.gov.tw/upload/resource/files/O%E5%9C%8B%E4%B8%AD%E7%B5%84-%E5%8D%B3%E5%88%BB%E6%95%91%E6%8F%B4.pdf"
+    ]
   }
 }
