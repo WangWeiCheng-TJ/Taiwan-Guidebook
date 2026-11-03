@@ -75,6 +75,8 @@ Routes: `#/explore`, `#/place/<id>`, `#/log`, `#/log/<placeId>` (prefills the fo
 
 Accessibility rules for views: text in the language other than the UI's gets `lang="${langTag(...)}"`; labels (`aria-label`, `title`) come from `lang.js`; every control is reachable by keyboard (a hidden file input is opened by a `data-action` button).
 
+Style rules for `app/app.css` (`tests/core/css.test.js` reads the stylesheet and enforces them): colours are tokens defined for light and dark, and any text token must reach AA (4.5:1) on `--bg`, `--surface` and `--accent-soft` (`--warm` is for fills and big glyphs only: small warm text uses `--warm-text`, text on a `--warm` fill uses `--warm-ink`); the edge of a control with no text of its own (field, unselected star) uses `--line-strong` (3:1); taps are 44px (chips and the map row 40px; the 🔊 button looks 30px but has an invisible 44px ring); free text wraps with `overflow-wrap: anywhere` (set on `.view` and `.sheet-body`); no rule may target a class that nothing in `app/js/` or `index.html` emits.
+
 Storage keys: `tg.log.v1` (`LogEntry[]`), `tg.trip.v1` (`Trip`), `tg.lang.v1` (`'en' | 'zh_TW'`), `tg.party.v1` (number 1..10, written on the first tap of − or +; absent means not set: phrases use 2 and the Ask AI prompt leaves the party out). Not stored: the Ask AI mode, its photo preset and note.
 
 ## Tasks
