@@ -4,7 +4,7 @@ import { readJSON } from './storage.js';
 import { LOG_KEY, emptyDraft } from './triplog.js';
 import { TRIP_KEY, parseTrip } from './trip.js';
 import { LANG_KEY, initialLang } from './lang.js';
-import { PARTY_KEY, clampParty } from './party.js';
+import { PARTY_KEY, clampParty, partyChosen } from './party.js';
 
 /** @typedef {import('./types.js').Guidebook} Guidebook */
 /** @typedef {import('./types.js').Pos} Pos */
@@ -19,6 +19,8 @@ import { PARTY_KEY, clampParty } from './party.js';
  * @property {LogEntry[]} log        persisted under LOG_KEY
  * @property {import('./types.js').Trip|null} trip  persisted under TRIP_KEY
  * @property {number} party        people traveling together, PARTY_MIN..PARTY_MAX; persisted under PARTY_KEY
+ * @property {boolean} partySet     the traveler has set party (it is in storage); until then phrases use the
+ *                                  default 2 and the Ask AI prompt leaves the party out
  * @property {boolean} pasteOpen     My trip: show the "paste AI answer" box even when a plan exists
  * @property {string|null} tripDate  My trip: the plan day the user picked; null = defaultTripDate()
  * @property {string} exploreCity    "all" or a city_en
@@ -28,6 +30,8 @@ import { PARTY_KEY, clampParty } from './party.js';
  *           question null = not edited, follow defaultQuestion()
  */
 
+const storedParty = readJSON(PARTY_KEY, null);
+
 /** @type {AppState} */
 export const state = {
   lang: initialLang(readJSON(LANG_KEY, null), typeof navigator === 'undefined' ? '' : navigator.language),
@@ -35,7 +39,8 @@ export const state = {
   pos: null,
   log: readJSON(LOG_KEY, []),
   trip: parseTrip(readJSON(TRIP_KEY, null)).trip, // re-validated: storage may hold an old or damaged plan
-  party: clampParty(readJSON(PARTY_KEY, 2)),
+  party: clampParty(storedParty),
+  partySet: partyChosen(storedParty),
   pasteOpen: false,
   tripDate: null,
   exploreCity: 'all',

@@ -29,6 +29,17 @@ export function clampParty(x) {
 }
 
 /**
+ * Whether a stored party size is the traveler's own choice. setParty writes a number the first time they
+ * tap − or +; nothing stored (or damaged storage) means they never set it. Phrases still use the default 2
+ * then, but the Ask AI prompt says nothing about the party rather than telling the AI "We are 2 people".
+ * @param {unknown} stored  readJSON(PARTY_KEY, null)
+ * @returns {boolean}
+ */
+export function partyChosen(stored) {
+  return typeof stored === 'number' && Number.isFinite(stored);
+}
+
+/**
  * English word for 1..10 ("one".."ten"); other numbers as digits.
  * @param {number} n
  * @returns {string}

@@ -91,10 +91,12 @@ function setTrip(trip) {
 
 /**
  * Change the party size (clamped), persist it and re-render: phrases and the Ask AI prompt follow it.
+ * From now on the prompt names the party (partySet).
  * @param {number} n
  */
 function setParty(n) {
   state.party = clampParty(n);
+  state.partySet = true;
   if (!writeJSON(PARTY_KEY, state.party)) toast(tr(state.lang, 'storageFail'));
   render();
 }

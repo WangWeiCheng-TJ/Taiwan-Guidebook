@@ -9,12 +9,14 @@ import { partyControl } from './reference.js';
 
 /**
  * Collect the AskContext for buildAskPrompt from app state.
+ * party is null until the traveler has set it (s.partySet), so a fresh install does not tell the AI
+ * "We are 2 people" for someone traveling alone.
  * @param {import('../state.js').AppState} s
  * @returns {import('../types.js').AskContext}
  */
 export function askContext(s) {
   return { ...s.ask, pos: s.pos, log: s.log, places: places(), today: today(), trip: s.trip, lang: s.lang,
-    party: s.party, food: foodFor(s.data?.food, askCity(s)) };
+    party: s.partySet ? s.party : null, food: foodFor(s.data?.food, askCity(s)) };
 }
 
 /**
