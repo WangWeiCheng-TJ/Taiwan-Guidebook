@@ -83,15 +83,15 @@
     "etiquette_tips_en": "Wear comfortable walking shoes as the estate is built on a gentle slope with cobblestones. Photography is allowed, but flash is prohibited inside historic rooms. Preserved historical interior floors require shoe covers or adherence to designated pathways.",
     "etiquette_tips_zh": "園區包含坡道與石階步道，建議穿著舒適步行鞋。室內古蹟展廳禁止使用閃光燈，請依循導覽動線參觀。",
     "must_see_spots_en": [
-      "Dutch-era underground prison cells and defensive ramparts",
+      "British consular prison cells and defensive ramparts",
       "Victorian consular dining room with English fireplace and Minton floor tiles",
-      "17th-century muzzle-loading bronze and iron cannons placed in the courtyard",
+      "Row of 17th–19th-century muzzle-loading cannons beside the main fort and consular residence",
       "Hilltop panoramic lookout facing the Tamsui River mouth and Mount Guanyin"
     ],
     "must_see_spots_zh": [
-      "主堡荷蘭地牢與厚重穹頂防禦結構",
+      "主堡英國領事館地牢與厚重穹頂防禦結構",
       "英國領事官邸壁爐、僕役呼叫鈴與英國進口彩釉地磚",
-      "庭園中清代嘉慶年間鑄造的古砲群",
+      "主堡與領事官邸旁的一排17至19世紀古砲",
       "俯瞰淡水河口與觀音山日落的眺望平台"
     ],
     "recommended_duration_min": 90,
@@ -101,12 +101,12 @@
     "must_see": [
       {
         "name": {
-          "en": "Dutch-era underground prison cells and defensive ramparts",
-          "zh_TW": "主堡荷蘭地牢與厚重穹頂防禦結構"
+          "en": "British consular prison cells and defensive ramparts",
+          "zh_TW": "主堡英國領事館地牢與厚重穹頂防禦結構"
         },
         "why": {
-          "en": "Built by the Dutch in 1644 with stone walls up to 1.9 meters thick. It features bombproof barrel-vaulted ceilings and preserved underground prison cells.",
-          "zh_TW": "荷蘭人於1644年以石材建造，牆體厚達1.9公尺，設有防砲轟的拱頂與保留至今的地牢。"
+          "en": "The Dutch rebuilt the fort in 1644 as a square main fort, stone outside and brick inside, with barrel vaults on both floors. Under consular jurisdiction, the British consulate turned the ground floor into four jail cells with a prisoners' yard to hold foreigners who broke the law in Taiwan.",
+          "zh_TW": "荷蘭人於1644年重建此城，主堡外石內磚，內分上下兩層，採半圓筒形穹窿結構。英國租用為領事館後，將二樓改為辦公室，底樓設4間牢房及放封院，依領事裁判權暫時拘留在臺灣犯罪的外國人。"
         }
       },
       {
@@ -121,12 +121,12 @@
       },
       {
         "name": {
-          "en": "17th-century muzzle-loading bronze and iron cannons placed in the courtyard",
-          "zh_TW": "庭園中清代嘉慶年間鑄造的古砲群"
+          "en": "Row of 17th–19th-century muzzle-loading cannons beside the main fort and consular residence",
+          "zh_TW": "主堡與領事官邸旁的一排17至19世紀古砲"
         },
         "why": {
-          "en": "Displayed in the courtyard, these historic cannons reflect the fortress's long role in maritime coastal defense.",
-          "zh_TW": "陳列於庭園中的古砲群，見證了這座堡壘漫長的海防要塞歷史。"
+          "en": "A row of Chinese and Western muzzle-loading smooth-bore guns from the 17th to the 19th century. The cannon whose barrel is inscribed as cast in the summer of the 18th year of the Jiaqing reign (1813) for the Tamsui garrison was left by the Qing naval garrison stationed in Tamsui, a trace of the town's military past.",
+          "zh_TW": "一排17至19世紀的中西式前膛滑膛古砲。其中砲身鑄有「嘉慶十八年夏奉憲鑄造臺灣北路淡水營大砲」字樣的古砲，為清嘉慶年間駐防淡水的水師守備營所遺留，見證淡水軍事發展的過往。"
         }
       },
       {
@@ -152,6 +152,12 @@
   "metadata": {
     "source": "Bureau of Cultural Heritage, Ministry of Culture, Taiwan & Tamsui Historical Museum",
     "generated_by": "Taiwan-Guidebook Curatorial Team",
-    "last_updated": "2026-08-31"
+    "last_updated": "2026-11-03",
+    "sources": [
+      "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0G253379909569761568/104110191-%E7%B4%85%E6%AF%9B%E5%9F%8E-A4%E4%B8%AD%E6%96%87%E6%91%BA%E9%A0%81-%E5%8F%8D%E9%9D%A2.pdf",
+      "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0M129647813827932684/Fort%20San%20Domingo%202022.pdf",
+      "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0M129646913653498027/%E6%AD%B7%E5%8F%B2%E6%B7%AC%E9%8D%8A%20%E9%A2%A8%E8%8F%AF%E7%9B%A1%E7%8F%BE%E2%80%93%E6%B7%A1%E6%B0%B4%E7%B4%85%E6%AF%9B%E5%9F%8E%E6%91%BA%E9%A0%81.pdf",
+      "https://www.tshs.ntpc.gov.tw/files/file_pool/1/0P057364759406896328/%E5%B8%B6%E4%B8%8D%E8%B5%B0%E7%9A%84%E9%A4%A8%E8%97%8F-%E7%B4%85%E6%AF%9B%E5%9F%8E%E5%9C%92%E5%8D%80%E5%81%B5%E6%8E%A2%E7%AD%86%E8%A8%98.pdf"
+    ]
   }
 }
