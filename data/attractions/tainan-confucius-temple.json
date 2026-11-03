@@ -89,8 +89,8 @@
       "三層樓古典文昌閣與泮池古樹庭園"
     ],
     "recommended_duration_min": 60,
-    "transportation_en": "Take Tainan City Bus No. 2, 88, or Taiwan Tourist Shuttle 99 to 'Confucius Temple' stop, or take an easy 12-minute walk from Hayashi Department Store / National Museum of Taiwan Literature.",
-    "transportation_zh": "搭乘大台南公車2號、88號至『孔廟』站下車；或從國立臺灣文學館/林百貨步行約5分鐘。",
+    "transportation_en": "Take Tainan City Bus 102, 25 or 902 to the 'Confucius Temple' stop (孔廟(臺灣文學館、臺南市美術館1館)), about 130 m from the temple. Taiwan Tourist Shuttle 98 (Fucheng-Taijiang Line) also passes the temple. It is a short walk from Hayashi Department Store / National Museum of Taiwan Literature.",
+    "transportation_zh": "搭乘大臺南公車102、25、902號至『孔廟(臺灣文學館、臺南市美術館1館)』站下車（距孔廟直線約130公尺）；台灣好行98府城台江線亦行經孔廟。從國立臺灣文學館/林百貨步行不遠。",
     "best_time_to_visit": "Early morning (8:30 AM - 10:30 AM) when the tree-shaded courtyards are peaceful and illuminated by soft sunlight.",
     "must_see": [
       {
@@ -146,6 +146,11 @@
   "metadata": {
     "source": "Tainan Confucius Temple Foundation & Bureau of Cultural Heritage",
     "generated_by": "Taiwan-Guidebook Curatorial Team",
-    "last_updated": "2026-08-31"
+    "last_updated": "2026-11-03",
+    "sources": [
+      "https://www.nmtl.gov.tw/cp.aspx?n=3800",
+      "https://www.taiwan.net.tw/m1.aspx?id=9638&sNo=0001016",
+      "https://www.taiwantrip.com.tw/Frontend/Route/Select_p?RouteID=R0117"
+    ]
   }
 }
