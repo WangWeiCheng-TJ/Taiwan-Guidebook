@@ -21,7 +21,7 @@ import { renderApps } from './views/apps.js';
 import { renderLearn } from './views/learn.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
-import { foodSheet, findPick, dishSheet } from './views/food.js';
+import { foodSheet, findPick, dishSheet, foodDriverCard } from './views/food.js';
 import { foodFor } from './data.js';
 
 const view = document.getElementById('view');
@@ -211,7 +211,7 @@ const actions = {
   },
   'food-driver': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
-    if (f) showBig(`<div class="big">${esc(f.pick.name)}</div><div class="mid">${esc(f.city.city_zh)}</div><div class="mid">請帶我到這裡，謝謝。</div><div class="hint">"Please take me here, thank you."</div>`);
+    if (f) showBig(foodDriverCard(f.city, f.pick));
   },
   city: el => { state.exploreCity = el.dataset.city; render(); },
   driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
@@ -237,7 +237,10 @@ const actions = {
   star: el => {
     const n = Number(el.dataset.n);
     state.draft.stars = state.draft.stars === n ? 0 : n;
-    view.querySelectorAll('.stars button').forEach(b => b.classList.toggle('on', Number(b.dataset.n) <= state.draft.stars));
+    view.querySelectorAll('.stars button').forEach(b => {
+      b.classList.toggle('on', Number(b.dataset.n) <= state.draft.stars);
+      b.setAttribute('aria-pressed', String(Number(b.dataset.n) === state.draft.stars));
+    });
   },
   'delete-entry': el => {
     if (!confirm(tr(state.lang, 'deleteNote'))) return;
@@ -315,7 +318,9 @@ function renderChrome() {
   document.documentElement.lang = L === 'zh_TW' ? 'zh-Hant-TW' : 'en';
   document.getElementById('brand').textContent = tr(L, 'brand');
   document.getElementById('net-status').textContent = tr(L, 'offline');
-  document.getElementById('lang-toggle').textContent = tr(L, 'switchTo');
+  const toggle = document.getElementById('lang-toggle');
+  toggle.textContent = tr(L, 'switchTo');
+  toggle.setAttribute('aria-label', tr(L, 'switchLabel'));
   document.querySelectorAll('.tabbar a').forEach(a => {
     a.querySelector('[data-label]').textContent = tr(L, `tab.${a.dataset.tab}`);
   });

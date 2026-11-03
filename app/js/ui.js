@@ -45,13 +45,15 @@ export async function copyText(text) {
 
 /**
  * Full-screen high-contrast card for showing text to a driver or shopkeeper.
- * Tapping anywhere closes it (wired in main.js). Button and hint follow the UI language at open time.
+ * Tapping anywhere closes it (wired in main.js). Button, hint and the dialog's accessible name follow the
+ * UI language at open time.
  * @param {string} html  trusted markup; callers must esc() any data inside
  * @returns {void}
  */
 export function showBig(html) {
   const el = document.getElementById('bigcard');
-  el.innerHTML = `<button class="btn close">${tr(state.lang, 'close')}</button>${html}<div class="hint">${tr(state.lang, 'tapClose')}</div>`;
+  el.setAttribute('aria-label', tr(state.lang, 'bigCard'));
+  el.innerHTML = `<button class="btn close" type="button">${tr(state.lang, 'close')}</button>${html}<div class="hint">${tr(state.lang, 'tapClose')}</div>`;
   el.hidden = false;
 }
 
@@ -89,6 +91,7 @@ export function speak(text) {
  */
 export function openSheet(title, html) {
   const el = document.getElementById('sheet');
+  el.querySelector('.sheet-head button').setAttribute('aria-label', tr(state.lang, 'close'));
   el.querySelector('.sheet-title').textContent = title;
   el.querySelector('.sheet-body').innerHTML = html;
   el.querySelector('.sheet-body').scrollTop = 0;

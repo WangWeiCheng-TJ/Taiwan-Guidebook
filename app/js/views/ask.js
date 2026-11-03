@@ -54,7 +54,7 @@ export function questionText(s) {
  * Shared: data-action="party-dec" | "party-inc", data-input="question", data-change="include-log" | "want-plan",
  * data-action="mode" data-mode, data-action="copy-prompt".
  * The preview lives in #prompt-preview so main.js can refresh it without re-rendering (keeps input focus).
- * Area option labels stay English: they are what the AI reads.
+ * Area option labels stay English (lang="en"): they are what the AI reads.
  * @param {import('../state.js').AppState} s
  * @returns {string}
  */
@@ -63,7 +63,7 @@ export function renderAsk(s) {
   const a = s.ask;
   const custom = a.area === 'custom' || !a.area;
   const areaOpts = areaOptions(places()).map(o =>
-    `<option value="${esc(o.value)}" ${a.area === o.value ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
+    `<option value="${esc(o.value)}" lang="en" ${a.area === o.value ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
 
   // A picked city lists all its places (buildAskPrompt), so the radius only applies to GPS.
   const modeFields = a.mode === 'near' ? `

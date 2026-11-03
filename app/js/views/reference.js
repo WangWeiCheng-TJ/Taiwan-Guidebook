@@ -124,7 +124,7 @@ export function phraseCardFull(ph, L) {
   const canSpeak = typeof speechSynthesis !== 'undefined';
   return `<div class="card phrase">
     <div class="row spread">
-      <span class="meta">${esc(ph.en)}</span>
+      <span class="meta" lang="en">${esc(ph.en)}</span>
       <span class="row">
         ${canSpeak ? `<button class="btn small" data-action="speak" data-id="${esc(ph.id)}">${tr(L, 'play')}</button>` : ''}
         <button class="btn small" data-action="show-phrase" data-id="${esc(ph.id)}">${tr(L, 'show')}</button>
@@ -135,12 +135,12 @@ export function phraseCardFull(ph, L) {
 }
 
 /**
- * Markup for a phrase on the big card.
+ * Markup for a phrase on the big card: the Chinese and its English meaning, each with its lang attribute.
  * @param {import('../types.js').Phrase & { zhuyin: string }} ph
  * @returns {string}
  */
 export function phraseCard(ph) {
-  return `<div class="big">${esc(ph.zh_TW)}</div><div class="hint">${esc(ph.en)}</div>`;
+  return `<div class="big" lang="zh-TW">${esc(ph.zh_TW)}</div><div class="hint" lang="en">${esc(ph.en)}</div>`;
 }
 
 /**

@@ -3,7 +3,7 @@ import { gpsDistance, fmtKm, sortByDistance } from '../geo.js';
 import { cities } from '../data.js';
 import { places } from '../state.js';
 import { tr, localized } from '../lang.js';
-import { locationPanel, placeName } from './common.js';
+import { locationPanel, placeName, langTag } from './common.js';
 import { renderTodayCard } from './trip.js';
 import { renderFoodSection } from './food.js';
 
@@ -47,7 +47,7 @@ export function renderExplore(s) {
           <span class="title">${esc(placeName(p, L))}</span>
           ${visited.has(p.id) ? `<span class="badge">${tr(L, 'visited')}</span>` : ''}
         </div>
-        <div class="meta">${esc(placeName(p, other))} · ${esc(localized(p.location, 'district', L))}, ${esc(localized(p.location, 'city', L))}${d != null ? ` · <b>${fmtKm(d)}</b>` : ''}</div>
+        <div class="meta"><span lang="${langTag(other)}">${esc(placeName(p, other))}</span> · ${esc(localized(p.location, 'district', L))}, ${esc(localized(p.location, 'city', L))}${d != null ? ` · <b>${fmtKm(d)}</b>` : ''}</div>
         <p>${esc(clip(localized(p, 'summary', L), 150))}</p>
       </a>`;
     }).join('') || `<p class="muted">${tr(L, 'noPlaces')}</p>`}

@@ -10,7 +10,8 @@ import { placeName } from './common.js';
  * My trip tab (#/log): the plan (renderTripSection), then the notes: entry form bound to s.draft
  * (an empty draft date shows today's date),
  * entries grouped by day (newest first), backup.
- * Form: <form data-form="log"> with fields date, placeId, name, note; star buttons data-action="star" data-n.
+ * Form: <form data-form="log"> with fields date, placeId, name, note; star buttons data-action="star" data-n
+ * (aria-pressed on the one that is the rating).
  * The free-text name field ([data-other]) is hidden when a guidebook place is selected.
  * Emits: data-action="delete-entry" data-id, "export"; data-change="import" (file input).
  * @param {import('../state.js').AppState} s
@@ -47,8 +48,8 @@ export function renderLog(s) {
       </label>
       <div>
         <div class="muted small">${tr(L, 'rating')}</div>
-        <div class="stars">${[1, 2, 3, 4, 5].map(n =>
-          `<button type="button" data-action="star" data-n="${n}" class="${n <= dr.stars ? 'on' : ''}" aria-label="${n}">★</button>`).join('')}</div>
+        <div class="stars" role="group" aria-label="${esc(tr(L, 'rating'))}">${[1, 2, 3, 4, 5].map(n =>
+          `<button type="button" data-action="star" data-n="${n}" class="${n <= dr.stars ? 'on' : ''}" aria-label="${esc(tr(L, 'starN', { n }))}" aria-pressed="${n === dr.stars}">★</button>`).join('')}</div>
       </div>
       <label>${tr(L, 'note')} <textarea name="note" placeholder="${esc(tr(L, 'notePh'))}">${esc(dr.note)}</textarea></label>
       <button class="btn primary" type="submit">${tr(L, 'save')}</button>
@@ -62,7 +63,7 @@ export function renderLog(s) {
           ${e.stars ? `<div class="starline">${stars(e.stars)}</div>` : ''}
           ${e.note ? `<div>${esc(e.note)}</div>` : ''}
         </div>
-        <button class="btn small danger" data-action="delete-entry" data-id="${esc(e.id)}" aria-label="✕">✕</button>
+        <button class="btn small danger" data-action="delete-entry" data-id="${esc(e.id)}" aria-label="${esc(tr(L, 'deleteEntry', { name: name(e) }))}">✕</button>
       </div>`).join('')}
     `).join('') : `<p class="muted">${tr(L, 'nothingLogged')}</p>`}
 

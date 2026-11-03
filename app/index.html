@@ -20,7 +20,7 @@
     <a href="#/explore" class="brand" id="brand">Taiwan Guidebook</a>
     <div class="actions">
       <span id="net-status" class="net" hidden>Offline</span>
-      <button id="lang-toggle" class="btn small" type="button" aria-label="Language">中文</button>
+      <button id="lang-toggle" class="btn small" type="button" aria-label="中文: switch to Chinese">中文</button>
     </div>
   </header>
 
@@ -41,12 +41,12 @@
     <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
       <div class="sheet-head">
         <span class="sheet-title" id="sheet-title"></span>
-        <button class="btn small" data-action="close-sheet" aria-label="Close">✕</button>
+        <button class="btn small" type="button" data-action="close-sheet" aria-label="Close">✕</button>
       </div>
       <div class="sheet-body"></div>
     </div>
   </div>
-  <div id="bigcard" class="bigcard" hidden role="dialog" aria-modal="true"></div>
+  <div id="bigcard" class="bigcard" hidden role="dialog" aria-modal="true" aria-label="Large text to show"></div>
   <button id="askbar" class="askbar" type="button" hidden></button>
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 

@@ -8,6 +8,16 @@ import { cities } from '../data.js';
 import { tr, localized } from '../lang.js';
 
 /**
+ * BCP 47 tag for a lang="" attribute, so screen readers use the right voice (and browsers the right CJK
+ * glyphs) for text in the language other than the UI's.
+ * @param {import('../lang.js').Lang} lang
+ * @returns {'zh-TW'|'en'}
+ */
+export function langTag(lang) {
+  return lang === 'zh_TW' ? 'zh-TW' : 'en';
+}
+
+/**
  * Place name in the UI language.
  * @param {import('../types.js').Place} p
  * @param {import('../lang.js').Lang} lang

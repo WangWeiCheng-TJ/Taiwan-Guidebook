@@ -49,7 +49,7 @@ export function foodSheet(city, p, L) {
   const hint = p.hint ? (L === 'zh_TW' ? p.hint.zh_TW : p.hint.en) : '';
   return `
     <div class="big-name" lang="zh-TW">${esc(p.name)} ${sayButton(p.name, L)}</div>
-    ${p.dish ? `<div class="dish">${esc(L === 'zh_TW' ? p.dish.zh_TW : `${p.dish.en} (${p.dish.zh_TW})`)}</div>` : ''}
+    ${p.dish ? `<div class="dish">${L === 'zh_TW' ? esc(p.dish.zh_TW) : `${esc(p.dish.en)} (<span lang="zh-TW">${esc(p.dish.zh_TW)}</span>)`}</div>` : ''}
     <div class="muted">${esc(p.local ? localLabel(city, L) : tr(L, `food.${p.kind}`))} · ${esc(L === 'zh_TW' ? city.city_zh : city.city_en)}</div>
     ${hint ? `<p>${esc(hint)}</p>` : ''}
     <div class="row" style="margin-top:12px">
@@ -57,6 +57,20 @@ export function foodSheet(city, p, L) {
       <button class="btn" data-action="food-driver" data-city="${esc(city.city_en)}" data-id="${esc(p.id)}">${tr(L, 'driver')}</button>
     </div>
     <p class="muted small">${tr(L, 'foodNoAddress')}</p>`;
+}
+
+/**
+ * Markup for the "Show to driver" big card of a pick: its name and city in Chinese, the request, and an
+ * English gloss, each with its lang attribute (the UI around them may be English).
+ * @param {import('../data.js').FoodCity} city
+ * @param {import('../data.js').FoodPick} p
+ * @returns {string}
+ */
+export function foodDriverCard(city, p) {
+  return `<div class="big" lang="zh-TW">${esc(p.name)}</div>
+    <div class="mid" lang="zh-TW">${esc(city.city_zh)}</div>
+    <div class="mid" lang="zh-TW">請帶我到這裡，謝謝。</div>
+    <div class="hint" lang="en">"Please take me here, thank you."</div>`;
 }
 
 /**

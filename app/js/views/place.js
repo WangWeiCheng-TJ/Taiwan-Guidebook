@@ -6,8 +6,8 @@ import { topicLink } from './learn.js';
 import { isHttps } from './apps.js';
 import { notesFor } from '../triplog.js';
 import { places } from '../state.js';
-import { tr, localized, localizedList } from '../lang.js';
-import { placeName, sayButton } from './common.js';
+import { tr, localized, localizedList, otherLang } from '../lang.js';
+import { placeName, sayButton, langTag } from './common.js';
 import { phrasesForPlace, mainGroupForPlace } from '../phrases.js';
 import { withParty } from '../party.js';
 
@@ -39,7 +39,7 @@ export function renderPlace(s, id) {
   return `
     <a href="#/explore" class="small">${tr(L, 'allPlaces')}</a>
     <h1>${esc(placeName(p, L))} ${sayButton(p.name.zh_TW, L)}</h1>
-    <div class="zh">${esc(placeName(p, L === 'en' ? 'zh_TW' : 'en'))}</div>
+    <div class="zh" lang="${langTag(otherLang(L))}">${esc(placeName(p, otherLang(L)))}</div>
     <div class="muted small">${esc(localized(p.location, 'district', L))}, ${esc(localized(p.location, 'city', L))}${d != null ? ` · ${tr(L, 'away', { d: fmtKm(d) })}` : ''}</div>
     <div class="row" style="margin:10px 0">
       ${p.heritage_status ? `<span class="badge">${esc(p.heritage_status)}</span>` : ''}
@@ -128,22 +128,23 @@ function usefulPhrases(s, p) {
   if (!list.length) return '';
   return `<h2>${tr(L, 'usefulHere')}</h2>
     ${list.map(ph => `<button class="phrase-row" data-action="phrase-sheet" data-id="${esc(ph.id)}">
-      <span><span class="zh-inline" lang="zh-TW">${esc(ph.zh_TW)}</span> <span class="muted small">${esc(ph.en)}</span></span>
+      <span><span class="zh-inline" lang="zh-TW">${esc(ph.zh_TW)}</span> <span class="muted small" lang="en">${esc(ph.en)}</span></span>
       <span class="chev" aria-hidden="true">›</span>
     </button>`).join('')}
     <button class="linklike small" data-action="phrases-sheet" data-group="${mainGroupForPlace(p)}">${tr(L, 'morePhrases')}</button>`;
 }
 
 /**
- * Markup for the "Show to driver" big card. Always Chinese: it is shown to a local.
+ * Markup for the "Show to driver" big card. Always Chinese: it is shown to a local. The Chinese and the
+ * English gloss carry lang attributes, since the UI around them may be in the other language.
  * @param {import('../types.js').Place} p
  * @returns {string}
  */
 export function driverCard(p) {
-  return `<div class="big">${esc(p.name.zh_TW)}</div>
-    <div class="mid">${esc(p.location.address_zh)}</div>
-    <div class="mid">請帶我到這裡，謝謝。</div>
-    <div class="hint">"Please take me here, thank you."</div>`;
+  return `<div class="big" lang="zh-TW">${esc(p.name.zh_TW)}</div>
+    <div class="mid" lang="zh-TW">${esc(p.location.address_zh)}</div>
+    <div class="mid" lang="zh-TW">請帶我到這裡，謝謝。</div>
+    <div class="hint" lang="en">"Please take me here, thank you."</div>`;
 }
 
 /**

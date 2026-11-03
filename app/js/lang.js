@@ -20,7 +20,8 @@ export function initialLang(stored, navLang = '') {
 
 const STRINGS = {
   en: {
-    brand: 'Taiwan Guidebook', offline: 'Offline', switchTo: '中文', loadFail: 'Could not load the guide. Connect to the internet once so it can be saved for offline use.',
+    brand: 'Taiwan Guidebook', offline: 'Offline', switchTo: '中文', switchLabel: '中文: switch to Chinese',
+    loadFail: 'Could not load the guide. Connect to the internet once so it can be saved for offline use.',
     'tab.explore': 'Explore', 'tab.log': 'My trip', 'tab.ask': 'Ask AI', 'tab.phrases': 'Phrases', 'tab.tips': 'Tips',
     distancesFrom: 'Distances from <b>{label}</b>', inCity: "I'm in <b>{label}</b>", update: 'Update', change: 'Change', useLocation: 'Use my location', nearPick: "or I'm in…",
     choosePlace: 'Choose a city', yourLocation: 'your location', locating: 'Finding your location…',
@@ -37,6 +38,7 @@ const STRINGS = {
     save: 'Save', saved: 'Saved.', nothingLogged: 'Nothing logged yet.', dayN: 'day {n}', backup: 'Backup',
     backupIntro: 'Move your notes to another phone, or keep a copy.', export: 'Export', import: 'Import',
     deleteNote: 'Delete this note?', imported: 'Imported {n} new note(s).', badImport: 'That file is not a trip log export.',
+    starN: '{n} of 5 stars', deleteEntry: 'Delete note: {name}',
     storageFail: 'Could not save on this device (storage blocked or full).',
     myPlan: 'My plan', pasteIntro: 'In <a href="#/ask">Ask AI</a>, tick <b>Ask for a plan I can paste back</b>, send it to your AI, then paste its whole answer here.',
     pastePh: "Paste the AI's answer here", loadPlan: 'Load plan', cancel: 'Cancel', replacePlan: 'Replace plan', removePlan: 'Remove plan',
@@ -60,7 +62,7 @@ const STRINGS = {
     'food.international': 'International', 'food.sweets': 'Desserts', 'food.bar': 'Bar',
     listen: 'Listen', noSpeech: 'This device can’t play speech.', tapToHear: 'Tap a character to hear it.',
     askAbout: '✦ Ask AI: “{t}”', explainTitle: 'Ask AI', explainCopied: 'Copied. Paste it into your AI app.',
-    guideUpdated: 'Guide updated.', tapClose: 'Tap anywhere to close', close: 'Close',
+    guideUpdated: 'Guide updated.', tapClose: 'Tap anywhere to close', close: 'Close', bigCard: 'Large text to show',
     // party size
     'party.label': 'People:',
     'party.dec': 'One person fewer',
@@ -78,7 +80,8 @@ const STRINGS = {
     'map.online': 'The map needs an internet connection.',
   },
   zh_TW: {
-    brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
+    brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', switchLabel: 'EN：切換成英文',
+    loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
     'tab.explore': '探索', 'tab.log': '我的旅程', 'tab.ask': '問 AI', 'tab.phrases': '常用語', 'tab.tips': '須知',
     distancesFrom: '距離以 <b>{label}</b> 計算', inCity: '我在 <b>{label}</b>', update: '更新', change: '更換', useLocation: '使用我的位置', nearPick: '或選擇我在哪個城市…',
     choosePlace: '選擇城市', yourLocation: '目前位置', locating: '正在取得位置…',
@@ -95,6 +98,7 @@ const STRINGS = {
     save: '儲存', saved: '已儲存。', nothingLogged: '還沒有紀錄。', dayN: '第 {n} 天', backup: '備份',
     backupIntro: '把筆記搬到另一支手機，或留一份備份。', export: '匯出', import: '匯入',
     deleteNote: '刪除這則筆記？', imported: '已匯入 {n} 則新筆記。', badImport: '這不是旅程筆記的匯出檔。',
+    starN: '{n} 顆星（滿分 5 顆）', deleteEntry: '刪除筆記：{name}',
     storageFail: '無法儲存在這台裝置上（儲存空間被封鎖或已滿）。',
     myPlan: '我的行程', pasteIntro: '在<a href="#/ask">問 AI</a>勾選<b>請 AI 給我可以貼回來的行程</b>，送給你的 AI，再把它的完整回答貼在這裡。',
     pastePh: '把 AI 的回答貼在這裡', loadPlan: '載入行程', cancel: '取消', replacePlan: '換一份行程', removePlan: '移除行程',
@@ -118,7 +122,7 @@ const STRINGS = {
     'food.international': '異國料理', 'food.sweets': '甜點', 'food.bar': '酒吧',
     listen: '聽發音', noSpeech: '這台裝置無法播放語音。', tapToHear: '點單一個字可以聽它的發音。',
     askAbout: '✦ 問 AI：「{t}」', explainTitle: '問 AI', explainCopied: '已複製，貼到你的 AI 就可以問了。',
-    guideUpdated: '手冊已更新。', tapClose: '點任何地方關閉', close: '關閉',
+    guideUpdated: '手冊已更新。', tapClose: '點任何地方關閉', close: '關閉', bigCard: '放大給對方看的字卡',
     // party size
     'party.label': '人數：',
     'party.dec': '少一人',
