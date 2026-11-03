@@ -68,6 +68,20 @@ export function locationPanel(s) {
 }
 
 /**
+ * "Then open: ChatGPT Claude Gemini": links to the AI chats a copied prompt is pasted into.
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+export function aiLinks(L) {
+  return `<div class="row small">
+    <span class="muted">${tr(L, 'thenOpen')}</span>
+    <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
+    <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>
+    <a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>
+  </div>`;
+}
+
+/**
  * 🔊 button that reads Chinese text aloud with the device voice (data-action="say").
  * "" on devices without speech synthesis, so no dead button is shown.
  * @param {string} text  Chinese text to speak

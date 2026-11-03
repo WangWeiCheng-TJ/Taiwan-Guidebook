@@ -3,7 +3,7 @@
 import { esc } from '../util.js';
 import { tr } from '../lang.js';
 import { foodFor, foodMapsLink } from '../data.js';
-import { sayButton } from './common.js';
+import { aiLinks, sayButton } from './common.js';
 
 export const FOOD_KINDS = ['taiwanese', 'hotpot', 'beef_noodles', 'ramen', 'japanese', 'international', 'sweets', 'bar'];
 
@@ -39,7 +39,8 @@ export function renderFoodSection(s) {
 }
 
 /**
- * Sheet body for one pick: name, kind, hint, Navigate (Google Maps search) and Show to driver.
+ * Sheet body for one pick: name, kind, hint, Navigate (Google Maps search), Show to driver, and
+ * "Ask AI about the menu" (data-action="ask-menu" data-city data-id data-kind="pick").
  * @param {import('../data.js').FoodCity} city
  * @param {import('../data.js').FoodPick} p
  * @param {import('../lang.js').Lang} L
@@ -55,8 +56,59 @@ export function foodSheet(city, p, L) {
     <div class="row" style="margin-top:12px">
       <a class="btn primary" href="${esc(foodMapsLink(p, city))}" target="_blank" rel="noopener">${tr(L, 'navigate')}</a>
       <button class="btn" data-action="food-driver" data-city="${esc(city.city_en)}" data-id="${esc(p.id)}">${tr(L, 'driver')}</button>
+      ${askMenuButton(city, p.id, 'pick', L)}
     </div>
     <p class="muted small">${tr(L, 'foodNoAddress')}</p>`;
+}
+
+/**
+ * "Ask AI about the menu" button of a food sheet.
+ * @param {import('../data.js').FoodCity} city
+ * @param {string} id
+ * @param {'pick'|'dish'} kind
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+function askMenuButton(city, id, kind, L) {
+  return `<button class="btn" data-action="ask-menu" data-city="${esc(city.city_en)}" data-id="${esc(id)}" data-kind="${kind}"><span aria-hidden="true">✦</span> ${tr(L, 'askMenu')}</button>`;
+}
+
+/**
+ * What "Ask AI about the menu" tells the AI about a pick (data-kind="pick": its name, dish and hint) or a dish
+ * with no shop chosen yet (data-kind="dish", a to_try entry: the dish only).
+ * @param {import('../data.js').FoodCity[]|undefined} food
+ * @param {string} city   city_en
+ * @param {string} id
+ * @param {string} kind   'pick' | 'dish'
+ * @returns {import('../types.js').PhotoShop|null}  null when there is no such pick or dish
+ */
+export function menuShop(food, city, id, kind) {
+  const c = foodFor(food, city);
+  if (!c) return null;
+  const where = { city_en: c.city_en, city_zh: c.city_zh };
+  if (kind === 'dish') {
+    const d = (c.to_try || []).find(x => x.id === id);
+    return d ? { ...where, dish: d.dish } : null;
+  }
+  const p = c.picks.find(x => x.id === id);
+  if (!p) return null;
+  return { ...where, name: p.name, ...(p.dish ? { dish: p.dish } : {}), ...(p.hint ? { hint: p.hint } : {}) };
+}
+
+/**
+ * Sheet body after "Ask AI about the menu" copied its prompt: the next steps, links to AI chats, and the
+ * prompt itself (to select by hand when copying failed, which the sheet then says).
+ * @param {string} prompt
+ * @param {boolean} copied
+ * @param {import('../lang.js').Lang} L
+ * @returns {string}
+ */
+export function menuPromptSheet(prompt, copied, L) {
+  return `
+    ${copied ? '' : `<p class="small muted">${tr(L, 'copyFailPreview')}</p>`}
+    <p class="small">${tr(L, 'menuSteps')}</p>
+    ${aiLinks(L)}
+    <pre class="prompt">${esc(prompt)}</pre>`;
 }
 
 /**
@@ -74,7 +126,8 @@ export function foodDriverCard(city, p) {
 }
 
 /**
- * Sheet for a dish with no shop chosen yet: Navigate searches Google Maps for the dish in that city.
+ * Sheet for a dish with no shop chosen yet: Navigate searches Google Maps for the dish in that city;
+ * "Ask AI about the menu" (data-action="ask-menu" data-kind="dish") for when a shop is found.
  * @param {import('../data.js').FoodCity} city
  * @param {{ id: string, dish: { en: string, zh_TW: string } }} d
  * @param {import('../lang.js').Lang} L
@@ -87,7 +140,10 @@ export function dishSheet(city, d, L) {
     ${L === 'zh_TW' ? '' : `<div class="dish">${esc(d.dish.en)}</div>`}
     <div class="muted">${esc(localLabel(city, L))} · ${esc(L === 'zh_TW' ? city.city_zh : city.city_en)}</div>
     <p>${tr(L, 'shopTbdIntro')}</p>
-    <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">${tr(L, 'findNearby')}</a>`;
+    <div class="row">
+      <a class="btn primary" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">${tr(L, 'findNearby')}</a>
+      ${askMenuButton(city, d.id, 'dish', L)}
+    </div>`;
 }
 
 /**

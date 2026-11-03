@@ -27,9 +27,11 @@ import { PARTY_KEY, clampParty, partyChosen } from './party.js';
  * @property {string|null} tripDate  My trip: the plan day the user picked; null = defaultTripDate()
  * @property {string} exploreCity    "all" or a city_en
  * @property {LogDraft} draft        the log form, survives tab switches; draft.date "" follows today's date
- * @property {{ mode: 'near'|'plan', radius: number, area: string, customArea: string,
- *              day: 'today'|'tomorrow', question: string|null, includeLog: boolean, wantPlan: boolean }} ask
- *           question null = not edited, follow defaultQuestion()
+ * @property {{ mode: 'near'|'plan'|'photo', radius: number, area: string, customArea: string,
+ *              day: 'today'|'tomorrow', question: string|null, includeLog: boolean, wantPlan: boolean,
+ *              photo: import('./prompt.js').PhotoKind, photoNote: string }} ask
+ *           question null = not edited, follow defaultQuestion(); photo / photoNote: the "About a photo" mode's
+ *           preset (PHOTO_KINDS) and the traveler's addition to its prompt (not persisted)
  */
 
 const storedParty = readJSON(PARTY_KEY, null);
@@ -48,7 +50,8 @@ export const state = {
   tripDate: null,
   exploreCity: 'all',
   draft: emptyDraft(''), // not today(): an app left open past midnight would log under yesterday
-  ask: { mode: 'near', radius: 3, area: '', customArea: '', day: 'tomorrow', question: null, includeLog: true, wantPlan: false },
+  ask: { mode: 'near', radius: 3, area: '', customArea: '', day: 'tomorrow', question: null, includeLog: true, wantPlan: false,
+    photo: 'menu', photoNote: '' },
 };
 
 /**

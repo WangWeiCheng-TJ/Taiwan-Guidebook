@@ -6,7 +6,7 @@ import { today } from './util.js';
 import { writeJSON } from './storage.js';
 import { loadGuidebook, placeById, cityCenter } from './data.js';
 import { LOG_KEY, emptyDraft, draftDate, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
-import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt } from './prompt.js';
+import { buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt, buildPhotoPrompt } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
 import { toast, copyText, showBig, hideBig, speak, openSheet, closeSheet } from './ui.js';
@@ -15,13 +15,13 @@ import { tr, trMsg, LANG_KEY, otherLang } from './lang.js';
 import { renderExplore } from './views/explore.js';
 import { renderPlace, driverCard } from './views/place.js';
 import { renderLog } from './views/log.js';
-import { renderAsk, askContext } from './views/ask.js';
+import { renderAsk, currentPrompt, photoContext } from './views/ask.js';
 import { renderPhrases, renderTips, phraseCard, phraseCardFull } from './views/reference.js';
 import { renderApps } from './views/apps.js';
 import { renderLearn } from './views/learn.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
-import { foodSheet, findPick, dishSheet, foodDriverCard } from './views/food.js';
+import { foodSheet, findPick, dishSheet, foodDriverCard, menuShop, menuPromptSheet } from './views/food.js';
 import { foodFor } from './data.js';
 import { parseRoute, activeTab, entryKey, withKey, scrollFor, entryOverlays, withOverlays, overlayChange, focusSelector } from './nav.js';
 
@@ -288,7 +288,7 @@ function pickLocation(city) {
 
 function refreshPreview() {
   const el = document.getElementById('prompt-preview');
-  if (el) el.textContent = buildAskPrompt(askContext(state));
+  if (el) el.textContent = currentPrompt(state);
 }
 
 /** Keep the suggested question in sync with area/day until the user edits it. */
@@ -355,6 +355,15 @@ const actions = {
     const d = c && (c.to_try || []).find(x => x.id === el.dataset.id);
     if (d) sheet(tr(state.lang, 'foodPick'), dishSheet(c, d, state.lang));
   },
+  // A food sheet's "Ask AI about the menu": copy a menu prompt for that pick or dish, then show the steps.
+  'ask-menu': async el => {
+    const shop = menuShop(state.data.food, el.dataset.city, el.dataset.id, el.dataset.kind);
+    if (!shop) return;
+    const prompt = buildPhotoPrompt(photoContext(state, shop), 'menu', state.lang);
+    const ok = await copyText(prompt);
+    toast(tr(state.lang, ok ? 'copied' : 'copyFailPreview'));
+    sheet(tr(state.lang, 'askMenu'), menuPromptSheet(prompt, ok, state.lang));
+  },
   'food-driver': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
     if (f) big(foodDriverCard(f.city, f.pick));
@@ -416,8 +425,8 @@ const actions = {
   },
   'trip-day': el => { state.tripDate = el.dataset.date; render(); },
   'copy-prompt': async () => {
-    const ok = await copyText(buildAskPrompt(askContext(state)));
-    toast(tr(state.lang, ok ? 'copied' : 'copyFailPreview'));
+    const ok = await copyText(currentPrompt(state));
+    toast(tr(state.lang, ok ? (state.ask.mode === 'photo' ? 'photoCopied' : 'copied') : 'copyFailPreview'));
   },
 };
 
@@ -482,6 +491,7 @@ view.addEventListener('change', async e => {
     case 'area': state.ask.area = el.value; render(); break;
     case 'include-log': state.ask.includeLog = el.checked; refreshPreview(); break;
     case 'want-plan': state.ask.wantPlan = el.checked; refreshPreview(); break;
+    case 'photo-kind': state.ask.photo = el.value; refreshPreview(); break; // a radio: no re-render, focus stays
     case 'import': await importLog(el); break;
   }
   if (el.form?.dataset.form === 'log' && el.name) {
@@ -503,6 +513,7 @@ view.addEventListener('input', e => {
   const el = e.target;
   if (el.dataset.input === 'question') { state.ask.question = el.value; refreshPreview(); }
   if (el.dataset.input === 'custom-area') { state.ask.customArea = el.value; refreshQuestion(); }
+  if (el.dataset.input === 'photo-note') { state.ask.photoNote = el.value; refreshPreview(); }
   if (el.dataset.input === 'ai-answer') state.pasteText = el.value; // kept across re-renders until a plan loads
   if (el.form?.dataset.form === 'log' && el.name) setDraftField(el);
 });
