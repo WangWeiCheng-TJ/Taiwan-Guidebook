@@ -173,7 +173,8 @@ export function logBlock(log, places) {
 
 /**
  * The full Ask AI prompt. Paragraphs, in order:
- * 1. who/when (+ trip day number if the log is not empty), then the party size when ctx.party is a number:
+ * 1. who/when (+ trip day number if the log is not empty and today is on or after its first date),
+ *    then the party size when ctx.party is a number:
  *    "I'm traveling alone." (1) or "We are <n> people." (absent/null: no sentence)
  * 2. near: where I am (GPS rounded to 3 decimals, or the picked place) / plan: area and date
  * 3. trip log (only if includeLog and not empty)
@@ -190,7 +191,8 @@ export function logBlock(log, places) {
 export function buildAskPrompt(ctx) {
   const parts = [];
   const day = dayNumber(ctx.log, ctx.today);
-  parts.push(`I'm a visitor traveling in Taiwan. Today is ${ctx.today}${day ? ` (day ${day} of my trip)` : ''}.${partySentence(ctx.party)}`);
+  // A log entry dated after today (picked ahead in the form) would make today "day -6": say nothing then.
+  parts.push(`I'm a visitor traveling in Taiwan. Today is ${ctx.today}${day >= 1 ? ` (day ${day} of my trip)` : ''}.${partySentence(ctx.party)}`);
 
   let list = [];
   let listTitle = '';
