@@ -124,3 +124,18 @@ test('an unknown pick does nothing', async () => {
   assert.equal(clip.text, null);
   assert.equal(dom.sheet.known['.sheet-body'].innerHTML, body);
 });
+
+test('"Ask AI about the menu" follows the UI language: the first line, the sheet title, the steps', async () => {
+  state.lang = 'zh_TW';
+  clip.text = null;
+  click({ action: 'ask-menu', city: 'Tainan City', id: 'xiao-hao-zhou-satay-hotpot', kind: 'pick' }, dom.sheet);
+  await settle();
+  assert.match(clip.text, /^（送出前，請先把照片附在這則訊息裡。）/);
+  assert.match(clip.text, /Please reply in Traditional Chinese \(Taiwan\)\.$/);
+  assert.equal(toastText(), tr('zh_TW', 'copied'));
+  assert.equal(dom.sheet.known['.sheet-title'].textContent, tr('zh_TW', 'askMenu'));
+  const body = dom.sheet.known['.sheet-body'].innerHTML;
+  assert.ok(body.includes(tr('zh_TW', 'menuSteps')));
+  assert.ok(!body.includes(tr('en', 'menuSteps')));
+  state.lang = 'en';
+});
