@@ -8,10 +8,10 @@ An offline travel guide for visitors to Taiwan, built as a Progressive Web App, 
 
 The app (`app/`) works offline once loaded and can be installed from the browser ("Add to Home Screen"). Tabs:
 
-- **Explore**: a small set of historic places (Taipei, New Taipei, Tainan, Changhua), sorted by distance from your GPS position or a city you pick, filterable by city; today's stops if you loaded a plan; the owner's food picks for cities that have them.
+- **Explore**: a small set of historic places (Taipei, New Taipei, Tainan, Changhua), sorted by distance from your GPS position, or with a city's places first when you pick a city instead (no distances then: a city is not a point), filterable by city; today's stops if you loaded a plan; the owner's food picks for cities that have them.
 - **Place page**: summary, must-see spots with a tap-to-read reason, etiquette, transport, best time to visit, history and timeline; navigation links (Google Maps, Apple Maps); a "show to driver" card with the Chinese address; suggested phrases for that kind of place; "Copy for AI" with the full entry.
 - **My trip**: a personal log (place or free text, stars, a one-line note) kept on the device, with JSON export and import; a day-by-day plan, loaded from a `?trip=<https URL>` link or pasted back from an AI's answer.
-- **Ask AI**: builds a prompt from nearby places (or an area you plan to visit), your log, your plan and the food picks, and copies it for the AI chat of your choice. No API key, no account.
+- **Ask AI**: builds a prompt from nearby places (or the places of the city you picked, or an area you plan to visit, typed in English or Chinese), your log, your plan, the food picks and, once you set it, how many of you there are, and copies it for the AI chat of your choice. No API key, no account.
 - **Phrases**: by situation (most used, sightseeing, food, transport, shopping, emergency, basics), each in Chinese with zhuyin, per-symbol romanization and spoken tones, read aloud by the device voice or shown full screen.
 - **Tips**: practical advice on transport, money, safety, daily life and culture.
 - Select any text in the app to ask an AI what it means in context.

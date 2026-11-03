@@ -38,18 +38,19 @@ Claude writes the contract (JSDoc stub + tests in `tests/tasks/`), a worker agen
 |---|---|---|
 | `types.js` | types only | Shared shapes (`Place`, `Phrase`, `Tip`, `Guidebook`, `Pos`, `LogEntry`, `AskContext`, `Trip`, ...). Changing one is a contract change |
 | `util.js` | pure | `esc`, `clip`, `today`, `addDays`, `daysBetween`, `stars`, `titleCase` |
-| `geo.js` | pure | `km`, `fmtKm`, `distanceTo`, `sortByDistance`, `mapsLinks` |
+| `geo.js` | pure | `km`, `fmtKm`, `distanceTo`, `gpsDistance` (the distance shown: GPS only, never from a picked city), `sortByDistance`, `mapsLinks`, `osmEmbedUrl`, `osmLink` |
 | `data.js` | pure + fetch | `loadGuidebook`, `placeById`, `cities`, `districtsOf`, `cityCenter`, `foodFor`, `foodMapsLink` |
 | `storage.js` | side effect | `readJSON`, `writeJSON` (never throw) |
 | `i18n.js` | pure | Per-language lookup: `t`, `tList`, `languagesOf`, `DEFAULT_LANG` |
 | `lang.js` | pure | UI string tables and content accessors: `LANGS`, `LANG_KEY`, `initialLang`, `tr`, `trMsg`, `localized`, `localizedList`, `otherLang` |
 | `zhuyin.js` | pure | Zhuyin per symbol: `ZHUYIN_ROMAN`, `parseSyllable`, `alignZhuyin`, `spokenTones` (tone sandhi) |
 | `phrases.js` | pure | `PHRASE_GROUPS` (Phrases tab tiles), `phrasesIn`, `phrasesForPlace`, `mainGroupForPlace` |
-| `triplog.js` | pure | Personal log: `LOG_KEY`, `EXPORT_TYPE`, `emptyDraft`, `validateDraft`, `newId`, `makeEntry`, `removeEntry`, `exportPayload`, `mergeImport`, `firstDate`, `dayNumber`, `entryName`, `groupByDate`, `notesFor` |
-| `trip.js` | pure + fetch | Itineraries: `TRIP_KEY`, `parseTrip`, `resolveItem`, `tripDayFor`, `defaultTripDate`, `tripUrlFrom`, `loadTrip`, `tripBlock` |
-| `aiplan.js` | pure | Paste an AI answer back as a trip: `planRequestSuffix`, `extractJsonBlock`, `planFromAiText` |
+| `party.js` | pure | Party size: `PARTY_KEY`, `PARTY_MIN`, `PARTY_MAX`, `clampParty`, `partyChosen` (stored = set by the traveler; the prompt names the party only then), `numberWord`, `withParty` |
+| `triplog.js` | pure | Personal log: `LOG_KEY`, `EXPORT_TYPE`, `emptyDraft`, `draftDate` (a draft date of "" follows today), `validateDraft`, `newId`, `makeEntry`, `removeEntry`, `exportPayload`, `mergeImport`, `firstDate`, `dayNumber`, `entryName`, `groupByDate`, `notesFor` |
+| `trip.js` | pure + fetch | Itineraries: `TRIP_KEY`, `parseTrip` (days sharing a date are merged), `resolveItem`, `tripDayFor`, `defaultTripDate`, `tripUrlFrom`, `loadTrip`, `tripBlock` |
+| `aiplan.js` | pure | Paste an AI answer back as a trip: `planRequestSuffix`, `extractJsonBlock` (skips the request's own example, so a paste that holds the request still works), `planFromAiText` |
 | `prompt.js` | pure | Ask AI text: `areaOptions`, `areaLabel`, `areaPlaces`, `nearPlaces`, `defaultQuestion`, `placeBrief`, `logBlock`, `buildAskPrompt`, `buildPlacePrompt`, `buildExplainPrompt` (selected text), `foodBlock` |
-| `state.js` | state | The single `state` object, `places()` |
+| `state.js` | state | The single `state` object (`partySet`: a party size is stored; `draft.date` "" follows today), `places()` |
 | `ui.js` | DOM | `toast`, `copyText`, `showBig`, `hideBig`, `speak`, `openSheet`, `closeSheet` |
 | `main.js` | wiring | Router, event dispatch, persistence, language switch, the select-text "Ask AI" bar, service worker registration |
 
@@ -70,7 +71,7 @@ Python (`scripts/`): `build_dataset.py` (validate `data/`, write the bundle and 
 
 Routes: `#/explore`, `#/place/<id>`, `#/log`, `#/log/<placeId>` (prefills the form), `#/ask`, `#/phrases`, `#/phrases/<group>` (a `PHRASE_GROUPS` id), `#/tips`. Query: `?trip=<https URL>` loads a plan once.
 
-Storage keys: `tg.log.v1` (`LogEntry[]`), `tg.trip.v1` (`Trip`), `tg.lang.v1` (`'en' | 'zh_TW'`).
+Storage keys: `tg.log.v1` (`LogEntry[]`), `tg.trip.v1` (`Trip`), `tg.lang.v1` (`'en' | 'zh_TW'`), `tg.party.v1` (number 1..10, written on the first tap of − or +; absent means not set: phrases use 2 and the Ask AI prompt leaves the party out).
 
 ## Tasks
 
