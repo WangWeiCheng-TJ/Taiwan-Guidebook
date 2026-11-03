@@ -8,7 +8,7 @@
   { "id": "where-tickets", "category": "sightseeing", "ticket": true, "en": "Where do I buy tickets?", "zh_TW": "請問在哪裡買票？", "zhuyin": "ㄑㄧㄥˇ ㄨㄣˋ ㄗㄞˋ ㄋㄚˇ ㄌㄧˇ ㄇㄞˇ ㄆㄧㄠˋ", "pinyin": "qǐngwèn zài nǎlǐ mǎi piào?" },
   { "id": "need-ticket", "category": "sightseeing", "ticket": true, "en": "Do I need a ticket?", "zh_TW": "要門票嗎？", "zhuyin": "ㄧㄠˋ ㄇㄣˊ ㄆㄧㄠˋ ˙ㄇㄚ", "pinyin": "yào ménpiào ma?" },
   { "id": "photos-ok", "category": "sightseeing", "en": "Can I take photos here?", "zh_TW": "這裡可以拍照嗎？", "zhuyin": "ㄓㄜˋ ㄌㄧˇ ㄎㄜˇ ㄧˇ ㄆㄞ ㄓㄠˋ ˙ㄇㄚ", "pinyin": "zhèlǐ kěyǐ pāizhào ma?" },
-  { "id": "closing-time", "category": "sightseeing", "en": "What time do you close?", "zh_TW": "請問幾點關門？", "zhuyin": "ㄑㄧㄥˇ ㄨㄣˋ ㄐㄧˇ ㄉㄧㄢˇ ㄍㄨㄢ ㄇㄣˊ", "pinyin": "qǐngwèn jǐ diǎn guānmén?" },
+  { "id": "closing-time", "category": "sightseeing", "hours": true, "en": "What time do you close?", "zh_TW": "請問幾點關門？", "zhuyin": "ㄑㄧㄥˇ ㄨㄣˋ ㄐㄧˇ ㄉㄧㄢˇ ㄍㄨㄢ ㄇㄣˊ", "pinyin": "qǐngwèn jǐ diǎn guānmén?" },
   { "id": "english-info", "category": "sightseeing", "en": "Is there an English introduction?", "zh_TW": "有英文的介紹嗎？", "zhuyin": "ㄧㄡˇ ㄧㄥ ㄨㄣˊ ˙ㄉㄜ ㄐㄧㄝˋ ㄕㄠˋ ˙ㄇㄚ", "pinyin": "yǒu yīngwén de jièshào ma?" },
   { "id": "this-one", "category": "food", "top": true, "en": "I'd like this one", "zh_TW": "我要這個", "zhuyin": "ㄨㄛˇ ㄧㄠˋ ㄓㄜˋ ˙ㄍㄜ", "pinyin": "wǒ yào zhège" },
   { "id": "not-spicy", "category": "food", "top": true, "en": "Not spicy, please", "zh_TW": "不要辣，謝謝", "zhuyin": "ㄅㄨˋ ㄧㄠˋ ㄌㄚˋ ㄒㄧㄝˋ ˙ㄒㄧㄝ", "pinyin": "bú yào là, xièxie" },

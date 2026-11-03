@@ -35,3 +35,21 @@ test('bundle: no always-open place is offered an hours phrase', () => {
     assert.ok(!phrasesForPlace(p, guidebook.phrases, 99).some(ph => ph.hours), p.id);
   }
 });
+
+// The cases above inject the flag themselves; these read it from the built data, so a missing flag cannot pass silently.
+test('bundle: "closing-time" is marked as an hours phrase', () => {
+  assert.equal(guidebook.phrases.find(p => p.id === 'closing-time')?.hours, true);
+});
+
+test('bundle: Duiyue Gate is always open and is not offered "closing-time"', () => {
+  const gate = places.find(p => p.id === 'duiyue-gate');
+  assert.equal(gate?.foreign_visitor_guide?.always_open, true);
+  assert.ok(!ids(phrasesForPlace(gate, guidebook.phrases, 99)).includes('closing-time'));
+  // The same gate without the flag does get it, so the filter is what removes it
+  const unflagged = withGuide(gate, { always_open: false });
+  assert.ok(ids(phrasesForPlace(unflagged, guidebook.phrases, 99)).includes('closing-time'));
+});
+
+test('bundle: a place that is not always open is still offered "closing-time"', () => {
+  assert.ok(ids(phrasesForPlace(chihkan, guidebook.phrases, 99)).includes('closing-time'));
+});
