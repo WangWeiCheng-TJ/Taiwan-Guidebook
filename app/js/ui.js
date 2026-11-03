@@ -2,6 +2,7 @@
 
 import { state } from './state.js';
 import { tr } from './lang.js';
+import { SAY_RATE, sayRate, bigCardHtml, wakeKeeper } from './bigcard.js';
 
 let toastTimer;
 
@@ -43,23 +44,69 @@ export async function copyText(text) {
   }
 }
 
+/** The screen stays awake while the big card is open (no-op where the Wake Lock API is missing). */
+const wake = wakeKeeper(
+  () => (typeof navigator === 'undefined' ? null : navigator.wakeLock),
+  () => document.visibilityState !== 'hidden',
+);
+/** @type {{ text: string, at: number }|null} the card's last 🔊 tap: its text, and when tapped or done reading */
+let lastSay = null;
+
 /**
- * Full-screen high-contrast card for showing text to a driver or shopkeeper.
- * Tapping anywhere closes it (wired in main.js). Button, hint and the dialog's accessible name follow the
- * UI language at open time.
+ * Full-screen high-contrast card for showing text to a driver or shopkeeper (markup: bigCardHtml): a 🔊 button
+ * when `opts.say` is given and the device can speak, a rotate-180° toggle, and Close. It closes only with
+ * Close, Escape, Back or a tap on the dimmed backdrop, never with a tap on the text (wired in main.js).
+ * Opens upright and keeps the screen awake until hideBig. Labels and the dialog's accessible name follow
+ * the UI language at open time.
  * @param {string} html  trusted markup; callers must esc() any data inside
+ * @param {{ say?: string }} [opts]  say: the Chinese the 🔊 button reads aloud (sayOnCard)
  * @returns {void}
  */
-export function showBig(html) {
+export function showBig(html, opts = {}) {
   const el = document.getElementById('bigcard');
   el.setAttribute('aria-label', tr(state.lang, 'bigCard'));
-  el.innerHTML = `<button class="btn close" type="button">${tr(state.lang, 'close')}</button>${html}<div class="hint">${tr(state.lang, 'tapClose')}</div>`;
+  el.innerHTML = bigCardHtml(html, state.lang, { say: opts.say || '', canSpeak: typeof speechSynthesis !== 'undefined' });
+  el.classList.remove('flipped');
   el.hidden = false;
+  lastSay = null;
+  wake.hold();
 }
 
-/** @returns {void} */
+/** Close the big card and let the screen sleep again. @returns {void} */
 export function hideBig() {
   document.getElementById('bigcard').hidden = true;
+  wake.release();
+}
+
+/**
+ * The page is visible again (visibilitychange): the browser dropped the wake lock while it was hidden, so
+ * take it again if the big card is still open. Otherwise nothing.
+ * @returns {void}
+ */
+export function wakeAgain() {
+  wake.resume();
+}
+
+/**
+ * Turn the big card's text 180° (or back), so the person opposite can read it; the buttons stay upright.
+ * @returns {boolean} true when the text is now turned
+ */
+export function flipBig() {
+  return document.getElementById('bigcard').classList.toggle('flipped');
+}
+
+/**
+ * The big card's 🔊: read the text aloud. A tap within REPEAT_MS of the previous one, or of the end of its
+ * reading, reads it again more slowly (sayRate).
+ * @param {string} text  Chinese
+ * @returns {void}
+ */
+export function sayOnCard(text) {
+  const now = Date.now();
+  const said = { text, at: now };
+  const u = utter(text, sayRate(lastSay, text, now));
+  lastSay = said;
+  u.onend = () => { said.at = Date.now(); }; // "again" also counts from the end of a long reading
 }
 
 /**
@@ -67,12 +114,23 @@ export function hideBig() {
  * Prefers a Taiwan Mandarin voice, then any other Mandarin voice. Never a Cantonese voice
  * (zh-HK / yue): it would read Mandarin phrases wrongly. With no Mandarin voice, the browser decides.
  * @param {string} text
+ * @param {number} [rate]  speech rate, SAY_RATE by default
  * @returns {void}
  */
-export function speak(text) {
+export function speak(text, rate = SAY_RATE) {
+  utter(text, rate);
+}
+
+/**
+ * speak(), returning the utterance. Stops whatever was being read.
+ * @param {string} text
+ * @param {number} rate
+ * @returns {SpeechSynthesisUtterance}
+ */
+function utter(text, rate) {
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'zh-TW';
-  u.rate = 0.85;
+  u.rate = rate;
   const voices = speechSynthesis.getVoices();
   const norm = l => l.toLowerCase().replace('_', '-');
   const mandarin = voices.filter(v => /^(zh|cmn)/.test(norm(v.lang)) && !/^(zh-hk|zh-mo|yue)/.test(norm(v.lang)));
@@ -80,6 +138,7 @@ export function speak(text) {
   if (v) u.voice = v;
   speechSynthesis.cancel();
   speechSynthesis.speak(u);
+  return u;
 }
 
 /**

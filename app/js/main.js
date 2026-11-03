@@ -9,19 +9,19 @@ import { LOG_KEY, emptyDraft, draftDate, validateDraft, makeEntry, newId, remove
 import { buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt, buildPhotoPrompt } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
-import { toast, copyText, showBig, hideBig, speak, openSheet, closeSheet } from './ui.js';
+import { toast, copyText, showBig, hideBig, flipBig, sayOnCard, wakeAgain, speak, openSheet, closeSheet } from './ui.js';
 import { esc } from './util.js';
 import { tr, trMsg, LANG_KEY, otherLang } from './lang.js';
 import { renderExplore } from './views/explore.js';
-import { renderPlace, driverCard } from './views/place.js';
+import { renderPlace, driverCard, driverSay } from './views/place.js';
 import { renderLog } from './views/log.js';
 import { renderAsk, currentPrompt, photoContext } from './views/ask.js';
-import { renderPhrases, renderTips, phraseCard, phraseCardFull } from './views/reference.js';
+import { renderPhrases, renderTips, phraseCard, phraseCardFull, phraseSay } from './views/reference.js';
 import { renderApps } from './views/apps.js';
 import { renderLearn } from './views/learn.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
-import { foodSheet, findPick, dishSheet, foodDriverCard, menuShop, menuPromptSheet } from './views/food.js';
+import { foodSheet, findPick, dishSheet, foodDriverCard, foodDriverSay, menuShop, menuPromptSheet } from './views/food.js';
 import { foodFor } from './data.js';
 import { parseRoute, activeTab, entryKey, withKey, scrollFor, entryOverlays, withOverlays, overlayChange, focusSelector } from './nav.js';
 
@@ -159,10 +159,13 @@ function sheet(title, html) {
   pushOverlay('sheet', opener);
 }
 
-/** @param {string} html */
-function big(html) {
+/**
+ * @param {string} html
+ * @param {string} [say]  the Chinese the card's 🔊 reads aloud
+ */
+function big(html, say = '') {
   const opener = document.activeElement;
-  showBig(html);
+  showBig(html, { say });
   pushOverlay('big', opener);
 }
 
@@ -178,7 +181,7 @@ function dropOverlay(restore) {
   if (restore && o.opener?.isConnected && o.opener.getClientRects().length) o.opener.focus({ preventScroll: true });
 }
 
-/** Close button, backdrop, Escape, a tap on the big card: step back off the overlay's entry (popstate closes it). */
+/** Close button, backdrop, Escape: step back off the overlay's entry (popstate closes it). */
 function closeTop() {
   const top = overlays[overlays.length - 1];
   if (!top || backPending) return;
@@ -346,6 +349,13 @@ const actions = {
     sheet(`${g.icon} ${tr(state.lang, `cat.${g.id}`)}`, phrasesIn(state.data.phrases, g.id).map(ph => phraseCardFull(withParty(ph, state.party), state.lang)).join(''));
   },
   'close-sheet': () => closeTop(),
+  'close-big': () => closeTop(),
+  // The big card's 🔊 (a quick second tap reads it again slowly) and rotate-180° toggle: the card stays open.
+  'big-say': el => {
+    if (typeof speechSynthesis === 'undefined') return toast(tr(state.lang, 'noSpeech'));
+    sayOnCard(el.dataset.say);
+  },
+  'big-flip': el => el.setAttribute('aria-pressed', String(flipBig())),
   'food-sheet': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
     if (f) sheet(tr(state.lang, 'foodPick'), foodSheet(f.city, f.pick, state.lang));
@@ -366,13 +376,16 @@ const actions = {
   },
   'food-driver': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
-    if (f) big(foodDriverCard(f.city, f.pick));
+    if (f) big(foodDriverCard(f.city, f.pick), foodDriverSay(f.city, f.pick));
   },
   city: el => { state.exploreCity = el.dataset.city; render(); },
-  driver: el => big(driverCard(placeById(places(), el.dataset.id))),
+  driver: el => {
+    const p = placeById(places(), el.dataset.id);
+    if (p) big(driverCard(p), driverSay(p));
+  },
   'show-phrase': el => {
     const ph = phraseById(el.dataset.id);
-    if (ph) big(phraseCard(ph));
+    if (ph) big(phraseCard(ph), phraseSay(ph));
   },
   say: el => {
     if (typeof speechSynthesis === 'undefined') return toast(tr(state.lang, 'noSpeech'));
@@ -380,7 +393,7 @@ const actions = {
   },
   speak: el => {
     const ph = phraseById(el.dataset.id);
-    if (ph) speak(ph.tts || ph.zh_TW); // tts: respelling for phrases the voice engine mispronounces
+    if (ph) speak(phraseSay(ph)); // its tts respelling when the voice engine mispronounces it
   },
   'party-dec': () => setParty(state.party - 1),
   'party-inc': () => setParty(state.party + 1),
@@ -451,7 +464,17 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeTop();
 });
 
-document.getElementById('bigcard').addEventListener('click', closeTop);
+// The big card closes on a tap on its backdrop (#bigcard itself, around the panel), never on its text:
+// a driver pointing at the address must not close it. Its buttons dispatch like the page's.
+const bigcard = document.getElementById('bigcard');
+bigcard.addEventListener('click', e => {
+  if (e.target === bigcard) closeTop();
+  else dispatchClick(e);
+});
+// The browser drops the screen wake lock while the page is hidden; take it again if the big card is open.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'hidden') wakeAgain();
+});
 
 // A place photo comes from Wikimedia, which the service worker does not cache: when it fails (offline),
 // hide it together with its credit line. 'error' does not bubble, hence the capture phase.

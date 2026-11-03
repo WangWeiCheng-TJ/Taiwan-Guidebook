@@ -167,15 +167,40 @@ pre.prompt {
 .daygroup { margin: 18px 0 6px; font-weight: 700; }
 .entry { display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; }
 
+/* Show card: a white panel on a dimmed backdrop (#bigcard; a tap on the backdrop closes it, one on the text
+   does not). The panel stays black on white in both colour schemes: it is shown to someone else, often outdoors
+   or in a dark taxi. Only .big-text turns 180° (.flipped); the bar stays upright for the person holding it. */
 .bigcard {
-  position: fixed; inset: 0; z-index: 20; background: #fff; color: #111;
-  display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-  padding: 24px; gap: 16px;
+  position: fixed; inset: 0; z-index: 20; background: rgba(0, 0, 0, .6);
+  display: flex; justify-content: center;
+  padding: calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right))
+    calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
 }
+.big-panel {
+  /* light tokens inside the panel, so its buttons match the white card in dark mode too */
+  --surface: #ffffff; --text: #1d1b18; --line: #d6cfc2; --accent: #0f5f5a; --accent-soft: #e2efed;
+  color-scheme: light;
+  width: 100%; max-width: 760px; background: #fff; color: #111; border-radius: 18px;
+  display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 14px; overflow: auto;
+  overscroll-behavior: contain;
+}
+.big-bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.big-bar .row { gap: 6px; }
+.big-bar .btn { padding: 8px 11px; }
+.big-text {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; gap: 16px; padding: 8px 4px;
+  transition: transform .25s ease;
+}
+.bigcard.flipped .big-text { transform: rotate(180deg); }
+.big-flip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
 .bigcard .big { font-size: clamp(36px, 11vw, 72px); font-weight: 800; line-height: 1.2; word-break: break-word; }
 .bigcard .mid { font-size: clamp(22px, 6vw, 36px); font-weight: 600; line-height: 1.35; }
-.bigcard .hint { color: #666; font-size: 15px; }
-.bigcard .close { position: absolute; top: calc(12px + env(safe-area-inset-top)); right: 16px; }
+.bigcard .hint { color: #595959; font-size: 15px; }
+.bigcard .big-hint { text-align: center; }
+@media (prefers-reduced-motion: reduce) {
+  .big-text { transition: none; }
+}
 
 .toast {
   position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--tabbar-h) + 16px + env(safe-area-inset-bottom));

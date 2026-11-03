@@ -120,7 +120,7 @@ export function installDom({ hash = '#/explore', language = 'en-GB', guidebook =
   sheet.known['.sheet-body'] = new FakeElement(document, { parent: sheet });
   const bigcard = el('bigcard');
   bigcard.hidden = true;
-  const bigClose = new FakeElement(document, { tag: 'button', parent: bigcard });
+  const bigClose = new FakeElement(document, { tag: 'button', dataset: { action: 'close-big' }, parent: bigcard });
   el('askbar', { tag: 'button' }).hidden = true;
   el('toast');
   document.bySelector['.topbar'] = new FakeElement(document, { tag: 'header' });
