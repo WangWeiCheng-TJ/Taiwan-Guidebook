@@ -56,8 +56,8 @@ let lastSay = null;
  * Full-screen high-contrast card for showing text to a driver or shopkeeper (markup: bigCardHtml): a 🔊 button
  * when `opts.say` is given and the device can speak, a rotate-180° toggle, and Close. It closes only with
  * Close, Escape, Back or a tap on the dimmed backdrop, never with a tap on the text (wired in main.js).
- * Opens upright and keeps the screen awake until hideBig. Labels and the dialog's accessible name follow
- * the UI language at open time.
+ * Opens upright, keeps the screen awake and the page behind from scrolling until hideBig. Labels and the
+ * dialog's accessible name follow the UI language at open time.
  * @param {string} html  trusted markup; callers must esc() any data inside
  * @param {{ say?: string }} [opts]  say: the Chinese the 🔊 button reads aloud (sayOnCard)
  * @returns {void}
@@ -68,6 +68,7 @@ export function showBig(html, opts = {}) {
   el.innerHTML = bigCardHtml(html, state.lang, { say: opts.say || '', canSpeak: typeof speechSynthesis !== 'undefined' });
   el.classList.remove('flipped');
   el.hidden = false;
+  document.body.classList.add('no-scroll'); // a wheel or swipe on the dimmed backdrop must not scroll the page behind
   lastSay = null;
   wake.hold();
 }
@@ -75,6 +76,7 @@ export function showBig(html, opts = {}) {
 /** Close the big card and let the screen sleep again. @returns {void} */
 export function hideBig() {
   document.getElementById('bigcard').hidden = true;
+  if (document.getElementById('sheet').hidden) document.body.classList.remove('no-scroll'); // a sheet under it still locks the page
   wake.release();
 }
 
@@ -161,5 +163,5 @@ export function openSheet(title, html) {
 /** @returns {void} */
 export function closeSheet() {
   document.getElementById('sheet').hidden = true;
-  document.body.classList.remove('no-scroll');
+  if (document.getElementById('bigcard').hidden) document.body.classList.remove('no-scroll');
 }

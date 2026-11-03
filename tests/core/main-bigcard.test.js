@@ -189,3 +189,92 @@ test('without a device voice there is no 🔊; the card still opens with its oth
     globalThis.speechSynthesis = saved;
   }
 });
+
+// ---------- the repeat window counts from the END of a reading; every way out frees the screen and the page ----------
+
+test('🔊: a tap soon after a long reading ENDED is still "again"; with no end event it is a fresh reading', async () => {
+  const realNow = Date.now;
+  let t = 5_000_000;
+  Date.now = () => t;
+  try {
+    click({ action: 'driver', id: 'chihkan-tower' });
+    const say = driverSay(chihkan);
+    const n = spoken.length;
+    tapCard(cardButton({ action: 'big-say', say }));
+    assert.equal(spoken[n].rate, SAY_RATE);
+    t += 3000;
+    tapCard(cardButton({ action: 'big-say', say }));
+    assert.equal(spoken[n + 1].rate, SLOW_RATE);
+    assert.equal(typeof spoken[n + 1].onend, 'function', 'the reading reports when it ends');
+
+    t += 9000; // a long reading: 9 s after this tap it ends
+    spoken[n + 1].onend();
+    t += 2000; // 11 s after the previous tap, 2 s after the end
+    tapCard(cardButton({ action: 'big-say', say }));
+    assert.equal(spoken[n + 2].rate, SLOW_RATE, 'counted from the end of the reading');
+
+    t += 6000; // that reading never reports an end: 6 s after its tap is a fresh request
+    tapCard(cardButton({ action: 'big-say', say }));
+    assert.equal(spoken[n + 3].rate, SAY_RATE);
+    tapCard(dom.bigClose);
+    await settle();
+    assert.equal(dom.bigcard.hidden, true);
+  } finally {
+    Date.now = realNow;
+  }
+});
+
+test('Escape and Back close the card and release the wake lock', async () => {
+  click({ action: 'driver', id: 'chihkan-tower' });
+  await settle();
+  const lock = lastWake();
+  assert.equal(lock.released, false);
+  dom.document.dispatch('keydown', { key: 'Escape' });
+  await settle();
+  assert.equal(dom.bigcard.hidden, true);
+  assert.equal(lock.released, true, 'Escape');
+
+  click({ action: 'driver', id: 'chihkan-tower' });
+  await settle();
+  const again = lastWake();
+  assert.notEqual(again, lock);
+  assert.equal(again.released, false);
+  dom.history.back();
+  await settle();
+  assert.equal(dom.bigcard.hidden, true);
+  assert.equal(again.released, true, 'Back');
+  assert.equal(dom.location.hash, '#/place/chihkan-tower');
+});
+
+test('the page behind does not scroll while the card is open, also when the card sits over a sheet', async () => {
+  const locked = () => dom.document.body.classList.contains('no-scroll');
+  assert.equal(locked(), false);
+  click({ action: 'driver', id: 'chihkan-tower' });
+  assert.equal(locked(), true, 'a wheel or swipe on the dimmed backdrop would scroll the page');
+  tapCard(dom.bigClose);
+  await settle();
+  assert.equal(locked(), false);
+
+  click({ action: 'phrase-sheet', id: 'hello' });
+  assert.equal(locked(), true, 'the sheet locks it too');
+  dom.sheet.listeners.click[0]({ target: dom.control({ action: 'show-phrase', id: 'hello' }, {}, dom.sheet), preventDefault() {} });
+  tapCard(dom.bigClose);
+  await settle();
+  assert.equal(dom.sheet.hidden, false);
+  assert.equal(locked(), true, 'closing the card leaves the sheet\'s lock');
+  dom.sheet.listeners.click[0]({ target: dom.sheetClose, preventDefault() {} });
+  await settle();
+  assert.equal(locked(), false);
+});
+
+test('leaving the page closes the card and releases the wake lock', async () => {
+  click({ action: 'driver', id: 'chihkan-tower' });
+  await settle();
+  const lock = lastWake();
+  assert.equal(lock.released, false);
+  dom.location.hash = '#/tips';
+  await settle();
+  assert.equal(dom.bigcard.hidden, true);
+  assert.equal(lock.released, true);
+  assert.equal(dom.document.body.classList.contains('no-scroll'), false);
+});
