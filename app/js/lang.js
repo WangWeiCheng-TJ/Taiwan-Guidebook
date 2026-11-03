@@ -20,7 +20,7 @@ export function initialLang(stored, navLang = '') {
 
 const STRINGS = {
   en: {
-    brand: 'Taiwan Guidebook', offline: 'Offline', switchTo: '中文', switchLabel: '中文: switch to Chinese',
+    brand: 'Taiwan Guidebook', offline: 'Offline', switchTo: '中文', switchLabel: '中文: switch to Chinese', loading: 'Loading…',
     loadFail: 'Could not load the guide. Connect to the internet once so it can be saved for offline use.',
     'tab.explore': 'Explore', 'tab.log': 'My trip', 'tab.ask': 'Ask AI', 'tab.phrases': 'Phrases', 'tab.tips': 'Tips',
     distancesFrom: 'Distances from <b>{label}</b>', inCity: "I'm in <b>{label}</b>", update: 'Update', change: 'Change', useLocation: 'Use my location', nearPick: "or I'm in…",
@@ -80,7 +80,7 @@ const STRINGS = {
     'map.online': 'The map needs an internet connection.',
   },
   zh_TW: {
-    brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', switchLabel: 'EN：切換成英文',
+    brand: '台灣旅遊手冊', offline: '離線', switchTo: 'EN', switchLabel: 'EN：切換成英文', loading: '載入中…',
     loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
     'tab.explore': '探索', 'tab.log': '我的旅程', 'tab.ask': '問 AI', 'tab.phrases': '常用語', 'tab.tips': '須知',
     distancesFrom: '距離以 <b>{label}</b> 計算', inCity: '我在 <b>{label}</b>', update: '更新', change: '更換', useLocation: '使用我的位置', nearPick: '或選擇我在哪個城市…',

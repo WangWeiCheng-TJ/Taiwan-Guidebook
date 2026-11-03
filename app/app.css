@@ -173,6 +173,9 @@ pre.prompt {
 /* The toast is a live region that stays in the page; with no message it takes no space */
 .toast:empty { padding: 0; }
 
+/* main.js focuses the page heading after a route change (for screen readers); it is not a control */
+h1[tabindex="-1"]:focus, .view[tabindex="-1"]:focus { outline: none; }
+
 /* Trip plan */
 .plan .chips { margin-bottom: 0; }
 ol.stops { list-style: none; padding: 0; margin: 6px 0 0; }

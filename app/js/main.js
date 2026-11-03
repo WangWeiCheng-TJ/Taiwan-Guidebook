@@ -23,38 +23,41 @@ import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
 import { foodSheet, findPick, dishSheet, foodDriverCard } from './views/food.js';
 import { foodFor } from './data.js';
+import { parseRoute, activeTab, entryKey, withKey, scrollFor, entryOverlays, withOverlays, overlayChange, focusSelector } from './nav.js';
 
 const view = document.getElementById('view');
+let loadFailed = false; // the guidebook could not be loaded: #view shows loadFail
+
+/** A key unique enough to tell history entries and overlays apart, also across reloads. */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
 // ---------- Routing ----------
 // #/explore | #/place/<id> | #/log | #/log/<placeId> (prefill) | #/ask | #/phrases | #/phrases/<group> | #/tips
-// | #/apps | #/learn | #/learn/<topicId>
-
-/** Pages without a tab of their own highlight the tab they are reached from. */
-const PARENT_TAB = { place: 'explore', apps: 'tips', learn: 'tips' };
+// | #/apps | #/learn | #/learn/<topicId>. Unknown routes show Explore and say so in the address bar.
 
 /**
- * @param {string} hash  location.hash
- * @returns {{ tab: string, arg: string }}
+ * Render the current route into #view and highlight the tab.
+ * @param {boolean} [nav]  a route change: focus moves to `returnTo`, else to the new page's heading.
+ *   Otherwise a control that had focus in #view gets it back in the new markup (a re-render would
+ *   otherwise drop focus to <body>).
+ * @param {{ selector: string, range: [number, number]|null }|null} [returnTo]  Back or Forward: the control
+ *   that had focus when the reader left this page (focusedControl())
  */
-function parseRoute(hash) {
-  const [route, arg = ''] = hash.replace(/^#\/?/, '').split('/');
-  return { tab: route || 'explore', arg: decodeURIComponent(arg) };
-}
-
-/** Render the current route into #view and highlight the tab. */
-function render() {
-  if (!state.data) return;
-  const { tab, arg } = parseRoute(location.hash);
+function render(nav = false, returnTo = null) {
+  renderChrome();
+  if (!state.data) {
+    if (loadFailed) view.innerHTML = `<p>${tr(state.lang, 'loadFail')}</p>`;
+    return;
+  }
+  const { tab, arg, known } = parseRoute(location.hash);
+  if (!known) history.replaceState(history.state, '', '#/explore');
 
   if (tab === 'log' && arg && placeById(places(), arg)) {
     state.draft = { ...state.draft, placeId: arg, name: '' };
-    history.replaceState(null, '', '#/log');
+    history.replaceState(history.state, '', '#/log');
   }
 
-  renderChrome();
-  document.querySelectorAll('.tabbar a').forEach(a =>
-    a.classList.toggle('active', a.dataset.tab === (PARENT_TAB[tab] || tab)));
+  document.querySelectorAll('.tabbar a').forEach(a => a.classList.toggle('active', a.dataset.tab === activeTab(tab)));
 
   const views = {
     explore: () => renderExplore(state),
@@ -66,10 +69,143 @@ function render() {
     apps: () => renderApps(state),
     learn: () => renderLearn(state, arg),
   };
+  const focus = nav ? returnTo : focusedControl();
   view.innerHTML = (views[tab] || views.explore)();
+  if (focus) refocus(focus);
+  else if (nav) focusHeading();
 }
 
-window.addEventListener('hashchange', () => { closeSheet(); render(); window.scrollTo(0, 0); });
+// ---------- Focus ----------
+
+/**
+ * The control focused inside #view, as a selector that finds it again after a re-render.
+ * @returns {{ selector: string, range: [number, number]|null }|null}
+ */
+function focusedControl() {
+  const el = document.activeElement;
+  if (!el || el === view || !view.contains(el)) return null;
+  const range = typeof el.selectionStart === 'number' ? [el.selectionStart, el.selectionEnd] : null;
+  return { selector: focusSelector(name => el.getAttribute(name)), range };
+}
+
+/**
+ * Focus the control again, with its text selection; a control that is now disabled (− at the minimum)
+ * hands focus to an enabled button next to it; one that is gone hands it to the page heading.
+ * @param {{ selector: string, range: [number, number]|null }} f
+ */
+function refocus(f) {
+  let el = f.selector ? view.querySelector(f.selector) : null;
+  if (el?.disabled) el = el.parentElement?.querySelector('button:not([disabled])') || null;
+  if (!el) return focusHeading();
+  el.focus({ preventScroll: true });
+  if (f.range && typeof el.selectionStart === 'number') el.setSelectionRange(f.range[0], f.range[1]);
+}
+
+/** Move focus to the page's heading, so a screen reader starts reading the new page. */
+function focusHeading() {
+  const h = view.querySelector('h1') || view;
+  h.setAttribute('tabindex', '-1');
+  h.focus({ preventScroll: true });
+}
+
+// ---------- History: scroll position per entry, Back closes overlays first ----------
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; // restored per entry below
+/** @type {Map<string, number>} scrollY by history entry key, saved when leaving the entry */
+const scrolls = new Map();
+/** @type {Map<string, { selector: string, range: [number, number]|null }>} the focused control, ditto */
+const focused = new Map();
+let entry = entryKey(history.state) || uid();
+// A reload on an overlay's entry leaves nothing open: drop the stale overlay list.
+history.replaceState(withKey(withOverlays(history.state, []), entry), '');
+
+/** @type {{ kind: 'sheet'|'big', token: string, opener: Element|null }[]} open overlays, bottom first */
+const overlays = [];
+let backPending = false; // history.back() was called to close an overlay; popstate has not come yet
+
+window.addEventListener('hashchange', () => {
+  // #view still shows the page being left: remember where the reader was on it
+  scrolls.set(entry, window.scrollY);
+  const f = focusedControl();
+  if (f) focused.set(entry, f); else focused.delete(entry);
+  while (overlays.length) dropOverlay(false);
+  const back = entryKey(history.state); // set: Back or Forward to a page seen before; null: a new page
+  const y = scrollFor(back, scrolls);
+  entry = back || uid();
+  if (!back) history.replaceState(withKey(history.state, entry), '');
+  render(true, back ? focused.get(back) || null : null);
+  window.scrollTo(0, y);
+});
+
+/**
+ * Record an overlay just opened (openSheet / showBig) with its own history entry, so Back closes it,
+ * and move focus into it. A sheet opened over a sheet only replaces the content: same entry.
+ * @param {'sheet'|'big'} kind
+ * @param {Element|null} opener  the element focused before opening; gets focus back on close
+ */
+function pushOverlay(kind, opener) {
+  if (overlays[overlays.length - 1]?.kind !== kind) {
+    overlays.push({ kind, token: uid(), opener });
+    history.pushState(withOverlays(history.state, overlays.map(o => o.token)), '');
+  }
+  syncInert();
+  document.querySelector(kind === 'big' ? '#bigcard .close' : '#sheet .sheet-head button')?.focus({ preventScroll: true });
+}
+
+/** @param {string} title @param {string} html */
+function sheet(title, html) {
+  const opener = document.activeElement;
+  openSheet(title, html);
+  pushOverlay('sheet', opener);
+}
+
+/** @param {string} html */
+function big(html) {
+  const opener = document.activeElement;
+  showBig(html);
+  pushOverlay('big', opener);
+}
+
+/**
+ * Close the top overlay.
+ * @param {boolean} restore  give focus back to the element that opened it
+ */
+function dropOverlay(restore) {
+  const o = overlays.pop();
+  if (!o) return;
+  if (o.kind === 'big') hideBig(); else closeSheet();
+  syncInert();
+  if (restore && o.opener?.isConnected && o.opener.getClientRects().length) o.opener.focus({ preventScroll: true });
+}
+
+/** Close button, backdrop, Escape, a tap on the big card: step back off the overlay's entry (popstate closes it). */
+function closeTop() {
+  const top = overlays[overlays.length - 1];
+  if (!top || backPending) return;
+  if (entryOverlays(history.state).includes(top.token)) {
+    backPending = true;
+    history.back();
+  } else {
+    dropOverlay(true); // its entry is gone (replaced): just close it
+  }
+}
+
+window.addEventListener('popstate', () => {
+  backPending = false;
+  const { close, stale } = overlayChange(overlays.map(o => o.token), entryOverlays(history.state));
+  for (let i = 0; i < close; i++) dropOverlay(true);
+  if (stale) {
+    backPending = true;
+    history.back();
+  }
+});
+
+/** While an overlay is open, the page under it (and a sheet under the big card) takes no focus or clicks. */
+function syncInert() {
+  const kinds = overlays.map(o => o.kind);
+  for (const el of [document.querySelector('.topbar'), view, document.querySelector('.tabbar')]) el?.toggleAttribute('inert', kinds.length > 0);
+  document.getElementById('sheet').toggleAttribute('inert', kinds.includes('big') && kinds.includes('sheet'));
+}
 
 // ---------- State changes ----------
 
@@ -119,7 +255,7 @@ function phraseById(id) {
 async function loadSharedTrip() {
   const url = tripUrlFrom(location.search);
   if (!url) return;
-  history.replaceState(null, '', location.pathname + location.hash);
+  history.replaceState(history.state, '', location.pathname + location.hash);
   const { trip, errors } = await loadTrip(url);
   if (trip) {
     toast(setTrip(trip) ? tr(state.lang, 'planLoaded', { t: trip.title }) : tr(state.lang, 'storageFail'));
@@ -202,32 +338,32 @@ const actions = {
   'phrase-sheet': el => {
     const ph = phraseById(el.dataset.id);
     const g = ph && PHRASE_GROUPS.find(x => x.id === ph.category);
-    if (ph) openSheet(g ? `${g.icon} ${tr(state.lang, `cat.${g.id}`)}` : '', phraseCardFull(ph, state.lang));
+    if (ph) sheet(g ? `${g.icon} ${tr(state.lang, `cat.${g.id}`)}` : '', phraseCardFull(ph, state.lang));
   },
   'phrases-sheet': el => {
     const g = PHRASE_GROUPS.find(x => x.id === el.dataset.group);
     if (!g) return;
-    openSheet(`${g.icon} ${tr(state.lang, `cat.${g.id}`)}`, phrasesIn(state.data.phrases, g.id).map(ph => phraseCardFull(withParty(ph, state.party), state.lang)).join(''));
+    sheet(`${g.icon} ${tr(state.lang, `cat.${g.id}`)}`, phrasesIn(state.data.phrases, g.id).map(ph => phraseCardFull(withParty(ph, state.party), state.lang)).join(''));
   },
-  'close-sheet': () => closeSheet(),
+  'close-sheet': () => closeTop(),
   'food-sheet': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
-    if (f) openSheet(tr(state.lang, 'foodPick'), foodSheet(f.city, f.pick, state.lang));
+    if (f) sheet(tr(state.lang, 'foodPick'), foodSheet(f.city, f.pick, state.lang));
   },
   'dish-sheet': el => {
     const c = foodFor(state.data.food, el.dataset.city);
     const d = c && (c.to_try || []).find(x => x.id === el.dataset.id);
-    if (d) openSheet(tr(state.lang, 'foodPick'), dishSheet(c, d, state.lang));
+    if (d) sheet(tr(state.lang, 'foodPick'), dishSheet(c, d, state.lang));
   },
   'food-driver': el => {
     const f = findPick(state.data.food, el.dataset.city, el.dataset.id);
-    if (f) showBig(foodDriverCard(f.city, f.pick));
+    if (f) big(foodDriverCard(f.city, f.pick));
   },
   city: el => { state.exploreCity = el.dataset.city; render(); },
-  driver: el => showBig(driverCard(placeById(places(), el.dataset.id))),
+  driver: el => big(driverCard(placeById(places(), el.dataset.id))),
   'show-phrase': el => {
     const ph = phraseById(el.dataset.id);
-    if (ph) showBig(phraseCard(ph));
+    if (ph) big(phraseCard(ph));
   },
   say: el => {
     if (typeof speechSynthesis === 'undefined') return toast(tr(state.lang, 'noSpeech'));
@@ -303,12 +439,10 @@ document.addEventListener('keydown', e => {
   }
 });
 document.addEventListener('keydown', e => {
-  if (e.key !== 'Escape') return;
-  if (!document.getElementById('bigcard').hidden) hideBig();
-  else closeSheet();
+  if (e.key === 'Escape') closeTop();
 });
 
-document.getElementById('bigcard').addEventListener('click', hideBig);
+document.getElementById('bigcard').addEventListener('click', closeTop);
 
 // A place photo comes from Wikimedia, which the service worker does not cache: when it fails (offline),
 // hide it together with its credit line. 'error' does not bubble, hence the capture phase.
@@ -420,7 +554,7 @@ askbar.addEventListener('click', async () => {
   const ok = await copyText(prompt);
   askbar.hidden = true;
   document.getSelection()?.removeAllRanges();
-  openSheet(tr(state.lang, 'explainTitle'), `
+  sheet(tr(state.lang, 'explainTitle'), `
     <p class="small ${ok ? '' : 'muted'}">${tr(state.lang, ok ? 'explainCopied' : 'copyFailPreview')}</p>
     <div class="row small" style="margin-bottom:10px">
       <span class="muted">${tr(state.lang, 'thenOpen')}</span>
@@ -441,10 +575,13 @@ window.addEventListener('offline', updateNet);
 
 async function init() {
   updateNet();
+  renderChrome(); // top bar and tabs in the saved or browser language while the guide loads
+  view.innerHTML = `<p class="muted">${tr(state.lang, 'loading')}</p>`;
   try {
     state.data = await loadGuidebook();
   } catch {
-    view.innerHTML = `<p>${tr(state.lang, 'loadFail')}</p>`;
+    loadFailed = true; // render() shows loadFail, in the language the toggle picks
+    render();
     return;
   }
   render();
