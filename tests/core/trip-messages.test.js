@@ -17,7 +17,7 @@ async function allMessages() {
   add(parseTrip({}).errors);
   add(parseTrip({ title: 'T', days: [1] }).errors);
   add(parseTrip({ title: 'T', days: [{ date: '4 Nov', items: 'none', title: 3 }] }).errors);
-  add(parseTrip({ title: 'T', days: [{ date: '2026-11-04', items: [1, { place: 3, name: 4 }, { name: 'a', time: '9:00', note: 5 }] }] }).errors);
+  add(parseTrip({ title: 'T', days: [{ date: '2026-11-04', items: [1, { place: 3, name: 4 }, { name: 'a', time: '25:00', note: 5 }] }] }).errors);
   const res = r => async () => r;
   add((await loadTrip('https://x.test/t.json', res({ ok: false, status: 404 }))).errors);
   add((await loadTrip('https://x.test/t.json', res({ ok: false }))).errors);
