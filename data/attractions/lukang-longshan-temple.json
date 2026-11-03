@@ -9,8 +9,8 @@
     "city_en": "Changhua County",
     "district_zh": "鹿港鎮",
     "district_en": "Lukang Township",
-    "address_zh": "彰化縣鹿港鎮金門街109號",
-    "address_en": "No. 109, Jinmen St., Lukang Township, Changhua County",
+    "address_zh": "彰化縣鹿港鎮金門街81號",
+    "address_en": "No. 81, Jinmen St., Lukang Township, Changhua County",
     "coordinates": {
       "lat": 24.0531,
       "lng": 120.4354
@@ -34,10 +34,10 @@
   },
   "timeline": [
     {
-      "year_or_era": "1653",
-      "era_category": "Early Qing",
-      "event_zh": "泉州僧侶肇善禪師迎奉觀音大士神像至鹿港大有街創建草創小廟。",
-      "event_en": "Monk Zhaoshan brought Guanyin statues from Mount Putuo to found an early shrine."
+      "year_or_era": "1646–1661",
+      "era_category": "Late Ming",
+      "event_zh": "相傳明永曆年間，泉州移民迎請觀音菩薩，於鹿港舊河道邊（今大有街一帶）結廬為寺；此說無史料可考。",
+      "event_en": "By tradition, settlers from Quanzhou brought an image of Guanyin and built a simple shrine beside the old river channel (today's Dayou Street) during the Ming Yongli era; no records confirm the date."
     },
     {
       "year_or_era": "1786",
@@ -139,6 +139,14 @@
   "metadata": {
     "source": "Lukang Longshan Temple Foundation & Bureau of Cultural Heritage",
     "generated_by": "Taiwan-Guidebook Curatorial Team",
-    "last_updated": "2026-08-31"
+    "last_updated": "2026-11-03",
+    "sources": [
+      "https://www.taiwan.net.tw/m1.aspx?id=2156&sno=0001016",
+      "https://view.boch.gov.tw/NationalHistorical/itemspage.aspx?id=52",
+      "https://tourism.chcg.gov.tw/AttractionsContent.aspx?id=91&chk=fb6ba20e-68ce-4ef8-80ac-dd3693ecf7d0",
+      "https://www.lungshan-temple.org.tw/index.php?nav=8",
+      "https://taiwangods.moi.gov.tw/html/cultural/3_0011.aspx?i=10",
+      "https://city.gvm.com.tw/article/86673"
+    ]
   }
 }
