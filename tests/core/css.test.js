@@ -3,7 +3,7 @@
 // sizes, wrapping, and that no rule targets a class nothing emits.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -313,5 +313,40 @@ test('toast: bounded by left and right, centred by auto margins (left: 50% would
   assert.equal(t['margin-inline'], 'auto');
   assert.equal(t.width, 'fit-content');
   assert.equal(t.transform, undefined);
+});
+
+// ---------- Dead and ineffective selectors (audit css #9) ----------
+
+/** Text of every file under app/ that can emit markup: index.html and app/js/**, scripts only. */
+function emitterSource() {
+  const out = [readFileSync(join(appDir, 'index.html'), 'utf8')];
+  const walk = dir => {
+    for (const f of readdirSync(dir)) {
+      const p = join(dir, f);
+      if (statSync(p).isDirectory()) walk(p);
+      else if (f.endsWith('.js')) out.push(readFileSync(p, 'utf8'));
+    }
+  };
+  walk(join(appDir, 'js'));
+  return out.join('\n');
+}
+
+test('no rule targets a class that no view, script or page emits', () => {
+  const source = emitterSource();
+  const classes = new Set();
+  for (const r of RULES) for (const m of r.selector.matchAll(/\.([a-z_][\w-]*)/gi)) classes.add(m[1]);
+  const dead = [...classes].filter(c => !new RegExp(`(^|[^\\w-])${c}($|[^\\w-])`).test(source));
+  assert.deepEqual(dead, [], 'remove the rule, or emit the class');
+});
+
+test('no rule targets <output> (the party stepper uses <b class="party-n">)', () => {
+  assert.ok(!RULES.some(r => /(^|[\s>+~])output\b/.test(r.selector)));
+});
+
+test('"More phrases" (button.linklike.small) is 14px and 44px tall: `font: inherit` must not outrank .small', () => {
+  assert.ok(px(resolve('button.linklike.small', 'min-height')) >= 44);
+  assert.equal(resolve('button.linklike.small', 'font-size'), '14px');
+  // a link-style button without .small still follows the surrounding text
+  assert.equal(resolve('button.linklike', 'font-size'), 'inherit');
 });
 

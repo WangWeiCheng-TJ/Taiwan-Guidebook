@@ -303,7 +303,9 @@ button.phrase-row {
   display: flex; justify-content: space-between; align-items: center; gap: 10px;
 }
 button.phrase-row .chev { color: var(--muted); font-size: 18px; }
-button.linklike { appearance: none; background: none; border: 0; padding: 6px 0; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
+button.linklike { appearance: none; background: none; border: 0; padding: 6px 0; min-height: 44px; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
+/* `font: inherit` above is more specific than .small, which would otherwise be ignored on this button */
+button.linklike.small { font-size: 14px; }
 
 /* Floating "ask AI about the selected text" button. Stacking: .sheet 15 < .askbar 16 < .bigcard 20 < .toast 30;
    it must clear the sheet because text inside a sheet can be selected too */
@@ -353,18 +355,11 @@ details.map p { margin: 6px 0 0; }
 /* Party size stepper: "People − 2 +" */
 .party { display: inline-flex; align-items: center; gap: 8px; }
 .party .btn.small { min-width: 44px; justify-content: center; font-size: 18px; line-height: 1; }
-.party output, .party .party-n {
+.party .party-n {
   min-width: 1.6em; text-align: center; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums;
 }
 
-/* Recommended apps (#/apps) */
-.app-name { font-weight: 650; font-size: 17px; }
-.app-why { margin: 6px 0 0; font-size: 15px; }
-.app-meta { margin-top: 8px; font-size: 13px; color: var(--muted); }
-
-/* Learn (#/learn): topic articles */
-.topic-body { margin: 12px 0 18px; }
-.topic-body p { margin: 0 0 14px; line-height: 1.65; }
+/* Learn (#/learn): sources list under a topic */
 .sources { margin: 6px 0 0; padding-left: 18px; font-size: 13px; color: var(--muted); }
 .sources li { margin: 4px 0; overflow-wrap: anywhere; }
 .sources a { color: inherit; }
@@ -379,4 +374,4 @@ details.map p { margin: 6px 0 0; }
 .say-btn::after { content: ''; position: absolute; inset: -7px; }
 .say-btn:active { background: var(--accent-soft); }
 .zc.say { cursor: pointer; border-radius: 8px; padding: 2px 3px; -webkit-tap-highlight-color: transparent; }
-.zc.say:active, .zc.say.speaking { background: var(--accent-soft); }
+.zc.say:active { background: var(--accent-soft); }
