@@ -161,7 +161,7 @@
  * @property {string} note
  *
  * @typedef {Object} LogDraft    The unsaved log form
- * @property {string} date
+ * @property {string} date       YYYY-MM-DD the user picked, or "" for today (resolved when shown and when saved)
  * @property {string} placeId    "" when not a guidebook place
  * @property {string} name
  * @property {number} stars      0 = no rating

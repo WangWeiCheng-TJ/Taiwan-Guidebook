@@ -7,7 +7,8 @@ import { renderTripSection } from './trip.js';
 import { placeName } from './common.js';
 
 /**
- * My trip tab (#/log): the plan (renderTripSection), then the notes: entry form bound to s.draft,
+ * My trip tab (#/log): the plan (renderTripSection), then the notes: entry form bound to s.draft
+ * (an empty draft date shows today's date),
  * entries grouped by day (newest first), backup.
  * Form: <form data-form="log"> with fields date, placeId, name, note; star buttons data-action="star" data-n.
  * The free-text name field ([data-other]) is hidden when a guidebook place is selected.
@@ -34,7 +35,7 @@ export function renderLog(s) {
     <p class="muted small">${tr(L, 'notesIntro')}</p>
 
     <form class="card stack" data-form="log">
-      <label>${tr(L, 'date')} <input type="date" name="date" value="${esc(dr.date)}"></label>
+      <label>${tr(L, 'date')} <input type="date" name="date" value="${esc(dr.date || today())}"></label>
       <label>${tr(L, 'where')}
         <select name="placeId">
           <option value="">${tr(L, 'elsewhere')}</option>

@@ -11,11 +11,23 @@ export const LOG_KEY = 'tg.log.v1';
 export const EXPORT_TYPE = 'taiwan-guidebook-trip-log';
 
 /**
- * @param {string} date  YYYY-MM-DD the form should start with
+ * @param {string} date  YYYY-MM-DD the form should start with, or "" to follow today's date
  * @returns {LogDraft}
  */
 export function emptyDraft(date) {
   return { date, placeId: '', name: '', stars: 0, note: '' };
+}
+
+/**
+ * The date to keep in the draft after the user sets the form's date field. Today's date is kept as ""
+ * ("follow today"), so a form left open past midnight logs the new day instead of the day the app
+ * started; any other date is the user's choice and stays as picked.
+ * @param {string} picked  the date input's value, YYYY-MM-DD or "" when cleared
+ * @param {string} today   YYYY-MM-DD
+ * @returns {string}
+ */
+export function draftDate(picked, today) {
+  return picked === today ? '' : picked;
 }
 
 /**

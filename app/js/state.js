@@ -1,7 +1,6 @@
 // The single mutable app state. Only main.js mutates it; views read it.
 
 import { readJSON } from './storage.js';
-import { today } from './util.js';
 import { LOG_KEY, emptyDraft } from './triplog.js';
 import { TRIP_KEY, parseTrip } from './trip.js';
 import { LANG_KEY, initialLang } from './lang.js';
@@ -23,7 +22,7 @@ import { PARTY_KEY, clampParty } from './party.js';
  * @property {boolean} pasteOpen     My trip: show the "paste AI answer" box even when a plan exists
  * @property {string|null} tripDate  My trip: the plan day the user picked; null = defaultTripDate()
  * @property {string} exploreCity    "all" or a city_en
- * @property {LogDraft} draft        the log form, survives tab switches
+ * @property {LogDraft} draft        the log form, survives tab switches; draft.date "" follows today's date
  * @property {{ mode: 'near'|'plan', radius: number, area: string, customArea: string,
  *              day: 'today'|'tomorrow', question: string|null, includeLog: boolean, wantPlan: boolean }} ask
  *           question null = not edited, follow defaultQuestion()
@@ -40,7 +39,7 @@ export const state = {
   pasteOpen: false,
   tripDate: null,
   exploreCity: 'all',
-  draft: emptyDraft(today()),
+  draft: emptyDraft(''), // not today(): an app left open past midnight would log under yesterday
   ask: { mode: 'near', radius: 3, area: '', customArea: '', day: 'tomorrow', question: null, includeLog: true, wantPlan: false },
 };
 

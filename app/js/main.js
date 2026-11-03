@@ -5,7 +5,7 @@ import { state, places } from './state.js';
 import { today } from './util.js';
 import { writeJSON } from './storage.js';
 import { loadGuidebook, placeById, cityCenter } from './data.js';
-import { LOG_KEY, emptyDraft, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
+import { LOG_KEY, emptyDraft, draftDate, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
 import { buildAskPrompt, buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
@@ -331,16 +331,25 @@ view.addEventListener('change', async e => {
     case 'import': await importLog(el.files[0]); break;
   }
   if (el.form?.dataset.form === 'log' && el.name) {
-    state.draft[el.name] = el.value;
+    setDraftField(el);
     if (el.name === 'placeId') view.querySelector('[data-other]').hidden = !!el.value;
   }
 });
+
+/**
+ * Copy one log form field into the draft. The date is kept as "" while it is today's (draftDate),
+ * so the form follows the calendar when the app stays open past midnight.
+ * @param {HTMLInputElement} el
+ */
+function setDraftField(el) {
+  state.draft[el.name] = el.name === 'date' ? draftDate(el.value, today()) : el.value;
+}
 
 view.addEventListener('input', e => {
   const el = e.target;
   if (el.dataset.input === 'question') { state.ask.question = el.value; refreshPreview(); }
   if (el.dataset.input === 'custom-area') { state.ask.customArea = el.value; refreshQuestion(); }
-  if (el.form?.dataset.form === 'log' && el.name) state.draft[el.name] = el.value;
+  if (el.form?.dataset.form === 'log' && el.name) setDraftField(el);
 });
 
 view.addEventListener('submit', e => {
