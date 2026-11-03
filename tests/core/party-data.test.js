@@ -48,3 +48,13 @@ test('partyProblems: a party field that does not occur in the phrase is caught',
 test('every party phrase in the bundle changes its Chinese with the size', () => {
   for (const ph of guidebook.phrases.filter(p => p.party)) assert.deepEqual(partyProblems(ph), [], ph.id);
 });
+
+// The two bundle checks above (and "every party phrase in the guidebook aligns" in party.test.js) loop over
+// phrases with a `party` field. data/phrases.json has none yet (BACKLOG: Party size), so they run no
+// assertion. This case says so in every test run instead of passing as coverage; once two-tickets and
+// table-for-two get their party field it passes, and the todo can go.
+test('the bundle has party phrases, so the bundle party checks run', {
+  todo: 'no phrase in data/phrases.json has a party field yet (BACKLOG: Party size)',
+}, () => {
+  assert.ok(guidebook.phrases.some(p => p.party), 'no phrase carries party');
+});
