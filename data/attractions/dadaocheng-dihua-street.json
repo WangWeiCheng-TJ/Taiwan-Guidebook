@@ -77,7 +77,7 @@
     ],
     "must_see_spots_zh": [
       "台北霞海城隍廟（月老靈驗享譽國際）",
-      "三進式長條老街屋天井文創茶館（如合勝堂、進益採買等）",
+      "三進式長條老街屋天井文創茶館",
       "永樂布業商場（全臺最大布料批發與旗袍手工藝中心）",
       "大稻埕碼頭（PIER5貨櫃市集與淡水河夕陽自行車道）"
     ],
@@ -99,7 +99,7 @@
       {
         "name": {
           "en": "Traditional 3-courtyard historic shophouses with hidden garden cafes and tea studios",
-          "zh_TW": "三進式長條老街屋天井文創茶館（如合勝堂、進益採買等）"
+          "zh_TW": "三進式長條老街屋天井文創茶館"
         },
         "why": {
           "en": "These elongated historic shophouses run deep with tranquil central courtyards once used for workshops and storage. Today, they house artisanal cafes and tea studios.",
@@ -139,6 +139,10 @@
   "metadata": {
     "source": "Taipei City Department of Cultural Affairs & URS Historic Preservation Project",
     "generated_by": "Taiwan-Guidebook Curatorial Team",
-    "last_updated": "2026-08-31"
+    "last_updated": "2026-11-03",
+    "sources": [
+      "https://news.pts.org.tw/article/567217",
+      "https://supertaste.tvbs.com.tw/travel/313760"
+    ]
   }
 }
