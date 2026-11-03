@@ -214,8 +214,8 @@ pre.prompt {
 }
 .bigcard.flipped .big-text { transform: rotate(180deg); }
 .big-flip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
-.bigcard .big { font-size: clamp(36px, 11vw, 72px); font-weight: 800; line-height: 1.2; word-break: break-word; }
-.bigcard .mid { font-size: clamp(22px, 6vw, 36px); font-weight: 600; line-height: 1.35; }
+.bigcard .big { font-size: clamp(36px, min(11vw, 14vh), 72px); font-weight: 800; line-height: 1.2; word-break: break-word; }
+.bigcard .mid { font-size: clamp(22px, min(6vw, 8vh), 36px); font-weight: 600; line-height: 1.35; }
 .bigcard .hint { color: #595959; font-size: 15px; }
 .bigcard .big-hint { text-align: center; }
 @media (prefers-reduced-motion: reduce) {
@@ -289,6 +289,11 @@ details.must p { margin: 8px 0 0; color: var(--text); }
   background: var(--bg); border-radius: 18px 18px 0 0; box-shadow: 0 -6px 24px rgba(0, 0, 0, .18);
   padding-bottom: env(safe-area-inset-bottom); max-width: 720px; margin: 0 auto;
   animation: sheet-up .18s ease-out;
+}
+@media (prefers-color-scheme: dark) {
+  /* --bg is the page colour too, and a black shadow is invisible on it: outline the panel, dim the page more */
+  .sheet-backdrop { background: rgba(0, 0, 0, .6); }
+  .sheet-panel { box-shadow: 0 0 0 1px var(--line-strong), 0 -6px 24px rgba(0, 0, 0, .5); }
 }
 @keyframes sheet-up { from { transform: translateY(24px); opacity: .6; } to { transform: none; opacity: 1; } }
 .sheet-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 8px; }

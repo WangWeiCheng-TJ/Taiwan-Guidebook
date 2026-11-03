@@ -350,3 +350,26 @@ test('"More phrases" (button.linklike.small) is 14px and 44px tall: `font: inher
   assert.equal(resolve('button.linklike', 'font-size'), 'inherit');
 });
 
+// ---------- Bottom sheet in dark mode (audit css #10) ----------
+
+/** The rule for this selector inside the dark-scheme @media block. */
+function darkRule(selector) {
+  const r = RULES.find(x => x.selector === selector && x.media === DARK);
+  assert.ok(r, `no dark-scheme rule for "${selector}"`);
+  return r.decls;
+}
+
+test('sheet: in dark mode the panel gets a visible outline and the page behind is dimmed more', () => {
+  // --bg is the page colour too, so only an outline (and a stronger dimming) tells the panel from the page
+  assert.match(darkRule('.sheet-panel')['box-shadow'], /0 0 0 1px var\(--line-strong\)/);
+  const alpha = value => Number(value.match(/rgba\(0,\s*0,\s*0,\s*([\d.]+)\)/)[1]);
+  assert.ok(alpha(darkRule('.sheet-backdrop').background) > alpha(rule('.sheet-backdrop').background));
+});
+
+// ---------- Show card in landscape (audit css #11) ----------
+
+test('show card: type sizes are capped by the viewport height too, so a phone on its side needs less scrolling', () => {
+  assert.match(rule('.bigcard .big')['font-size'], /^clamp\(\s*36px,\s*min\(\s*11vw,\s*\d+vh\s*\),\s*72px\s*\)$/);
+  assert.match(rule('.bigcard .mid')['font-size'], /^clamp\(\s*22px,\s*min\(\s*6vw,\s*\d+vh\s*\),\s*36px\s*\)$/);
+  assert.equal(rule('.big-panel').overflow, 'auto', 'what still does not fit scrolls inside the panel');
+});
