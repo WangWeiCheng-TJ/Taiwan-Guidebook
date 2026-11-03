@@ -51,10 +51,14 @@ test('every party phrase in the bundle changes its Chinese with the size', () =>
 
 // The two bundle checks above (and "every party phrase in the guidebook aligns" in party.test.js) loop over
 // phrases with a `party` field. data/phrases.json has none yet (BACKLOG: Party size), so they run no
-// assertion. This case says so in every test run instead of passing as coverage; once two-tickets and
-// table-for-two get their party field it passes, and the todo can go.
+// assertion. This case shows up as skipped, with the reason, in every test run instead of the gap passing
+// silently as coverage. Once two-tickets and table-for-two get their party field it runs and passes.
+// (A todo would say the same, but node lists a todo under "failing tests", which reads like a failure.)
+const partyPhrases = guidebook.phrases.filter(p => p.party);
 test('the bundle has party phrases, so the bundle party checks run', {
-  todo: 'no phrase in data/phrases.json has a party field yet (BACKLOG: Party size)',
+  skip: partyPhrases.length === 0
+    && 'no phrase in data/phrases.json has a party field yet, so the bundle party checks run no assertion (BACKLOG: Party size)',
 }, () => {
-  assert.ok(guidebook.phrases.some(p => p.party), 'no phrase carries party');
+  assert.ok(partyPhrases.length > 0);
+  for (const ph of partyPhrases) assert.ok(ph.party.en_other.includes('{'), ph.id);
 });
