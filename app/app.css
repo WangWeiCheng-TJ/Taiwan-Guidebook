@@ -54,7 +54,8 @@ a { color: var(--accent); }
 .topbar {
   position: sticky; top: 0; z-index: 5;
   display: flex; align-items: center; justify-content: space-between;
-  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  /* 6px, not 10: the language toggle is a 44px target now, so the bar stays about as tall as before */
+  padding: calc(6px + env(safe-area-inset-top)) 16px 6px;
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
@@ -107,14 +108,14 @@ h2 { font-size: 17px; margin: 24px 0 8px; }
   text-decoration: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px;
 }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-.btn.small { padding: 5px 10px; font-size: 14px; min-height: 32px; }
+.btn.small { padding: 5px 10px; font-size: 14px; min-height: 44px; }
 .btn.danger { color: var(--danger); }
 .btn:disabled { opacity: .5; }
 
 .chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin: 0 0 12px; scrollbar-width: none; }
 .chip {
   flex: none; border: 1px solid var(--line); background: var(--surface); color: var(--text);
-  border-radius: 99px; padding: 6px 12px; font: inherit; font-size: 14px; cursor: pointer;
+  border-radius: 99px; padding: 6px 12px; font: inherit; font-size: 14px; cursor: pointer; min-height: 40px;
 }
 .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 
@@ -325,7 +326,7 @@ figure.photo figcaption a { color: inherit; }
 /* Embedded map: a collapsed button-like row; the iframe only loads when opened (online only) */
 details.map { background: none; border: 0; padding: 0; margin: 12px 0; }
 details.map summary {
-  list-style: none; display: inline-flex; align-items: center; gap: 6px; min-height: 32px;
+  list-style: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px;
   padding: 5px 12px; border: 1px solid var(--line); border-radius: 10px;
   background: var(--surface); color: var(--text); font-size: 14px;
 }
@@ -341,7 +342,7 @@ details.map p { margin: 6px 0 0; }
 
 /* Party size stepper: "People − 2 +" */
 .party { display: inline-flex; align-items: center; gap: 8px; }
-.party .btn.small { min-width: 36px; justify-content: center; font-size: 18px; line-height: 1; }
+.party .btn.small { min-width: 44px; justify-content: center; font-size: 18px; line-height: 1; }
 .party output, .party .party-n {
   min-width: 1.6em; text-align: center; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums;
 }
@@ -360,9 +361,12 @@ details.map p { margin: 6px 0 0; }
 
 /* Tap to hear Chinese */
 .say-btn {
-  appearance: none; border: 1px solid var(--line); background: var(--surface); border-radius: 99px;
-  font-size: 15px; line-height: 1; padding: 6px 8px; margin-left: 6px; vertical-align: middle; cursor: pointer;
+  position: relative; appearance: none; border: 1px solid var(--line); background: var(--surface); border-radius: 99px;
+  display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0;
+  font-size: 15px; line-height: 1; margin-left: 6px; vertical-align: middle; cursor: pointer;
 }
+/* 30px to look at, 44px to tap: the invisible ring around the button counts as the button */
+.say-btn::after { content: ''; position: absolute; inset: -7px; }
 .say-btn:active { background: var(--accent-soft); }
 .zc.say { cursor: pointer; border-radius: 8px; padding: 2px 3px; -webkit-tap-highlight-color: transparent; }
 .zc.say:active, .zc.say.speaking { background: var(--accent-soft); }

@@ -242,3 +242,31 @@ test('contrast: the show card is black on white in both schemes; its hint reache
   assert.ok(contrast(hex(rule('.bigcard .hint').color, 'light'), '#ffffff') >= 4.5);
 });
 
+// ---------- Tap targets (audit css #6) ----------
+
+test('tap targets: small buttons, the party stepper and stars are 44px; chips and the map row 40px', () => {
+  assert.ok(px(resolve('button.btn.small', 'min-height')) >= 44, 'language toggle, sheet close, Play/Show, delete, Change/Update');
+  assert.ok(px(resolve('.party button.btn.small', 'min-width')) >= 44, 'party - and +');
+  assert.ok(px(resolve('.party button.btn.small', 'min-height')) >= 44);
+  assert.ok(px(resolve('.stars button', 'min-width')) >= 44, 'rating stars');
+  assert.ok(px(resolve('.stars button', 'min-height')) >= 44);
+  assert.equal(px(resolve('div.stars', 'gap')), 0, 'stars touch, so their targets do not overlap');
+  assert.ok(px(resolve('button.chip', 'min-height')) >= 40);
+  assert.ok(px(resolve('details.map summary', 'min-height')) >= 40);
+});
+
+test('tap targets: the speaker button stays small to look at but its invisible ring makes it 44px', () => {
+  const btn = rule('.say-btn');
+  const ring = rule('.say-btn::after');
+  assert.equal(btn.position, 'relative', 'the ring is positioned against the button');
+  assert.equal(ring.position, 'absolute');
+  const outset = -px(ring.inset);
+  assert.ok(outset > 0, 'inset is negative: the ring is bigger than the button');
+  assert.ok(px(btn.width) + 2 * outset >= 44, 'width + ring');
+  assert.ok(px(btn.height) + 2 * outset >= 44, 'height + ring');
+});
+
+test('tap targets: the top bar pads less now that the language toggle is 44px tall', () => {
+  assert.match(rule('.topbar').padding, /calc\(6px \+ env\(safe-area-inset-top\)\) 16px 6px/);
+});
+
