@@ -176,10 +176,12 @@ export function logBlock(log, places) {
  * 1. who/when (+ trip day number if the log is not empty and today is on or after its first date),
  *    then the party size when ctx.party is a number:
  *    "I'm traveling alone." (1) or "We are <n> people." (absent/null: no sentence)
- * 2. near: where I am (GPS rounded to 3 decimals, or the picked place) / plan: area and date
+ * 2. near: where I am (GPS rounded to 3 decimals, or "somewhere in <picked city> (no GPS)") / plan: area and date
  * 3. trip log (only if includeLog and not empty)
  * 4. the loaded plan for the target date (near: today; plan: today/tomorrow), if ctx.trip has that day
- * 5. guidebook places (near: within radius or 3 nearest fallback; plan: areaPlaces); with ids when wantPlan
+ * 5. guidebook places (near with GPS: within radius or 3 nearest fallback, with distances; near with a picked
+ *    city: that city's places, no distances and no radius, since the city's centre is no one's position;
+ *    plan: areaPlaces); with ids when wantPlan
  * 5b. the owner's food picks for the city in question (ctx.food), if any
  * 6. "guidebook is limited, suggest other places too"
  * 7. "My question: ..." (ctx.question, or defaultQuestion in ctx.lang when null)
@@ -197,7 +199,14 @@ export function buildAskPrompt(ctx) {
   let list = [];
   let listTitle = '';
   let withDistance = false;
-  if (ctx.mode === 'near') {
+  // A picked city is an area: list its places without distances (see gpsDistance in geo.js).
+  const pickedCity = ctx.mode === 'near' && ctx.pos?.source === 'pick' ? ctx.pos.city || ctx.pos.label : '';
+  const cityList = pickedCity ? ctx.places.filter(p => p.location.city_en === pickedCity) : [];
+  if (ctx.mode === 'near' && cityList.length) {
+    parts.push(`I'm somewhere in ${ctx.pos.label} (no GPS).`);
+    list = cityList;
+    listTitle = `Places from my guidebook in ${pickedCity}:`;
+  } else if (ctx.mode === 'near') {
     if (ctx.pos) {
       if (ctx.pos.source === 'gps') {
         const nearest = sortByDistance(ctx.places, ctx.pos)[0];

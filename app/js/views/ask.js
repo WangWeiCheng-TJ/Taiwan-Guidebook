@@ -49,7 +49,7 @@ export function questionText(s) {
 
 /**
  * Ask AI tab (#/ask): mode switch, mode fields, party size, question, toggles, copy button, live preview.
- * near mode: location panel + radius (data-change="radius").
+ * near mode: location panel + radius (data-change="radius"; not shown for a picked city, whose places are all listed).
  * plan mode: day (data-change="day"), area select (data-change="area"), custom area input (data-input="custom-area").
  * Shared: data-action="party-dec" | "party-inc", data-input="question", data-change="include-log" | "want-plan",
  * data-action="mode" data-mode, data-action="copy-prompt".
@@ -65,13 +65,14 @@ export function renderAsk(s) {
   const areaOpts = areaOptions(places()).map(o =>
     `<option value="${esc(o.value)}" ${a.area === o.value ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
 
+  // A picked city lists all its places (buildAskPrompt), so the radius only applies to GPS.
   const modeFields = a.mode === 'near' ? `
     ${locationPanel(s)}
-    <label>${tr(L, 'within')}
+    ${s.pos?.source === 'pick' ? '' : `<label>${tr(L, 'within')}
       <select data-change="radius">
         ${[1, 2, 3, 5, 10, 25].map(r => `<option value="${r}" ${a.radius === r ? 'selected' : ''}>${r} km</option>`).join('')}
       </select>
-    </label>` : `
+    </label>`}` : `
     <div class="stack">
       <label>${tr(L, 'when')}
         <select data-change="day">

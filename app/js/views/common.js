@@ -29,8 +29,9 @@ export function cityName(city, lang) {
 }
 
 /**
- * "Distances from X [Update]" when a position is set,
- * otherwise "Use my location" plus a city picker as fallback (fewer options than listing places).
+ * "Distances from your location [Update]" with GPS, "I'm in <city> [Change] [Use my location]" with a picked
+ * city (no distances then, see gpsDistance), otherwise "Use my location" plus a city picker as fallback
+ * (fewer options than listing places).
  * Emits: data-action="locate" | "clear-location", data-change="pick-location" (value = city_en).
  * @param {import('../state.js').AppState} s
  * @returns {string}
@@ -40,7 +41,7 @@ export function locationPanel(s) {
   if (s.pos) {
     const label = s.pos.city ? cityName(s.pos.city, L) : tr(L, 'yourLocation');
     return `<div class="panel row spread small">
-      <span>${tr(L, 'distancesFrom', { label: esc(label) })}</span>
+      <span>${tr(L, s.pos.city ? 'inCity' : 'distancesFrom', { label: esc(label) })}</span>
       <span class="row">
         ${s.pos.city ? `<button class="btn small" data-action="clear-location">${tr(L, 'change')}</button>` : ''}
         <button class="btn small" data-action="locate">${tr(L, s.pos.city ? 'useLocation' : 'update')}</button>

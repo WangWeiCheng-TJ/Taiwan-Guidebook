@@ -40,6 +40,19 @@ export function distanceTo(place, pos) {
 }
 
 /**
+ * The distance to show the traveler: from a GPS position only, else null.
+ * A picked city (source 'pick') is an area, not a point. Its position is the mean of the city's guidebook
+ * places (cityCenter), which can lie between places tens of km apart (New Taipei: Tamsui and Ruifang), so a
+ * distance from it would mislead (from the New Taipei centre, a Taipei City place is the nearest).
+ * @param {Place} place
+ * @param {import('./types.js').Pos|null} pos
+ * @returns {number|null} kilometres
+ */
+export function gpsDistance(place, pos) {
+  return pos && pos.source !== 'pick' ? distanceTo(place, pos) : null;
+}
+
+/**
  * Places sorted nearest first. Without a position, returns the input order (as a copy).
  * @param {Place[]} places
  * @param {LatLng|null} pos

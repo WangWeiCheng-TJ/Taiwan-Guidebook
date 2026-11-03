@@ -1,5 +1,5 @@
 import { esc, clip, today } from '../util.js';
-import { distanceTo, fmtKm, sortByDistance } from '../geo.js';
+import { gpsDistance, fmtKm, sortByDistance } from '../geo.js';
 import { cities } from '../data.js';
 import { places } from '../state.js';
 import { tr, localized } from '../lang.js';
@@ -9,7 +9,9 @@ import { renderFoodSection } from './food.js';
 
 /**
  * Explore tab (#/explore): today's plan card, location panel, city filter chips, place cards.
- * Cards are sorted by distance when s.pos is set and link to #/place/<id>.
+ * Cards are sorted by distance when s.pos is set and link to #/place/<id>. They show the distance only from
+ * GPS (gpsDistance). A picked city is no one's position: its own places come first, then the others by
+ * distance from its centre.
  * A "Visited" badge shows when the log has an entry for the place.
  * Emits: data-action="city" data-city="<city_en|all>" (the filter key stays English; labels follow s.lang).
  * @param {import('../state.js').AppState} s
@@ -18,7 +20,11 @@ import { renderFoodSection } from './food.js';
 export function renderExplore(s) {
   const L = s.lang;
   const city = s.exploreCity;
-  const list = sortByDistance(places().filter(p => city === 'all' || p.location.city_en === city), s.pos);
+  const sorted = sortByDistance(places().filter(p => city === 'all' || p.location.city_en === city), s.pos);
+  const picked = s.pos?.source === 'pick' ? s.pos.city : null;
+  const list = picked
+    ? [...sorted.filter(p => p.location.city_en === picked), ...sorted.filter(p => p.location.city_en !== picked)]
+    : sorted;
   const visited = new Set(s.log.map(e => e.placeId).filter(Boolean));
   const cityLabel = c => {
     const p = places().find(x => x.location.city_en === c);
@@ -35,7 +41,7 @@ export function renderExplore(s) {
     ${locationPanel(s)}
     <div class="chips">${chips}</div>
     ${list.map(p => {
-      const d = distanceTo(p, s.pos);
+      const d = gpsDistance(p, s.pos);
       return `<a class="card" href="#/place/${esc(p.id)}">
         <div class="row spread">
           <span class="title">${esc(placeName(p, L))}</span>

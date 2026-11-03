@@ -1,5 +1,5 @@
 import { esc, stars } from '../util.js';
-import { distanceTo, fmtKm, mapsLinks, osmEmbedUrl, osmLink } from '../geo.js';
+import { gpsDistance, fmtKm, mapsLinks, osmEmbedUrl, osmLink } from '../geo.js';
 import { placeById } from '../data.js';
 import { topicsForPlace } from '../topics.js';
 import { topicLink } from './learn.js';
@@ -27,7 +27,7 @@ export function renderPlace(s, id) {
   if (!p) return `<p>${tr(L, 'notFound')} <a href="#/explore">${tr(L, 'back')}</a></p>`;
   const g = p.foreign_visitor_guide || {};
   const c = p.cultural_significance || {};
-  const d = distanceTo(p, s.pos);
+  const d = gpsDistance(p, s.pos); // none from a picked city: its centre is no one's position
   const links = mapsLinks(p);
   const notes = notesFor(s.log, p.id);
   const etiquette = localized(g, 'etiquette_tips', L);
