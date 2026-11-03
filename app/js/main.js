@@ -73,20 +73,24 @@ window.addEventListener('hashchange', () => { closeSheet(); render(); window.scr
 
 // ---------- State changes ----------
 
-/** Persist the log; tell the user if the device refused. */
+/**
+ * Persist the log.
+ * @returns {boolean} false when the device refused: the caller shows storageFail instead of its own message
+ */
 function saveLog() {
-  if (!writeJSON(LOG_KEY, state.log)) toast(tr(state.lang, 'storageFail'));
+  return writeJSON(LOG_KEY, state.log);
 }
 
 /**
  * Replace (or remove, with null) the current plan and persist it.
  * @param {import('./types.js').Trip|null} trip
+ * @returns {boolean} false when the device refused to store it
  */
 function setTrip(trip) {
   state.trip = trip;
   state.tripDate = null;
   state.pasteOpen = false;
-  if (!writeJSON(TRIP_KEY, trip)) toast(tr(state.lang, 'storageFail'));
+  return writeJSON(TRIP_KEY, trip);
 }
 
 /**
@@ -118,8 +122,7 @@ async function loadSharedTrip() {
   history.replaceState(null, '', location.pathname + location.hash);
   const { trip, errors } = await loadTrip(url);
   if (trip) {
-    setTrip(trip);
-    toast(tr(state.lang, 'planLoaded', { t: trip.title }));
+    toast(setTrip(trip) ? tr(state.lang, 'planLoaded', { t: trip.title }) : tr(state.lang, 'storageFail'));
     render();
   } else {
     toast(trMsg(state.lang, errors[0]));
@@ -162,17 +165,24 @@ function refreshQuestion() {
   refreshPreview();
 }
 
-async function importLog(file) {
+/**
+ * Merge a chosen export file into the log.
+ * @param {HTMLInputElement} input  the file input; emptied afterwards, so the same file can be chosen again
+ */
+async function importLog(input) {
+  const file = input.files?.[0];
   if (!file) return;
+  let merged;
   try {
-    const { log, added } = mergeImport(state.log, JSON.parse(await file.text()));
-    state.log = log;
-    saveLog();
-    toast(tr(state.lang, 'imported', { n: added }));
-    render();
+    merged = mergeImport(state.log, JSON.parse(await file.text()));
   } catch {
-    toast(tr(state.lang, 'badImport'));
+    merged = null;
   }
+  input.value = '';
+  if (!merged) return toast(tr(state.lang, 'badImport'));
+  state.log = merged.log;
+  toast(saveLog() ? tr(state.lang, 'imported', { n: merged.added }) : tr(state.lang, 'storageFail'));
+  render();
 }
 
 function exportLog() {
@@ -245,24 +255,25 @@ const actions = {
   'delete-entry': el => {
     if (!confirm(tr(state.lang, 'deleteNote'))) return;
     state.log = removeEntry(state.log, el.dataset.id);
-    saveLog();
+    if (!saveLog()) toast(tr(state.lang, 'storageFail'));
     render();
   },
   export: () => exportLog(),
+  // The file input itself is hidden; this button is what keyboard and switch users reach.
+  import: () => view.querySelector('[data-change="import"]')?.click(),
   mode: el => { state.ask.mode = el.dataset.mode; render(); },
   'paste-plan': () => {
     const text = view.querySelector('[data-input="ai-answer"]')?.value || '';
     const { trip, errors } = planFromAiText(text, places());
     if (!trip) return toast(trMsg(state.lang, errors[0]));
-    setTrip(trip);
-    toast(tr(state.lang, 'planLoaded', { t: trip.title }));
+    toast(setTrip(trip) ? tr(state.lang, 'planLoaded', { t: trip.title }) : tr(state.lang, 'storageFail'));
     render();
   },
   'paste-plan-again': () => { state.pasteOpen = true; render(); },
   'cancel-paste': () => { state.pasteOpen = false; render(); },
   'clear-trip': () => {
     if (!confirm(tr(state.lang, 'removePlanConfirm'))) return;
-    setTrip(null);
+    if (!setTrip(null)) toast(tr(state.lang, 'storageFail'));
     render();
   },
   'trip-day': el => { state.tripDate = el.dataset.date; render(); },
@@ -335,7 +346,7 @@ view.addEventListener('change', async e => {
     case 'area': state.ask.area = el.value; render(); break;
     case 'include-log': state.ask.includeLog = el.checked; refreshPreview(); break;
     case 'want-plan': state.ask.wantPlan = el.checked; refreshPreview(); break;
-    case 'import': await importLog(el.files[0]); break;
+    case 'import': await importLog(el); break;
   }
   if (el.form?.dataset.form === 'log' && el.name) {
     setDraftField(el);
@@ -365,9 +376,8 @@ view.addEventListener('submit', e => {
   const error = validateDraft(state.draft);
   if (error) return toast(trMsg(state.lang, error));
   state.log = [...state.log, makeEntry(state.draft, newId(), today())];
-  saveLog();
   state.draft = emptyDraft(state.draft.date);
-  toast(tr(state.lang, 'saved'));
+  toast(tr(state.lang, saveLog() ? 'saved' : 'storageFail'));
   render();
 });
 

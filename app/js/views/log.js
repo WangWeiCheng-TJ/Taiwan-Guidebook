@@ -13,7 +13,8 @@ import { placeName } from './common.js';
  * Form: <form data-form="log"> with fields date, placeId, name, note; star buttons data-action="star" data-n
  * (aria-pressed on the one that is the rating).
  * The free-text name field ([data-other]) is hidden when a guidebook place is selected.
- * Emits: data-action="delete-entry" data-id, "export"; data-change="import" (file input).
+ * Emits: data-action="delete-entry" data-id, "export", "import" (a button: main.js clicks the hidden file input,
+ * which a keyboard can't reach); data-change="import" (the file input).
  * @param {import('../state.js').AppState} s
  * @returns {string}
  */
@@ -70,8 +71,9 @@ export function renderLog(s) {
     <h2>${tr(L, 'backup')}</h2>
     <p class="muted small">${tr(L, 'backupIntro')}</p>
     <div class="row">
-      <button class="btn" data-action="export">${tr(L, 'export')}</button>
-      <label class="btn" style="color:var(--text)">${tr(L, 'import')}<input type="file" accept="application/json,.json" data-change="import" hidden></label>
+      <button class="btn" type="button" data-action="export">${tr(L, 'export')}</button>
+      <button class="btn" type="button" data-action="import">${tr(L, 'import')}</button>
+      <input type="file" accept="application/json,.json" data-change="import" hidden>
     </div>
   `;
 }
