@@ -50,26 +50,29 @@ Claude writes the contract (JSDoc stub + tests in `tests/tasks/`), a worker agen
 | `trip.js` | pure + fetch | Itineraries: `TRIP_KEY`, `parseTrip` (days sharing a date are merged), `resolveItem`, `tripDayFor`, `defaultTripDate`, `tripUrlFrom`, `loadTrip`, `tripBlock` |
 | `aiplan.js` | pure | Paste an AI answer back as a trip: `planRequestSuffix`, `extractJsonBlock` (skips the request's own example, so a paste that holds the request still works), `planFromAiText` |
 | `prompt.js` | pure | Ask AI text: `areaOptions`, `areaLabel`, `areaPlaces`, `nearPlaces`, `defaultQuestion`, `placeBrief`, `logBlock`, `buildAskPrompt`, `buildPlacePrompt`, `buildExplainPrompt` (selected text), `foodBlock` |
-| `state.js` | state | The single `state` object (`partySet`: a party size is stored; `draft.date` "" follows today), `places()` |
-| `ui.js` | DOM | `toast`, `copyText`, `showBig`, `hideBig`, `speak`, `openSheet`, `closeSheet` |
-| `main.js` | wiring | Router, event dispatch, persistence, language switch, the select-text "Ask AI" bar, service worker registration |
+| `state.js` | state | The single `state` object (`partySet`: a party size is stored; `draft.date` "" follows today; `pasteText`: the paste box, kept across re-renders), `places()` |
+| `nav.js` | pure | Routing and history decisions: `ROUTES`, `PARENT_TAB`, `parseRoute` (malformed escapes kept as typed; unknown routes are Explore), `activeTab`, `entryKey`, `withKey`, `scrollFor` (Back restores the scroll position), `entryOverlays`, `withOverlays`, `overlayChange` (Back closes the top sheet or big card), `focusSelector` (refocus a control after a re-render) |
+| `ui.js` | DOM | `toast` (#toast is a status live region that stays in the page), `copyText`, `showBig`, `hideBig`, `speak`, `openSheet`, `closeSheet` |
+| `main.js` | wiring | Router, event dispatch, persistence (a failed write shows `storageFail` instead of the success message), language switch, history (scroll and focus per entry; each sheet or big card has its own entry, so Back closes it; the page under it is `inert`), focus after re-renders, the select-text "Ask AI" bar, service worker registration |
 
 Views (`app/js/views/`), all pure:
 
 | Module | Exports |
 |---|---|
-| `common.js` | `placeName`, `cityName`, `locationPanel` (GPS or city picker) |
+| `common.js` | `langTag` (`lang=""` value for text in the other language), `placeName`, `cityName`, `locationPanel` (GPS or city picker), `sayButton` |
 | `explore.js` | `renderExplore` |
 | `place.js` | `renderPlace`, `driverCard` |
 | `log.js` | `renderLog` |
 | `trip.js` | `renderTripSection` (top of My trip), `renderTodayCard` (top of Explore) |
 | `ask.js` | `askContext`, `questionText`, `renderAsk` |
 | `reference.js` | `zhuyinBlock`, `renderPhrases`, `phraseCardFull`, `phraseCard`, `renderTips` |
-| `food.js` | `FOOD_KINDS`, `renderFoodSection`, `foodSheet`, `dishSheet`, `findPick` |
+| `food.js` | `FOOD_KINDS`, `renderFoodSection`, `foodSheet`, `dishSheet`, `foodDriverCard`, `findPick` |
 
 Python (`scripts/`): `build_dataset.py` (validate `data/`, write the bundle and the public dataset), `generate_spot.py` (Gemini draft of a place), `migrate_i18n.py` (schema v1 to per-language maps; for T4b, not run on `data/`).
 
-Routes: `#/explore`, `#/place/<id>`, `#/log`, `#/log/<placeId>` (prefills the form), `#/ask`, `#/phrases`, `#/phrases/<group>` (a `PHRASE_GROUPS` id), `#/tips`. Query: `?trip=<https URL>` loads a plan once.
+Routes: `#/explore`, `#/place/<id>`, `#/log`, `#/log/<placeId>` (prefills the form), `#/ask`, `#/phrases`, `#/phrases/<group>` (a `PHRASE_GROUPS` id), `#/tips`, `#/apps`, `#/learn`, `#/learn/<topicId>`. An unknown route shows Explore and becomes `#/explore`. Query: `?trip=<https URL>` loads a plan once.
+
+Accessibility rules for views: text in the language other than the UI's gets `lang="${langTag(...)}"`; labels (`aria-label`, `title`) come from `lang.js`; every control is reachable by keyboard (a hidden file input is opened by a `data-action` button).
 
 Storage keys: `tg.log.v1` (`LogEntry[]`), `tg.trip.v1` (`Trip`), `tg.lang.v1` (`'en' | 'zh_TW'`), `tg.party.v1` (number 1..10, written on the first tap of − or +; absent means not set: phrases use 2 and the Ask AI prompt leaves the party out).
 

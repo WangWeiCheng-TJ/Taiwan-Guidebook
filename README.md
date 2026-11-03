@@ -15,6 +15,7 @@ The app (`app/`) works offline once loaded and can be installed from the browser
 - **Phrases**: by situation (most used, sightseeing, food, transport, shopping, emergency, basics), each in Chinese with zhuyin, per-symbol romanization and spoken tones, read aloud by the device voice or shown full screen.
 - **Tips**: practical advice on transport, money, safety, daily life and culture.
 - Select any text in the app to ask an AI what it means in context.
+- Back works like a phone app expects: it closes an open card or sheet first, and returns to where you were in a list. Usable with a keyboard and a screen reader (focus follows the page, messages are announced, Chinese and English text carry their language).
 - English or Traditional Chinese UI, switchable at any time. Place content, phrases and tips are bilingual; food pick names are Chinese only (some picks have an English dish name).
 
 ## Run locally
