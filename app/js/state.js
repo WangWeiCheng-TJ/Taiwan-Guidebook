@@ -22,6 +22,8 @@ import { PARTY_KEY, clampParty, partyChosen } from './party.js';
  * @property {boolean} partySet     the traveler has set party (it is in storage); until then phrases use the
  *                                  default 2 and the Ask AI prompt leaves the party out
  * @property {boolean} pasteOpen     My trip: show the "paste AI answer" box even when a plan exists
+ * @property {string} pasteText      My trip: what is in the "paste AI answer" box (survives re-renders; cleared
+ *                                   once a plan loads from it)
  * @property {string|null} tripDate  My trip: the plan day the user picked; null = defaultTripDate()
  * @property {string} exploreCity    "all" or a city_en
  * @property {LogDraft} draft        the log form, survives tab switches; draft.date "" follows today's date
@@ -42,6 +44,7 @@ export const state = {
   party: clampParty(storedParty),
   partySet: partyChosen(storedParty),
   pasteOpen: false,
+  pasteText: '',
   tripDate: null,
   exploreCity: 'all',
   draft: emptyDraft(''), // not today(): an app left open past midnight would log under yesterday

@@ -263,9 +263,11 @@ const actions = {
   import: () => view.querySelector('[data-change="import"]')?.click(),
   mode: el => { state.ask.mode = el.dataset.mode; render(); },
   'paste-plan': () => {
-    const text = view.querySelector('[data-input="ai-answer"]')?.value || '';
-    const { trip, errors } = planFromAiText(text, places());
+    const box = view.querySelector('[data-input="ai-answer"]');
+    if (box) state.pasteText = box.value;
+    const { trip, errors } = planFromAiText(state.pasteText, places());
     if (!trip) return toast(trMsg(state.lang, errors[0]));
+    state.pasteText = '';
     toast(setTrip(trip) ? tr(state.lang, 'planLoaded', { t: trip.title }) : tr(state.lang, 'storageFail'));
     render();
   },
@@ -367,6 +369,7 @@ view.addEventListener('input', e => {
   const el = e.target;
   if (el.dataset.input === 'question') { state.ask.question = el.value; refreshPreview(); }
   if (el.dataset.input === 'custom-area') { state.ask.customArea = el.value; refreshQuestion(); }
+  if (el.dataset.input === 'ai-answer') state.pasteText = el.value; // kept across re-renders until a plan loads
   if (el.form?.dataset.form === 'log' && el.name) setDraftField(el);
 });
 

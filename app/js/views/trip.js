@@ -8,7 +8,7 @@ import { placeName } from './common.js';
 
 /**
  * "My plan" block at the top of the My trip tab (#/log).
- * No plan, or s.pasteOpen: a box to paste the AI's answer
+ * No plan, or s.pasteOpen: a box to paste the AI's answer, holding s.pasteText
  *   (data-input="ai-answer", data-action="paste-plan", plus "cancel-paste" when a plan exists).
  * With a plan: title, day chips (data-action="trip-day" data-date), the chosen day's stops
  *   (guidebook stops link to #/place/<id>; unknown ids get a "not in guidebook" badge),
@@ -20,7 +20,7 @@ import { placeName } from './common.js';
  */
 export function renderTripSection(s, today) {
   const L = s.lang;
-  if (!s.trip || s.pasteOpen) return pasteBox(!!s.trip, L);
+  if (!s.trip || s.pasteOpen) return pasteBox(!!s.trip, L, s.pasteText || '');
 
   const trip = s.trip;
   const date = s.tripDate && tripDayFor(trip, s.tripDate) ? s.tripDate : defaultTripDate(trip, today);
@@ -63,14 +63,15 @@ function stopRow(item, L) {
 /**
  * @param {boolean} hasPlan  show a Cancel button (replacing an existing plan)
  * @param {Lang} L
+ * @param {string} text  what the traveler has pasted so far (s.pasteText)
  * @returns {string}
  */
-function pasteBox(hasPlan, L) {
+function pasteBox(hasPlan, L, text) {
   return `
     <div class="card stack">
       <div class="title">${tr(L, 'myPlan')}</div>
       <p class="muted small" style="margin:0">${tr(L, 'pasteIntro')}</p>
-      <textarea data-input="ai-answer" rows="4" placeholder="${esc(tr(L, 'pastePh'))}"></textarea>
+      <textarea data-input="ai-answer" rows="4" placeholder="${esc(tr(L, 'pastePh'))}">${esc(text)}</textarea>
       <div class="row">
         <button class="btn primary" data-action="paste-plan">${tr(L, 'loadPlan')}</button>
         ${hasPlan ? `<button class="btn" data-action="cancel-paste">${tr(L, 'cancel')}</button>` : ''}
