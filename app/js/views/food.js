@@ -126,6 +126,16 @@ export function foodDriverCard(city, p) {
 }
 
 /**
+ * What the pick's driver card's 🔊 reads aloud: the shop's name, then its city (a pause between).
+ * @param {import('../data.js').FoodCity} city
+ * @param {import('../data.js').FoodPick} p
+ * @returns {string}
+ */
+export function foodDriverSay(city, p) {
+  return [p.name, city.city_zh].filter(Boolean).join('，');
+}
+
+/**
  * Sheet for a dish with no shop chosen yet: Navigate searches Google Maps for the dish in that city;
  * "Ask AI about the menu" (data-action="ask-menu" data-kind="dish") for when a shop is found.
  * @param {import('../data.js').FoodCity} city

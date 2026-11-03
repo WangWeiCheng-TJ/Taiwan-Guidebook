@@ -144,6 +144,16 @@ export function phraseCard(ph) {
 }
 
 /**
+ * What the device voice reads for a phrase (▶ Play and the big card's 🔊): its `tts` respelling when it has
+ * one (for phrases the voice engine mispronounces), else the Chinese.
+ * @param {import('../types.js').Phrase} ph
+ * @returns {string}
+ */
+export function phraseSay(ph) {
+  return ph.tts || ph.zh_TW;
+}
+
+/**
  * Tips grouped by category: one card per tip.
  * @param {import('../types.js').Tip[]} tips
  * @param {string} L

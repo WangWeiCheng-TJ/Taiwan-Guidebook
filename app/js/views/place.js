@@ -148,6 +148,15 @@ export function driverCard(p) {
 }
 
 /**
+ * What the driver card's 🔊 reads aloud: the place's Chinese name, then its Chinese address (a pause between).
+ * @param {import('../types.js').Place} p
+ * @returns {string}
+ */
+export function driverSay(p) {
+  return [p.name.zh_TW, p.location?.address_zh].filter(Boolean).join('，');
+}
+
+/**
  * The place's photo with its mandatory credit line, or nothing when the photo or its credit is incomplete.
  * Loaded from Wikimedia (online only): main.js hides the figure when the image fails, e.g. offline.
  * @param {import('../types.js').Place} p
