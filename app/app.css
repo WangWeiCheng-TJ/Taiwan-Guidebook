@@ -170,6 +170,8 @@ pre.prompt {
   background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; z-index: 30; font-size: 15px;
   max-width: calc(100% - 32px);
 }
+/* The toast is a live region that stays in the page; with no message it takes no space */
+.toast:empty { padding: 0; }
 
 /* Trip plan */
 .plan .chips { margin-bottom: 0; }

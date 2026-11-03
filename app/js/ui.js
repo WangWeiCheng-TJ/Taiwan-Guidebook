@@ -7,15 +7,16 @@ let toastTimer;
 
 /**
  * Show a short message above the tab bar for ~2.6 s. Replaces any visible toast.
+ * #toast is a status live region that always stays in the page (never hidden): screen readers announce
+ * text put into it, and an empty toast takes no space (app.css .toast:empty).
  * @param {string} msg
  * @returns {void}
  */
 export function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
-  el.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.hidden = true; }, 2600);
+  toastTimer = setTimeout(() => { el.textContent = ''; }, 2600);
 }
 
 /**
