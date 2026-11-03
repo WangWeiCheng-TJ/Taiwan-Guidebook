@@ -270,3 +270,48 @@ test('tap targets: the top bar pads less now that the language toggle is 44px ta
   assert.match(rule('.topbar').padding, /calc\(6px \+ env\(safe-area-inset-top\)\) 16px 6px/);
 });
 
+// ---------- Wrapping (audit css #5) ----------
+
+/** Like resolve(), for inherited properties: the nearest ancestor chain that sets it wins. "a b c" tries "a b c", "a b", "a". */
+function resolveInherited(element, prop) {
+  const parts = element.split(' ');
+  for (let n = parts.length; n > 0; n--) {
+    const v = resolve(parts.slice(0, n).join(' '), prop);
+    if (v !== undefined) return v;
+  }
+  return undefined;
+}
+
+test('wrapping: free text in the page and in sheets wraps anywhere; a log entry text column can shrink', () => {
+  for (const el of ['main.view div.card.entry div', 'main.view ol.stops li', 'main.view div.panel', 'div.sheet-body div.card']) {
+    assert.equal(resolveInherited(el, 'overflow-wrap'), 'anywhere', el);
+  }
+  assert.equal(rule('.entry > div:first-child')['min-width'], '0');
+});
+
+// ---------- Collapsible cards (audit css #7) ----------
+
+test('details: the summary is pulled over the card padding, so the whole card face toggles it', () => {
+  const pad = rule('details').padding;
+  assert.equal(pad, '10px 14px');
+  assert.equal(rule('details.must').padding, pad, 'the .must card must keep the same padding the summary margins undo');
+  const summary = rule('details:not(.map) > summary');
+  assert.equal(summary.margin, '-10px -14px', 'the negative of the card padding');
+  assert.equal(summary.padding, pad);
+  // open: no bottom padding, so the body starts right under the title as before
+  const open = rule('details[open]:not(.map) > summary');
+  assert.equal(open['margin-bottom'], '0');
+  assert.equal(open['padding-bottom'], '0');
+});
+
+// ---------- Toast (audit css #8) ----------
+
+test('toast: bounded by left and right, centred by auto margins (left: 50% would shrink it to half the width)', () => {
+  const t = rule('.toast');
+  assert.equal(t.left, '16px');
+  assert.equal(t.right, '16px');
+  assert.equal(t['margin-inline'], 'auto');
+  assert.equal(t.width, 'fit-content');
+  assert.equal(t.transform, undefined);
+});
+
