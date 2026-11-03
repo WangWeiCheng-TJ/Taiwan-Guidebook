@@ -43,9 +43,11 @@ export function areaLabel(area, customArea) {
 
 /**
  * Guidebook places in the chosen area.
- * For custom text, a place matches when the core of its district or city name
- * (without "District"/"City"/...) appears in the text, case-insensitive:
- * "Da'an District, Taipei" matches every Taipei City place, but not New Taipei City.
+ * For custom text, a place matches when the core of its district or city name appears in the text:
+ * the English name without "District"/"City"/... (case-insensitive), or the Chinese name without
+ * 區/市/縣/鎮/鄉, with 臺 and 台 read as the same character.
+ * "Da'an District, Taipei" matches every Taipei City place, but not New Taipei City; so does 台北市大安區.
+ * "Tamsui, New Taipei, then Taipei" matches both cities (a later standalone "Taipei" still counts).
  * @param {Place[]} places
  * @param {string} area
  * @param {string} customArea
@@ -57,21 +59,46 @@ export function areaPlaces(places, area, customArea) {
     const [city, district] = area.slice(9).split('|');
     return places.filter(p => p.location.city_en === city && p.location.district_en === district);
   }
-  const text = customArea.toLowerCase();
+  const text = zhNorm(customArea.toLowerCase());
   if (!text.trim()) return [];
   const core = s => s.toLowerCase().replace(/\b(district|city|county|township)\b/g, '').trim();
   return places.filter(p => {
-    const d = core(p.location.district_en), c = core(p.location.city_en);
-    return (d && hasWord(text, d)) || (c && hasWord(text, c));
+    const { district_en: de, city_en: ce, district_zh: dz, city_zh: cz } = p.location;
+    const d = core(de), c = core(ce);
+    if ((d && hasWord(text, d)) || (c && hasWord(text, c))) return true;
+    return [zhCore(dz), zhCore(cz)].some(z => z && text.includes(z));
   });
 }
 
+/** 臺 and 台 are the same character in place names (臺南 = 台南). */
+function zhNorm(s) {
+  return String(s || '').replace(/臺/g, '台');
+}
+
+/**
+ * A Chinese district or city name without its 區/市/縣/鎮/鄉 ending: 臺南市 → 台南, 中西區 → 中西.
+ * A one-character core (東區 → 東) would match too much text, so such names keep their ending.
+ * @param {string|undefined} s
+ * @returns {string}
+ */
+function zhCore(s) {
+  const t = zhNorm(s).trim();
+  const c = t.replace(/[區市縣鎮鄉]$/, '');
+  return c.length >= 2 ? c : t;
+}
+
+/**
+ * True when word occurs in text other than as the end of "new <word>": "new taipei" contains "taipei",
+ * which only counts as Taipei when "taipei" also occurs on its own somewhere in the text.
+ * @param {string} text  lower case
+ * @param {string} word  lower case
+ * @returns {boolean}
+ */
 function hasWord(text, word) {
-  const i = text.indexOf(word);
-  if (i < 0) return false;
-  // "new taipei" contains "taipei"; only count it when the match is not preceded by another word
-  const before = text.slice(0, i).trimEnd();
-  return !/new$/.test(before);
+  for (let i = text.indexOf(word); i >= 0; i = text.indexOf(word, i + 1)) {
+    if (!/new$/.test(text.slice(0, i).trimEnd())) return true;
+  }
+  return false;
 }
 
 /**
