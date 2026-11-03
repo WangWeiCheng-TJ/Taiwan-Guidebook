@@ -5,6 +5,10 @@ import { parseTrip } from './trip.js';
 /** @typedef {import('./types.js').Trip} Trip */
 /** @typedef {import('./types.js').Place} Place */
 
+// The example plan in planRequestSuffix. A paste that still holds the request (a whole chat copied on a
+// phone) contains it too, so extractJsonBlock skips it.
+const EXAMPLE = '{"title":"Tainan day","days":[{"date":"YYYY-MM-DD","items":[{"time":"09:00","place":"chihkan-tower","note":"go early"},{"time":"12:00","name":"Lunch at a beef soup shop"}]}]}';
+
 /**
  * Instruction appended to the Ask AI prompt when the user wants a plan they can paste back.
  * Must ask for exactly one ```json fenced block in the Trip shape, using guidebook ids in "place"
@@ -17,31 +21,49 @@ export function planRequestSuffix() {
     'Use the real date(s) of the plan. For a place from my guidebook list, put its [id: ...] value in "place"; for anything else, put its name in "name". "time" (HH:MM) and "note" are optional.',
     'Shape (example values):',
     '```json',
-    '{"title":"Tainan day","days":[{"date":"YYYY-MM-DD","items":[{"time":"09:00","place":"chihkan-tower","note":"go early"},{"time":"12:00","name":"Lunch at a beef soup shop"}]}]}',
+    EXAMPLE,
     '```',
   ].join('\n');
 }
 
+const squash = s => s.replace(/\s+/g, '');
+/** True for the request's own example plan, however the copy re-spaced it. */
+const isExample = s => squash(s) === squash(EXAMPLE);
+const parses = s => {
+  try {
+    JSON.parse(s);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 /**
  * Find the JSON object in an AI answer.
- * Order: the first ```json fenced block; else the first ``` fenced block whose content starts with "{";
+ * Order: the first ```json fenced block whose content is valid JSON (else the first ```json block);
+ * else the first ``` fenced block whose content starts with "{";
  * else the first balanced {...} span in the text (respecting strings, so "}" inside quotes does not end it).
+ * A ```json fence opens only where "json" is followed by a line break or by the "{" itself, so the request's
+ * words "exactly one ```json code block" are not taken for a fence. The example plan from planRequestSuffix
+ * is skipped at every step: a paste that holds the request and then the answer finds the answer's plan.
  * @param {string} text
  * @returns {string|null}  the raw JSON text, or null if nothing found
  */
 export function extractJsonBlock(text) {
   if (typeof text !== 'string') return null;
 
-  const jsonMatch = text.match(/```+[ \t]*json\b[ \t]*\r?\n?([\s\S]*?)```+/i);
-  if (jsonMatch) {
-    return jsonMatch[1].trim();
+  const jsonBlocks = [...text.matchAll(/```+[ \t]*json[ \t]*(?:\r?\n|(?=\{))([\s\S]*?)```+/gi)]
+    .map(m => m[1].trim())
+    .filter(s => !isExample(s));
+  if (jsonBlocks.length) {
+    return jsonBlocks.find(parses) ?? jsonBlocks[0];
   }
 
   const fenceRegex = /```+[ \t]*[^\n\r`]*\r?\n?([\s\S]*?)```+/g;
   let match;
   while ((match = fenceRegex.exec(text)) !== null) {
     const content = match[1].trim();
-    if (content.startsWith('{')) {
+    if (content.startsWith('{') && !isExample(content)) {
       return content;
     }
   }
@@ -70,7 +92,10 @@ export function extractJsonBlock(text) {
           } else if (ch === '}') {
             depth--;
             if (depth === 0) {
-              return text.slice(i, j + 1);
+              const span = text.slice(i, j + 1);
+              if (!isExample(span)) return span;
+              i = j; // the request's example: look on after it
+              break;
             }
           }
         }
