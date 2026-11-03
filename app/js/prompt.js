@@ -4,13 +4,15 @@ import { addDays } from './util.js';
 import { distanceTo, fmtKm, sortByDistance } from './geo.js';
 import { cities, districtsOf } from './data.js';
 import { dayNumber, entryName } from './triplog.js';
-import { tripBlock } from './trip.js';
+import { nextStop, tripBlock } from './trip.js';
 import { planRequestSuffix } from './aiplan.js';
 
 /** @typedef {import('./types.js').Place} Place */
 /** @typedef {import('./types.js').Pos} Pos */
 /** @typedef {import('./types.js').LogEntry} LogEntry */
 /** @typedef {import('./types.js').AskContext} AskContext */
+/** @typedef {import('./types.js').PhotoContext} PhotoContext */
+/** @typedef {import('./types.js').PhotoShop} PhotoShop */
 
 /**
  * Options for the "Plan a day" area picker: each city, followed by its districts.
@@ -302,6 +304,169 @@ export function buildExplainPrompt({ text, context = '', source = '', lang = 'en
   if (source) lines.push(lang === 'zh_TW' ? `出處：${source}` : `From: ${source}`);
   if (lang === 'zh_TW') lines.push('Please reply in Traditional Chinese (Taiwan).');
   return lines.join('\n\n');
+}
+
+/** "Ask AI about a photo" presets, in display order. */
+export const PHOTO_KINDS = /** @type {const} */ (['menu', 'sign', 'board', 'machine', 'label']);
+
+/** @typedef {typeof PHOTO_KINDS[number]} PhotoKind */
+
+const PHOTO_EN = {
+  menu: 'a menu', sign: 'a sign or notice', board: 'a departure board or timetable',
+  machine: 'a ticket machine or a form', label: 'a food label or ingredient list',
+};
+
+// What some travelers avoid. The app makes no claim about any food: it asks the AI to flag these.
+const FLAGS = "pork, beef, seafood (fish or shellfish), offal, blood (such as pig's blood cake or duck blood) or peanuts";
+const NEAR_KM = 1; // GPS this close to a guidebook place: "near <place>"
+const CITY_KM = 15; // this close: "in or near <city>" (the same reach as the food picks in Ask AI)
+const RIDE = 'line, platform and time, whether I need to change, and roughly how long the ride takes';
+
+/** @type {Record<PhotoKind, (ctx: PhotoContext, next: string, plan: boolean) => string[]>} */
+const PHOTO_ASKS = {
+  menu: ctx => [
+    'List every item on the menu, in its order: the Chinese exactly as written, an English name, the price if shown, and in a few words what it is (main ingredients, how it is cooked).',
+    `Flag each item that has or may have ${FLAGS}. When the menu doesn't make it clear, mark the item "ask the staff" instead of guessing.`,
+    ...(ctx.shop?.dish ? [`Find ${ctx.shop.name ? 'the recommended dish' : 'the dish I want to try'} (${ctx.shop.dish.zh_TW}) on the menu and include it in the order.`] : []),
+    `Suggest an order for ${forWhom(ctx.party)}, with an estimated total cost in NT$.`,
+    'For each suggested item, give the exact Chinese to point at on the menu, and one short sentence in Chinese I can show or say to order it.',
+    'If the menu shows how ordering works here (an order sheet to fill in, paying first, a minimum charge), explain it.',
+  ],
+  sign: () => [
+    'Translate all of the text, line by line: the Chinese as written, then English.',
+    'Say in one or two sentences what it means for me as a visitor: a rule, a warning, opening hours, a closure, a price, directions or something else.',
+    'Tell me whether I need to do anything (or avoid doing something) because of it.',
+    'List any times, dates, prices, phone numbers or addresses on it.',
+  ],
+  board: (ctx, next, plan) => [
+    'Read it: for each departure shown, the time, the line or train number, the type (such as local or express), the destination in Chinese and English, the platform or stop, and any status (delayed, cancelled).',
+    next ? `Tell me which departure to take to reach my next stop: ${RIDE}.`
+      : plan ? `Tell me which departure to take to reach the next stop on my plan that I haven't been to yet: ${RIDE}. If you can't tell which stop that is, ask me.`
+        : `If you don't know where I'm going, ask me. Then tell me which departure to take: ${RIDE}.`,
+    'Tell me if the kind of ticket matters for that departure (a reserved seat, an express fare, which cards work).',
+    'Point out anything unusual on the board (delays, cancellations, a changed platform).',
+  ],
+  machine: ctx => [
+    'Translate every button, option and field: the Chinese as written, then English.',
+    `Walk me through it step by step: what to press, choose or write, in order${typeof ctx.party === 'number' ? `, for ${forWhom(ctx.party)}` : ' (ask me how many tickets if it matters)'}.`,
+    'For a form: what to write in each field, which fields I can leave empty, and whether it needs a passport number or a local phone number.',
+    'Say what payment it takes (coins, notes, cards) if the photo shows it.',
+  ],
+  label: () => [
+    'Tell me what the product is, in English, and how it is eaten or prepared.',
+    'Translate the full ingredient list.',
+    `Flag any ${FLAGS} in it, and any allergens the label lists. When an ingredient is vague (such as "flavoring" or "animal fat"), say what it could contain and mark it "unclear".`,
+    'Give the best-before or expiry date and how to store it, if the label shows them.',
+  ],
+};
+
+/**
+ * "Ask AI about a photo": the text a traveler pastes into their AI chat together with a photo they attach
+ * there (the app never sees the photo). Pure. Paragraphs, in order:
+ * 1. "(Attach your photo to this message before you send it.)", in lang: the traveler reads it when pasting
+ * 2. "I'm a visitor traveling in Taiwan. Today is <today>[, <time>]." + the party sentence (as buildAskPrompt,
+ *    only when ctx.party is a number) + where, unless ctx.shop says it:
+ *    GPS within 1 km of a guidebook place: "I'm at GPS <lat>, <lng>, near <Place> (<中文>) in <district>, <city>."
+ *    within 15 km: "I'm at GPS <lat>, <lng>, in or near <city>."; farther: "I'm at GPS <lat>, <lng>.";
+ *    a picked city: "I'm somewhere in <city>."; no position: nothing
+ * 3. ctx.shop: the pick's name and city, "Recommended here: <dish en> (<dish zh>)." and "Their tip: <hint en>";
+ *    a dish with no shop: "I'm in <city> (<city zh>) to try a local dish: <dish en> (<dish zh>)."
+ * 4. board only: today's plan (tripBlock) when ctx.trip has today
+ * 5. "My next stop: <label>[ (<中文>), <district>, <city>][, planned for HH:MM]." when nextStop() finds one
+ *    for ctx.today at ctx.time (every kind: it tells the AI how much time there is)
+ * 6. "The attached photo shows <kind>. Please:" and a numbered list of what to give back:
+ *    menu: every item in Chinese and English with what it is; flags for pork, beef, seafood, offal, blood and
+ *      peanuts ("ask the staff" when unclear); the shop's dish found on the menu (ctx.shop.dish); an order for
+ *      the party (one person, and how to scale it, while the party is not set) with an estimated cost in NT$;
+ *      the exact Chinese to point at; how ordering works here
+ *    sign: a line-by-line translation, what it means for a visitor, what to do, times/prices/numbers on it
+ *    board: the departures read out; which one to take to the next stop (or to the next stop of today's plan,
+ *      or ask where to) with line, platform and time; ticket kind; anything unusual
+ *    machine: every button and field translated; step by step, for the party when set; forms; payment
+ *    label: what it is; the full ingredient list; the same flags plus listed allergens; best-before date
+ * 7. "Also keep in mind: <note>" when ctx.note is not blank
+ * 8. say what can't be read instead of guessing; ask for the photo if none is attached
+ * 9. "Please reply in Traditional Chinese (Taiwan)." when lang is zh_TW
+ * An unknown kind is read as 'menu'.
+ * @param {PhotoContext} ctx
+ * @param {PhotoKind} kind
+ * @param {'en'|'zh_TW'} [lang]
+ * @returns {string}
+ */
+export function buildPhotoPrompt(ctx, kind, lang = 'en') {
+  const k = PHOTO_KINDS.includes(/** @type {any} */ (kind)) ? kind : 'menu';
+  const parts = [lang === 'zh_TW' ? '（送出前，請先把照片附在這則訊息裡。）' : '(Attach your photo to this message before you send it.)'];
+  const where = ctx.shop ? '' : photoWhere(ctx.pos, ctx.places);
+  parts.push(`I'm a visitor traveling in Taiwan. Today is ${ctx.today}${ctx.time ? `, ${ctx.time}` : ''}.${partySentence(ctx.party)}${where ? ` ${where}` : ''}`);
+  if (ctx.shop) parts.push(shopText(ctx.shop));
+  const plan = k === 'board' && ctx.trip ? tripBlock(ctx.trip, ctx.places, ctx.today) : '';
+  if (plan) parts.push(plan);
+  const stop = ctx.time ? nextStop(ctx.trip || null, ctx.places, ctx.today, ctx.time) : null;
+  const next = stop ? stopText(stop) : '';
+  if (next) parts.push(`My next stop: ${next}.`);
+  const asks = PHOTO_ASKS[k](ctx, next, !!plan);
+  parts.push(`The attached photo shows ${PHOTO_EN[k]}. Please:\n${asks.map((s, i) => `${i + 1}. ${s}`).join('\n')}`);
+  const note = (ctx.note || '').trim();
+  if (note) parts.push(`Also keep in mind: ${note}`);
+  parts.push("If part of the photo is blurry, cut off or hard to read, say what you can't read instead of guessing. If no photo is attached, ask me for it.");
+  if (lang === 'zh_TW') parts.push('Please reply in Traditional Chinese (Taiwan).');
+  return parts.join('\n\n');
+}
+
+/**
+ * Who a menu order is for.
+ * @param {number|null|undefined} n
+ * @returns {string}
+ */
+function forWhom(n) {
+  if (typeof n !== 'number') return 'one person (and say how to scale it for more people)';
+  return n === 1 ? 'me alone' : `the ${n} of us`;
+}
+
+/**
+ * Where the traveler is, for the photo prompt: near a guidebook place, in a city, or just GPS. "" without a position.
+ * @param {Pos|null} pos
+ * @param {Place[]} places
+ * @returns {string}
+ */
+function photoWhere(pos, places) {
+  if (!pos) return '';
+  if (pos.source === 'pick') return `I'm somewhere in ${pos.city || pos.label}.`;
+  const gps = `I'm at GPS ${pos.lat.toFixed(3)}, ${pos.lng.toFixed(3)}`;
+  const nearest = sortByDistance(places, pos)[0];
+  const d = nearest ? /** @type {number} */ (distanceTo(nearest, pos)) : Infinity;
+  if (d <= NEAR_KM) return `${gps}, near ${nearest.name.en} (${nearest.name.zh_TW}) in ${nearest.location.district_en}, ${nearest.location.city_en}.`;
+  if (d <= CITY_KM) return `${gps}, in or near ${nearest.location.city_en}.`;
+  return `${gps}.`;
+}
+
+/**
+ * The food pick or dish a menu photo is about.
+ * @param {PhotoShop} shop
+ * @returns {string}
+ */
+function shopText(shop) {
+  const city = `${shop.city_en} (${shop.city_zh})`;
+  const dish = shop.dish ? `${shop.dish.en} (${shop.dish.zh_TW})` : '';
+  const lines = [];
+  if (shop.name) {
+    lines.push(`I'm at ${shop.name}, a place to eat in ${city} that a local friend recommends.`);
+    if (dish) lines.push(`Recommended here: ${dish}.`);
+  } else {
+    lines.push(dish ? `I'm in ${city} to try a local dish: ${dish}.` : `I'm in ${city}.`);
+  }
+  if (shop.hint?.en) lines.push(`Their tip: ${shop.hint.en}`);
+  return lines.join(' ');
+}
+
+/**
+ * A plan stop for the photo prompt: "Chihkan Tower (赤崁樓), West Central District, Tainan City, planned for 09:00".
+ * @param {{ item: import('./types.js').TripItem, place: Place|null, label: string }} stop
+ * @returns {string}
+ */
+function stopText({ item, place, label }) {
+  const where = place ? ` (${place.name.zh_TW}), ${place.location.district_en}, ${place.location.city_en}` : '';
+  return `${label}${where}${item.time ? `, planned for ${item.time}` : ''}`;
 }
 
 const FOOD_KIND_EN = {

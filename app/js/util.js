@@ -32,6 +32,16 @@ export function today(now = new Date()) {
 }
 
 /**
+ * Local clock time as HH:MM (24-hour).
+ * @param {Date} [now]
+ * @returns {string}
+ */
+export function nowTime(now = new Date()) {
+  const d = new Date(now);
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+
+/**
  * @param {string} iso  YYYY-MM-DD
  * @param {number} n    days to add, may be negative
  * @returns {string}    YYYY-MM-DD

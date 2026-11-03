@@ -166,6 +166,30 @@ export function tripDayFor(trip, date) {
 }
 
 /**
+ * The next stop of the plan on that date at that time: the stop right after the last one whose time has
+ * passed (a stop is passed when its time is before `time`), or the first stop when none has passed.
+ * Stops without a time are passed over only by a later timed stop that has passed.
+ * null when the plan has no day for the date, when that day has no timed stop (nothing tells where
+ * the traveler is in it), when `time` is not HH:MM, or when every stop is behind.
+ * Example: 09:00 A, B, 14:00 C at 12:00 → B; at 08:00 → A; at 15:00 → null.
+ * @param {Trip|null} trip
+ * @param {Place[]} places
+ * @param {string} date  YYYY-MM-DD
+ * @param {string} time  HH:MM
+ * @returns {{ item: TripItem, place: Place|null, label: string }|null}
+ */
+export function nextStop(trip, places, date, time) {
+  const day = trip ? tripDayFor(trip, date) : null;
+  if (!day || !/^\d\d:\d\d$/.test(String(time)) || !day.items.some(it => it.time)) return null;
+  let last = -1;
+  day.items.forEach((it, i) => { if (it.time && it.time < time) last = i; });
+  const item = day.items[last + 1];
+  if (!item) return null;
+  const { place, label } = resolveItem(item, places);
+  return { item, place, label };
+}
+
+/**
  * Which day to show by default: today's day, else the next upcoming day, else the last day.
  * @param {Trip} trip   days sorted by date (parseTrip guarantees this)
  * @param {string} today YYYY-MM-DD

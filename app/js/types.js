@@ -186,6 +186,23 @@
  * @property {number|null} [party] party size 1..10: one sentence ("I'm traveling alone." / "We are <n> people.");
  *           null or absent adds nothing
  *
+ * @typedef {Object} PhotoContext  Everything buildPhotoPrompt needs ("Ask AI about a photo"), passed explicitly
+ * @property {Pos|null} pos
+ * @property {Place[]} places
+ * @property {string} today      YYYY-MM-DD, injected so tests are deterministic
+ * @property {string} [time]     HH:MM now, injected likewise; finds the next stop of today's plan (nextStop)
+ * @property {Trip|null} [trip]  loaded itinerary
+ * @property {number|null} [party]  as AskContext.party: null or absent until the traveler sets it
+ * @property {PhotoShop|null} [shop]  the food pick or dish the photo is about ("Ask AI about the menu")
+ * @property {string} [note]     the traveler's own addition, e.g. "Allergic to shellfish"; "" adds nothing
+ *
+ * @typedef {Object} PhotoShop   Where a menu photo is taken: a food pick, or a to_try dish with no shop yet
+ * @property {string} city_en
+ * @property {string} city_zh
+ * @property {string} [name]     the pick's name; absent for a dish with no shop chosen
+ * @property {Bilingual} [dish]  what to order there (a pick), or the dish itself (to_try)
+ * @property {Bilingual} [hint]  the owner's note on the pick
+ *
  * @typedef {Object} TripItem    one stop in an itinerary
  * @property {string} [place]    guidebook place id
  * @property {string} [name]     free-text stop when not in the guidebook
