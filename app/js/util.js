@@ -53,12 +53,26 @@ export function daysBetween(a, b) {
 }
 
 /**
- * Star string for a rating: 3 → "★★★☆☆"; 0/null → "".
+ * True for a real calendar date written YYYY-MM-DD: "2026-11-31" and "2026-13-01" are false.
+ * @param {unknown} s
+ * @returns {boolean}
+ */
+export function isIsoDate(s) {
+  if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const [y, m, d] = s.split('-').map(Number);
+  const t = new Date(Date.UTC(y, m - 1, d));
+  return t.getUTCFullYear() === y && t.getUTCMonth() === m - 1 && t.getUTCDate() === d;
+}
+
+/**
+ * Star string for a rating: 3 → "★★★☆☆"; 0/null → "". Values outside 0..5 are clamped, so a damaged
+ * rating (an imported 8, a -1) never throws.
  * @param {number|null|undefined} n
  * @returns {string}
  */
 export function stars(n) {
-  return n ? '★'.repeat(n) + '☆'.repeat(5 - n) : '';
+  const k = Math.min(5, Math.max(0, Math.round(Number(n) || 0)));
+  return k ? '★'.repeat(k) + '☆'.repeat(5 - k) : '';
 }
 
 /**

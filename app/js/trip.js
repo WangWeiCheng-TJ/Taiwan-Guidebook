@@ -2,6 +2,7 @@
 // Pure functions except loadTrip (network). Contract tests: tests/core/trip.test.js
 
 import { placeById } from './data.js';
+import { isIsoDate } from './util.js';
 
 /** @typedef {import('./types.js').Trip} Trip */
 /** @typedef {import('./types.js').TripDay} TripDay */
@@ -11,6 +12,8 @@ import { placeById } from './data.js';
 export const TRIP_KEY = 'tg.trip.v1';
 
 const isObj = v => Boolean(v && typeof v === 'object' && !Array.isArray(v));
+// AI answers often write null for an optional key they leave out: treat it as absent.
+const given = v => v !== undefined && v !== null;
 
 function parseItem(item, errors, where) {
   if (!isObj(item)) {
@@ -19,7 +22,7 @@ function parseItem(item, errors, where) {
   }
   const clean = {};
   for (const key of ['place', 'name']) {
-    if (item[key] !== undefined) {
+    if (given(item[key])) {
       if (typeof item[key] !== 'string') errors.push(`${where}: ${key} must be text.`);
       else if (item[key].trim()) clean[key] = item[key].trim();
     }
@@ -27,12 +30,13 @@ function parseItem(item, errors, where) {
   if (!clean.place && !clean.name) {
     errors.push(`${where}: needs a place id or a name.`);
   }
-  if (item.time !== undefined) {
-    const t = typeof item.time === 'string' ? item.time.trim() : '';
+  if (given(item.time)) {
+    let t = typeof item.time === 'string' ? item.time.trim() : '';
+    if (/^\d:[0-5]\d$/.test(t)) t = `0${t}`; // "9:30" → "09:30"
     if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(t)) errors.push(`${where}: time must be HH:MM, like 09:30.`);
     else clean.time = t;
   }
-  if (item.note !== undefined) {
+  if (given(item.note)) {
     if (typeof item.note !== 'string') errors.push(`${where}: note must be text.`);
     else if (item.note.trim()) clean.note = item.note.trim();
   }
@@ -46,12 +50,12 @@ function parseDay(day, errors, n) {
     return null;
   }
   const date = typeof day.date === 'string' ? day.date.trim() : '';
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) errors.push(`${where}: date must be YYYY-MM-DD, like 2026-11-04.`);
+  if (!isIsoDate(date)) errors.push(`${where}: date must be YYYY-MM-DD, like 2026-11-04.`);
   if (!Array.isArray(day.items)) errors.push(`${where}: items must be a list.`);
 
   /** @type {TripDay} */
   const cleanDay = { date, items: [] };
-  if (day.title !== undefined) {
+  if (given(day.title)) {
     if (typeof day.title !== 'string') errors.push(`${where}: title must be text.`);
     else if (day.title.trim()) cleanDay.title = day.title.trim();
   }
@@ -70,9 +74,11 @@ function parseDay(day, errors, n) {
  * Rules, each failure adds one human-readable message to errors:
  * - raw must be an object with a non-empty string `title`
  * - `days` must be a non-empty array
- * - every day: `date` matches YYYY-MM-DD; `items` is an array (may be empty); `title` optional string
- * - every item: has a non-empty string `place` or `name` (or both); `time` if present matches HH:MM;
- *   `note` if present is a string
+ * - every day: `date` is a real calendar date written YYYY-MM-DD (not 2026-11-31); `items` is an array
+ *   (may be empty); `title` optional string
+ * - every item: has a non-empty string `place` or `name` (or both); `time` if present matches HH:MM
+ *   (a one-digit hour such as "9:30" is accepted and padded to "09:30"); `note` if present is a string
+ * - an optional field (day `title`; item `place`, `name`, `time`, `note`) set to null counts as absent
  * - unknown place ids are NOT errors here (resolveItem reports them)
  *
  * Output trip is a clean copy: only known fields kept, strings trimmed, days sorted by date.
