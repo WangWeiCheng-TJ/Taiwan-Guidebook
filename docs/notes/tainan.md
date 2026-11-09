@@ -124,7 +124,6 @@
 - **Two Wild Ducks Hanging Bakery**：餅店；新
   - [Google 地圖](https://www.google.com/maps/search/?api=1&query=Two%20Wild%20Ducks%20Hanging%20Bakery%2023.0050658,120.2204769)，座標 23.0050658, 120.2204769
 - **麵屋吉森**：類別不明；暫時關閉、新
-  - 筆記：吃完起疹子
   - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%BA%B5%E5%B1%8B%E5%90%89%E6%A3%AE%2023.0095876,120.2329503)，座標 23.0095876, 120.2329503
 - **賀也拉麵（育樂街）**：拉麵；新
   - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E8%B3%80%E4%B9%9F%E6%8B%89%E9%BA%B5%EF%BC%88%E8%82%B2%E6%A8%82%E8%A1%97%EF%BC%89%2022.9935996,120.2145468)，座標 22.9935996, 120.2145468
