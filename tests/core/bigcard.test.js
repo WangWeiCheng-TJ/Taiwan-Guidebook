@@ -213,3 +213,13 @@ test('foodDriverSay: the shop\'s name, then its city', () => {
   const pick = tainan.picks[0];
   assert.equal(foodDriverSay(tainan, pick), `${pick.name}，${tainan.city_zh}`);
 });
+
+test('the closing hint names the Close button: on a phone the backdrop around the panel is too thin to tap', () => {
+  for (const L of ['en', 'zh_TW']) {
+    const hint = tr(L, 'tapClose');
+    assert.ok(hint.includes(tr(L, 'close')), `${L}: ${hint}`);
+    assert.ok(bigCardHtml('x', L).includes(`<div class="hint big-hint">${hint}</div>`), L);
+  }
+  assert.doesNotMatch(tr('en', 'tapClose'), /outside|anywhere/);
+  assert.doesNotMatch(tr('zh_TW', 'tapClose'), /外面|任何地方/);
+});
