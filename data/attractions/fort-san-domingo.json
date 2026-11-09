@@ -74,7 +74,7 @@
   "cultural_significance": {
     "why_it_matters_zh": "紅毛城是臺灣現存歷史最悠久的古蹟之一，具體展現了17世紀歐洲重商主義擴張、大航海時代的海洋地緣政治，以及19世紀開港通商後西方外交建築風格在臺灣的融合。",
     "why_it_matters_en": "Fort San Domingo is one of Taiwan's oldest standing architectural complexes. It encapsulates 17th-century European mercantilism, Age of Discovery geopolitics, and 19th-century colonial diplomatic heritage.",
-    "architectural_highlights_zh": "主堡牆厚達1.9公尺，具備防砲轟拱頂與地牢；領事官邸則呈現精湛的英國維多利亞風格，包括清水紅磚、綠釉花瓶欄杆、VR1891維多利亞女王徽號磚雕以及引進自英國的Minton地磚。",
+    "architectural_highlights_zh": "主堡牆厚達1.9公尺，具備防砲轟拱頂與牢房；領事官邸則呈現精湛的英國維多利亞風格，包括清水紅磚、綠釉花瓶欄杆、VR1891維多利亞女王徽號磚雕以及引進自英國的Minton地磚。",
     "architectural_highlights_en": "The main fortress features 1.9-meter-thick stone walls with bombproof barrel-vaulted ceilings. The consular residence boasts classic British Victorian verandah architecture, VR 1891 monogram brick carvings, green glazed bottle balustrades, and authentic Victorian encaustic tiles imported from Britain.",
     "intangible_culture_zh": "見證淡水夕照與淡江水運的人文記憶，是淡水開港歷史的核心符號。",
     "intangible_culture_en": "Symbolizes Tamsui's transformation from an aboriginal river port to an international tea and camphor export harbor."
@@ -83,13 +83,13 @@
     "etiquette_tips_en": "Wear comfortable walking shoes as the estate is built on a gentle slope with cobblestones. Photography is allowed, but flash is prohibited inside historic rooms. Preserved historical interior floors require shoe covers or adherence to designated pathways.",
     "etiquette_tips_zh": "園區包含坡道與石階步道，建議穿著舒適步行鞋。室內古蹟展廳禁止使用閃光燈，請依循導覽動線參觀。",
     "must_see_spots_en": [
-      "British consular prison cells and defensive ramparts",
+      "British consular jail cells and heavy barrel-vaulted structure",
       "Victorian consular dining room with English fireplace and Minton floor tiles",
       "Row of 17th–19th-century muzzle-loading cannons beside the main fort and consular residence",
       "Hilltop panoramic lookout facing the Tamsui River mouth and Mount Guanyin"
     ],
     "must_see_spots_zh": [
-      "主堡英國領事館地牢與厚重穹頂防禦結構",
+      "主堡英國領事館牢房與厚重穹頂結構",
       "英國領事官邸壁爐、僕役呼叫鈴與英國進口彩釉地磚",
       "主堡與領事官邸旁的一排17至19世紀古砲",
       "俯瞰淡水河口與觀音山日落的眺望平台"
@@ -101,11 +101,11 @@
     "must_see": [
       {
         "name": {
-          "en": "British consular prison cells and defensive ramparts",
-          "zh_TW": "主堡英國領事館地牢與厚重穹頂防禦結構"
+          "en": "British consular jail cells and heavy barrel-vaulted structure",
+          "zh_TW": "主堡英國領事館牢房與厚重穹頂結構"
         },
         "why": {
-          "en": "The Dutch rebuilt the fort in 1644 as a square main fort, stone outside and brick inside, with barrel vaults on both floors. Under consular jurisdiction, the British consulate turned the ground floor into four jail cells with a prisoners' yard to hold foreigners who broke the law in Taiwan.",
+          "en": "The Dutch rebuilt the fort in 1644 as a square main fort with barrel vaults on both floors. After leasing it, the British consulate used the upper floor as offices and turned the ground floor into four jail cells and a yard, where foreigners who broke the law in Taiwan were held for a time under consular jurisdiction.",
           "zh_TW": "荷蘭人於1644年重建此城，主堡外石內磚，內分上下兩層，採半圓筒形穹窿結構。英國租用為領事館後，將二樓改為辦公室，底樓設4間牢房及放封院，依領事裁判權暫時拘留在臺灣犯罪的外國人。"
         }
       },
