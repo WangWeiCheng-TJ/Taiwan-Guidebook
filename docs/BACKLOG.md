@@ -52,7 +52,7 @@ Planned (design in [ARCHITECTURE.md](ARCHITECTURE.md)):
 ## Food picks
 
 - Names are Chinese only; an English line per pick (what it is / what to order) would help European readers.
-- No coordinates: picks aren't sorted by distance; Navigate searches Google Maps by name.
+- No coordinates: picks aren't sorted by distance; Navigate searches Google Maps by name. Candidate coordinates for the Tainan picks are in [notes/tainan.md](notes/tainan.md) (owner to confirm).
 
 ## App
 

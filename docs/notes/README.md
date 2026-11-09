@@ -5,6 +5,7 @@
 - [臺南](tainan.md)
 - [臺北・新北](taipei.md)
 - [彰化](changhua.md)
+- [花蓮](hualien.md)
 
 規則：
 

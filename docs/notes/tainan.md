@@ -33,3 +33,126 @@
 ### 要不要收費（`free_entry`）
 - 兌悅門：免費（已標記，來源：參觀費用：無）。
 - 赤崁樓、臺南孔子廟：收不收費、哪些區域收費，待填。
+
+## Google 地圖清單（2026-11-10 匯入，待整理）
+
+原始材料，還沒整理，也還沒進 `data/`。來自作者自己的 Google 地圖儲存清單，已略過私人清單、公司、住家地址、只有地址或座標的項目。「已在資料中」是跟 `data/food/*.json`、`data/attractions/*.json` 比對的結果。
+
+說明：日式、拉麵、披薩、ALMONd、FULA 等標「新」的，有些是 2026-10-17 從資料拿掉的（見上面「已拿掉」），要不要加回來由作者決定。
+
+- **半夜丨杜子餓**：日本菜；新
+  - 筆記：品質...普偏下?  算對得起價位但品質真的偏下
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E5%8D%8A%E5%A4%9C%E4%B8%A8%E6%9D%9C%E5%AD%90%E9%A4%93%2022.9933588,120.2067301)，座標 22.9933588, 120.2067301
+- **ON LIVE 炸雞現場 安平店**：快餐；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=ON%20LIVE%20%E7%82%B8%E9%9B%9E%E7%8F%BE%E5%A0%B4%20%E5%AE%89%E5%B9%B3%E5%BA%97%2022.999427,120.1671111)，座標 22.999427, 120.1671111
+- **DANIEL Sous Vide 舒肥健康餐盒**：餐廳；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=DANIEL%20Sous%20Vide%20%E8%88%92%E8%82%A5%E5%81%A5%E5%BA%B7%E9%A4%90%E7%9B%92%2022.9917019,120.2111306)，座標 22.9917019, 120.2111306
+- **金欣相機鏡頭維修**：相機維修店；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%87%91%E6%AC%A3%E7%9B%B8%E6%A9%9F%E9%8F%A1%E9%A0%AD%E7%B6%AD%E4%BF%AE%2022.9777887,120.2448329)，座標 22.9777887, 120.2448329
+- **兌悅門**：歷史建築；已在資料中（景點）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E5%85%8C%E6%82%85%E9%96%80%2023.0007191,120.1944056)，座標 23.0007191, 120.1944056
+- **台南硓𥑮石．芳宅**：藝術中心；已在資料中（景點）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E5%8F%B0%E5%8D%97%E7%A1%93%F0%A5%91%AE%E7%9F%B3%EF%BC%8E%E8%8A%B3%E5%AE%85%2023.0003327,120.1961236)，座標 23.0003327, 120.1961236
+- **鱔魔師**：餐廳；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%B1%94%E9%AD%94%E5%B8%AB%2023.0344116,120.2131572)，座標 23.0344116, 120.2131572
+- **柯家蚵嗲**：類別不明；暫時關閉、已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E6%9F%AF%E5%AE%B6%E8%9A%B5%E5%97%B2%2023.0288762,120.214011)，座標 23.0288762, 120.214011
+- **武串燒**：中東烤肉店；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E6%AD%A6%E4%B8%B2%E7%87%92%2023.0280476,120.2147809)，座標 23.0280476, 120.2147809
+- **27 Pizza Italy 義大利窯烤披薩**：意大利菜；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=27%20Pizza%20Italy%20%E7%BE%A9%E5%A4%A7%E5%88%A9%E7%AA%AF%E7%83%A4%E6%8A%AB%E8%96%A9%2022.9935068,120.2234274)，座標 22.9935068, 120.2234274
+- **木木海產粥**：粥餐廳；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E6%9C%A8%E6%9C%A8%E6%B5%B7%E7%94%A2%E7%B2%A5%2022.9899481,120.199829)，座標 22.9899481, 120.199829
+- **入街**：熟食店；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E5%85%A5%E8%A1%97%2022.9890351,120.1956329)，座標 22.9890351, 120.1956329
+- **老王下麵 牛肉麵專賣店**：中式麵食；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E8%80%81%E7%8E%8B%E4%B8%8B%E9%BA%B5%20%E7%89%9B%E8%82%89%E9%BA%B5%E5%B0%88%E8%B3%A3%E5%BA%97%2023.0012731,120.1971488)，座標 23.0012731, 120.1971488
+- **雄沙西米專賣店**：鮮食市場；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%9B%84%E6%B2%99%E8%A5%BF%E7%B1%B3%E5%B0%88%E8%B3%A3%E5%BA%97%2023.0389021,120.202335)，座標 23.0389021, 120.202335
+- **餓男食堂**：日本菜；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%A4%93%E7%94%B7%E9%A3%9F%E5%A0%82%2022.9891597,120.191292)，座標 22.9891597, 120.191292
+- **阿富師大滷麵黑輪**：中國菜；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%98%BF%E5%AF%8C%E5%B8%AB%E5%A4%A7%E6%BB%B7%E9%BA%B5%E9%BB%91%E8%BC%AA%2023.0258662,120.2039362)，座標 23.0258662, 120.2039362
+- **洁茂牛肉麵館**：中式麵食；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E6%B4%81%E8%8C%82%E7%89%9B%E8%82%89%E9%BA%B5%E9%A4%A8%2023.0105288,120.2164349)，座標 23.0105288, 120.2164349
+- **PIZZA FACE🍕**：小食/零食吧；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=PIZZA%20FACE%F0%9F%8D%95%2022.9867292,120.1966023)，座標 22.9867292, 120.1966023
+- **溫度窯烤**：披薩外帶；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E6%BA%AB%E5%BA%A6%E7%AA%AF%E7%83%A4%2022.9885329,120.2044459)，座標 22.9885329, 120.2044459
+- **有吉可樂-魚尾巴日式料理**：日本菜；新
+  - 筆記：便宜CP質高、豬排乾、薑汁太油
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E6%9C%89%E5%90%89%E5%8F%AF%E6%A8%82-%E9%AD%9A%E5%B0%BE%E5%B7%B4%E6%97%A5%E5%BC%8F%E6%96%99%E7%90%86%2023.0131924,120.2303671)，座標 23.0131924, 120.2303671
+- **岐門酒吧 KEY MEM Wine & Cocktail**：酒吧；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E5%B2%90%E9%96%80%E9%85%92%E5%90%A7%20KEY%20MEM%20Wine%20%26%20Cocktail%2022.9985532,120.2023253)，座標 22.9985532, 120.2023253
+- **爆Q美式炸雞永康中華店**：餐廳；新
+  - 筆記：米血、無骨雞排、地瓜、雞塊、玉米筍可點；百頁會膩
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E7%88%86Q%E7%BE%8E%E5%BC%8F%E7%82%B8%E9%9B%9E%E6%B0%B8%E5%BA%B7%E4%B8%AD%E8%8F%AF%E5%BA%97%2023.0166029,120.2288903)，座標 23.0166029, 120.2288903
+- **香滋滋厚切雞排南台店**：小食/零食吧；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%A6%99%E6%BB%8B%E6%BB%8B%E5%8E%9A%E5%88%87%E9%9B%9E%E6%8E%92%E5%8D%97%E5%8F%B0%E5%BA%97%2023.0229557,120.2229256)，座標 23.0229557, 120.2229256
+- **而寶家拉麵**：拉麵；新
+  - 筆記：可免費加麵、清湯正常太淡、炸物不錯、炸物+麵會太多
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E8%80%8C%E5%AF%B6%E5%AE%B6%E6%8B%89%E9%BA%B5%2023.0138128,120.2182243)，座標 23.0138128, 120.2182243
+- **ALMONd 我的漢飽超好吃**：漢堡飽；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=ALMONd%20%E6%88%91%E7%9A%84%E6%BC%A2%E9%A3%BD%E8%B6%85%E5%A5%BD%E5%90%83%2022.9794852,120.2223647)，座標 22.9794852, 120.2223647
+- **紅眼披薩**：意式薄餅；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E7%B4%85%E7%9C%BC%E6%8A%AB%E8%96%A9%2022.9906375,120.2363672)，座標 22.9906375, 120.2363672
+- **FULA COFFEE 芙拉咖啡 巴斯克專門鋪**：咖啡店；新
+  - 筆記：巴斯克
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=FULA%20COFFEE%20%E8%8A%99%E6%8B%89%E5%92%96%E5%95%A1%20%E5%B7%B4%E6%96%AF%E5%85%8B%E5%B0%88%E9%96%80%E9%8B%AA%2022.9970071,120.1755803)，座標 22.9970071, 120.1755803
+- **府城黃家蝦捲**：熟食店；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E5%BA%9C%E5%9F%8E%E9%BB%83%E5%AE%B6%E8%9D%A6%E6%8D%B2%2023.0027467,120.1925975)，座標 23.0027467, 120.1925975
+- **伊豆讚壽司．日式飯糰．(平台)米大壽司**：類別不明；永久歇業、新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E4%BC%8A%E8%B1%86%E8%AE%9A%E5%A3%BD%E5%8F%B8%EF%BC%8E%E6%97%A5%E5%BC%8F%E9%A3%AF%E7%B3%B0%EF%BC%8E%28%E5%B9%B3%E5%8F%B0%29%E7%B1%B3%E5%A4%A7%E5%A3%BD%E5%8F%B8%2023.0069274,120.1818575)，座標 23.0069274, 120.1818575
+- **香草亭奇雞排**：熟食店；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%A6%99%E8%8D%89%E4%BA%AD%E5%A5%87%E9%9B%9E%E6%8E%92%2022.9827144,120.2056481)，座標 22.9827144, 120.2056481
+- **餓八來秋（雞飯）**：新加坡菜；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%A4%93%E5%85%AB%E4%BE%86%E7%A7%8B%EF%BC%88%E9%9B%9E%E9%A3%AF%EF%BC%89%2022.9929682,120.194191)，座標 22.9929682, 120.194191
+- **炭水化合物**：日式串燒餐廳；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E7%82%AD%E6%B0%B4%E5%8C%96%E5%90%88%E7%89%A9%2022.9894144,120.2110416)，座標 22.9894144, 120.2110416
+- **にくにくNikuNiku極厚日式炸豬排專門店**：日本菜；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E3%81%AB%E3%81%8F%E3%81%AB%E3%81%8FNikuNiku%E6%A5%B5%E5%8E%9A%E6%97%A5%E5%BC%8F%E7%82%B8%E8%B1%AC%E6%8E%92%E5%B0%88%E9%96%80%E5%BA%97%2022.9756721,120.2155132)，座標 22.9756721, 120.2155132
+- **肉 慾 覺 醒（南洋Sate_food）**：燒烤；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E8%82%89%20%E6%85%BE%20%E8%A6%BA%20%E9%86%92%EF%BC%88%E5%8D%97%E6%B4%8BSate_food%EF%BC%89%2022.9886667,120.2108785)，座標 22.9886667, 120.2108785
+- **LindaYakiniku 琳噠燒肉**：日式燒肉；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=LindaYakiniku%20%E7%90%B3%E5%99%A0%E7%87%92%E8%82%89%2022.9878831,120.211211)，座標 22.9878831, 120.211211
+- **豚的三次方**：日式炸豬扒餐廳；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E8%B1%9A%E7%9A%84%E4%B8%89%E6%AC%A1%E6%96%B9%2023.0322587,120.2128535)，座標 23.0322587, 120.2128535
+- **一旬一會甜點工作室**：甜品店；已在資料中（美食）
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E4%B8%80%E6%97%AC%E4%B8%80%E6%9C%83%E7%94%9C%E9%BB%9E%E5%B7%A5%E4%BD%9C%E5%AE%A4%2023.027661,120.2078725)，座標 23.027661, 120.2078725
+- **Zuzu 千層蛋糕 可麗露 司康**：類別不明；暫時關閉、新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=Zuzu%20%E5%8D%83%E5%B1%A4%E8%9B%8B%E7%B3%95%20%E5%8F%AF%E9%BA%97%E9%9C%B2%20%E5%8F%B8%E5%BA%B7%2022.9868407,120.2427199)，座標 22.9868407, 120.2427199
+- **Two Wild Ducks Hanging Bakery**：餅店；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=Two%20Wild%20Ducks%20Hanging%20Bakery%2023.0050658,120.2204769)，座標 23.0050658, 120.2204769
+- **麵屋吉森**：類別不明；暫時關閉、新
+  - 筆記：吃完起疹子
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%BA%B5%E5%B1%8B%E5%90%89%E6%A3%AE%2023.0095876,120.2329503)，座標 23.0095876, 120.2329503
+- **賀也拉麵（育樂街）**：拉麵；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E8%B3%80%E4%B9%9F%E6%8B%89%E9%BA%B5%EF%BC%88%E8%82%B2%E6%A8%82%E8%A1%97%EF%BC%89%2022.9935996,120.2145468)，座標 22.9935996, 120.2145468
+- **白露拉麵 bailu ramen**：拉麵；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E7%99%BD%E9%9C%B2%E6%8B%89%E9%BA%B5%20bailu%20ramen%2022.989837,120.2083244)，座標 22.989837, 120.2083244
+- **二男家 家系拉麵**：拉麵；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E4%BA%8C%E7%94%B7%E5%AE%B6%20%E5%AE%B6%E7%B3%BB%E6%8B%89%E9%BA%B5%2023.015375,120.2137729)，座標 23.015375, 120.2137729
+- **鮨瑀壽司**：壽司；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E9%AE%A8%E7%91%80%E5%A3%BD%E5%8F%B8%2023.009536,120.2231202)，座標 23.009536, 120.2231202
+- **南方安逸 Harbour Fantasy**：素食料理；想去，還沒去過、新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E5%8D%97%E6%96%B9%E5%AE%89%E9%80%B8%20Harbour%20Fantasy%2022.9981634,120.1952603)，座標 22.9981634, 120.1952603
+- **焰遇燒肉餐廳**：餐廳；新
+  - [Google 地圖](https://www.google.com/maps/search/?api=1&query=%E7%84%B0%E9%81%87%E7%87%92%E8%82%89%E9%A4%90%E5%BB%B3%2023.3005342,120.3052155)，座標 23.3005342, 120.3052155
+
+### 美食座標候選（待作者確認）
+
+對應 BACKLOG 的「food picks have no coordinates」。資料裡已有的臺南美食，在 Google 地圖上的地址和座標：
+
+- 柯家蚵嗲：709臺南市安南區郡安路四段與號安和路交叉口；23.0288762, 120.214011
+- 入街：700臺南市中西區南廠里大德街62號；22.9890351, 120.1956329
+- 阿富師大滷麵黑輪：709臺南市安南區溪東里北安路二段63巷21號；23.0258662, 120.2039362
+- 府城黃家蝦捲：700臺南市中西區兌悅里西和路268號；23.0027467, 120.1925975
+- 木木海產粥：700臺南市中西區府前路一段327號；22.9899481, 120.199829
+- 鱔魔師：709001臺南市安南區安東里安和路一段412號；23.0344116, 120.2131572
+- 老王下麵 牛肉麵專賣店：704臺南市北區立人里成功路490號；23.0012731, 120.1971488
+- 武串燒：709臺南市安南區安和里安和路一段106號；23.0280476, 120.2147809
+- 餓八來秋（雞飯）：700005臺南市中西區府前里友愛街310巷12號；22.9929682, 120.194191
+- 肉 慾 覺 醒（南洋Sate_food）：700臺南市中西區開山里府前路一段31號；22.9886667, 120.2108785
+- 一旬一會甜點工作室：709臺南市安南區溪頂里泰安街16巷1號；23.027661, 120.2078725
+- 岐門酒吧 KEY MEM Wine & Cocktail：700臺南市中西區赤崁街45巷8號；22.9985532, 120.2023253
+- 註：柯家蚵嗲在 Google 地圖上是「暫時關閉」，地址只有路口，座標可能不準。
