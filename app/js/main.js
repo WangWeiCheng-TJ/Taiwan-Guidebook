@@ -32,6 +32,7 @@ import { parseRoute, activeTab, entryKey, withKey, scrollFor, entryOverlays, wit
 
 const view = document.getElementById('view');
 let loadFailed = false; // the guidebook could not be loaded: #view shows loadFail
+let renderedDay = ''; // today() when #view was last rendered: the log form's date and today's plan show it
 
 /** A key unique enough to tell history entries and overlays apart, also across reloads. */
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
@@ -75,6 +76,7 @@ function render(nav = false, returnTo = null) {
     learn: () => renderLearn(state, arg),
   };
   const focus = nav ? returnTo : focusedControl();
+  renderedDay = today();
   view.innerHTML = (views[tab] || views.explore)();
   if (focus) refocus(focus);
   else if (nav) focusHeading();
@@ -624,8 +626,11 @@ bigcard.addEventListener('click', e => {
   else dispatchClick(e);
 });
 // The browser drops the screen wake lock while the page is hidden; take it again if the big card is open.
+// Back after midnight: render again, so the log form and today's plan show the new day.
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState !== 'hidden') wakeAgain();
+  if (document.visibilityState === 'hidden') return;
+  wakeAgain();
+  if (state.data && renderedDay && today() !== renderedDay) render();
 });
 
 // A place photo comes from Wikimedia, which the service worker does not cache: when it fails (offline),
@@ -678,7 +683,8 @@ view.addEventListener('change', async e => {
 
 /**
  * Copy one log form field into the draft. The date is kept as "" while it is today's (draftDate),
- * so the form follows the calendar when the app stays open past midnight.
+ * so the form shows the new day when it is drawn again after midnight (also when the page comes back
+ * into view on a new day); a save before that keeps the date the form shows.
  * @param {HTMLInputElement} el
  */
 function setDraftField(el) {
@@ -704,7 +710,10 @@ view.addEventListener('submit', e => {
   e.preventDefault();
   const error = validateDraft(state.draft);
   if (error) return toast(trMsg(state.lang, error));
-  state.log = [...state.log, makeEntry(state.draft, newId(), today(), places())];
+  // A draft that follows today ("") is saved under the date its form shows: the form may have been drawn
+  // before midnight, and the note must land on the day the traveler saw
+  const shown = e.target.elements?.date?.value;
+  state.log = [...state.log, makeEntry(state.draft, newId(), shown || today(), places())];
   state.draft = emptyDraft(state.draft.date);
   const ok = saveLog();
   if (ok) keepStorage();
