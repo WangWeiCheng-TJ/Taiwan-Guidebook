@@ -22,6 +22,7 @@ import { renderApps } from './views/apps.js';
 import { renderLearn } from './views/learn.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
+import { BACKUP_KEY, backupFileName, backupMark, bumpMark, backupExtras, planChoice } from './backup.js';
 import { STAY_KEY, emptyStay, normalizeStay, validateStay, putStay, removeStay, staySay, stayCity } from './stay.js';
 import { stayCard } from './views/stay.js';
 import { cityName } from './views/common.js';
@@ -246,7 +247,38 @@ function setTrip(trip) {
   state.trip = trip;
   state.tripDate = null;
   state.pasteOpen = false;
-  return writeJSON(TRIP_KEY, trip);
+  const ok = writeJSON(TRIP_KEY, trip);
+  if (ok && trip) keepStorage();
+  return ok;
+}
+
+let persistAsked = false; // keepStorage() asked the browser in this page session
+
+/**
+ * Ask the browser, once, to keep this site's storage when the device runs low on space: the notes and the plan
+ * live only here. Called after the first saved note or plan; a browser without the API, or one that says no,
+ * changes nothing (the backup line still says how old the last backup is).
+ */
+function keepStorage() {
+  if (persistAsked) return;
+  persistAsked = true;
+  const st = navigator.storage;
+  if (typeof st?.persist !== 'function') return;
+  Promise.resolve(typeof st.persisted === 'function' ? st.persisted() : false)
+    .then(kept => kept || st.persist())
+    .catch(() => {});
+}
+
+/**
+ * Count notes saved or imported since the last backup (bumpMark), for the line on My trip. Nothing to count
+ * before the first backup: the line then counts every note. A refused write is not reported.
+ * @param {number} n
+ */
+function notesAdded(n) {
+  const mark = bumpMark(state.backup, n);
+  if (mark === state.backup) return;
+  state.backup = mark;
+  writeJSON(BACKUP_KEY, mark);
 }
 
 /**
@@ -351,30 +383,83 @@ function refreshQuestion() {
 }
 
 /**
- * Merge a chosen export file into the log.
+ * Read a chosen backup file in: its notes are merged into the log (mergeImport: version 1, version 2 or a bare
+ * array). Its plan (version 2) is loaded when the phone has none, and replaces a different plan only after
+ * asking. Its party size is taken when the traveller never set one on this phone.
  * @param {HTMLInputElement} input  the file input; emptied afterwards, so the same file can be chosen again
  */
 async function importLog(input) {
   const file = input.files?.[0];
   if (!file) return;
-  let merged;
+  let parsed, merged;
   try {
-    merged = mergeImport(state.log, JSON.parse(await file.text()));
+    parsed = JSON.parse(await file.text());
+    merged = mergeImport(state.log, parsed);
   } catch {
     merged = null;
   }
   input.value = '';
-  if (!merged) return toast(tr(state.lang, 'badImport'));
+  const L = state.lang;
+  if (!merged) return toast(tr(L, 'badImport'));
   state.log = merged.log;
-  toast(saveLog() ? tr(state.lang, 'imported', { n: merged.added }) : tr(state.lang, 'storageFail'));
+  let ok = saveLog();
+  if (ok && merged.added) keepStorage();
+  notesAdded(merged.added);
+  const said = [tr(L, 'imported', { n: merged.added })];
+
+  const { trip, party, badTrip } = backupExtras(parsed);
+  const choice = planChoice(state.trip, trip);
+  if (choice === 'load' || (choice === 'ask' && confirm(tr(L, 'backup.planConfirm', { t: trip.title, old: state.trip.title })))) {
+    ok = setTrip(trip) && ok;
+    said.push(tr(L, 'planLoaded', { t: trip.title }));
+  }
+  if (badTrip) said.push(tr(L, 'backup.badPlan'));
+  if (party !== null && !state.partySet) {
+    state.party = party;
+    state.partySet = true;
+    ok = writeJSON(PARTY_KEY, party) && ok;
+  }
+  toast(ok ? said.join(' ') : tr(L, 'storageFail'), said.length > 1 ? 6000 : undefined);
   render();
 }
 
-function exportLog() {
-  const blob = new Blob([JSON.stringify(exportPayload(state.log, new Date()), null, 2)], { type: 'application/json' });
+/**
+ * Export the backup (exportPayload version 2: notes, plan, party size; never My stay). Where the browser can
+ * share the file, the share sheet sends it to the traveller's own chat or mail; elsewhere it downloads. A
+ * cancelled share is no backup; a share that fails otherwise falls back to the download. Afterwards the
+ * mark (BACKUP_KEY) records the backup, for the line on My trip.
+ */
+async function exportLog() {
+  const L = state.lang;
+  const payload = exportPayload(state.log, new Date(), { trip: state.trip, party: state.partySet ? state.party : null });
+  const json = JSON.stringify(payload, null, 2);
+  const name = backupFileName(today());
+  const file = typeof File === 'function' ? new File([json], name, { type: 'application/json' }) : null;
+  if (file && typeof navigator.share === 'function' && navigator.canShare?.({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], title: tr(L, 'backup.shareTitle', { d: today() }) });
+    } catch (err) {
+      if (err?.name === 'AbortError') return; // the traveller closed the share sheet
+      download(json, name);
+    }
+  } else {
+    download(json, name); // no await before this: the click still counts as the user's
+  }
+  state.backup = backupMark(new Date());
+  writeJSON(BACKUP_KEY, state.backup);
+  render();
+}
+
+/**
+ * Save text as a file through a temporary link.
+ * @param {string} json
+ * @param {string} name
+ */
+function download(json, name) {
+  const blob = new Blob([json], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `taiwan-trip-log-${today()}.json`;
+  a.download = name;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
@@ -621,7 +706,10 @@ view.addEventListener('submit', e => {
   if (error) return toast(trMsg(state.lang, error));
   state.log = [...state.log, makeEntry(state.draft, newId(), today(), places())];
   state.draft = emptyDraft(state.draft.date);
-  toast(tr(state.lang, saveLog() ? 'saved' : 'storageFail'));
+  const ok = saveLog();
+  if (ok) keepStorage();
+  notesAdded(1);
+  toast(tr(state.lang, ok ? 'saved' : 'storageFail'));
   render();
 });
 
