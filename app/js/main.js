@@ -19,7 +19,7 @@ import { renderLog } from './views/log.js';
 import { renderAsk, currentPrompt, photoContext, renderLater, laterInfo } from './views/ask.js';
 import { renderPhrases, renderTips, phraseCard, phraseCardFull, phraseSay } from './views/reference.js';
 import { renderApps } from './views/apps.js';
-import { renderLearn } from './views/learn.js';
+import { renderLearn, timelinePrompt } from './views/learn.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
 import { BACKUP_KEY, backupFileName, backupMark, bumpMark, backupExtras, planChoice } from './backup.js';
@@ -626,6 +626,14 @@ const actions = {
     const ok = await copyText(prompt);
     remember({ kind: 'place', subject: placeName(p, state.lang), where: localized(p.location, 'city', state.lang) }, prompt);
     toast(copiedMsg(ok, 'copiedPlace', 'copyFail'));
+  },
+  // Copy for AI on the timeline page: the timeline of all places and a request for the story that connects them.
+  // Kept in Ask later as "About Taiwan through the places".
+  'copy-timeline': async () => {
+    const prompt = timelinePrompt(state);
+    const ok = await copyText(prompt);
+    remember({ kind: 'place', subject: tr(state.lang, 'timeline.title'), where: '' }, prompt);
+    toast(copiedMsg(ok, 'copied', 'copyFail'));
   },
   star: el => {
     const n = Number(el.dataset.n);

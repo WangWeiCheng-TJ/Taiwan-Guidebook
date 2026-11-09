@@ -146,6 +146,8 @@ details[open]:not(.map) > summary { margin-bottom: 0; padding-bottom: 0; }
 .timeline { list-style: none; padding: 0; margin: 8px 0 0; }
 .timeline li { padding: 6px 0; border-top: 1px solid var(--line); font-size: 15px; }
 .timeline b { color: var(--accent); margin-right: 6px; }
+/* A link on a line of its own (the timeline's place links, "All places on one timeline"): the whole line taps */
+a.row-link { display: flex; align-items: center; min-height: 44px; }
 
 form.stack, .stack { display: grid; gap: 10px; }
 label { font-size: 14px; color: var(--muted); display: grid; gap: 4px; }

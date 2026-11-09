@@ -3,6 +3,7 @@ import { gpsDistance, fmtKm, mapsLinks, osmEmbedUrl, osmLink } from '../geo.js';
 import { placeById } from '../data.js';
 import { topicsForPlace } from '../topics.js';
 import { topicLink } from './learn.js';
+import { TIMELINE_ID } from '../timeline.js';
 import { isHttps } from './apps.js';
 import { notesFor } from '../triplog.js';
 import { places } from '../state.js';
@@ -13,8 +14,8 @@ import { withParty } from '../party.js';
 
 /**
  * Place page (#/place/<id>): header, badges, photo (online only), summary, action buttons, the user's notes,
- * practical sections with a collapsed map (online only), then the story and timeline collapsed, and
- * "Learn more" topics. Content follows s.lang (falls back to English).
+ * practical sections with a collapsed map (online only), then the story and timeline collapsed (the timeline ends
+ * with a link to the timeline of all places, #/learn/timeline), and "Learn more" topics. Content follows s.lang (falls back to English).
  * Emits: data-action="driver" | "copy-place" (data-id = place id).
  * Links: Google Maps directions, Apple Maps, #/log/<id> ("I was here" prefills the log form).
  * @param {import('../state.js').AppState} s
@@ -77,6 +78,7 @@ export function renderPlace(s, id) {
     ${p.timeline?.length ? `<details>
       <summary>${tr(L, 'timeline')}</summary>
       <ul class="timeline">${p.timeline.map(t => `<li><b>${esc(t.year_or_era)}</b>${esc(localized(t, 'event', L))}</li>`).join('')}</ul>
+      <a class="row-link small" href="#/learn/${TIMELINE_ID}">${tr(L, 'timeline.all')}</a>
     </details>` : ''}
     ${learnMore(s, p)}
   `;

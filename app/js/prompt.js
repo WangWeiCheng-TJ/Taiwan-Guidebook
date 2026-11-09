@@ -295,6 +295,27 @@ export function buildPlacePrompt(place, notes) {
 }
 
 /**
+ * "Copy for AI" on the timeline page (#/learn/timeline): the merged timeline era by era, each event with its year as
+ * written and its place (English and Chinese name), then a request to tell the story that connects these places.
+ * Events from a place still pending owner review end in "[draft]", and the AI is told what that means. English
+ * data, like the place prompt; the Chinese UI adds the reply-language line.
+ * @param {import('./timeline.js').TimelineEra[]} groups  mergeTimeline(places)
+ * @param {'en'|'zh_TW'} [lang]
+ * @returns {string}
+ */
+export function buildTimelinePrompt(groups, lang = 'en') {
+  const events = groups.flatMap(g => g.events);
+  return [
+    "Here is a timeline of Taiwan's history made from the places in my travel guidebook, era by era. Each event names the place it belongs to.",
+    ...groups.map(g => `${g.era || 'Era not given'}\n${g.events.map(e =>
+      `- ${e.when} · ${e.place.name.en} (${e.place.name.zh_TW}): ${e.event_en}${e.pending ? ' [draft]' : ''}`).join('\n')}`),
+    events.some(e => e.pending) && 'Events marked [draft] come from entries the guidebook\'s author has not checked yet: treat them with care.',
+    'Tell me the story that connects these places: how Taiwan\'s history runs through them from one era to the next, and what I can still see at each place that shows its part in that story.',
+    lang === 'zh_TW' && 'Please reply in Traditional Chinese (Taiwan).',
+  ].filter(Boolean).join('\n\n');
+}
+
+/**
  * Question for "select text, ask AI what it means".
  * @param {{ text: string, context?: string, source?: string, lang?: 'en'|'zh_TW' }} q
  *   text     the selected words (trimmed; cut to 80 characters)

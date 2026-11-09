@@ -19,7 +19,7 @@ export const ASK_LATER_SHOWN = 3;
 
 /**
  * Where a prompt was copied: the Ask AI tab's modes ('near', 'plan', 'photo'), "Ask AI about the menu" on a food
- * sheet ('menu'), "Copy for AI" on a place ('place'), the select-text bar ('explain').
+ * sheet ('menu'), "Copy for AI" on a place or on the timeline of all places ('place'), the select-text bar ('explain').
  * @typedef {'near'|'plan'|'photo'|'menu'|'place'|'explain'} AskLaterKind
  */
 export const ASK_LATER_KINDS = /** @type {const} */ (['near', 'plan', 'photo', 'menu', 'place', 'explain']);
