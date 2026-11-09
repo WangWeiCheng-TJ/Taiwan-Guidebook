@@ -59,3 +59,19 @@ test('planFromAiText loads an AI answer that uses null for optional keys', () =>
   assert.equal(trip.days[0].items.length, 2);
   assert.equal(trip.days[0].items[0].place, 'chihkan-tower');
 });
+
+test('parseTrip: a blank time ("" or spaces) counts as absent, like the other blank optional fields', () => {
+  for (const time of ['', '  ']) {
+    const { trip, errors } = parseTrip({ title: 'T', days: [{ date: '2026-11-04', items: [{ name: 'Lunch', time }] }] });
+    assert.deepEqual(errors, [], JSON.stringify(time));
+    assert.deepEqual(trip.days[0].items[0], { name: 'Lunch' }, 'no time key');
+  }
+});
+
+test('planFromAiText loads an AI answer that writes "" for a stop it has no time for', () => {
+  const answer = '{"title":"Tainan","days":[{"date":"2026-11-04","items":[' +
+    '{"time":"09:00","place":"chihkan-tower"},{"time":"","name":"Lunch"}]}]}';
+  const { trip, errors } = planFromAiText(answer, places);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(trip.days[0].items, [{ place: 'chihkan-tower', time: '09:00' }, { name: 'Lunch' }]);
+});

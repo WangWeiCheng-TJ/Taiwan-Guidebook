@@ -30,7 +30,8 @@ function parseItem(item, errors, where) {
   if (!clean.place && !clean.name) {
     errors.push(`${where}: needs a place id or a name.`);
   }
-  if (given(item.time)) {
+  // a blank time ("" or spaces) is absent, like a blank place, name or note
+  if (given(item.time) && !(typeof item.time === 'string' && !item.time.trim())) {
     let t = typeof item.time === 'string' ? item.time.trim() : '';
     if (/^\d:[0-5]\d$/.test(t)) t = `0${t}`; // "9:30" → "09:30"
     if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(t)) errors.push(`${where}: time must be HH:MM, like 09:30.`);
@@ -78,7 +79,8 @@ function parseDay(day, errors, n) {
  *   (may be empty); `title` optional string
  * - every item: has a non-empty string `place` or `name` (or both); `time` if present matches HH:MM
  *   (a one-digit hour such as "9:30" is accepted and padded to "09:30"); `note` if present is a string
- * - an optional field (day `title`; item `place`, `name`, `time`, `note`) set to null counts as absent
+ * - an optional field (day `title`; item `place`, `name`, `time`, `note`) set to null, or to a blank string,
+ *   counts as absent
  * - unknown place ids are NOT errors here (resolveItem reports them)
  *
  * Output trip is a clean copy: only known fields kept, strings trimmed, days sorted by date.
