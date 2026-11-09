@@ -146,3 +146,11 @@ test('timelinePrompt: the text for the page\'s Copy for AI, in the UI language',
   assert.equal(timelinePrompt(s('zh_TW')), buildTimelinePrompt(mergeTimeline([A, B]), 'zh_TW'));
   assert.equal(timelinePrompt({ lang: 'en', data: guidebook }), buildTimelinePrompt(mergeTimeline(guidebook.places), 'en'));
 });
+
+test('app.css: a row link (the timeline\'s place links, "All places on one timeline") is a 44px flex row', () => {
+  const css = readFileSync(new URL('../../app/app.css', import.meta.url), 'utf8');
+  const body = css.match(/^a\.row-link\s*\{([^}]*)\}/m)?.[1];
+  assert.ok(body, 'a.row-link has a rule');
+  assert.match(body, /display:\s*flex/);
+  assert.match(body, /min-height:\s*44px/);
+});
