@@ -74,11 +74,17 @@ export function showBig(html, opts = {}) {
   wake.hold();
 }
 
-/** Close the big card and let the screen sleep again. @returns {void} */
+/**
+ * Close the big card, stop its 🔊 reading and let the screen sleep again. Stopping every reading is safe: the
+ * card is modal, so nothing else can have started one while it was open.
+ * @returns {void}
+ */
 export function hideBig() {
   document.getElementById('bigcard').hidden = true;
   if (document.getElementById('sheet').hidden) document.body.classList.remove('no-scroll'); // a sheet under it still locks the page
   wake.release();
+  if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel();
+  lastSay = null;
 }
 
 /**

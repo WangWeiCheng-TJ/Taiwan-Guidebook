@@ -278,3 +278,31 @@ test('leaving the page closes the card and releases the wake lock', async () => 
   assert.equal(lock.released, true);
   assert.equal(dom.document.body.classList.contains('no-scroll'), false);
 });
+
+test('closing the card stops its reading: Close, the backdrop, Escape, Back and leaving the page', async () => {
+  const saved = speechSynthesis.cancel;
+  let cancels = 0;
+  speechSynthesis.cancel = () => { cancels++; };
+  const ways = [
+    ['Close', () => tapCard(dom.bigClose)],
+    ['the backdrop', () => tapCard(dom.bigcard)],
+    ['Escape', () => dom.document.dispatch('keydown', { key: 'Escape' })],
+    ['Back', () => dom.history.back()],
+    ['leaving the page', () => { dom.location.hash = '#/place/chihkan-tower'; }],
+  ];
+  try {
+    for (const [way, close] of ways) {
+      if (way === 'leaving the page') { dom.location.hash = '#/tips'; await settle(); }
+      click({ action: 'driver', id: 'chihkan-tower' });
+      await settle();
+      tapCard(cardButton({ action: 'big-say', say: driverSay(chihkan) }));
+      cancels = 0; // reading now (a new reading cancels the one before it)
+      close();
+      await settle();
+      assert.equal(dom.bigcard.hidden, true, way);
+      assert.equal(cancels, 1, `${way} stops the reading`);
+    }
+  } finally {
+    speechSynthesis.cancel = saved;
+  }
+});
