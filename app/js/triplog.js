@@ -2,10 +2,14 @@
 
 import { daysBetween, isIsoDate } from './util.js';
 import { placeById } from './data.js';
+import { localized } from './lang.js';
+import { t } from './i18n.js';
 
 /** @typedef {import('./types.js').LogEntry} LogEntry */
 /** @typedef {import('./types.js').LogDraft} LogDraft */
 /** @typedef {import('./types.js').Place} Place */
+/** @typedef {import('./types.js').Bilingual} Bilingual */
+/** @typedef {import('./lang.js').Lang} Lang */
 
 export const LOG_KEY = 'tg.log.v1';
 export const EXPORT_TYPE = 'taiwan-guidebook-trip-log';
@@ -50,13 +54,26 @@ export function newId() {
 }
 
 /**
+ * The place's name in both languages, as an entry keeps it (LogEntry.label).
+ * @param {Place} p
+ * @returns {Bilingual}
+ */
+function labelOf(p) {
+  return { en: localized(p, 'name', 'en'), zh_TW: localized(p, 'name', 'zh_TW') };
+}
+
+/**
  * Turn a valid draft into a stored entry. Trims text; name is "" when placeId is set.
+ * An entry for a place found in `places` also keeps the place's name in both languages (label), so it
+ * still has one after a guide update drops the place.
  * @param {LogDraft} draft  must pass validateDraft
  * @param {string} id
  * @param {string} fallbackDate  used when draft.date is empty
+ * @param {Place[]} [places]  the guidebook the place was picked from; without it, no label
  * @returns {LogEntry}
  */
-export function makeEntry(draft, id, fallbackDate) {
+export function makeEntry(draft, id, fallbackDate, places = []) {
+  const p = draft.placeId ? placeById(places, draft.placeId) : null;
   return {
     id,
     date: draft.date || fallbackDate,
@@ -64,7 +81,26 @@ export function makeEntry(draft, id, fallbackDate) {
     name: draft.placeId ? '' : draft.name.trim(),
     stars: draft.stars || null,
     note: draft.note.trim(),
+    ...(p ? { label: labelOf(p) } : {}),
   };
+}
+
+/**
+ * Give each entry that points at a place in `places` and has no label yet (logged before entries kept
+ * one) that place's label, so it keeps its name if a later guide drops the place.
+ * @param {LogEntry[]} log
+ * @param {Place[]} places
+ * @returns {LogEntry[]} the same array when no entry gained a label, else a new one
+ */
+export function withLabels(log, places) {
+  let changed = false;
+  const out = log.map(e => {
+    const p = e.placeId && !e.label ? placeById(places, e.placeId) : null;
+    if (!p) return e;
+    changed = true;
+    return { ...e, label: labelOf(p) };
+  });
+  return changed ? out : log;
 }
 
 /**
@@ -87,9 +123,24 @@ export function exportPayload(log, now) {
 }
 
 /**
+ * An imported label reshaped to { en, zh_TW } (trimmed strings, "" for a missing one), or null when it
+ * names nothing.
+ * @param {unknown} raw
+ * @returns {Bilingual|null}
+ */
+function cleanLabel(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const l = /** @type {Record<string, unknown>} */ (raw);
+  const en = typeof l.en === 'string' ? l.en.trim() : '';
+  const zh = typeof l.zh_TW === 'string' ? l.zh_TW.trim() : '';
+  return en || zh ? { en, zh_TW: zh } : null;
+}
+
+/**
  * An imported entry reshaped to the LogEntry contract, or null when it has no usable id or date.
  * The file may be hand-edited or rewritten by an AI: a rating outside 1..5 becomes null,
  * text fields that are not strings become "", and a numeric id becomes a string (so it can be deleted).
+ * A label is kept (see cleanLabel) only on an entry with a placeId; one that names nothing is dropped.
  * @param {unknown} raw
  * @returns {LogEntry|null}
  */
@@ -99,13 +150,16 @@ function cleanEntry(raw) {
   const id = typeof e.id === 'number' && Number.isFinite(e.id) ? String(e.id) : e.id;
   if (typeof id !== 'string' || !id || !isIsoDate(e.date)) return null;
   const s = typeof e.stars === 'number' ? Math.round(e.stars) : NaN;
+  const placeId = typeof e.placeId === 'string' && e.placeId ? e.placeId : null;
+  const label = placeId ? cleanLabel(e.label) : null;
   return {
     id,
     date: /** @type {string} */ (e.date),
-    placeId: typeof e.placeId === 'string' && e.placeId ? e.placeId : null,
+    placeId,
     name: typeof e.name === 'string' ? e.name : '',
     stars: s >= 1 && s <= 5 ? s : null,
     note: typeof e.note === 'string' ? e.note : '',
+    ...(label ? { label } : {}),
   };
 }
 
@@ -148,16 +202,29 @@ export function dayNumber(log, date) {
 }
 
 /**
- * Display name: the guidebook name if the entry points at a known place, else the typed name.
- * An entry whose place is no longer in the guidebook (renamed or removed, or imported from another
- * version) has no typed name, so it falls back to its placeId rather than "".
+ * Display name in a language: the guidebook name if the entry points at a known place, else the name the
+ * entry kept when it was logged (label; English when it has no Chinese one), else the typed name. An entry
+ * whose place is no longer in the guidebook (renamed or removed, or imported from another version) and
+ * that has no label (logged before entries kept one) falls back to its placeId rather than "".
  * @param {LogEntry} entry
  * @param {Place[]} places
+ * @param {Lang} [lang]  'en' by default (prompts)
  * @returns {string}
  */
-export function entryName(entry, places) {
+export function entryName(entry, places, lang = 'en') {
   const p = entry.placeId && placeById(places, entry.placeId);
-  return p ? p.name.en : entry.name || entry.placeId || '';
+  if (p) return localized(p, 'name', lang);
+  return (entry.placeId && t(entry.label, lang)) || entry.name || entry.placeId || '';
+}
+
+/**
+ * True when the entry points at a place this guidebook no longer has: the log names it without a link.
+ * @param {LogEntry} entry
+ * @param {Place[]} places
+ * @returns {boolean}
+ */
+export function placeGone(entry, places) {
+  return !!entry.placeId && !placeById(places, entry.placeId);
 }
 
 /**

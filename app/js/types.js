@@ -159,6 +159,8 @@
  * @property {string} name       free-text name when placeId is null, otherwise ""
  * @property {number|null} stars 1..5 or null
  * @property {string} note
+ * @property {Bilingual} [label] the place's name when it was logged (only with a placeId), so the entry keeps
+ *           a name after a guide update drops the place; absent on entries logged before entries kept one
  *
  * @typedef {Object} LogDraft    The unsaved log form
  * @property {string} date       YYYY-MM-DD the user picked, or "" for today (resolved when shown and when saved)

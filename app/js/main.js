@@ -5,7 +5,8 @@ import { state, places } from './state.js';
 import { today } from './util.js';
 import { writeJSON } from './storage.js';
 import { loadGuidebook, placeById, cityCenter } from './data.js';
-import { LOG_KEY, emptyDraft, draftDate, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor } from './triplog.js';
+import { LOG_KEY, emptyDraft, draftDate, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor,
+  withLabels } from './triplog.js';
 import { buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt, buildPhotoPrompt } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
@@ -221,6 +222,19 @@ function syncInert() {
  */
 function saveLog() {
   return writeJSON(LOG_KEY, state.log);
+}
+
+/**
+ * Entries logged before entries kept their place's name get it from `guide` (withLabels), so they keep a
+ * name when a later guide drops the place. Stored when any changed; a refused write is not reported (the
+ * labels are kept in memory and stored with the next save).
+ * @param {import('./types.js').Place[]} guide
+ */
+function labelLog(guide) {
+  const log = withLabels(state.log, guide);
+  if (log === state.log) return;
+  state.log = log;
+  saveLog();
 }
 
 /**
@@ -605,7 +619,7 @@ view.addEventListener('submit', e => {
   e.preventDefault();
   const error = validateDraft(state.draft);
   if (error) return toast(trMsg(state.lang, error));
-  state.log = [...state.log, makeEntry(state.draft, newId(), today())];
+  state.log = [...state.log, makeEntry(state.draft, newId(), today(), places())];
   state.draft = emptyDraft(state.draft.date);
   toast(tr(state.lang, saveLog() ? 'saved' : 'storageFail'));
   render();
@@ -682,20 +696,26 @@ async function init() {
     render();
     return;
   }
+  labelLog(places());
   render();
   await loadSharedTrip();
 }
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
-  // sw.js posts this after a background refresh brought a different guidebook.json
+  // sw.js posts this after a background refresh brought a different guidebook.json. Log entries take their
+  // names from the guide being replaced.
   navigator.serviceWorker.addEventListener('message', async e => {
     if (e.data?.type !== 'data-updated') return;
+    const before = places();
     try {
       state.data = await loadGuidebook();
-      render();
-      toast(tr(state.lang, 'guideUpdated'));
-    } catch { /* keep the current data */ }
+    } catch {
+      return; // keep the current data
+    }
+    labelLog(before);
+    render();
+    toast(tr(state.lang, 'guideUpdated'));
   });
 }
 
