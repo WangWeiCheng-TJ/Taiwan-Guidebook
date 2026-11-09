@@ -46,7 +46,7 @@ const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 
  * @param {boolean} [nav]  a route change: focus moves to `returnTo`, else to the new page's heading.
  *   Otherwise a control that had focus in #view gets it back in the new markup (a re-render would
  *   otherwise drop focus to <body>).
- * @param {{ selector: string, range: [number, number]|null }|null} [returnTo]  Back or Forward: the control
+ * @param {{ selector: string, range: [number, number]|null, index: number }|null} [returnTo]  Back or Forward: the control
  *   that had focus when the reader left this page (focusedControl())
  */
 function render(nav = false, returnTo = null) {
@@ -85,23 +85,27 @@ function render(nav = false, returnTo = null) {
 // ---------- Focus ----------
 
 /**
- * The control focused inside #view, as a selector that finds it again after a re-render.
- * @returns {{ selector: string, range: [number, number]|null }|null}
+ * The control focused inside #view, as a selector that finds it again after a re-render, and which of the
+ * controls matching it (My trip can link to one place from the plan and from a note).
+ * @returns {{ selector: string, range: [number, number]|null, index: number }|null}
  */
 function focusedControl() {
   const el = document.activeElement;
   if (!el || el === view || !view.contains(el)) return null;
   const range = typeof el.selectionStart === 'number' ? [el.selectionStart, el.selectionEnd] : null;
-  return { selector: focusSelector(name => el.getAttribute(name)), range };
+  const selector = focusSelector(name => el.getAttribute(name));
+  const index = selector ? Math.max(0, [...view.querySelectorAll(selector)].indexOf(el)) : 0;
+  return { selector, range, index };
 }
 
 /**
- * Focus the control again, with its text selection; a control that is now disabled (− at the minimum)
- * hands focus to an enabled button next to it; one that is gone hands it to the page heading.
- * @param {{ selector: string, range: [number, number]|null }} f
+ * Focus the control again (the same one of several that match, else the first), with its text selection; a
+ * control that is now disabled (− at the minimum) hands focus to an enabled button next to it; one that is
+ * gone hands it to the page heading.
+ * @param {{ selector: string, range: [number, number]|null, index: number }} f
  */
 function refocus(f) {
-  let el = f.selector ? view.querySelector(f.selector) : null;
+  let el = f.selector ? view.querySelectorAll(f.selector)[f.index] || view.querySelector(f.selector) : null;
   if (el?.disabled) el = el.parentElement?.querySelector('button:not([disabled])') || null;
   if (!el) return focusHeading();
   el.focus({ preventScroll: true });
@@ -120,7 +124,7 @@ function focusHeading() {
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; // restored per entry below
 /** @type {Map<string, number>} scrollY by history entry key, saved when leaving the entry */
 const scrolls = new Map();
-/** @type {Map<string, { selector: string, range: [number, number]|null }>} the focused control, ditto */
+/** @type {Map<string, { selector: string, range: [number, number]|null, index: number }>} the focused control, ditto */
 const focused = new Map();
 let entry = entryKey(history.state) || uid();
 // A reload on an overlay's entry leaves nothing open: drop the stale overlay list, and step back off that

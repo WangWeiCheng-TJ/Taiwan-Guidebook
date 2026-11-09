@@ -28,6 +28,8 @@ export class FakeElement {
     this.listeners = {};
     /** @type {Record<string, FakeElement>} selector -> element, for querySelector */
     this.known = {};
+    /** @type {Record<string, FakeElement[]>} selector -> elements, for querySelectorAll */
+    this.knownAll = {};
     this.classList = new FakeClassList();
     this.innerHTML = '';
     this.textContent = '';
@@ -54,7 +56,7 @@ export class FakeElement {
     return !!on;
   }
   querySelector(sel) { return this.known[sel] || null; }
-  querySelectorAll() { return []; }
+  querySelectorAll(sel) { return this.knownAll[sel] || []; }
   contains(n) {
     for (let e = n; e; e = e.parentElement) if (e === this) return true;
     return false;
