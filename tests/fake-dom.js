@@ -102,9 +102,12 @@ export const settle = async (rounds = 5) => {
 
 /**
  * Install the fake browser as globals. Call before importing app/js/main.js.
- * @param {{ hash?: string, language?: string, guidebook?: unknown, fetchFails?: boolean }} opts
+ * `stack`: history entries the tab already has (a reload), oldest first; the last one is current. Without it,
+ * one entry at `hash` with no state.
+ * @param {{ hash?: string, language?: string, guidebook?: unknown, fetchFails?: boolean,
+ *   stack?: { hash: string, state: unknown }[] }} opts
  */
-export function installDom({ hash = '#/explore', language = 'en-GB', guidebook = null, fetchFails = false } = {}) {
+export function installDom({ hash = '#/explore', language = 'en-GB', guidebook = null, fetchFails = false, stack = null } = {}) {
   const document = new FakeDocument();
   const el = (id, opts = {}) => (document.byId[id] = new FakeElement(document, { id, ...opts }));
 
@@ -137,8 +140,8 @@ export function installDom({ hash = '#/explore', language = 'en-GB', guidebook =
   const winListeners = {};
   const fireWin = type => { for (const fn of winListeners[type] || []) fn({ type }); };
   const base = 'http://localhost:8765/';
-  const entries = [{ url: new URL(hash, base), state: null }];
-  let index = 0;
+  const entries = (stack || [{ hash, state: null }]).map(e => ({ url: new URL(e.hash, base), state: structuredClone(e.state ?? null) }));
+  let index = entries.length - 1;
   const cur = () => entries[index];
 
   const history = {
@@ -220,5 +223,6 @@ export function installDom({ hash = '#/explore', language = 'en-GB', guidebook =
    */
   const control = (dataset, props = {}, parent = view) => Object.assign(new FakeElement(document, { tag: 'button', dataset, parent }), props);
 
-  return { document, window, history, location, storage, view, sheet, bigcard, sheetClose, bigClose, control, entries: () => entries.length, store };
+  return { document, window, history, location, storage, view, sheet, bigcard, sheetClose, bigClose, control,
+    entries: () => entries.length, at: () => index, store };
 }

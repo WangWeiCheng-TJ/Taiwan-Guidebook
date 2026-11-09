@@ -123,8 +123,11 @@ const scrolls = new Map();
 /** @type {Map<string, { selector: string, range: [number, number]|null }>} the focused control, ditto */
 const focused = new Map();
 let entry = entryKey(history.state) || uid();
-// A reload on an overlay's entry leaves nothing open: drop the stale overlay list.
+// A reload on an overlay's entry leaves nothing open: drop the stale overlay list, and step back off that
+// entry onto the page's own (same URL; popstate finds nothing to close), so the first Back is not a dead press.
+const staleOnLoad = entryOverlays(history.state).length > 0;
 history.replaceState(withKey(withOverlays(history.state, []), entry), '');
+if (staleOnLoad) history.back();
 
 /** @type {{ kind: 'sheet'|'big', token: string, opener: Element|null }[]} open overlays, bottom first */
 const overlays = [];
