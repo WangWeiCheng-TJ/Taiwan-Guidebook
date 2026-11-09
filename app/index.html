@@ -25,7 +25,7 @@
   </header>
 
   <main id="view" class="view">
-    <p class="muted">Loading…</p>
+    <p class="muted" data-loading>Loading…</p>
   </main>
 
   <nav class="tabbar" aria-label="Sections">
@@ -52,6 +52,68 @@
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
   <div id="announce" class="sr-status" role="status" aria-live="polite" aria-atomic="true"></div>
 
+  <script>
+  // Boot watchdog: a classic script, so it runs even when a module fails to load or throws. Until main.js marks
+  // #view with data-started (after its first render), a script error, or #view still showing the loading line
+  // (data-loading) 8 seconds on, puts "The app didn't start" and a Repair button in #view. Loading goes on: when
+  // the app renders, its page replaces the message, so a slow first load is not cut off. Repair unregisters this
+  // page's service worker, deletes the app's caches (tg-*) and reloads. Its two strings are copies of bootFail and
+  // bootRepair in lang.js, which may not have loaded (tests/core/boot-watchdog.test.js keeps them equal).
+  (function () {
+    var WAIT = 8000;
+    var view = document.getElementById('view');
+    var lang = null;
+    try { lang = JSON.parse(localStorage.getItem('tg.lang.v1')); } catch (e) {}
+    if (lang !== 'en' && lang !== 'zh_TW') lang = /^zh/i.test(navigator.language || '') ? 'zh_TW' : 'en';
+    var text = lang === 'zh_TW' ? ['App 沒有順利啟動。', '修復'] : ["The app didn't start.", 'Repair'];
+
+    function started() { return view.hasAttribute('data-started'); }
+    function loading() { return !!view.querySelector('[data-loading]'); }
+
+    function show() {
+      if (started() || !loading()) return;
+      view.innerHTML = '<div lang="' + (lang === 'zh_TW' ? 'zh-Hant-TW' : 'en') + '"><p>' + text[0] + '</p>'
+        + '<button type="button" class="btn primary" id="boot-repair">' + text[1] + '</button></div>';
+      document.getElementById('boot-repair').addEventListener('click', repair);
+      var say = document.getElementById('announce');
+      if (say) say.textContent = text[0];
+    }
+
+    function repair() {
+      document.getElementById('boot-repair').disabled = true;
+      var quiet = function () {};
+      var jobs = [];
+      if (navigator.serviceWorker) {
+        jobs.push(navigator.serviceWorker.getRegistration()
+          .then(function (r) { return r && r.unregister(); }).catch(quiet));
+      }
+      if (window.caches) {
+        jobs.push(caches.keys().then(function (keys) {
+          return Promise.all(keys.filter(function (k) { return k.indexOf('tg-') === 0; })
+            .map(function (k) { return caches.delete(k); }));
+        }).catch(quiet));
+      }
+      Promise.all(jobs).then(function () { location.reload(); });
+    }
+
+    // A script that fails to load or throws, or a promise nobody catches; a broken image or stylesheet is no reason
+    window.addEventListener('error', function (e) {
+      var t = e && e.target;
+      if (t && t !== window && t.tagName !== 'SCRIPT') return;
+      show();
+    }, true);
+    window.addEventListener('unhandledrejection', show);
+
+    // Look again every 8 seconds: main.js puts its own loading line back when it starts after the message is up.
+    // Stop once the app has started, or #view shows neither the loading line nor this message (an older main.js).
+    function tick() {
+      if (started() || !(loading() || document.getElementById('boot-repair'))) return;
+      show();
+      setTimeout(tick, WAIT);
+    }
+    setTimeout(tick, WAIT);
+  })();
+  </script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

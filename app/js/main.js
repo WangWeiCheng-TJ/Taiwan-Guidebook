@@ -929,19 +929,25 @@ window.addEventListener('online', updateNet);
 window.addEventListener('offline', updateNet);
 window.addEventListener('online', laterOnline);
 
+/** #view shows the app (a page, or loadFail): the boot watchdog in index.html stands down. */
+const markStarted = () => view.setAttribute('data-started', '');
+
 async function init() {
   updateNet();
   renderChrome(); // top bar and tabs in the saved or browser language while the guide loads
-  view.innerHTML = `<p class="muted">${tr(state.lang, 'loading')}</p>`;
+  // data-loading: the boot watchdog in index.html looks for it (and replaces it if the app never gets further)
+  view.innerHTML = `<p class="muted" data-loading>${tr(state.lang, 'loading')}</p>`;
   try {
     state.data = await loadGuidebook();
   } catch {
     loadFailed = true; // render() shows loadFail, in the language the toggle picks
     render();
+    markStarted();
     return;
   }
   labelLog(places());
   render();
+  markStarted();
   await loadSharedTrip();
 }
 

@@ -41,3 +41,7 @@ test('a route change on the error screen keeps the error (nothing to render with
   await settle();
   assert.equal(dom.view.innerHTML, `<p>${tr('zh_TW', 'loadFail')}</p>`);
 });
+
+test('the error screen counts as started: main.js marks #view and the boot watchdog in index.html stands down', () => {
+  assert.equal(dom.view.hasAttribute('data-started'), true);
+});
