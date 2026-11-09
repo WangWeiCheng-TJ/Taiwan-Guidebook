@@ -16,6 +16,7 @@ Built (on `main`; not hosted yet):
 - City picker when GPS isn't used.
 - Ask AI about a photo: menu, sign, departure board, ticket machine or form, food label; "Ask AI about the menu" on food pick and dish sheets.
 - My stay: the traveler's hotel (Chinese name and address, phone), one per city, on the device only; "Take me back" on My trip and Explore opens it on the show card.
+- Full backup: one file with notes, plan and party size (version 2; older files still import), shared to the traveller's own chat or mail where the browser can share files, else downloaded; "Last backup 3 days ago · 5 notes since" on My trip; `navigator.storage.persist()` after the first saved note or plan.
 - The trip log survives guide updates: a note keeps its place's name (also through export and import); a guide update names the logged or planned places it dropped.
 
 Planned (design in [ARCHITECTURE.md](ARCHITECTURE.md)):
