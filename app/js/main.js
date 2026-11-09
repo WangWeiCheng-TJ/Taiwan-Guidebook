@@ -6,7 +6,7 @@ import { today } from './util.js';
 import { writeJSON } from './storage.js';
 import { loadGuidebook, placeById, cityCenter } from './data.js';
 import { LOG_KEY, emptyDraft, draftDate, validateDraft, makeEntry, newId, removeEntry, mergeImport, exportPayload, notesFor,
-  withLabels } from './triplog.js';
+  withLabels, trackedIds, goneFromGuide, guideUpdatedMessage } from './triplog.js';
 import { buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt, buildPhotoPrompt } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
@@ -704,7 +704,7 @@ async function init() {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
   // sw.js posts this after a background refresh brought a different guidebook.json. Log entries take their
-  // names from the guide being replaced.
+  // names from the guide being replaced; the toast names the logged or planned places the new one dropped.
   navigator.serviceWorker.addEventListener('message', async e => {
     if (e.data?.type !== 'data-updated') return;
     const before = places();
@@ -715,7 +715,8 @@ if ('serviceWorker' in navigator) {
     }
     labelLog(before);
     render();
-    toast(tr(state.lang, 'guideUpdated'));
+    const gone = goneFromGuide(trackedIds(state.log, state.trip), before, places(), state.lang);
+    toast(guideUpdatedMessage(gone, state.lang), gone.length ? 6000 : undefined);
   });
 }
 

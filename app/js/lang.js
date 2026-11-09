@@ -76,6 +76,10 @@ const STRINGS = {
     listen: 'Listen', noSpeech: 'This device can’t play speech.', tapToHear: 'Tap a character to hear it.',
     askAbout: '✦ Ask AI: “{t}”', explainTitle: 'Ask AI', explainCopied: 'Copied. Paste it into your AI app.',
     guideUpdated: 'Guide updated.', tapClose: 'Tap outside the card to close', close: 'Close', bigCard: 'Large text to show',
+    guideGone: 'Guide updated: {names} is no longer in the guide.',
+    guideGoneMany: 'Guide updated: {names} are no longer in the guide.',
+    guideGoneMore: 'Guide updated: {names} and {n} more are no longer in the guide.',
+    listSep: ', ',
     bigSay: 'Read aloud', bigFlip: 'Turn 180°',
     // party size
     'party.label': 'People:',
@@ -173,6 +177,10 @@ const STRINGS = {
     listen: '聽發音', noSpeech: '這台裝置無法播放語音。', tapToHear: '點單一個字可以聽它的發音。',
     askAbout: '✦ 問 AI：「{t}」', explainTitle: '問 AI', explainCopied: '已複製，貼到你的 AI 就可以問了。',
     guideUpdated: '手冊已更新。', tapClose: '點字卡外面可以關閉', close: '關閉', bigCard: '放大給對方看的字卡',
+    guideGone: '手冊已更新：{names}已不在手冊中。',
+    guideGoneMany: '手冊已更新：{names}已不在手冊中。',
+    guideGoneMore: '手冊已更新：{names}和另外 {n} 個地方已不在手冊中。',
+    listSep: '、',
     bigSay: '唸出來', bigFlip: '轉 180°',
     // party size
     'party.label': '人數：',

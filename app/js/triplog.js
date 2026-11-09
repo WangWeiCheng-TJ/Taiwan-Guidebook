@@ -2,13 +2,14 @@
 
 import { daysBetween, isIsoDate } from './util.js';
 import { placeById } from './data.js';
-import { localized } from './lang.js';
+import { localized, tr } from './lang.js';
 import { t } from './i18n.js';
 
 /** @typedef {import('./types.js').LogEntry} LogEntry */
 /** @typedef {import('./types.js').LogDraft} LogDraft */
 /** @typedef {import('./types.js').Place} Place */
 /** @typedef {import('./types.js').Bilingual} Bilingual */
+/** @typedef {import('./types.js').Trip} Trip */
 /** @typedef {import('./lang.js').Lang} Lang */
 
 export const LOG_KEY = 'tg.log.v1';
@@ -225,6 +226,50 @@ export function entryName(entry, places, lang = 'en') {
  */
 export function placeGone(entry, places) {
   return !!entry.placeId && !placeById(places, entry.placeId);
+}
+
+/**
+ * The guidebook places the traveller has logged or planned, each id once (log first, then the plan).
+ * @param {LogEntry[]} log
+ * @param {Trip|null} trip
+ * @returns {string[]}
+ */
+export function trackedIds(log, trip) {
+  const ids = [...log.map(e => e.placeId), ...(trip?.days || []).flatMap(d => (d.items || []).map(i => i.place))];
+  return [...new Set(ids.filter(id => typeof id === 'string' && id))];
+}
+
+/**
+ * Names of the places among `ids` that the old guidebook had and the new one has not, in the UI language,
+ * taken from the old guidebook; in the order of `ids`.
+ * @param {string[]} ids  e.g. trackedIds(...)
+ * @param {Place[]} before  the guidebook the page had
+ * @param {Place[]} after   the guidebook it has now
+ * @param {Lang} lang
+ * @returns {string[]}
+ */
+export function goneFromGuide(ids, before, after, lang) {
+  return ids.flatMap(id => {
+    const p = placeById(before, id);
+    return p && !placeById(after, id) ? [localized(p, 'name', lang)] : [];
+  });
+}
+
+/** How many gone places the guide-update message names before "and N more". */
+export const GONE_NAMED = 3;
+
+/**
+ * The toast after a guide update: "Guide updated." or, when places the traveller logged or planned are
+ * gone, which ones (up to GONE_NAMED names, then "and N more").
+ * @param {string[]} gone  goneFromGuide(...)
+ * @param {Lang} lang
+ * @returns {string}
+ */
+export function guideUpdatedMessage(gone, lang) {
+  if (!gone.length) return tr(lang, 'guideUpdated');
+  const names = gone.slice(0, GONE_NAMED).join(tr(lang, 'listSep'));
+  if (gone.length > GONE_NAMED) return tr(lang, 'guideGoneMore', { names, n: gone.length - GONE_NAMED });
+  return tr(lang, gone.length > 1 ? 'guideGoneMany' : 'guideGone', { names });
 }
 
 /**

@@ -1,11 +1,13 @@
 // The trip log survives guide updates: an entry for a guidebook place keeps the place's name (label), the log
-// names a place the guide dropped without a link, and labels go through export and import.
+// names a place the guide dropped without a link, labels go through export and import, and a guide update can
+// say which of the traveller's places it dropped.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { state } from '../../app/js/state.js';
 import { tr } from '../../app/js/lang.js';
 import {
-  makeEntry, entryName, placeGone, withLabels, mergeImport, exportPayload, emptyDraft,
+  makeEntry, entryName, placeGone, withLabels, mergeImport, exportPayload, trackedIds, goneFromGuide,
+  guideUpdatedMessage, GONE_NAMED, emptyDraft,
 } from '../../app/js/triplog.js';
 import { logBlock } from '../../app/js/prompt.js';
 import { renderLog } from '../../app/js/views/log.js';
@@ -13,6 +15,7 @@ import { guidebook, places } from '../fixtures.js';
 
 state.data = guidebook;
 const CHIHKAN = { en: 'Chihkan Tower (Fort Provintia)', zh_TW: '赤崁樓' };
+const DADAOCHENG = { en: 'Dadaocheng Dihua Street Historic District', zh_TW: '大稻埕迪化街歷史街區' };
 const without = (...ids) => places.filter(p => !ids.includes(p.id));
 const draft = over => ({ date: '2026-11-03', placeId: '', name: '', stars: 4, note: '', ...over });
 const entry = over => ({ id: 'x', date: '2026-11-03', placeId: 'chihkan-tower', name: '', stars: 4, note: '', ...over });
@@ -112,6 +115,41 @@ test('mergeImport keeps a valid label (trimmed, missing language as ""), and dro
     undefined, undefined, undefined, undefined, undefined,
   ]);
   assert.deepEqual(log.map(e => 'label' in e), [true, true, false, false, false, false, false]);
+});
+
+// ---------- the traveller's places, and what an update dropped ----------
+
+test('trackedIds: logged and planned guidebook places, each once', () => {
+  const log = [entry({ id: 'a' }), entry({ id: 'b', placeId: null, name: 'Curry' }), entry({ id: 'c' })];
+  const trip = { title: 'T', days: [
+    { date: '2026-11-04', items: [{ place: 'dadaocheng-dihua-street' }, { name: 'Lunch' }, { place: 'chihkan-tower' }] },
+    { date: '2026-11-05', items: [{ place: 'jiufen-gold-mountain', time: '09:00' }] },
+  ] };
+  assert.deepEqual(trackedIds(log, trip), ['chihkan-tower', 'dadaocheng-dihua-street', 'jiufen-gold-mountain']);
+  assert.deepEqual(trackedIds(log, null), ['chihkan-tower']);
+  assert.deepEqual(trackedIds([], { title: 'T', days: [{ date: '2026-11-04' }] }), []);
+});
+
+test('goneFromGuide names what the old guide had and the new one has not, from the old guide', () => {
+  const ids = ['chihkan-tower', 'jiufen-gold-mountain', 'dadaocheng-dihua-street', 'never-there'];
+  const after = without('chihkan-tower', 'dadaocheng-dihua-street');
+  assert.deepEqual(goneFromGuide(ids, places, after, 'en'), [CHIHKAN.en, DADAOCHENG.en]);
+  assert.deepEqual(goneFromGuide(ids, places, after, 'zh_TW'), [CHIHKAN.zh_TW, DADAOCHENG.zh_TW]);
+  assert.deepEqual(goneFromGuide(ids, places, places, 'en'), []);
+  assert.deepEqual(goneFromGuide([], places, [], 'en'), []);
+});
+
+test('guideUpdatedMessage: the plain message, or the places that are gone', () => {
+  assert.equal(guideUpdatedMessage([], 'en'), tr('en', 'guideUpdated'));
+  assert.equal(guideUpdatedMessage([], 'zh_TW'), tr('zh_TW', 'guideUpdated'));
+  assert.equal(guideUpdatedMessage(['Coral Stone House'], 'en'), 'Guide updated: Coral Stone House is no longer in the guide.');
+  assert.equal(guideUpdatedMessage(['A', 'B'], 'en'), 'Guide updated: A, B are no longer in the guide.');
+  assert.equal(guideUpdatedMessage(['珊瑚石屋'], 'zh_TW'), '手冊已更新：珊瑚石屋已不在手冊中。');
+  assert.equal(guideUpdatedMessage(['甲', '乙'], 'zh_TW'), '手冊已更新：甲、乙已不在手冊中。');
+  assert.equal(GONE_NAMED, 3);
+  assert.equal(guideUpdatedMessage(['A', 'B', 'C'], 'en'), 'Guide updated: A, B, C are no longer in the guide.');
+  assert.equal(guideUpdatedMessage(['A', 'B', 'C', 'D', 'E'], 'en'), 'Guide updated: A, B, C and 2 more are no longer in the guide.');
+  assert.equal(guideUpdatedMessage(['甲', '乙', '丙', '丁'], 'zh_TW'), '手冊已更新：甲、乙、丙和另外 1 個地方已不在手冊中。');
 });
 
 // ---------- My trip ----------

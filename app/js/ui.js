@@ -7,17 +7,18 @@ import { SAY_RATE, sayRate, bigCardHtml, wakeKeeper } from './bigcard.js';
 let toastTimer;
 
 /**
- * Show a short message above the tab bar for ~2.6 s. Replaces any visible toast.
+ * Show a short message above the tab bar for ~2.6 s (or `ms`). Replaces any visible toast.
  * #toast is a status live region that always stays in the page (never hidden): screen readers announce
  * text put into it, and an empty toast takes no space (app.css .toast:empty).
  * @param {string} msg
+ * @param {number} [ms]  how long it stays, for a longer message
  * @returns {void}
  */
-export function toast(msg) {
+export function toast(msg, ms = 2600) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.textContent = ''; }, 2600);
+  toastTimer = setTimeout(() => { el.textContent = ''; }, ms);
 }
 
 /**
