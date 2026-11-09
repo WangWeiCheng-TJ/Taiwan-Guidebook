@@ -173,6 +173,10 @@ const STRINGS = {
 const MESSAGES_ZH = {
   'Pick a place or type a name.': '請選擇地點或輸入名稱。',
   'Add a rating or a note.': '請給個評分或寫一句筆記。',
+  "Paste the hotel's name.": '請貼上飯店名稱。',
+  "Paste the hotel's address in Chinese.": '請貼上飯店的中文地址。',
+  'The address has no Chinese in it. Paste the Chinese one: that is what a driver reads.': '地址裡沒有中文。請貼上中文地址：司機看的是中文。',
+  'Check the phone number, or leave it empty.': '請檢查電話號碼，或留空。',
   'No plan found in the text.': '在這段文字裡找不到行程。',
   'The plan is not valid JSON.': '行程的格式不正確（不是有效的 JSON）。',
   'The trip file is not valid JSON.': '行程檔的格式不正確（不是有效的 JSON）。',

@@ -167,6 +167,13 @@
  * @property {number} stars      0 = no rating
  * @property {string} note
  *
+ * @typedef {Object} Stay        Where the traveler sleeps (My stay; stored on device only, never in a prompt or export)
+ * @property {string} id         unique; "" in an unsaved draft
+ * @property {string} name       the hotel's name as pasted, normally Chinese
+ * @property {string} address    the Chinese address a driver reads
+ * @property {string} phone      "" when not given
+ * @property {string} city       city_en the traveler picked, or "" (then the city is read from the address)
+ *
  * @typedef {Object} AskContext  Everything buildAskPrompt needs, passed explicitly so it stays pure
  * @property {'near'|'plan'} mode
  * @property {Pos|null} pos
