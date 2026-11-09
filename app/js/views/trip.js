@@ -10,7 +10,7 @@ import { placeName } from './common.js';
  * "My plan" block at the top of the My trip tab (#/log).
  * No plan, or s.pasteOpen: a box to paste the AI's answer, holding s.pasteText
  *   (data-input="ai-answer", data-action="paste-plan", plus "cancel-paste" when a plan exists).
- * With a plan: title, day chips (data-action="trip-day" data-date), the chosen day's stops
+ * With a plan: title, day chips (data-action="trip-day" data-date; aria-pressed on the shown day), the chosen day's stops
  *   (guidebook stops link to #/place/<id>; unknown ids get a "not in guidebook" badge),
  *   and data-action="paste-plan-again" | "clear-trip".
  * The shown day is s.tripDate if it exists in the plan, else defaultTripDate().
@@ -26,7 +26,7 @@ export function renderTripSection(s, today) {
   const date = s.tripDate && tripDayFor(trip, s.tripDate) ? s.tripDate : defaultTripDate(trip, today);
   const day = tripDayFor(trip, date);
   const chips = trip.days.map(d =>
-    `<button class="chip ${d.date === date ? 'on' : ''}" data-action="trip-day" data-date="${esc(d.date)}">${esc(shortDate(d.date, L))}${d.date === today ? ` · ${tr(L, 'today')}` : ''}</button>`
+    `<button class="chip ${d.date === date ? 'on' : ''}" data-action="trip-day" data-date="${esc(d.date)}" aria-pressed="${d.date === date}">${esc(shortDate(d.date, L))}${d.date === today ? ` · ${tr(L, 'today')}` : ''}</button>`
   ).join('');
 
   return `

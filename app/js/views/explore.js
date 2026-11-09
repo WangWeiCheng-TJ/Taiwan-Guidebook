@@ -15,7 +15,8 @@ import { renderFoodSection } from './food.js';
  * GPS (gpsDistance). A picked city is no one's position: its own places come first, then the others by
  * distance from its centre.
  * A "Visited" badge shows when the log has an entry for the place.
- * Emits: data-action="city" data-city="<city_en|all>" (the filter key stays English; labels follow s.lang).
+ * Emits: data-action="city" data-city="<city_en|all>" (the filter key stays English; labels follow s.lang;
+ * aria-pressed on the chosen one).
  * @param {import('../state.js').AppState} s
  * @returns {string}
  */
@@ -33,7 +34,7 @@ export function renderExplore(s) {
     return p ? localized(p.location, 'city', L) : c;
   };
   const chips = ['all', ...cities(places())].map(c =>
-    `<button class="chip ${c === city ? 'on' : ''}" data-action="city" data-city="${esc(c)}">${c === 'all' ? tr(L, 'all') : esc(cityLabel(c))}</button>`
+    `<button class="chip ${c === city ? 'on' : ''}" data-action="city" data-city="${esc(c)}" aria-pressed="${c === city}">${c === 'all' ? tr(L, 'all') : esc(cityLabel(c))}</button>`
   ).join('');
   const other = L === 'en' ? 'zh_TW' : 'en';
 
