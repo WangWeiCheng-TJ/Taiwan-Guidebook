@@ -197,7 +197,8 @@ pre.prompt {
 .later h2 { margin: 0; }
 .later-item { display: flex; gap: 8px; justify-content: space-between; align-items: center; padding: 10px 12px; margin: 8px 0 0; }
 .later-item > div:first-child { min-width: 0; }
-.later-item .row { flex-wrap: nowrap; gap: 6px; }
+/* The buttons keep their width: with overflow-wrap: anywhere a shrinking row would break "Copy" into "Co / py" */
+.later-item .row { flex: none; flex-wrap: nowrap; gap: 6px; }
 .later > .btn { margin-top: 8px; }
 
 /* Show card: a white panel on a dimmed backdrop (#bigcard; a tap on the backdrop closes it, one on the text
