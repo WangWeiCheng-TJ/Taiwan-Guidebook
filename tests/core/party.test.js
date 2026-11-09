@@ -100,6 +100,27 @@ test('every party phrase in the guidebook aligns for 1..10', () => {
   }
 });
 
+test('every party phrase in the guidebook really changes its Chinese, Zhuyin and pinyin with the party size', () => {
+  // withParty() leaves a phrase as it was when party.zh_TW / zhuyin / pinyin do not occur in it
+  const ZH = '一兩三四五六七八九十';
+  for (const ph of guidebook.phrases.filter(p => p.party)) {
+    const two = withParty(ph, 2);
+    for (const n of [1, 3, 4, 10]) {
+      const p = withParty(ph, n);
+      assert.notEqual(p.zh_TW, two.zh_TW, `${ph.id} n=${n} zh_TW`);
+      assert.notEqual(p.zhuyin, two.zhuyin, `${ph.id} n=${n} zhuyin`);
+      assert.notEqual(p.pinyin, two.pinyin, `${ph.id} n=${n} pinyin`);
+      assert.ok(p.zh_TW.includes(ZH[n - 1]), `${ph.id} n=${n} has ${ZH[n - 1]}`);
+    }
+  }
+});
+
+test('withParty: a party field that does not occur in the phrase changes nothing (what the build rejects)', () => {
+  const broken = { ...tickets, party: { ...tickets.party, zh_TW: '雙', zhuyin: 'ㄕㄨㄤ', pinyin: 'shuāng' } };
+  assert.equal(withParty(broken, 3).zh_TW, broken.zh_TW);
+  assert.equal(withParty(broken, 3).zhuyin, broken.zhuyin);
+});
+
 /** @returns {import('../../app/js/types.js').AskContext} */
 function ctx(over = {}) {
   return {
