@@ -665,10 +665,12 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
   render();
 });
 
-/** Top bar, tab labels and <html lang> in the current language (they live outside #view). */
+/** Top bar, tab bar (its labels and landmark name), the page title and <html lang> in the current language (they live outside #view). */
 function renderChrome() {
   const L = state.lang;
   document.documentElement.lang = L === 'zh_TW' ? 'zh-Hant-TW' : 'en';
+  document.title = tr(L, 'brand');
+  document.querySelector('.tabbar')?.setAttribute('aria-label', tr(L, 'navLabel'));
   document.getElementById('brand').textContent = tr(L, 'brand');
   document.getElementById('net-status').textContent = tr(L, 'offline');
   const toggle = document.getElementById('lang-toggle');
