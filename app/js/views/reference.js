@@ -98,7 +98,8 @@ export function renderPhrases(s, group) {
 }
 
 /**
- * Compact "People: − 2 +" control. The buttons are disabled at PARTY_MIN / PARTY_MAX.
+ * Compact "People: − 2 +" control. The buttons are disabled at PARTY_MIN / PARTY_MAX. The count is not a live
+ * region: each tap re-renders it, so main.js announces the new count instead.
  * Emits: data-action="party-dec" | "party-inc".
  * @param {import('../lang.js').Lang} L
  * @param {number} n  current party size
@@ -108,7 +109,7 @@ export function partyControl(L, n) {
   return `<div class="row party">
     <span class="muted small">${tr(L, 'party.label')}</span>
     <button class="btn small" data-action="party-dec" aria-label="${esc(tr(L, 'party.dec'))}" ${n <= PARTY_MIN ? 'disabled' : ''}>−</button>
-    <b class="party-n" aria-live="polite">${esc(n)}</b>
+    <b class="party-n">${esc(n)}</b>
     <button class="btn small" data-action="party-inc" aria-label="${esc(tr(L, 'party.inc'))}" ${n >= PARTY_MAX ? 'disabled' : ''}>+</button>
   </div>`;
 }

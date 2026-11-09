@@ -92,6 +92,7 @@ const STRINGS = {
     'party.label': 'People:',
     'party.dec': 'One person fewer',
     'party.inc': 'One person more',
+    'party.now': 'People: {n}',
     // My stay (My trip, Explore)
     'stay.title': 'My stay',
     'stay.intro': 'Where you are sleeping, ready to show a taxi driver. Kept on this device only: never in Ask AI questions or in the export.',
@@ -200,6 +201,7 @@ const STRINGS = {
     'party.label': '人數：',
     'party.dec': '少一人',
     'party.inc': '多一人',
+    'party.now': '人數：{n}',
     // My stay (My trip, Explore)
     'stay.title': '我的住宿',
     'stay.intro': '你住的地方，隨時可以給計程車司機看。只存在這台裝置上：不會放進問 AI 的問題，也不會匯出。',

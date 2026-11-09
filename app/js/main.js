@@ -10,7 +10,7 @@ import { LOG_KEY, emptyDraft, draftDate, validateDraft, makeEntry, newId, remove
 import { buildPlacePrompt, defaultQuestion, areaLabel, buildExplainPrompt, buildPhotoPrompt } from './prompt.js';
 import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
-import { toast, copyText, showBig, hideBig, flipBig, sayOnCard, wakeAgain, speak, openSheet, closeSheet } from './ui.js';
+import { toast, announce, copyText, showBig, hideBig, flipBig, sayOnCard, wakeAgain, speak, openSheet, closeSheet } from './ui.js';
 import { esc } from './util.js';
 import { tr, trMsg, LANG_KEY, otherLang } from './lang.js';
 import { renderExplore } from './views/explore.js';
@@ -300,7 +300,8 @@ function notesAdded(n) {
 
 /**
  * Change the party size (clamped), persist it and re-render: phrases and the Ask AI prompt follow it.
- * From now on the prompt names the party (partySet).
+ * From now on the prompt names the party (partySet). Screen readers hear the new count: the re-render replaced
+ * the count, and focus returns to the button, which says only "One person more".
  * @param {number} n
  */
 function setParty(n) {
@@ -308,6 +309,7 @@ function setParty(n) {
   state.partySet = true;
   if (!writeJSON(PARTY_KEY, state.party)) toast(tr(state.lang, 'storageFail'));
   render();
+  announce(tr(state.lang, 'party.now', { n: state.party }));
 }
 
 /**

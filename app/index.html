@@ -44,11 +44,13 @@
         <button class="btn small" type="button" data-action="close-sheet" aria-label="Close">✕</button>
       </div>
       <div class="sheet-body"></div>
+      <div class="sr-status" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
   </div>
   <div id="bigcard" class="bigcard" hidden role="dialog" aria-modal="true" aria-label="Large text to show"></div>
   <button id="askbar" class="askbar" type="button" hidden></button>
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div id="announce" class="sr-status" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script type="module" src="js/main.js"></script>
 </body>

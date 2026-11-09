@@ -30,7 +30,8 @@ export function sayRate(prev, text, now) {
  * card, main.js); in it a bar with 🔊 (data-action="big-say", only when `say` is given and the device can
  * speak), the rotate-180° toggle (data-action="big-flip", aria-pressed) and Close (class "close",
  * data-action="close-big"); then the caller's text in `.big-text` (the part that rotates; a tap on it does
- * nothing) and a hint on how to close. Labels follow the UI language.
+ * nothing), a hint on how to close, and an empty status region for screen readers (.sr-status: ui.js
+ * announce; the page's live regions are not read while this modal card is open). Labels follow the UI language.
  * @param {string} html  trusted markup; callers must esc() any data inside
  * @param {import('./lang.js').Lang} L  UI language
  * @param {{ say?: string, canSpeak?: boolean }} [opts]  say: the Chinese the 🔊 button reads aloud
@@ -47,6 +48,7 @@ export function bigCardHtml(html, L, { say = '', canSpeak = false } = {}) {
     </div>
     <div class="big-text">${html}</div>
     <div class="hint big-hint">${esc(tr(L, 'tapClose'))}</div>
+    <div class="sr-status" role="status" aria-live="polite" aria-atomic="true"></div>
   </div>`;
 }
 

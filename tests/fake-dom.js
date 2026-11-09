@@ -123,11 +123,14 @@ export function installDom({ hash = '#/explore', language = 'en-GB', guidebook =
   sheet.known['.sheet-head button'] = sheetClose;
   sheet.known['.sheet-title'] = new FakeElement(document, { tag: 'span', parent: sheet });
   sheet.known['.sheet-body'] = new FakeElement(document, { parent: sheet });
+  sheet.known['.sr-status'] = new FakeElement(document, { parent: sheet });
   const bigcard = el('bigcard');
   bigcard.hidden = true;
   const bigClose = new FakeElement(document, { tag: 'button', dataset: { action: 'close-big' }, parent: bigcard });
+  bigcard.known['.sr-status'] = new FakeElement(document, { parent: bigcard }); // rendered by bigCardHtml
   el('askbar', { tag: 'button' }).hidden = true;
   el('toast');
+  el('announce');
   document.bySelector['.topbar'] = new FakeElement(document, { tag: 'header' });
   document.bySelector['.tabbar'] = new FakeElement(document, { tag: 'nav' });
   document.bySelector['#sheet .sheet-head button'] = sheetClose;

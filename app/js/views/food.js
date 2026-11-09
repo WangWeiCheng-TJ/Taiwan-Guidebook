@@ -96,8 +96,8 @@ export function menuShop(food, city, id, kind) {
 }
 
 /**
- * Sheet body after "Ask AI about the menu" copied its prompt: the next steps, links to AI chats, and the
- * prompt itself (to select by hand when copying failed, which the sheet then says).
+ * Sheet body after "Ask AI about the menu" copied its prompt: whether it was copied, the next steps, links to AI
+ * chats, and the prompt itself (to select by hand when copying failed).
  * @param {string} prompt
  * @param {boolean} copied
  * @param {import('../lang.js').Lang} L
@@ -105,7 +105,7 @@ export function menuShop(food, city, id, kind) {
  */
 export function menuPromptSheet(prompt, copied, L) {
   return `
-    ${copied ? '' : `<p class="small muted">${tr(L, 'copyFailPreview')}</p>`}
+    ${copied ? `<p class="small">${tr(L, 'copied')}</p>` : `<p class="small muted">${tr(L, 'copyFailPreview')}</p>`}
     <p class="small">${tr(L, 'menuSteps')}</p>
     ${aiLinks(L)}
     <pre class="prompt">${esc(prompt)}</pre>`;

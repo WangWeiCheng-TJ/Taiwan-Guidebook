@@ -9,7 +9,9 @@ let toastTimer;
 /**
  * Show a short message above the tab bar for ~2.6 s (or `ms`). Replaces any visible toast.
  * #toast is a status live region that always stays in the page (never hidden): screen readers announce
- * text put into it, and an empty toast takes no space (app.css .toast:empty).
+ * text put into it, and an empty toast takes no space (app.css .toast:empty). While a sheet or the show card is
+ * open, #toast is outside that aria-modal dialog, where screen readers do not read it: the message also goes
+ * to the dialog's own status region (announce).
  * @param {string} msg
  * @param {number} [ms]  how long it stays, for a longer message
  * @returns {void}
@@ -19,6 +21,29 @@ export function toast(msg, ms = 2600) {
   el.textContent = msg;
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { el.textContent = ''; }, ms);
+  if (!document.getElementById('bigcard').hidden || !document.getElementById('sheet').hidden) announce(msg, ms);
+}
+
+/** @type {Map<Element, ReturnType<typeof setTimeout>>} when each status region is emptied again */
+const statusTimers = new Map();
+
+/**
+ * Tell screen readers something without showing it: text in the status region (.sr-status, visually hidden)
+ * of the open show card, else of the open sheet, else of the page (#announce); emptied after `ms`.
+ * @param {string} msg
+ * @param {number} [ms]
+ * @returns {void}
+ */
+export function announce(msg, ms = 2600) {
+  const big = document.getElementById('bigcard');
+  const sheet = document.getElementById('sheet');
+  const el = !big.hidden ? big.querySelector('.sr-status')
+    : !sheet.hidden ? sheet.querySelector('.sr-status')
+    : document.getElementById('announce');
+  if (!el) return;
+  el.textContent = msg;
+  clearTimeout(statusTimers.get(el));
+  statusTimers.set(el, setTimeout(() => { el.textContent = ''; }, ms));
 }
 
 /**
