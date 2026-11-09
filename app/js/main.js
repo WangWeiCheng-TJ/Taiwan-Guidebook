@@ -112,11 +112,16 @@ function refocus(f) {
   if (f.range && typeof el.selectionStart === 'number') el.setSelectionRange(f.range[0], f.range[1]);
 }
 
-/** Move focus to the page's heading, so a screen reader starts reading the new page. */
-function focusHeading() {
+/** The page's heading (#view when it has none), made focusable: focus goes there when nothing better is left. */
+function heading() {
   const h = view.querySelector('h1') || view;
   h.setAttribute('tabindex', '-1');
-  h.focus({ preventScroll: true });
+  return h;
+}
+
+/** Move focus to the page's heading, so a screen reader starts reading the new page. */
+function focusHeading() {
+  heading().focus({ preventScroll: true });
 }
 
 // ---------- History: scroll position per entry, Back closes overlays first ----------
@@ -166,9 +171,12 @@ function pushOverlay(kind, opener) {
   document.querySelector(kind === 'big' ? '#bigcard .close' : '#sheet .sheet-head button')?.focus({ preventScroll: true });
 }
 
-/** @param {string} title @param {string} html */
-function sheet(title, html) {
-  const opener = document.activeElement;
+/**
+ * @param {string} title
+ * @param {string} html
+ * @param {Element|null} [opener]  gets focus back when the sheet closes; by default the element focused now
+ */
+function sheet(title, html, opener = document.activeElement) {
   openSheet(title, html);
   pushOverlay('sheet', opener);
 }
@@ -734,7 +742,7 @@ view.addEventListener('submit', e => {
 // button floats above the tab bar while text inside the app is selected.
 
 const askbar = document.getElementById('askbar');
-let selection = null; // { text, context, source }, kept because tapping the button may clear the selection
+let selection = null; // { text, context, source, anchor }, kept because tapping the button may clear the selection
 
 function sourceOf() {
   const { tab, arg } = parseRoute(location.hash);
@@ -757,7 +765,7 @@ document.addEventListener('selectionchange', () => {
       || [...document.querySelectorAll('[data-private]')].some(p => sel?.containsNode?.(p, true));
     if (!text || !inApp || text.length > 200 || touchesPrivate) { askbar.hidden = true; return; }
     const block = el?.closest('p, li, summary, .card, details, .zc, h1, h2') || node.parentElement;
-    selection = { text, context: block ? block.textContent : '', source: sourceOf() };
+    selection = { text, context: block ? block.textContent : '', source: sourceOf(), anchor: el };
     const short = text.length > 16 ? text.slice(0, 15) + '…' : text;
     askbar.textContent = tr(state.lang, 'askAbout', { t: short });
     askbar.hidden = false;
@@ -766,8 +774,13 @@ document.addEventListener('selectionchange', () => {
 
 askbar.addEventListener('click', async () => {
   if (!selection) return;
-  const prompt = buildExplainPrompt({ ...selection, lang: state.lang });
+  const { text, context, source, anchor } = selection;
+  const prompt = buildExplainPrompt({ text, context, source, lang: state.lang });
   const ok = await copyText(prompt);
+  // The bar hides itself, so it cannot take focus back when the sheet closes: a control around the selected
+  // text does, else the page's heading
+  const near = anchor?.closest?.('a[href], button, input, select, textarea, summary, [tabindex]');
+  const opener = near && view.contains(near) ? near : heading();
   askbar.hidden = true;
   document.getSelection()?.removeAllRanges();
   sheet(tr(state.lang, 'explainTitle'), `
@@ -778,7 +791,7 @@ askbar.addEventListener('click', async () => {
       <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>
       <a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>
     </div>
-    <pre class="prompt">${esc(prompt)}</pre>`);
+    <pre class="prompt">${esc(prompt)}</pre>`, opener);
 });
 
 // ---------- Online status, data, service worker ----------
