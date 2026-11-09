@@ -216,7 +216,7 @@ test('contrast: the offline pill is --warm-ink on --warm, not white', () => {
 });
 
 test('contrast: warm text uses --warm-text (small text on the page cannot use the --warm fill colour)', () => {
-  for (const el of ['span.badge.warm', 'div.food-kind.local', 'div.dish', '.zp.tone b', '.zp.tone i']) {
+  for (const el of ['span.badge.warm', 'div.food-kind.local', 'div.dish', 'span.starline', 'div.starline', '.zp.tone b', '.zp.tone i']) {
     assert.equal(resolve(el, 'color'), 'var(--warm-text)', el);
   }
   // --warm itself stays for fills and big glyphs, which only need 3:1
@@ -239,13 +239,24 @@ test('contrast: field borders and unselected stars use --line-strong, which reac
 });
 
 test('contrast: the show card is black on white in both schemes; its hint reaches AA on that white', () => {
-  assert.ok(contrast(hex(rule('.bigcard .hint').color, 'light'), '#ffffff') >= 4.5);
+  const panel = rule('.big-panel');
+  assert.equal(hex(panel.background, 'light'), '#ffffff');
+  assert.ok(contrast(hex(panel.color, 'light'), '#ffffff') >= 15, 'text is near black');
+  assert.equal(panel['color-scheme'], 'light');
+  // the dark scheme must not recolour the card (it is shown to someone else, often outdoors)
+  for (const sel of ['.big-panel', '.bigcard .big', '.bigcard .mid', '.bigcard .hint']) {
+    assert.equal(RULES.find(x => x.selector === sel && x.media === DARK), undefined, `${sel} has a dark-scheme override`);
+  }
+  assert.ok(contrast(hex(rule('.bigcard .hint').color, 'light'), hex(panel.background, 'light')) >= 4.5);
 });
 
 // ---------- Tap targets (audit css #6) ----------
 
 test('tap targets: small buttons, the party stepper and stars are 44px; chips and the map row 40px', () => {
   assert.ok(px(resolve('button.btn.small', 'min-height')) >= 44, 'language toggle, sheet close, Play/Show, delete, Change/Update');
+  assert.ok(px(resolve('button.btn.small', 'min-width')) >= 44, 'glyph-only buttons (the close and delete crosses) are 44px wide too');
+  assert.ok(px(resolve('.btn', 'min-height')) >= 44, 'plain buttons');
+  assert.ok(px(resolve('.big-bar .btn', 'min-height')) >= 44, 'show card Close / Turn / Read aloud');
   assert.ok(px(resolve('.party button.btn.small', 'min-width')) >= 44, 'party - and +');
   assert.ok(px(resolve('.party button.btn.small', 'min-height')) >= 44);
   assert.ok(px(resolve('.stars button', 'min-width')) >= 44, 'rating stars');
