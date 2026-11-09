@@ -203,34 +203,65 @@ Ensure deep historical accuracy, covering all historical eras it has lived throu
         raise RuntimeError(f"Network error connecting to Gemini API: {e.reason}")
 
 
-def save_attraction(data: dict, overwrite: bool = False) -> Path:
-    """Save attraction JSON to data/attractions/<id>.json."""
-    ATTRACTIONS_DIR.mkdir(parents=True, exist_ok=True)
-    spot_id = data.get("id", "").strip().lower()
-    if not spot_id:
-        # Fallback slugify
-        en_name = data.get("name", {}).get("en", "spot")
-        spot_id = re.sub(r"[^a-z0-9]+", "-", en_name.lower()).strip("-")
-        data["id"] = spot_id
+def slugify_id(data: dict) -> str:
+    """The id a draft is saved under: the model's id (or its English name) as a kebab-case slug.
 
+    The id is also the file name and the URL (#/place/<id>), so it is always reduced to a-z, 0-9 and
+    single hyphens, whatever the model wrote. Raises ValueError when nothing is left.
+    """
+    name = data.get("name")
+    raw = data.get("id") if isinstance(data.get("id"), str) else ""
+    if not raw.strip() and isinstance(name, dict) and isinstance(name.get("en"), str):
+        raw = name["en"]
+    spot_id = re.sub(r"[^a-z0-9]+", "-", raw.lower()).strip("-")
+    if not spot_id:
+        raise ValueError("the draft has no usable id or English name to save it under")
+    return spot_id
+
+
+def save_attraction(data: dict, overwrite: bool = False):
+    """Save attraction JSON to data/attractions/<id>.json; returns the path, or None when nothing was written.
+
+    data["id"] is set to the slug the file is named after (the build requires id == file name).
+    Nothing is written when the file exists and overwrite is False.
+    """
+    ATTRACTIONS_DIR.mkdir(parents=True, exist_ok=True)
+    spot_id = slugify_id(data)
+    data["id"] = spot_id
     file_path = ATTRACTIONS_DIR / f"{spot_id}.json"
+    if file_path.resolve().parent != ATTRACTIONS_DIR.resolve():
+        raise ValueError(f"refusing to write outside {ATTRACTIONS_DIR}: {file_path}")
     if file_path.exists() and not overwrite:
         print(f"⚠️ File {file_path.name} already exists. Use --overwrite to replace it.")
-        return file_path
+        return None
 
-    with open(file_path, "w", encoding="utf-8") as f:
+    # LF on every OS, as build_dataset.write_json does (.gitattributes: CRLF breaks exact-match edits)
+    with open(file_path, "w", encoding="utf-8", newline="\n") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
     print(f"💾 Saved attraction to: {file_path}")
     return file_path
 
 
-def update_compiled_dataset():
-    """Trigger build_dataset.py to update compiled taiwan_attractions.json."""
+def update_compiled_dataset() -> bool:
+    """Run the build (with jsonschema, through uv, when available) so the draft is validated; True when it passed.
+
+    A failed build is printed, not hidden: the draft stays in data/attractions/ for the owner to fix.
+    """
+    import shutil
+    import subprocess
     build_script = BASE_DIR / "scripts" / "build_dataset.py"
-    if build_script.exists():
-        import subprocess
-        subprocess.run([sys.executable, str(build_script)], check=False)
+    if not build_script.exists():
+        return False
+    uv = shutil.which("uv")
+    if uv:
+        cmd = [uv, "run", "--no-project", "--with", "jsonschema>=4.20,<5", "--python", "3.12", "python", str(build_script)]
+    else:
+        cmd = [sys.executable, str(build_script)]
+    result = subprocess.run(cmd, check=False)
+    if result.returncode != 0:
+        print(f"❌ The build failed (exit {result.returncode}): fix the draft in data/attractions/, then run `npm run build`.")
+    return result.returncode == 0
 
 
 def process_single_spot(spot_name: str, api_key: str, model: str, overwrite: bool = False):
@@ -247,8 +278,7 @@ def process_single_spot(spot_name: str, api_key: str, model: str, overwrite: boo
         print(f"   - Timeline milestones: {timeline_len}")
         print(f"   - Category: {data.get('category')}")
 
-        save_attraction(data, overwrite=overwrite)
-        return True
+        return save_attraction(data, overwrite=overwrite) is not None
     except Exception as e:
         print(f"❌ Failed to generate '{spot_name}': {e}")
         return False
@@ -285,7 +315,7 @@ def main():
         if not file_path.exists():
             print(f"❌ File not found: {file_path}")
             sys.exit(1)
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, "r", encoding="utf-8-sig") as f:  # -sig: Notepad adds a BOM
             targets = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
         print(f"📋 Loaded {len(targets)} spots from {file_path.name}")
     elif args.spot_name:
