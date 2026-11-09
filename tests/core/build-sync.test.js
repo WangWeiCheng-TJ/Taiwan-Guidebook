@@ -39,3 +39,9 @@ test('every phrase and tip in the bundle has a known category', () => {
   const tips = guidebook.tips.filter(t => !TIPS.includes(t.category)).map(t => `${t.id}: ${t.category}`);
   assert.deepEqual([phrases, tips], [[], []]);
 });
+
+test('build_dataset.py RESERVED_TOPIC_IDS keeps topics off the timeline page\'s id', async () => {
+  const { TIMELINE_ID } = await import('../../app/js/timeline.js');
+  assert.deepEqual(pyList('RESERVED_TOPIC_IDS'), [TIMELINE_ID]);
+  assert.ok(!(guidebook.topics || []).some(t => t.id === TIMELINE_ID));
+});

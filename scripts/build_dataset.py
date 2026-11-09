@@ -38,6 +38,9 @@ TIP_CATEGORIES = ["safety", "transport", "daily-life", "money", "culture"]
 # keeps the copies in sync.
 APP_CATEGORIES = ["getting-around", "taxi", "trains", "messaging", "language", "weather", "food"]
 APP_PLATFORMS = ["ios", "android"]
+# #/learn/<id> shows a topic, except these ids, which are app pages (TIMELINE_ID in app/js/timeline.js);
+# tests/core/build-sync.test.js keeps the copies in sync.
+RESERVED_TOPIC_IDS = ["timeline"]
 KEBAB_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 HTTPS_URL = re.compile(r"""^https://[^\s"'<>]+$""")  # the same test as isHttps() in app/js/views/apps.js
 APP_OUTPUT_FILE = BASE_DIR / "app" / "data" / "guidebook.json"
@@ -396,6 +399,8 @@ def topic_problems(topic, stem: str, place_ids: set) -> list[str]:
     problems = []
     if topic.get("id") != stem or not KEBAB_ID.fullmatch(str(topic.get("id"))):
         problems.append(f"'id' {topic.get('id')!r} must be kebab-case and equal the file name {stem!r}")
+    if topic.get("id") in RESERVED_TOPIC_IDS:
+        problems.append(f"'id' {topic.get('id')!r} is taken by an app page (#/learn/{topic.get('id')})")
     for key in ("title", "summary"):
         if not is_bilingual(topic.get(key)):
             problems.append(f"'{key}' must be an object with non-empty 'en' and 'zh_TW' strings")

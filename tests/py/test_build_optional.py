@@ -113,6 +113,10 @@ class LoadTopics(unittest.TestCase):
             with self.subTest(label), self.assertRaises(BuildError):
                 self.load({"temple-layout.json": bad})
 
+    def test_an_id_taken_by_an_app_page_is_rejected(self):
+        with self.assertRaisesRegex(BuildError, r"taken by an app page \(#/learn/timeline\)"):
+            self.load({"timeline.json": good_topic(id="timeline")})
+
 
 class BundleKeys(unittest.TestCase):
     def test_the_bundle_leaves_the_keys_out_when_there_is_no_data(self):
