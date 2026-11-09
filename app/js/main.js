@@ -21,6 +21,9 @@ import { renderApps } from './views/apps.js';
 import { renderLearn } from './views/learn.js';
 import { PHRASE_GROUPS, phrasesIn } from './phrases.js';
 import { PARTY_KEY, clampParty, withParty } from './party.js';
+import { STAY_KEY, emptyStay, normalizeStay, validateStay, putStay, removeStay, staySay, stayCity } from './stay.js';
+import { stayCard } from './views/stay.js';
+import { cityName } from './views/common.js';
 import { foodSheet, findPick, dishSheet, foodDriverCard, foodDriverSay, menuShop, menuPromptSheet } from './views/food.js';
 import { foodFor } from './data.js';
 import { parseRoute, activeTab, entryKey, withKey, scrollFor, entryOverlays, withOverlays, overlayChange, focusSelector } from './nav.js';
@@ -245,6 +248,35 @@ function setParty(n) {
 }
 
 /**
+ * A saved stay by id.
+ * @param {string} id
+ * @returns {import('./types.js').Stay|undefined}
+ */
+function stayById(id) {
+  return state.stays.find(x => x.id === id);
+}
+
+/**
+ * Save the My stay form: one stay per city, so a stay already saved for the same city is replaced, after
+ * asking. Persisted on the device only (STAY_KEY); never in a prompt or the export.
+ */
+function saveStay() {
+  const L = state.lang;
+  const draft = normalizeStay(state.stayDraft);
+  const error = validateStay(draft);
+  if (error) return toast(trMsg(L, error));
+  const stay = { ...draft, id: draft.id || newId() };
+  const { stays, replaced } = putStay(state.stays, stay, places());
+  if (replaced.length && !confirm(tr(L, 'stay.replaceConfirm', {
+    city: cityName(stayCity(stay, places()), L), name: replaced.map(x => x.name).join('、') }))) return;
+  state.stays = stays;
+  state.stayDraft = emptyStay();
+  state.stayOpen = false;
+  toast(tr(L, writeJSON(STAY_KEY, stays) ? 'stay.saved' : 'storageFail'));
+  render();
+}
+
+/**
  * A phrase by id, said for the current party size.
  * @param {string} id
  * @returns {import('./types.js').Phrase|undefined}
@@ -437,6 +469,27 @@ const actions = {
     render();
   },
   'trip-day': el => { state.tripDate = el.dataset.date; render(); },
+  // My stay: "Take me back" shows the stay in the driver card's layout, with its phone as a tel: link.
+  'stay-card': el => {
+    const st = stayById(el.dataset.id);
+    if (st) big(stayCard(st), staySay(st));
+  },
+  'stay-add': () => { state.stayDraft = emptyStay(); state.stayOpen = true; render(); },
+  'stay-edit': el => {
+    const st = stayById(el.dataset.id);
+    if (!st) return;
+    state.stayDraft = { ...st };
+    state.stayOpen = true;
+    render();
+  },
+  'stay-cancel': () => { state.stayDraft = emptyStay(); state.stayOpen = false; render(); },
+  'stay-remove': el => {
+    if (!stayById(el.dataset.id) || !confirm(tr(state.lang, 'stay.removeConfirm'))) return;
+    state.stays = removeStay(state.stays, el.dataset.id);
+    if (state.stayDraft.id === el.dataset.id) { state.stayDraft = emptyStay(); state.stayOpen = false; }
+    if (!writeJSON(STAY_KEY, state.stays)) toast(tr(state.lang, 'storageFail'));
+    render();
+  },
   'copy-prompt': async () => {
     const ok = await copyText(currentPrompt(state));
     toast(tr(state.lang, ok ? (state.ask.mode === 'photo' ? 'photoCopied' : 'copied') : 'copyFailPreview'));
@@ -521,6 +574,7 @@ view.addEventListener('change', async e => {
     setDraftField(el);
     if (el.name === 'placeId') view.querySelector('[data-other]').hidden = !!el.value;
   }
+  if (el.form?.dataset.form === 'stay' && el.name) state.stayDraft[el.name] = el.value;
 });
 
 /**
@@ -539,9 +593,14 @@ view.addEventListener('input', e => {
   if (el.dataset.input === 'photo-note') { state.ask.photoNote = el.value; refreshPreview(); }
   if (el.dataset.input === 'ai-answer') state.pasteText = el.value; // kept across re-renders until a plan loads
   if (el.form?.dataset.form === 'log' && el.name) setDraftField(el);
+  if (el.form?.dataset.form === 'stay' && el.name) state.stayDraft[el.name] = el.value;
 });
 
 view.addEventListener('submit', e => {
+  if (e.target.dataset.form === 'stay') {
+    e.preventDefault();
+    return saveStay();
+  }
   if (e.target.dataset.form !== 'log') return;
   e.preventDefault();
   const error = validateDraft(state.draft);
@@ -573,8 +632,13 @@ document.addEventListener('selectionchange', () => {
     const text = sel ? sel.toString().trim() : '';
     const node = sel && sel.anchorNode;
     const inApp = node && (view.contains(node) || document.getElementById('sheet').contains(node));
-    if (!text || !inApp || text.length > 200) { askbar.hidden = true; return; }
-    const block = (node.nodeType === 1 ? node : node.parentElement)?.closest('p, li, summary, .card, details, .zc, h1, h2') || node.parentElement;
+    const el = node && (node.nodeType === 1 ? node : node.parentElement);
+    // My stay (data-private) never goes into a prompt: not selected, not as the text around a selection, and
+    // not as part of a selection that starts elsewhere and runs into it
+    const touchesPrivate = el?.closest('[data-private]')
+      || [...document.querySelectorAll('[data-private]')].some(p => sel?.containsNode?.(p, true));
+    if (!text || !inApp || text.length > 200 || touchesPrivate) { askbar.hidden = true; return; }
+    const block = el?.closest('p, li, summary, .card, details, .zc, h1, h2') || node.parentElement;
     selection = { text, context: block ? block.textContent : '', source: sourceOf() };
     const short = text.length > 16 ? text.slice(0, 15) + '…' : text;
     askbar.textContent = tr(state.lang, 'askAbout', { t: short });

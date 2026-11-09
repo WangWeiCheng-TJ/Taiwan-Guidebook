@@ -5,10 +5,12 @@ import { places } from '../state.js';
 import { tr, localized } from '../lang.js';
 import { locationPanel, placeName, langTag } from './common.js';
 import { renderTodayCard } from './trip.js';
+import { stayHereRow } from './stay.js';
 import { renderFoodSection } from './food.js';
 
 /**
- * Explore tab (#/explore): today's plan card, location panel, city filter chips, place cards.
+ * Explore tab (#/explore): today's plan card, "Take me back" to the stay here (stayHereRow), location panel,
+ * city filter chips, place cards.
  * Cards are sorted by distance when s.pos is set and link to #/place/<id>. They show the distance only from
  * GPS (gpsDistance). A picked city is no one's position: its own places come first, then the others by
  * distance from its centre.
@@ -38,6 +40,7 @@ export function renderExplore(s) {
   return `
     <h1>${tr(L, 'explore')}</h1>
     ${renderTodayCard(s, today())}
+    ${stayHereRow(s)}
     ${locationPanel(s)}
     <div class="chips">${chips}</div>
     ${list.map(p => {

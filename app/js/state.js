@@ -5,6 +5,7 @@ import { LOG_KEY, emptyDraft } from './triplog.js';
 import { TRIP_KEY, parseTrip } from './trip.js';
 import { LANG_KEY, initialLang } from './lang.js';
 import { PARTY_KEY, clampParty, partyChosen } from './party.js';
+import { STAY_KEY, readStays, emptyStay } from './stay.js';
 
 /** @typedef {import('./types.js').Guidebook} Guidebook */
 /** @typedef {import('./types.js').Pos} Pos */
@@ -25,6 +26,10 @@ import { PARTY_KEY, clampParty, partyChosen } from './party.js';
  * @property {string} pasteText      My trip: what is in the "paste AI answer" box (survives re-renders; cleared
  *                                   once a plan loads from it)
  * @property {string|null} tripDate  My trip: the plan day the user picked; null = defaultTripDate()
+ * @property {import('./types.js').Stay[]} stays  My stay: where the traveler sleeps, persisted under STAY_KEY (device only:
+ *                                  never in a prompt or the export)
+ * @property {import('./types.js').Stay} stayDraft  My stay form (survives re-renders; id set when editing a saved stay)
+ * @property {boolean} stayOpen     My trip: show the My stay form even when a stay is saved
  * @property {string} exploreCity    "all" or a city_en
  * @property {LogDraft} draft        the log form, survives tab switches; draft.date "" follows today's date
  * @property {{ mode: 'near'|'plan'|'photo', radius: number, area: string, customArea: string,
@@ -48,6 +53,9 @@ export const state = {
   pasteOpen: false,
   pasteText: '',
   tripDate: null,
+  stays: readStays(readJSON(STAY_KEY, [])), // re-validated, like the plan
+  stayDraft: emptyStay(),
+  stayOpen: false,
   exploreCity: 'all',
   draft: emptyDraft(''), // not today(): an app left open past midnight would log under yesterday
   ask: { mode: 'near', radius: 3, area: '', customArea: '', day: 'tomorrow', question: null, includeLog: true, wantPlan: false,

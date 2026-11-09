@@ -4,10 +4,11 @@ import { placeById } from '../data.js';
 import { places } from '../state.js';
 import { tr } from '../lang.js';
 import { renderTripSection } from './trip.js';
+import { renderStaySection } from './stay.js';
 import { placeName } from './common.js';
 
 /**
- * My trip tab (#/log): the plan (renderTripSection), then the notes: entry form bound to s.draft
+ * My trip tab (#/log): the plan (renderTripSection), My stay (renderStaySection), then the notes: entry form bound to s.draft
  * (an empty draft date shows today's date),
  * entries grouped by day (newest first), backup.
  * Form: <form data-form="log"> with fields date, placeId, name, note; star buttons data-action="star" data-n
@@ -32,6 +33,7 @@ export function renderLog(s) {
   return `
     <h1>${tr(L, 'myTrip')}</h1>
     ${renderTripSection(s, today())}
+    ${renderStaySection(s)}
 
     <h2>${tr(L, 'notes')}</h2>
     <p class="muted small">${tr(L, 'notesIntro')}</p>
