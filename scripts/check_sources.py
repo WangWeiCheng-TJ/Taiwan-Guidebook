@@ -13,12 +13,13 @@ installed, JSON as raw text) and looks for each quote after normalizing both
 sides (NFKC, one form of quotes, dashes and full-width punctuation, collapsed
 whitespace, case-folded). Prints one line per claim and a summary.
 
-Exit status: 0 when every quote is found (or skipped), 1 when any quote is
+Exit status: 0 when every quote is found (or skipped) or there are no claims, 1 when any quote is
 MISSING or a source could not be fetched, 2 for unreadable claims files.
 
 Usage:
-    npm run check:sources                         # docs/claims, live fetch
+    npm run check:sources                         # docs/claims (if it exists), live fetch
     uv run --no-project --with pypdf --python 3.12 python scripts/check_sources.py FILE_OR_DIR ...
+        --allow-missing a path that does not exist is noted, not an error
         --save DIR      also write each fetched page to DIR/<sha1 of the URL>
         --offline DIR   read pages from DIR/<sha1 of the URL> instead of the network
 
@@ -383,6 +384,9 @@ def main(argv=None) -> int:
     """CLI entry point; returns the exit status."""
     ap = argparse.ArgumentParser(description="Check that each claim's quote appears in its source.")
     ap.add_argument("paths", nargs="+", help="claims JSON files or directories of them")
+    ap.add_argument("--allow-missing", action="store_true",
+                    help="a path that does not exist is not an error: say so and check the rest "
+                         "(npm run check:sources uses it, as docs/claims holds nothing yet)")
     mode = ap.add_mutually_exclusive_group()
     mode.add_argument("--offline", metavar="DIR", help="read pages from DIR/<sha1(url)>, no network")
     mode.add_argument("--save", metavar="DIR", help="write fetched pages to DIR/<sha1(url)>")
@@ -392,11 +396,19 @@ def main(argv=None) -> int:
     except (AttributeError, ValueError):
         pass
 
+    paths = list(args.paths)
+    if args.allow_missing:
+        for p in [p for p in paths if not Path(p).exists()]:
+            print(f"note: {p} does not exist yet, nothing to check there")
+            paths.remove(p)
     try:
-        claims = load_claims(args.paths)
+        claims = load_claims(paths)
     except ClaimsError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
+    if not claims:
+        print("No claims to check.")
+        return 0
 
     urls = list(dict.fromkeys(urldefrag(c["source"])[0] for c in claims))
     with ThreadPoolExecutor(max_workers=WORKERS) as pool:
