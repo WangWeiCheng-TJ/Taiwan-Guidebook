@@ -335,7 +335,10 @@ def load_food() -> list[dict]:
             if problems:
                 raise BuildError(f"[INVALID] {path.name}: bad pick {pick}: " + "; ".join(problems))
             seen.add(pick["id"])
-        for dish in city.get("to_try", []):
+        to_try = city.get("to_try", [])
+        if not isinstance(to_try, list):
+            raise BuildError(f"[INVALID] {path.name}: to_try must be a list")
+        for dish in to_try:
             dish_id = dish.get("id") if isinstance(dish, dict) else None
             if not is_text(dish_id) or not is_bilingual(dish.get("dish")) or dish_id in seen:
                 raise BuildError(f"[INVALID] {path.name}: bad to_try entry {dish}")

@@ -109,6 +109,11 @@ class LoadFood(FoodCase):
             with self.subTest(label), self.assertRaises(BuildError):
                 self.load(good_city(to_try=to_try))
 
+    def test_to_try_must_be_a_list(self):
+        for label, to_try in {"object": {}, "string": "x", "null": None}.items():
+            with self.subTest(label), self.assertRaises(BuildError):
+                self.load(good_city(to_try=to_try))
+
 
 class FoodTextFields(FoodCase):
     """hint, local_label and dish are read as {en, zh_TW} by the food sheet and the Ask AI prompt."""

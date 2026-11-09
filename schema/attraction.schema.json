@@ -299,6 +299,10 @@
         "free_entry": {
           "type": "boolean",
           "description": "True when visiting costs nothing (from a source). Free places get no ticket phrases."
+        },
+        "always_open": {
+          "type": "boolean",
+          "description": "Open all day, every day (a gate, a street); no opening-hours phrases"
         }
       }
     },
