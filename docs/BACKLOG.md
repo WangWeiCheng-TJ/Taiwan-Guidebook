@@ -16,6 +16,7 @@ Built (on `main`; not hosted yet):
 - City picker when GPS isn't used.
 - Ask AI about a photo: menu, sign, departure board, ticket machine or form, food label; "Ask AI about the menu" on food pick and dish sheets.
 - My stay: the traveler's hotel (Chinese name and address, phone), one per city, on the device only; "Take me back" on My trip and Explore opens it on the show card.
+- The trip log survives guide updates: a note keeps its place's name (also through export and import); a guide update names the logged or planned places it dropped.
 
 Planned (design in [ARCHITECTURE.md](ARCHITECTURE.md)):
 
