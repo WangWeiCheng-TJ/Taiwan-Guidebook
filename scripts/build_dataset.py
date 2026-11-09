@@ -3,7 +3,7 @@
 Taiwan Historical & Cultural Guidebook Dataset Builder
 
 Validates the sources in data/ (attractions against schema/attraction.schema.json,
-phrases, tips, food picks) and writes:
+phrases, tips, food picks, and the optional data/apps.json and data/topics/*.json) and writes:
   - data/taiwan_attractions.json  public attractions dataset
   - app/data/guidebook.json       offline bundle read by the PWA in app/
 
@@ -14,6 +14,7 @@ without writing anything (tests/py/test_bundle_fresh.py uses it); main() writes.
 import sys
 import json
 import hashlib
+import re
 from datetime import date
 from pathlib import Path
 
@@ -26,11 +27,19 @@ SCHEMA_FILE = BASE_DIR / "schema" / "attraction.schema.json"
 PHRASES_FILE = DATA_DIR / "phrases.json"
 TIPS_FILE = DATA_DIR / "tips.json"
 FOOD_DIR = DATA_DIR / "food"
+APPS_FILE = DATA_DIR / "apps.json"
+TOPICS_DIR = DATA_DIR / "topics"
 FOOD_KINDS = {"taiwanese", "hotpot", "beef_noodles", "ramen", "japanese", "international", "sweets", "bar"}
 # Phrase tiles of the Phrases tab except "top" (PHRASE_GROUPS in app/js/phrases.js) and the tips headings
 # (cat.<category> in app/js/lang.js); tests/core/build-sync.test.js keeps the copies in sync.
 PHRASE_CATEGORIES = ["sightseeing", "food", "transport", "shopping", "emergency", "basics"]
 TIP_CATEGORIES = ["safety", "transport", "daily-life", "money", "culture"]
+# Sections of the recommended-apps page (APP_CATEGORIES in app/js/views/apps.js); tests/core/app-categories.test.js
+# keeps the copies in sync.
+APP_CATEGORIES = ["getting-around", "taxi", "trains", "messaging", "language", "weather", "food"]
+APP_PLATFORMS = ["ios", "android"]
+KEBAB_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+HTTPS_URL = re.compile(r"""^https://[^\s"'<>]+$""")  # the same test as isHttps() in app/js/views/apps.js
 APP_OUTPUT_FILE = BASE_DIR / "app" / "data" / "guidebook.json"
 
 
@@ -132,8 +141,13 @@ def attraction_files() -> list[Path]:
     return sorted(ATTRACTIONS_DIR.glob("*.json"), key=lambda p: p.name)
 
 
-def load_attractions(log=_quiet) -> list[dict]:
-    """Load and validate every attraction file; raise BuildError if any is invalid."""
+def load_attractions(log=_quiet, allow_basic=False) -> list[dict]:
+    """Load and validate every attraction file; raise BuildError if any is invalid.
+
+    Without jsonschema installed the schema cannot run: that is an error (a place with a string latitude
+    or a wrong era would be bundled), unless allow_basic is True (`--basic`), which falls back to
+    validate_basic()'s key checks.
+    """
     files = attraction_files()
     log(f"Found {len(files)} attraction files in data/attractions/")
 
@@ -142,8 +156,12 @@ def load_attractions(log=_quiet) -> list[dict]:
     categories = schema["properties"]["category"]["enum"] if schema else None
     if validator:
         log("Validation: full JSON Schema (jsonschema)\n")
+    elif schema is not None and not allow_basic:
+        raise BuildError("jsonschema is not installed, so places cannot be validated against "
+                         f"{SCHEMA_FILE.name}. Run `npm run build` (it adds jsonschema), "
+                         "or pass --basic for the weaker key checks.")
     else:
-        log("Validation: basic checks only (jsonschema not installed; `npm run build` adds it)\n")
+        log("Validation: basic checks only (jsonschema not installed or --basic)\n")
 
     attractions = []
     has_errors = False
@@ -326,6 +344,98 @@ def load_food() -> list[dict]:
     return cities
 
 
+def load_apps() -> list[dict]:
+    """data/apps.json (recommended phone apps, in display order); [] when the file does not exist.
+
+    Checks what app/js/views/apps.js relies on: bilingual name and why, a known category, an https
+    link, known platforms and unique kebab-case ids.
+    """
+    if not APPS_FILE.exists():
+        return []
+    with open(APPS_FILE, "r", encoding="utf-8") as f:
+        try:
+            apps = json.load(f)
+        except ValueError as ex:
+            raise BuildError(f"[INVALID] {APPS_FILE.name}: not valid JSON ({ex})") from ex
+    if not isinstance(apps, list):
+        raise BuildError(f"[INVALID] {APPS_FILE.name}: must contain a JSON array")
+    seen = set()
+    for app in apps:
+        if not isinstance(app, dict):
+            raise BuildError(f"[INVALID] {APPS_FILE.name}: every entry must be an object, got {app!r}")
+        problems = []
+        app_id = app.get("id")
+        if not (is_text(app_id) and KEBAB_ID.fullmatch(app_id)):
+            problems.append("'id' must be kebab-case")
+        elif app_id in seen:
+            problems.append(f"duplicate id {app_id!r}")
+        else:
+            seen.add(app_id)
+        if app.get("category") not in APP_CATEGORIES:
+            problems.append(f"'category' {app.get('category')!r} is not one of {APP_CATEGORIES}")
+        for key in ("name", "why"):
+            if not is_bilingual(app.get(key)):
+                problems.append(f"'{key}' must be an object with non-empty 'en' and 'zh_TW' strings")
+        if not (isinstance(app.get("url"), str) and HTTPS_URL.fullmatch(app["url"])):
+            problems.append(f"'url' {app.get('url')!r} must be an https link")
+        platforms = app.get("platforms")
+        if not (isinstance(platforms, list) and platforms and all(p in APP_PLATFORMS for p in platforms)):
+            problems.append(f"'platforms' must be a non-empty list of {APP_PLATFORMS}")
+        if problems:
+            raise BuildError(f"[INVALID] {APPS_FILE.name}: app {app_id!r}: " + "; ".join(problems))
+    return apps
+
+
+def topic_problems(topic, stem: str, place_ids: set) -> list[str]:
+    """What is wrong with one knowledge topic (empty when it is fine). stem: its file name without .json."""
+    if not isinstance(topic, dict):
+        return ["must be a JSON object"]
+    problems = []
+    if topic.get("id") != stem or not KEBAB_ID.fullmatch(str(topic.get("id"))):
+        problems.append(f"'id' {topic.get('id')!r} must be kebab-case and equal the file name {stem!r}")
+    for key in ("title", "summary"):
+        if not is_bilingual(topic.get(key)):
+            problems.append(f"'{key}' must be an object with non-empty 'en' and 'zh_TW' strings")
+    body = topic.get("body")
+    if not (isinstance(body, dict) and all(
+            isinstance(body.get(lang), list) and body[lang] and all(is_text(x) for x in body[lang])
+            for lang in ("en", "zh_TW"))):
+        problems.append("'body' must have non-empty lists of paragraph strings under 'en' and 'zh_TW'")
+    for key in ("tags", "places"):
+        if not (isinstance(topic.get(key), list) and all(is_text(x) for x in topic[key])):
+            problems.append(f"'{key}' must be a list of strings")
+    if isinstance(topic.get("places"), list):
+        unknown = [x for x in topic["places"] if x not in place_ids]
+        if unknown:
+            problems.append(f"'places' names ids that are not attractions: {unknown}")
+    meta = topic.get("metadata")
+    if not (isinstance(meta, dict) and is_text(meta.get("generated_by")) and is_text(meta.get("last_updated"))
+            and isinstance(meta.get("sources"), list) and all(is_text(x) for x in meta["sources"])):
+        problems.append("'metadata' needs 'sources' (list), 'generated_by' and 'last_updated'")
+    return problems
+
+
+def load_topics(place_ids: set) -> list[dict]:
+    """data/topics/<id>.json (knowledge topics) sorted by id; [] when the folder does not exist.
+
+    place_ids: ids of the attractions, which a topic's 'places' may name.
+    """
+    if not TOPICS_DIR.exists():
+        return []
+    topics = []
+    for path in sorted(TOPICS_DIR.glob("*.json"), key=lambda p: p.name):
+        with open(path, "r", encoding="utf-8") as f:
+            try:
+                topic = json.load(f)
+            except ValueError as ex:
+                raise BuildError(f"[INVALID] topics/{path.name}: not valid JSON ({ex})") from ex
+        problems = topic_problems(topic, path.stem, place_ids)
+        if problems:
+            raise BuildError(f"[INVALID] topics/{path.name}: " + "; ".join(problems))
+        topics.append(topic)
+    return sorted(topics, key=lambda t: t["id"])  # code-point order, as byId in app/js/topics.js
+
+
 def check_food_cities(food: list[dict], attractions: list[dict]) -> None:
     """Each food file names a city the places use, spelled the same way.
 
@@ -395,6 +505,13 @@ def build_app_bundle(attractions: list[dict], previous, today: str) -> dict:
     food = load_food()
     check_food_cities(food, attractions)
     content = {"places": attractions, "phrases": phrases, "tips": tips, "food": food}
+    # Optional sources: left out when absent, so the bundle stays as it was before they existed
+    apps = load_apps()
+    topics = load_topics({a["id"] for a in attractions})
+    if apps:
+        content["apps"] = apps
+    if topics:
+        content["topics"] = topics
     version = content_version(content)
     previous = previous or {}
     unchanged = previous.get("version") == version and previous.get("generated_at")
@@ -402,15 +519,16 @@ def build_app_bundle(attractions: list[dict], previous, today: str) -> dict:
     return {"version": version, "generated_at": generated_at, **content}
 
 
-def compute_outputs(log=_quiet, today=None) -> tuple[dict, dict]:
+def compute_outputs(log=_quiet, today=None, allow_basic=False) -> tuple[dict, dict]:
     """Load and validate data/; return (public_dataset, app_bundle). Writes nothing.
 
     Reads the current output files only to keep their generated_at when content is unchanged.
     today: YYYY-MM-DD for changed outputs (default: today's date).
+    allow_basic: validate places with validate_basic() when jsonschema is missing (default: that is an error).
     Raises BuildError on invalid data.
     """
     today = today or date.today().isoformat()
-    attractions = load_attractions(log)
+    attractions = load_attractions(log, allow_basic=allow_basic)
     dataset = build_public_dataset(attractions, read_json(OUTPUT_FILE), today)
     bundle = build_app_bundle(attractions, read_json(APP_OUTPUT_FILE), today)
     return dataset, bundle
@@ -423,7 +541,11 @@ def write_json(path: Path, payload: dict, **dump_args) -> None:
         json.dump(payload, f, ensure_ascii=False, **dump_args)
 
 
-def main() -> None:
+def main(argv=None) -> None:
+    args = sys.argv[1:] if argv is None else argv
+    if any(a != "--basic" for a in args):
+        print("usage: build_dataset.py [--basic]   (--basic: key checks only when jsonschema is missing)")
+        sys.exit(2)
     # Ensure UTF-8 stdout on Windows
     if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -437,7 +559,7 @@ def main() -> None:
             print("[WARNING] No JSON attraction files found in data/attractions/")
             sys.exit(0)
         previous_version = (read_json(APP_OUTPUT_FILE) or {}).get("version")
-        dataset, bundle = compute_outputs(log=print)
+        dataset, bundle = compute_outputs(log=print, allow_basic="--basic" in args)
     except BuildError as e:
         print(f"\n❌ [ERROR] {e}")
         sys.exit(1)

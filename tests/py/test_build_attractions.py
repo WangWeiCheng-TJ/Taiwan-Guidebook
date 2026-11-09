@@ -31,10 +31,10 @@ class AttractionIds(unittest.TestCase):
     def add(self, name: str, **over) -> None:
         (self.dir / name).write_text(json.dumps({**self.place, **over}, ensure_ascii=False), encoding="utf-8")
 
-    def load(self):
+    def load(self, **kw):
         lines = []
         try:
-            return build_dataset.load_attractions(log=lines.append), lines
+            return build_dataset.load_attractions(log=lines.append, **kw), lines
         except build_dataset.BuildError:
             self.failed = lines
             raise
@@ -70,7 +70,7 @@ class AttractionIds(unittest.TestCase):
         self.add("fort-zeelandia.json", id="Fort-Zeelandia")
         with mock.patch.object(build_dataset, "schema_validator", return_value=None):
             with self.assertRaises(build_dataset.BuildError):
-                self.load()
+                self.load(allow_basic=True)
 
     def test_a_place_without_an_id_is_rejected(self):
         place = dict(self.place)

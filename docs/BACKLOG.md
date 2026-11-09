@@ -21,7 +21,7 @@ Built (on `main`; not hosted yet):
 
 Planned (design in [ARCHITECTURE.md](ARCHITECTURE.md)):
 
-- Knowledge topics (Taiwanese folk religion, Wenchang / Kuixing, temple layout...).
+- Knowledge topics content (Taiwanese folk religion, Wenchang / Kuixing, temple layout...): the Learn pages and the build loader for `data/topics/<id>.json` exist (the build validates them and bundles them when present); the topics themselves, and `data/apps.json` for Recommended apps, are still to be written.
 - T4b: per-language data across schema, build, generator and app (not before it is planned; see SPEC.md, "Not in scope yet").
 - A `story` content type linking several places.
 - An embedded map (optional, online-only).
