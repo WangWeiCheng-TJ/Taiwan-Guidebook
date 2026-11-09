@@ -44,7 +44,7 @@ Only summaries go into the area prompt. A full place entry is about 8-9 KB minif
 `app/` is a static Progressive Web App: installable from the browser ("Add to Home Screen"), works offline through a service worker, refreshes data in the background when online and tells the user when the guide changed.
 
 - iOS Safari may clear storage for sites not added to the Home Screen after about a week of non-use. Tell users to install it.
-- Maps: navigation is a deep link to Google Maps / Apple Maps. "What's near me" is a GPS distance sort, which works offline; without GPS the user picks a city. An embedded map (Leaflet + OSM) would be optional and online-only.
+- Maps: navigation is a deep link to Google Maps / Apple Maps. "What's near me" is a GPS distance sort, which works offline; without GPS the user picks a city. The place page also has a collapsed OpenStreetMap iframe (`osmEmbedUrl`), loaded lazily and online only; it is not part of the offline guarantee.
 - Language: the UI is English or Traditional Chinese, switchable at any time; content shows in the chosen language and falls back to English. Phrases always show Chinese with zhuyin, per-symbol romanization and spoken tones, because they are meant to be shown or read aloud to locals.
 
 ## Content pipeline
@@ -54,6 +54,8 @@ Sources, edited in git by hand or with LLM help:
 - `data/attractions/<id>.json`: one place each, validated against `schema/attraction.schema.json`.
 - `data/phrases.json`, `data/tips.json`.
 - `data/food/<city>.json`: the owner's food picks per city.
+- `data/apps.json` and `data/topics/<id>.json`: optional; the bundle carries `apps` and `topics` only when they exist.
+- `docs/claims/<subject>.json`: optional claims with their source quotes, checked by `npm run check:sources` (`scripts/check_sources.py`).
 
 `scripts/build_dataset.py` validates them and writes two outputs:
 
@@ -70,11 +72,11 @@ The app reads only the bundle, so it is committed, and `npm test` fails when it 
 
 ## Knowledge topics
 
-General articles to read before the trip or anytime, e.g. Taiwanese folk religion, Wenchang / Kuixing (gods of exams), temple layout, Qing-era academies. Shape: `data/topics/<id>.json` with `title` and `body` per language, `tags`, and `places` (ids). A place would link to topics that share its tags (Chihkan Tower's `kuixing_exam_deity` → the Wenchang topic), and a "Learn" section would list all topics. Content first, then UI.
+General articles to read before the trip or anytime, e.g. Taiwanese folk religion, Wenchang / Kuixing (gods of exams), temple layout, Qing-era academies. Shape: `data/topics/<id>.json` with `title` and `body` per language, `tags`, and `places` (ids). A place links to topics that share its tags (Chihkan Tower's `kuixing_exam_deity` → the Wenchang topic), and the Learn page (`#/learn`, under Tips) lists all topics. The UI and the build loader exist; the topics themselves are still to be written. `#/learn/timeline` is not a topic: it merges every place's own `timeline` events under the eras of Taiwan's history (`timeline.js`), so the build refuses a topic with that id. `data/apps.json` (recommended apps, `#/apps`) is optional in the same way.
 
 ## Code structure and handoff
 
-`app/js/` is split into small ES modules with JSDoc contracts; views are pure functions from state to HTML, and only `main.js` mutates state or writes storage (`ui.js`, `storage.js` and the fetch helpers wrap the browser APIs; module map: `docs/SPEC.md`). `tests/core/` covers the logic modules (views, `state.js`, `storage.js`, `ui.js` and `main.js` are checked in the browser) and the data the app depends on (phrase zhuyin alignment, food kinds, must-see reasons, the service worker file list); `tests/py/` covers the i18n converter and checks the committed bundle against `data/`. Work that can be specified function by function is handed to another agent: Claude writes the stub and contract tests in `tests/tasks/`, the worker implements, a gate script checks it mechanically (`.claude/skills/delegate-and-gate/SKILL.md`). `tests/tasks/` holds contracts only while a delegated task is open; finished tests move to `tests/core/`.
+`app/js/` is split into small ES modules with JSDoc contracts; views are pure functions from state to HTML, and only `main.js` mutates state or writes storage (`ui.js`, `storage.js` and the fetch helpers wrap the browser APIs; module map: `docs/SPEC.md`). `tests/core/` covers the logic modules (several views and `state.js` have Node contract tests too, such as `place-extras`, `apps-view`, `tips-scope`, `timeline-view` and `main-*`; `storage.js` and the rendering in a real browser are checked by hand) and the data the app depends on (phrase zhuyin alignment, food kinds, must-see reasons, the service worker file list); `tests/py/` covers the i18n converter, the build's validation, `check_sources.py` and checks the committed bundle against `data/`. Work that can be specified function by function is handed to another agent: Claude writes the stub and contract tests in `tests/tasks/`, the worker implements, a gate script checks it mechanically (`.claude/skills/delegate-and-gate/SKILL.md`). `tests/tasks/` holds contracts only while a delegated task is open; finished tests move to `tests/core/`.
 
 ## Roadmap
 
@@ -84,4 +86,4 @@ The order the design grows in. Status of each step: `docs/BACKLOG.md`.
 2. **Itineraries:** load a plan from `?trip=<https url>` or paste the AI's answer back (Ask AI, "Ask for a plan I can paste back"); the plan shows on My trip, today's stops on Explore, and feeds later Ask AI prompts.
 3. **Two languages:** UI string table with an English / 繁中 switch, per-language lookup building blocks (T4a), then per-language data maps `{ "zh_TW": ..., "en": ... }` across schema, build, generator and app (T4b).
 4. **Content depth:** must-see reasons, food picks per city, knowledge topics.
-5. **Later:** a `story` type linking several places; an optional embedded map; more languages.
+5. **Later:** a `story` type linking several places; more languages. Built since the first plan: the embedded map (an OpenStreetMap iframe), Ask AI about a photo, My stay, the full backup, Ask later, and a timeline across the places.
