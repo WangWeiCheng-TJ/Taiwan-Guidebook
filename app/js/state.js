@@ -6,6 +6,7 @@ import { TRIP_KEY, parseTrip } from './trip.js';
 import { LANG_KEY, initialLang } from './lang.js';
 import { PARTY_KEY, clampParty, partyChosen } from './party.js';
 import { STAY_KEY, readStays, emptyStay } from './stay.js';
+import { BACKUP_KEY, readMark } from './backup.js';
 
 /** @typedef {import('./types.js').Guidebook} Guidebook */
 /** @typedef {import('./types.js').Pos} Pos */
@@ -30,6 +31,8 @@ import { STAY_KEY, readStays, emptyStay } from './stay.js';
  *                                  never in a prompt or the export)
  * @property {import('./types.js').Stay} stayDraft  My stay form (survives re-renders; id set when editing a saved stay)
  * @property {boolean} stayOpen     My trip: show the My stay form even when a stay is saved
+ * @property {import('./backup.js').BackupMark|null} backup  the last backup and the notes added since, persisted
+ *                                  under BACKUP_KEY; null = never backed up on this device
  * @property {string} exploreCity    "all" or a city_en
  * @property {LogDraft} draft        the log form, survives tab switches; draft.date "" follows today's date
  * @property {{ mode: 'near'|'plan'|'photo', radius: number, area: string, customArea: string,
@@ -56,6 +59,7 @@ export const state = {
   stays: readStays(readJSON(STAY_KEY, [])), // re-validated, like the plan
   stayDraft: emptyStay(),
   stayOpen: false,
+  backup: readMark(readJSON(BACKUP_KEY, null)), // re-validated, like the plan
   exploreCity: 'all',
   draft: emptyDraft(''), // not today(): an app left open past midnight would log under yesterday
   ask: { mode: 'near', radius: 3, area: '', customArea: '', day: 'tomorrow', question: null, includeLog: true, wantPlan: false,

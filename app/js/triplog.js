@@ -14,6 +14,8 @@ import { t } from './i18n.js';
 
 export const LOG_KEY = 'tg.log.v1';
 export const EXPORT_TYPE = 'taiwan-guidebook-trip-log';
+/** The export payload's version: 2 adds the plan and the party size (version 1 files had notes only). */
+export const EXPORT_VERSION = 2;
 
 /**
  * @param {string} date  YYYY-MM-DD the form should start with, or "" to follow today's date
@@ -114,13 +116,16 @@ export function removeEntry(log, id) {
 }
 
 /**
- * The object written to the export file.
+ * The object written to the export file (the backup), version 2: the notes, the plan and the party size.
+ * Never My stay: that stays on the device. `trip` and `party` are null when there is no plan, or when the
+ * traveller never set a party size. A version 1 reader still finds the notes under `entries`.
  * @param {LogEntry[]} log
  * @param {Date} now
- * @returns {{ type: string, exported_at: string, entries: LogEntry[] }}
+ * @param {{ trip?: Trip|null, party?: number|null }} [extra]
+ * @returns {{ type: string, version: number, exported_at: string, entries: LogEntry[], trip: Trip|null, party: number|null }}
  */
-export function exportPayload(log, now) {
-  return { type: EXPORT_TYPE, exported_at: now.toISOString(), entries: log };
+export function exportPayload(log, now, { trip = null, party = null } = {}) {
+  return { type: EXPORT_TYPE, version: EXPORT_VERSION, exported_at: now.toISOString(), entries: log, trip, party };
 }
 
 /**
@@ -165,7 +170,8 @@ function cleanEntry(raw) {
 }
 
 /**
- * Merge an imported file into the log. Accepts an export payload or a bare array.
+ * Merge an imported file into the log. Accepts an export payload (version 1 or 2; the plan and party size of
+ * version 2 are read by backupExtras in backup.js) or a bare array.
  * Entries without an id or a real YYYY-MM-DD date are skipped; ids already in the log are skipped (no overwrite),
  * and so are repeats of an id earlier in the same file (the first one is kept), so ids stay unique.
  * Kept entries are reshaped to the LogEntry contract (see cleanEntry): stars 1..5 or null, string text fields.
