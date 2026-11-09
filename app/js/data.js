@@ -16,6 +16,16 @@ export async function loadGuidebook(fetchFn = fetch) {
 }
 
 /**
+ * Written by an agent and not yet checked by the owner: metadata.generated_by says "pending owner review".
+ * For a place or a knowledge topic (views/learn.js exports it as isPending too).
+ * @param {{ metadata?: { generated_by?: string } }} entry
+ * @returns {boolean}
+ */
+export function isPending(entry) {
+  return /pending owner review/i.test(entry?.metadata?.generated_by || '');
+}
+
+/**
  * @param {Place[]} places
  * @param {string} id
  * @returns {Place|undefined}
