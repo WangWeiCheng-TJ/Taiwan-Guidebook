@@ -4,8 +4,9 @@ import { foodFor } from '../data.js';
 import { distanceTo, sortByDistance } from '../geo.js';
 import { places } from '../state.js';
 import { tr } from '../lang.js';
-import { aiLinks, locationPanel } from './common.js';
+import { aiLinks, cityName, locationPanel } from './common.js';
 import { partyControl } from './reference.js';
+import { ASK_LATER_SHOWN, laterLabel, laterTime } from '../asklater.js';
 
 /** Icons of the photo presets (decorative). */
 const PHOTO_ICONS = { menu: '🍽️', sign: '🪧', board: '🚆', machine: '🎫', label: '🏷️' };
@@ -72,7 +73,63 @@ export function questionText(s) {
 }
 
 /**
- * Ask AI tab (#/ask): mode switch, mode fields, party size, question, toggles, copy button, live preview.
+ * What the Ask later list says about the prompt the Ask AI tab copies (laterItem's kind, subject and where):
+ * near me: the question and the picked city; plan a day: the area (the question when none is chosen); photo: the
+ * preset (a PHOTO_KINDS id) and the picked city. GPS gives no place name: where is "" then.
+ * @param {import('../state.js').AppState} s
+ * @returns {{ kind: 'near'|'plan'|'photo', subject: string, where: string }}
+ */
+export function laterInfo(s) {
+  const a = s.ask;
+  const where = s.pos?.city ? cityName(s.pos.city, s.lang) : '';
+  if (a.mode === 'photo') return { kind: 'photo', subject: a.photo, where };
+  if (a.mode === 'plan') return { kind: 'plan', subject: areaLabel(a.area, a.customArea) || questionText(s), where: '' };
+  return { kind: 'near', subject: questionText(s), where };
+}
+
+/**
+ * Ask later, at the top of the Ask AI tab: the prompts copied before (s.later, newest first), each with its label
+ * and time, "copied offline" while it waits, Copy (data-action="later-copy" data-id) and Delete
+ * (data-action="later-delete" data-id); Clear all (data-action="later-clear"). Only the newest ASK_LATER_SHOWN
+ * unless s.laterAll; the toggle is data-action="later-all" with aria-expanded. "" when the list is empty.
+ * main.js re-renders it alone inside #ask-later (refreshLater), so an open Preview stays open after a copy.
+ * @param {import('../state.js').AppState} s
+ * @param {Date} [now]  for the times
+ * @returns {string}
+ */
+export function renderLater(s, now = new Date()) {
+  const L = s.lang;
+  const list = s.later || [];
+  if (!list.length) return '';
+  const shown = s.laterAll ? list : list.slice(0, ASK_LATER_SHOWN);
+  const more = list.length > ASK_LATER_SHOWN;
+  return `
+    <section class="panel later" aria-labelledby="later-title">
+      <div class="row spread">
+        <h2 id="later-title">${tr(L, 'later.title')}</h2>
+        <button class="btn small" type="button" data-action="later-clear">${tr(L, 'later.clear')}</button>
+      </div>
+      <p class="muted small">${tr(L, 'later.intro')}</p>
+      ${shown.map(item => {
+        const label = laterLabel(item, L);
+        return `<div class="card later-item">
+        <div>
+          <div class="title">${esc(label)}</div>
+          <div class="meta">${esc(laterTime(item, now))}${item.waiting ? ` <span class="badge warm">${tr(L, 'later.waiting')}</span>` : ''}</div>
+        </div>
+        <div class="row">
+          <button class="btn small" type="button" data-action="later-copy" data-id="${esc(item.id)}" aria-label="${esc(tr(L, 'later.copyLabel', { t: label }))}">${tr(L, 'later.copy')}</button>
+          <button class="btn small danger" type="button" data-action="later-delete" data-id="${esc(item.id)}" aria-label="${esc(tr(L, 'later.deleteLabel', { t: label }))}">✕</button>
+        </div>
+      </div>`;
+      }).join('')}
+      ${more ? `<button class="btn small" type="button" data-action="later-all" aria-expanded="${!!s.laterAll}">${
+        s.laterAll ? tr(L, 'later.showFewer') : tr(L, 'later.showAll', { n: list.length })}</button>` : ''}
+    </section>`;
+}
+
+/**
+ * Ask AI tab (#/ask): Ask later (renderLater, in #ask-later), mode switch, mode fields, party size, question, toggles, copy button, live preview.
  * near mode: location panel + radius (data-change="radius"; not shown for a picked city, whose places are all listed).
  * plan mode: day (data-change="day"), area select (data-change="area"), custom area input (data-input="custom-area").
  * photo mode ("About a photo"): location panel, the presets as radio buttons (data-change="photo-kind",
@@ -148,6 +205,7 @@ export function renderAsk(s) {
 
   return `
     <h1>${tr(L, 'askTitle')}</h1>
+    <div id="ask-later">${renderLater(s)}</div>
     <p class="muted small">${tr(L, photo ? 'photoIntro' : 'askIntro')}</p>
     <div class="seg">
       ${seg('near', 'nearMe')}

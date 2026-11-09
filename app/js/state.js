@@ -7,6 +7,7 @@ import { LANG_KEY, initialLang } from './lang.js';
 import { PARTY_KEY, clampParty, partyChosen } from './party.js';
 import { STAY_KEY, readStays, emptyStay } from './stay.js';
 import { BACKUP_KEY, readMark } from './backup.js';
+import { ASK_LATER_KEY, readLater } from './asklater.js';
 
 /** @typedef {import('./types.js').Guidebook} Guidebook */
 /** @typedef {import('./types.js').Pos} Pos */
@@ -33,6 +34,11 @@ import { BACKUP_KEY, readMark } from './backup.js';
  * @property {boolean} stayOpen     My trip: show the My stay form even when a stay is saved
  * @property {import('./backup.js').BackupMark|null} backup  the last backup and the notes added since, persisted
  *                                  under BACKUP_KEY; null = never backed up on this device
+ * @property {import('./asklater.js').AskLaterItem[]} later  Ask later: every prompt the app copied, newest first, at
+ *                                  most ASK_LATER_MAX; persisted under ASK_LATER_KEY (device only: never in the export)
+ * @property {boolean} laterAll     Ask AI: the Ask later list shows every item, not only the newest (not persisted)
+ * @property {boolean} laterDot     the Ask AI tab shows a dot: the browser came back online with items copied
+ *                                  offline; cleared when the Ask AI tab is shown (not persisted)
  * @property {string} exploreCity    "all" or a city_en
  * @property {LogDraft} draft        the log form, survives tab switches; draft.date "" follows today's date
  * @property {{ mode: 'near'|'plan'|'photo', radius: number, area: string, customArea: string,
@@ -60,6 +66,9 @@ export const state = {
   stayDraft: emptyStay(),
   stayOpen: false,
   backup: readMark(readJSON(BACKUP_KEY, null)), // re-validated, like the plan
+  later: readLater(readJSON(ASK_LATER_KEY, [])), // re-validated, like the plan
+  laterAll: false,
+  laterDot: false,
   exploreCity: 'all',
   draft: emptyDraft(''), // not today(): an app left open past midnight would log under yesterday
   ask: { mode: 'near', radius: 3, area: '', customArea: '', day: 'tomorrow', question: null, includeLog: true, wantPlan: false,

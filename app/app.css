@@ -187,6 +187,13 @@ pre.prompt {
 .entry { display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; }
 .entry > div:first-child { min-width: 0; }
 
+/* Ask AI, Ask later: the prompts copied before, on a panel above the question builder */
+.later h2 { margin: 0; }
+.later-item { display: flex; gap: 8px; justify-content: space-between; align-items: center; padding: 10px 12px; margin: 8px 0 0; }
+.later-item > div:first-child { min-width: 0; }
+.later-item .row { flex-wrap: nowrap; gap: 6px; }
+.later > .btn { margin-top: 8px; }
+
 /* Show card: a white panel on a dimmed backdrop (#bigcard; a tap on the backdrop closes it, one on the text
    does not). The panel stays black on white in both colour schemes: it is shown to someone else, often outdoors
    or in a dark taxi. Only .big-text turns 180° (.flipped); the bar stays upright for the person holding it. */
