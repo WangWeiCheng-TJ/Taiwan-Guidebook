@@ -50,6 +50,7 @@ export function areaLabel(area, customArea) {
  * 區/市/縣/鎮/鄉, with 臺 and 台 read as the same character.
  * "Da'an District, Taipei" matches every Taipei City place, but not New Taipei City; so does 台北市大安區.
  * "Tamsui, New Taipei, then Taipei" matches both cities (a later standalone "Taipei" still counts).
+ * 新北投 (Xinbeitou, in Taipei City) is not 新北 (New Taipei): see NOT_CITY_ZH.
  * @param {Place[]} places
  * @param {string} area
  * @param {string} customArea
@@ -64,13 +65,22 @@ export function areaPlaces(places, area, customArea) {
   const text = zhNorm(customArea.toLowerCase());
   if (!text.trim()) return [];
   const core = s => s.toLowerCase().replace(/\b(district|city|county|township)\b/g, '').trim();
+  const cityText = NOT_CITY_ZH.reduce((t, name) => t.split(name).join(' '), text); // no city core inside these
   return places.filter(p => {
     const { district_en: de, city_en: ce, district_zh: dz, city_zh: cz } = p.location;
     const d = core(de), c = core(ce);
     if ((d && hasWord(text, d)) || (c && hasWord(text, c))) return true;
-    return [zhCore(dz), zhCore(cz)].some(z => z && text.includes(z));
+    const zd = zhCore(dz), zc = zhCore(cz);
+    return Boolean((zd && text.includes(zd)) || (zc && cityText.includes(zc)));
   });
 }
+
+/**
+ * Chinese place names that hold a city's core without being in that city, the way "New Taipei" holds
+ * "Taipei" (hasWord): 新北投 (Xinbeitou, an area of Taipei City's Beitou District) holds 新北 (New Taipei).
+ * areaPlaces does not look for city cores inside them; district cores still match there.
+ */
+const NOT_CITY_ZH = ['新北投'];
 
 /** 臺 and 台 are the same character in place names (臺南 = 台南). */
 function zhNorm(s) {

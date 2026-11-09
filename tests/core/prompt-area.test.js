@@ -42,3 +42,12 @@ test('buildAskPrompt: a Chinese custom area brings in the guidebook places', () 
   assert.match(p, /Places from my guidebook in or around this area:\n1\. /);
   assert.match(p, /Chihkan Tower/);
 });
+
+test('areaPlaces: 新北投 (Xinbeitou, in Taipei City) is not New Taipei; 新北 on its own still is', () => {
+  const newTaipei = inCity('New Taipei City');
+  assert.ok(newTaipei.length > 0);
+  assert.deepEqual(ids('新北投溫泉'), []);
+  assert.deepEqual(ids('新北投'), []);
+  for (const text of ['新北', '新北市', '新北 淡水', '先去新北投，再去新北市']) assert.deepEqual(ids(text), newTaipei, text);
+  assert.deepEqual(ids('新北投和淡水'), ['fort-san-domingo'], 'a district core still matches next to it');
+});
