@@ -229,5 +229,7 @@ export function installDom({ hash = '#/explore', language = 'en-GB', guidebook =
   const control = (dataset, props = {}, parent = view) => Object.assign(new FakeElement(document, { tag: 'button', dataset, parent }), props);
 
   return { document, window, history, location, storage, view, sheet, bigcard, sheetClose, bigClose, control,
-    entries: () => entries.length, at: () => index, store };
+    entries: () => entries.length, at: () => index, store,
+    /** Fire a window event, e.g. 'online' (the browser's own events have no data the app reads). */
+    fire: fireWin };
 }

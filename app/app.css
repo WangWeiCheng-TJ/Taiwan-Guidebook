@@ -87,8 +87,14 @@ h2 { font-size: 17px; margin: 24px 0 8px; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   font-size: 12px; color: var(--muted); text-decoration: none;
 }
-.tabbar a .ico { display: flex; align-items: center; justify-content: center; height: 24px; }
+.tabbar a .ico { display: flex; align-items: center; justify-content: center; height: 24px; position: relative; }
 .tabbar a .ico svg { display: block; width: 24px; height: 24px; }
+/* Ask AI's dot: back online with questions copied offline (the tab's aria-label says so in words). A --warm fill,
+   ringed in the bar's colour so it stands off the icon */
+.tabbar a.has-dot .ico::after {
+  content: ""; position: absolute; top: -2px; right: -6px; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--warm); box-shadow: 0 0 0 2px var(--surface);
+}
 .tabbar a.active { color: var(--accent); font-weight: 600; }
 .tabbar a.active .ico svg { stroke-width: 2.2; }
 .tabbar a:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: 10px; }

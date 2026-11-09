@@ -12,11 +12,11 @@ import { TRIP_KEY, tripUrlFrom, loadTrip } from './trip.js';
 import { planFromAiText } from './aiplan.js';
 import { toast, announce, copyText, showBig, hideBig, flipBig, sayOnCard, wakeAgain, speak, openSheet, closeSheet } from './ui.js';
 import { esc } from './util.js';
-import { tr, trMsg, LANG_KEY, otherLang } from './lang.js';
+import { tr, trMsg, LANG_KEY, otherLang, localized } from './lang.js';
 import { renderExplore } from './views/explore.js';
 import { renderPlace, driverCard, driverSay } from './views/place.js';
 import { renderLog } from './views/log.js';
-import { renderAsk, currentPrompt, photoContext } from './views/ask.js';
+import { renderAsk, currentPrompt, photoContext, renderLater, laterInfo } from './views/ask.js';
 import { renderPhrases, renderTips, phraseCard, phraseCardFull, phraseSay } from './views/reference.js';
 import { renderApps } from './views/apps.js';
 import { renderLearn } from './views/learn.js';
@@ -25,7 +25,8 @@ import { PARTY_KEY, clampParty, withParty } from './party.js';
 import { BACKUP_KEY, backupFileName, backupMark, bumpMark, backupExtras, planChoice } from './backup.js';
 import { STAY_KEY, emptyStay, normalizeStay, validateStay, putStay, removeStay, staySay, stayCity } from './stay.js';
 import { stayCard } from './views/stay.js';
-import { cityName } from './views/common.js';
+import { cityName, placeName } from './views/common.js';
+import { ASK_LATER_KEY, laterItem, addLater, removeLater, markCopied, waitingCount, laterLabel } from './asklater.js';
 import { foodSheet, findPick, dishSheet, foodDriverCard, foodDriverSay, menuShop, menuPromptSheet } from './views/food.js';
 import { foodFor } from './data.js';
 import { parseRoute, activeTab, entryKey, withKey, scrollFor, entryOverlays, withOverlays, overlayChange, focusSelector } from './nav.js';
@@ -50,6 +51,7 @@ const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 
  *   that had focus when the reader left this page (focusedControl())
  */
 function render(nav = false, returnTo = null) {
+  if (activeTab(parseRoute(location.hash).tab) === 'ask') state.laterDot = false; // Ask later is on screen now
   renderChrome();
   if (!state.data) {
     if (loadFailed) view.innerHTML = `<p>${tr(state.lang, 'loadFail')}</p>`;
@@ -386,6 +388,74 @@ function pickLocation(city) {
   render();
 }
 
+// ---------- Ask later: every copied prompt, kept on the device ----------
+
+/** The browser says it has no connection. */
+const isOffline = () => navigator.onLine === false;
+
+/**
+ * The message after a copy. Offline, a copy that worked says the question stays in Ask later.
+ * @param {boolean} ok    copyText's result
+ * @param {string} key    the usual message
+ * @param {string} fail   the message when copying failed
+ * @returns {string}
+ */
+function copiedMsg(ok, key, fail) {
+  return tr(state.lang, !ok ? fail : isOffline() ? 'later.keptOffline' : key);
+}
+
+/**
+ * Keep a prompt the app just copied in Ask later (addLater: newest first, at most ASK_LATER_MAX, the same prompt
+ * once), flagged waiting when the browser is offline. Also kept when copying failed: the list can copy it again.
+ * Device only, never in the export. A refused write is not reported: the copy itself worked, and the list is kept
+ * for this page session.
+ * @param {{ kind: import('./asklater.js').AskLaterKind, subject: string, where: string }} info
+ * @param {string} prompt
+ */
+function remember(info, prompt) {
+  state.later = addLater(state.later, laterItem({ id: newId(), at: new Date(), ...info, prompt, offline: isOffline() }));
+  writeJSON(ASK_LATER_KEY, state.later);
+  refreshLater();
+}
+
+/**
+ * Store a changed Ask later list and draw it again with the tab's dot.
+ * @param {import('./asklater.js').AskLaterItem[]} list
+ * @returns {boolean} false when the device refused to store it
+ */
+function setLater(list) {
+  state.later = list;
+  if (!list.length) state.laterAll = false;
+  const ok = writeJSON(ASK_LATER_KEY, list);
+  refreshLater();
+  renderChrome();
+  return ok;
+}
+
+/**
+ * Draw Ask later again on its own (#ask-later, on the Ask AI tab), not the whole tab: an open Preview stays open
+ * and focus returns to the control that had it. Elsewhere there is nothing to draw.
+ */
+function refreshLater() {
+  const el = document.getElementById('ask-later');
+  if (!el) return;
+  const f = focusedControl();
+  el.innerHTML = renderLater(state);
+  if (f) refocus(f);
+}
+
+/**
+ * The browser is back online with items copied offline: a toast says how many, and the Ask AI tab gets a dot
+ * until it is shown (on the Ask AI tab itself, only the toast).
+ */
+function laterOnline() {
+  const n = waitingCount(state.later);
+  if (!n) return;
+  state.laterDot = activeTab(parseRoute(location.hash).tab) !== 'ask';
+  renderChrome();
+  toast(tr(state.lang, n === 1 ? 'later.online1' : 'later.onlineN', { n }), 6000);
+}
+
 function refreshPreview() {
   const el = document.getElementById('prompt-preview');
   if (el) el.textContent = currentPrompt(state);
@@ -519,9 +589,11 @@ const actions = {
   'ask-menu': async el => {
     const shop = menuShop(state.data.food, el.dataset.city, el.dataset.id, el.dataset.kind);
     if (!shop) return;
-    const prompt = buildPhotoPrompt(photoContext(state, shop), 'menu', state.lang);
+    const L = state.lang;
+    const prompt = buildPhotoPrompt(photoContext(state, shop), 'menu', L);
     const ok = await copyText(prompt);
-    toast(tr(state.lang, ok ? 'copied' : 'copyFailPreview'));
+    remember({ kind: 'menu', subject: shop.name || localized(shop, 'dish', L), where: L === 'zh_TW' ? shop.city_zh : shop.city_en }, prompt);
+    toast(copiedMsg(ok, 'copied', 'copyFailPreview'));
     sheet(tr(state.lang, 'askMenu'), menuPromptSheet(prompt, ok, state.lang));
   },
   'food-driver': el => {
@@ -549,8 +621,11 @@ const actions = {
   'party-inc': () => setParty(state.party + 1),
   'copy-place': async el => {
     const p = placeById(places(), el.dataset.id);
-    const ok = await copyText(buildPlacePrompt(p, notesFor(state.log, p.id)));
-    toast(tr(state.lang, ok ? 'copiedPlace' : 'copyFail'));
+    if (!p) return;
+    const prompt = buildPlacePrompt(p, notesFor(state.log, p.id));
+    const ok = await copyText(prompt);
+    remember({ kind: 'place', subject: placeName(p, state.lang), where: localized(p.location, 'city', state.lang) }, prompt);
+    toast(copiedMsg(ok, 'copiedPlace', 'copyFail'));
   },
   star: el => {
     const n = Number(el.dataset.n);
@@ -609,9 +684,39 @@ const actions = {
     render();
   },
   'copy-prompt': async () => {
-    const ok = await copyText(currentPrompt(state));
-    toast(tr(state.lang, ok ? (state.ask.mode === 'photo' ? 'photoCopied' : 'copied') : 'copyFailPreview'));
+    const prompt = currentPrompt(state);
+    const info = laterInfo(state);
+    const ok = await copyText(prompt);
+    remember(info, prompt);
+    toast(copiedMsg(ok, info.kind === 'photo' ? 'photoCopied' : 'copied', 'copyFailPreview'));
   },
+  // Ask later. Copy: an item copied again while online stops waiting (markCopied); a failed copy shows the
+  // prompt in a sheet, to select by hand.
+  'later-copy': async el => {
+    const item = state.later.find(x => x.id === el.dataset.id);
+    if (!item) return;
+    const L = state.lang;
+    const ok = await copyText(item.prompt);
+    if (!ok) {
+      return sheet(laterLabel(item, L), `<p class="small muted">${tr(L, 'copyFailPreview')}</p><pre class="prompt">${esc(item.prompt)}</pre>`, el);
+    }
+    toast(copiedMsg(ok, item.kind === 'photo' || item.kind === 'menu' ? 'photoCopied' : 'copied', 'copyFailPreview'));
+    if (!isOffline()) {
+      const list = markCopied(state.later, item.id);
+      if (list !== state.later && !setLater(list)) toast(tr(L, 'storageFail'));
+    }
+  },
+  'later-delete': el => {
+    const list = removeLater(state.later, el.dataset.id);
+    if (list === state.later) return;
+    if (setLater(list)) announce(tr(state.lang, 'later.removed'));
+    else toast(tr(state.lang, 'storageFail'));
+  },
+  'later-clear': () => {
+    if (!state.later.length || !confirm(tr(state.lang, 'later.clearConfirm'))) return;
+    toast(tr(state.lang, setLater([]) ? 'later.cleared' : 'storageFail'));
+  },
+  'later-all': () => { state.laterAll = !state.laterAll; refreshLater(); },
 };
 
 function dispatchClick(e) {
@@ -676,8 +781,16 @@ function renderChrome() {
   const toggle = document.getElementById('lang-toggle');
   toggle.textContent = tr(L, 'switchTo');
   toggle.setAttribute('aria-label', tr(L, 'switchLabel'));
+  // Ask AI's dot: back online with items copied offline (laterOnline), until the tab is shown
+  const waiting = waitingCount(state.later);
+  const dot = state.laterDot && waiting > 0;
   document.querySelectorAll('.tabbar a').forEach(a => {
-    a.querySelector('[data-label]').textContent = tr(L, `tab.${a.dataset.tab}`);
+    const label = tr(L, `tab.${a.dataset.tab}`);
+    a.querySelector('[data-label]').textContent = label;
+    if (a.dataset.tab !== 'ask') return;
+    a.classList.toggle('has-dot', dot);
+    if (dot) a.setAttribute('aria-label', tr(L, 'later.tabWaiting', { tab: label, n: waiting }));
+    else a.removeAttribute('aria-label');
   });
 }
 
@@ -781,6 +894,7 @@ askbar.addEventListener('click', async () => {
   const { text, context, source, anchor } = selection;
   const prompt = buildExplainPrompt({ text, context, source, lang: state.lang });
   const ok = await copyText(prompt);
+  remember({ kind: 'explain', subject: text, where: source }, prompt);
   // The bar hides itself, so it cannot take focus back when the sheet closes: a control around the selected
   // text does, else the page's heading
   const near = anchor?.closest?.('a[href], button, input, select, textarea, summary, [tabindex]');
@@ -788,7 +902,7 @@ askbar.addEventListener('click', async () => {
   askbar.hidden = true;
   document.getSelection()?.removeAllRanges();
   sheet(tr(state.lang, 'explainTitle'), `
-    <p class="small ${ok ? '' : 'muted'}">${tr(state.lang, ok ? 'explainCopied' : 'copyFailPreview')}</p>
+    <p class="small ${ok ? '' : 'muted'}">${copiedMsg(ok, 'explainCopied', 'copyFailPreview')}</p>
     <div class="row small" style="margin-bottom:10px">
       <span class="muted">${tr(state.lang, 'thenOpen')}</span>
       <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
@@ -805,6 +919,7 @@ function updateNet() {
 }
 window.addEventListener('online', updateNet);
 window.addEventListener('offline', updateNet);
+window.addEventListener('online', laterOnline);
 
 async function init() {
   updateNet();
