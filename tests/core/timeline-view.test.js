@@ -46,7 +46,7 @@ test('#/learn/timeline: back to Learn, the title, Copy for AI, eras in order, ea
   assert.deepEqual(hrefs(html, /<b>([^<]+)<\/b>/g), ['1628', '1890', '1926', 'Present']);
   assert.deepEqual(hrefs(html, /href="#\/place\/([^"]+)"/g), ['b', 'a', 'b', 'a'], 'every event links to its place');
   assert.ok(html.includes('<b>1890</b>Event 1.'));
-  assert.ok(html.includes('>Place a<span class="muted">&nbsp;· Tainan City</span></a>'), 'named, with its city');
+  assert.ok(html.includes('><span>Place a<span class="muted">&nbsp;· Tainan City</span></span></a>'), 'named, with its city, as one flex item (a long name wraps with its city)');
 });
 
 test('#/learn/timeline: a place pending owner review gets the Learn page\'s draft note on each of its events', () => {
@@ -64,7 +64,7 @@ test('#/learn/timeline in Chinese: Chinese eras and events; English left in the 
   assert.deepEqual(hrefs(html, /<h2>([^<]+)<\/h2>/g), [DUTCH, QING, JAPANESE, MODERN].map(e => eraLabel(e, 'zh_TW')));
   assert.ok(html.includes('<b>1890</b>事件1。'));
   assert.ok(html.includes('<b lang="en">Present</b>事件2。'), '"Present" is English');
-  assert.ok(html.includes('>景點a<span class="muted">&nbsp;· 臺南市</span></a>'));
+  assert.ok(html.includes('><span>景點a<span class="muted">&nbsp;· 臺南市</span></span></a>'));
   const odd = renderTimeline(s('zh_TW', [place('o', ['Late Ming (1644–1683)'], [ev('1650', '', 9)])]));
   assert.ok(odd.includes('<h2 lang="en">Late Ming (1644–1683)</h2>'), 'an era with no Chinese heading');
   assert.ok(!renderTimeline(s('en')).includes('lang="en"'), 'nothing to mark in the English UI');

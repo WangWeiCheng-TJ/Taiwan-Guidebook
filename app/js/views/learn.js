@@ -81,7 +81,8 @@ export function renderTimeline(s) {
 }
 
 /**
- * One event: year as written, text, the link to its place, the draft note.
+ * One event: year as written, text, the link to its place, the draft note. The link's text is one <span>, so a long
+ * name and its city wrap as one line of text in the flex row.
  * @param {import('../timeline.js').TimelineEvent} e
  * @param {import('../lang.js').Lang} L
  * @param {string} en  ' lang="en"' in the Chinese UI, else ''
@@ -91,7 +92,7 @@ function timelineItem(e, L, en) {
   const city = localized(e.place.location, 'city', L);
   return `<li>
         <b${/[a-z]/i.test(e.when) ? en : ''}>${esc(e.when)}</b>${esc(localized(e, 'event', L))}
-        <a class="row-link small" href="#/place/${esc(e.place.id)}">${esc(localized(e.place, 'name', L))}${city ? `<span class="muted">&nbsp;· ${esc(city)}</span>` : ''}</a>
+        <a class="row-link small" href="#/place/${esc(e.place.id)}"><span>${esc(localized(e.place, 'name', L))}${city ? `<span class="muted">&nbsp;· ${esc(city)}</span>` : ''}</span></a>
         ${e.pending ? `<span class="muted small pending">${tr(L, 'learn.pending')}</span>` : ''}
       </li>`;
 }
