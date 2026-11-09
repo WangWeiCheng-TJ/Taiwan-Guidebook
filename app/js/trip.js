@@ -168,12 +168,14 @@ export function tripDayFor(trip, date) {
 }
 
 /**
- * The next stop of the plan on that date at that time: the stop right after the last one whose time has
- * passed (a stop is passed when its time is before `time`), or the first stop when none has passed.
- * Stops without a time are passed over only by a later timed stop that has passed.
+ * The next stop of the plan on that date at that time, in time order: a plan may list its stops out of order
+ * (an AI's afternoon half of a day before its morning half, merged by parseTrip). The next stop is a stop
+ * without a time listed right after the latest stop whose time has passed (a stop is passed when its time is
+ * before `time`; with none passed, an untimed first stop), else the earliest stop whose time is still ahead.
  * null when the plan has no day for the date, when that day has no timed stop (nothing tells where
  * the traveler is in it), when `time` is not HH:MM, or when every stop is behind.
  * Example: 09:00 A, B, 14:00 C at 12:00 → B; at 08:00 → A; at 15:00 → null.
+ * Listed 14:00 C, 09:00 A, 11:00 B: at 10:00 → B; at 12:00 → C.
  * @param {Trip|null} trip
  * @param {Place[]} places
  * @param {string} date  YYYY-MM-DD
@@ -183,9 +185,19 @@ export function tripDayFor(trip, date) {
 export function nextStop(trip, places, date, time) {
   const day = trip ? tripDayFor(trip, date) : null;
   if (!day || !/^\d\d:\d\d$/.test(String(time)) || !day.items.some(it => it.time)) return null;
+  const items = day.items;
+  // the latest stop that has passed (of equal times, the one listed last)
   let last = -1;
-  day.items.forEach((it, i) => { if (it.time && it.time < time) last = i; });
-  const item = day.items[last + 1];
+  items.forEach((it, i) => {
+    if (it.time && it.time < time && (last < 0 || it.time >= /** @type {string} */ (items[last].time))) last = i;
+  });
+  const after = items[last + 1];
+  /** @type {TripItem|null} */
+  let item = after && !after.time ? after : null;
+  // else the earliest stop still ahead (of equal times, the one listed first)
+  if (!item) {
+    for (const it of items) if (it.time && it.time >= time && (!item || it.time < /** @type {string} */ (item.time))) item = it;
+  }
   if (!item) return null;
   const { place, label } = resolveItem(item, places);
   return { item, place, label };

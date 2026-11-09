@@ -49,6 +49,37 @@ test('nextStop: untimed stops count once a later timed stop has passed', () => {
   assert.equal(nextStop(t, places, DAY, '15:00'), null);
 });
 
+test('nextStop: works in time order when the plan lists its stops out of order', () => {
+  // an AI split the day in two halves, afternoon first; parseTrip merges them in the order given
+  const merged = parseTrip({ title: 'x', days: [
+    { date: DAY, title: 'Afternoon', items: [{ name: 'C', time: '14:00' }] },
+    { date: DAY, title: 'Morning', items: [{ name: 'A', time: '09:00' }, { name: 'B', time: '11:00' }] },
+  ] }).trip;
+  assert.deepEqual(merged.days[0].items.map(it => it.name), ['C', 'A', 'B']);
+  assert.equal(nextStop(merged, places, DAY, '08:00').label, 'A');
+  assert.equal(nextStop(merged, places, DAY, '10:00').label, 'B');
+  assert.equal(nextStop(merged, places, DAY, '12:00').label, 'C', 'the 14:00 stop is still ahead');
+  assert.equal(nextStop(merged, places, DAY, '15:00'), null);
+
+  const day = items => ({ title: 'x', days: [{ date: DAY, items }] });
+  const evening = day([{ name: 'Dinner', time: '18:00' }, { name: 'Tea', time: '15:00' }]);
+  assert.equal(nextStop(evening, places, DAY, '14:00').label, 'Tea');
+  assert.equal(nextStop(evening, places, DAY, '16:00').label, 'Dinner');
+  const shuffled = day([{ name: 'A', time: '09:00' }, { name: 'C', time: '14:00' }, { name: 'B', time: '11:00' }]);
+  assert.equal(nextStop(shuffled, places, DAY, '10:00').label, 'B', 'not the stop listed next');
+});
+
+test('nextStop: an untimed stop follows the timed stop it is listed after, wherever that one is listed', () => {
+  const t = { title: 'x', days: [{ date: DAY, items: [
+    { name: 'C', time: '14:00' }, { name: 'D' }, { name: 'A', time: '09:00' }, { name: 'B' }] }] };
+  assert.equal(nextStop(t, places, DAY, '08:00').label, 'A');
+  assert.equal(nextStop(t, places, DAY, '12:00').label, 'B');
+  assert.equal(nextStop(t, places, DAY, '15:00').label, 'D');
+  const first = { title: 'x', days: [{ date: DAY, items: [{ name: 'Check out' }, { name: 'Train', time: '10:00' }] }] };
+  assert.equal(nextStop(first, places, DAY, '08:00').label, 'Check out', 'an untimed first stop before anything passed');
+  assert.equal(nextStop(first, places, DAY, '11:00'), null);
+});
+
 test('nextStop: null without a day, a timed stop or a valid time', () => {
   const untimed = { title: 'x', days: [{ date: DAY, items: [{ name: 'A' }, { name: 'B' }] }] };
   assert.equal(nextStop(untimed, places, DAY, '08:00'), null, 'nothing tells where the traveler is in the day');
