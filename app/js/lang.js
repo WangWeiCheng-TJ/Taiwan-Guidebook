@@ -256,9 +256,9 @@ const MESSAGES_ZH = {
 };
 
 // parseTrip's messages about one day or stop: "Day 2: …", "Day 2, stop 3: …".
-// 'needs a place id or a name.' stays English: tests/core/lang.test.js pins it as an unknown message.
 const DETAIL_ZH = {
   'must be an object.': '格式不正確（必須是物件）。',
+  'needs a place id or a name.': '需要地點 id（place）或名稱（name）。',
   'date must be YYYY-MM-DD, like 2026-11-04.': '日期必須是 YYYY-MM-DD，例如 2026-11-04。',
   'items must be a list.': 'items 必須是清單。',
   'title must be text.': 'title 必須是文字。',

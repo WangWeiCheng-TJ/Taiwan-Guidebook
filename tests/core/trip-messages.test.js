@@ -6,9 +6,6 @@ import { parseTrip, loadTrip } from '../../app/js/trip.js';
 import { planFromAiText } from '../../app/js/aiplan.js';
 import { validateDraft } from '../../app/js/triplog.js';
 
-// Pinned as an untranslated example by tests/core/lang.test.js ("trMsg translates known messages only").
-const PINNED_ENGLISH = /: needs a place id or a name\.$/;
-
 /** Every distinct message the pure modules produce for these bad inputs. */
 async function allMessages() {
   const msgs = new Set();
@@ -32,14 +29,14 @@ async function allMessages() {
 
 test('the bad inputs reach every kind of message', async () => {
   const msgs = await allMessages();
-  for (const re of [/^The trip must be a JSON object\.$/, /^The trip must have a title\.$/, /^Day 1: date must be/,
+  for (const re of [/^The trip must be a JSON object\.$/, /^The trip must have a title\.$/, /^Day 1: date must be/, /: needs a place id or a name\.$/,
     /^Day 1, stop 3: time must be HH:MM/, /\(HTTP 404\)/, /^Could not load the trip\.$/, /not valid JSON/, /Check your connection/]) {
     assert.ok(msgs.some(m => re.test(m)), `no message matches ${re}`);
   }
 });
 
 test('every message has a Chinese translation in the 中文 UI', async () => {
-  const untranslated = (await allMessages()).filter(m => !PINNED_ENGLISH.test(m) && trMsg('zh_TW', m) === m);
+  const untranslated = (await allMessages()).filter(m => trMsg('zh_TW', m) === m);
   assert.deepEqual(untranslated, []);
 });
 
@@ -53,4 +50,9 @@ test('templated messages keep their numbers', () => {
 test('English UI and unknown details stay as they are', () => {
   assert.equal(trMsg('en', 'Day 1, stop 1: time must be HH:MM, like 09:30.'), 'Day 1, stop 1: time must be HH:MM, like 09:30.');
   assert.equal(trMsg('zh_TW', 'Day 1: something new.'), 'Day 1: something new.');
+});
+
+test('a stop with neither a place nor a name is reported in Chinese too', () => {
+  const [msg] = parseTrip({ title: 'T', days: [{ date: '2026-11-04', items: [{ place: null, name: null }] }] }).errors;
+  assert.equal(trMsg('zh_TW', msg), '第 1 天第 1 站：需要地點 id（place）或名稱（name）。');
 });

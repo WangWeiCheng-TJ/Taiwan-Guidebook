@@ -29,7 +29,7 @@ test('every English UI string has a Chinese translation', async () => {
 
 test('trMsg translates known messages only', () => {
   assert.equal(trMsg('zh_TW', 'Add a rating or a note.'), '請給個評分或寫一句筆記。');
-  assert.equal(trMsg('zh_TW', 'Day 1, stop 2: needs a place id or a name.'), 'Day 1, stop 2: needs a place id or a name.');
+  assert.equal(trMsg('zh_TW', 'Day 1, stop 2: something new.'), 'Day 1, stop 2: something new.');
   assert.equal(trMsg('en', 'Add a rating or a note.'), 'Add a rating or a note.');
 });
 
