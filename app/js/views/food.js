@@ -49,7 +49,7 @@ export function renderFoodSection(s) {
 export function foodSheet(city, p, L) {
   const hint = p.hint ? (L === 'zh_TW' ? p.hint.zh_TW : p.hint.en) : '';
   return `
-    <div class="big-name" lang="zh-TW">${esc(p.name)} ${sayButton(p.name, L)}</div>
+    <div class="big-name"><span lang="zh-TW">${esc(p.name)}</span> ${sayButton(p.name, L)}</div>
     ${p.dish ? `<div class="dish">${L === 'zh_TW' ? esc(p.dish.zh_TW) : `${esc(p.dish.en)} (<span lang="zh-TW">${esc(p.dish.zh_TW)}</span>)`}</div>` : ''}
     <div class="muted">${esc(p.local ? localLabel(city, L) : tr(L, `food.${p.kind}`))} · ${esc(L === 'zh_TW' ? city.city_zh : city.city_en)}</div>
     ${hint ? `<p>${esc(hint)}</p>` : ''}
@@ -146,7 +146,7 @@ export function foodDriverSay(city, p) {
 export function dishSheet(city, d, L) {
   const q = encodeURIComponent(`${d.dish.zh_TW} ${city.city_zh}`);
   return `
-    <div class="big-name" lang="zh-TW">${esc(d.dish.zh_TW)} ${sayButton(d.dish.zh_TW, L)}</div>
+    <div class="big-name"><span lang="zh-TW">${esc(d.dish.zh_TW)}</span> ${sayButton(d.dish.zh_TW, L)}</div>
     ${L === 'zh_TW' ? '' : `<div class="dish">${esc(d.dish.en)}</div>`}
     <div class="muted">${esc(localLabel(city, L))} · ${esc(L === 'zh_TW' ? city.city_zh : city.city_en)}</div>
     <p>${tr(L, 'shopTbdIntro')}</p>
