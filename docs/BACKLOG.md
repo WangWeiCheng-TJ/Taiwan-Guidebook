@@ -15,6 +15,7 @@ Built (on `main`; not hosted yet):
 - Select any text, ask AI what it means (explain-selection).
 - City picker when GPS isn't used.
 - Ask AI about a photo: menu, sign, departure board, ticket machine or form, food label; "Ask AI about the menu" on food pick and dish sheets.
+- My stay: the traveler's hotel (Chinese name and address, phone), one per city, on the device only; "Take me back" on My trip and Explore opens it on the show card.
 
 Planned (design in [ARCHITECTURE.md](ARCHITECTURE.md)):
 
