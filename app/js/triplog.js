@@ -109,10 +109,10 @@ export function withLabels(log, places) {
 /**
  * @param {LogEntry[]} log
  * @param {string} id
- * @returns {LogEntry[]} new array without that entry
+ * @returns {LogEntry[]} new array without that entry (a numeric id stored by an older import matches its text)
  */
 export function removeEntry(log, id) {
-  return log.filter(e => e.id !== id);
+  return log.filter(e => String(e.id) !== String(id));
 }
 
 /**
@@ -172,8 +172,9 @@ function cleanEntry(raw) {
 /**
  * Merge an imported file into the log. Accepts an export payload (version 1 or 2; the plan and party size of
  * version 2 are read by backupExtras in backup.js) or a bare array.
- * Entries without an id or a real YYYY-MM-DD date are skipped; ids already in the log are skipped (no overwrite),
- * and so are repeats of an id earlier in the same file (the first one is kept), so ids stay unique.
+ * Entries without an id or a real YYYY-MM-DD date are skipped; ids already in the log are skipped (no overwrite;
+ * a numeric id an older import stored counts as its text, 7 as '7'), and so are repeats of an id earlier in the
+ * same file (the first one is kept), so ids stay unique.
  * Kept entries are reshaped to the LogEntry contract (see cleanEntry): stars 1..5 or null, string text fields.
  * @param {LogEntry[]} log
  * @param {unknown} parsed  JSON.parse result of the file
@@ -183,7 +184,7 @@ function cleanEntry(raw) {
 export function mergeImport(log, parsed) {
   const entries = Array.isArray(parsed) ? parsed : parsed && /** @type {any} */ (parsed).entries;
   if (!Array.isArray(entries)) throw new Error('Not a trip log export');
-  const ids = new Set(log.map(e => e.id));
+  const ids = new Set(log.map(e => String(e.id)));
   const fresh = entries.map(cleanEntry).filter(e => e && !ids.has(e.id) && ids.add(e.id));
   return { log: [...log, ...fresh], added: fresh.length };
 }

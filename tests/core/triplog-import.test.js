@@ -66,3 +66,17 @@ test('mergeImport: a file that repeats an id adds it once (the first copy)', () 
   // Still skips ids already in the log.
   assert.equal(mergeImport(log, [entry({ id: '1' }), entry({ id: '2' })]).added, 1);
 });
+
+test('mergeImport: an entry stored with a numeric id by an older import is not added again', () => {
+  const log = [{ id: 7, date: '2025-01-01', placeId: null, name: 'x', stars: 3, note: '' }];
+  const res = mergeImport(log, [{ id: 7, date: '2025-01-01', name: 'x', stars: 3 }, { id: '7', date: '2025-01-02', name: 'y', stars: 2 }]);
+  assert.equal(res.added, 0);
+  assert.equal(res.log.length, 1);
+});
+
+test('removeEntry: deletes an entry stored with a numeric id (the button gives its id as text)', () => {
+  const log = [{ id: 7, date: '2025-01-01', placeId: null, name: 'x', stars: 3, note: '' },
+    { id: '8', date: '2025-01-01', placeId: null, name: 'y', stars: 3, note: '' }];
+  assert.deepEqual(removeEntry(log, '7').map(e => e.id), ['8']);
+  assert.deepEqual(removeEntry(log, '8').map(e => e.id), [7]);
+});
