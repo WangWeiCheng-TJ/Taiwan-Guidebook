@@ -22,9 +22,10 @@ const STRINGS = {
   en: {
     brand: 'Taiwan Guidebook', offline: 'Offline', switchTo: '中文', switchLabel: '中文: switch to Chinese', loading: 'Loading…',
     loadFail: 'Could not load the guide. Connect to the internet once so it can be saved for offline use.',
-    // bootFail, bootRepair: index.html's boot watchdog holds copies (it runs when lang.js does not load)
+    // bootFail, bootRepair, bootOffline: index.html's boot watchdog holds copies (it runs when lang.js does not load)
     bootFail: "The app didn't start.",
     bootRepair: 'Repair',
+    bootOffline: 'Repair needs an internet connection. It appears here once you are online.',
     'tab.explore': 'Explore', 'tab.log': 'My trip', 'tab.ask': 'Ask AI', 'tab.phrases': 'Phrases', 'tab.tips': 'Tips',
     navLabel: 'Sections',
     distancesFrom: 'Distances from <b>{label}</b>', inCity: "I'm in <b>{label}</b>", update: 'Update', change: 'Change', useLocation: 'Use my location', nearPick: "or I'm in…",
@@ -156,6 +157,7 @@ const STRINGS = {
     loadFail: '無法載入手冊。請先連上網路一次，之後就能離線使用。',
     bootFail: 'App 沒有順利啟動。',
     bootRepair: '修復',
+    bootOffline: '修復需要網路連線，連上網路後會出現在這裡。',
     'tab.explore': '探索', 'tab.log': '我的旅程', 'tab.ask': '問 AI', 'tab.phrases': '常用語', 'tab.tips': '須知',
     navLabel: '分頁',
     distancesFrom: '距離以 <b>{label}</b> 計算', inCity: '我在 <b>{label}</b>', update: '更新', change: '更換', useLocation: '使用我的位置', nearPick: '或選擇我在哪個城市…',

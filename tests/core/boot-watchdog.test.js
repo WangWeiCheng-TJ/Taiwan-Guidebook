@@ -1,7 +1,8 @@
 // The boot watchdog in app/index.html: a classic inline script that offers Repair when the app does not start
-// (a module that fails to load or throws, or #view still on "Loading…" 8 seconds on). It is run here in a node:vm
-// sandbox with a small fake of the few browser objects it touches; main.js's side (data-loading, data-started) is
-// in main-boot-mark.test.js and main-loadfail.test.js.
+// (a module that fails to load or throws, or #view still on "Loading…" 8 seconds on); offline, a line saying Repair
+// needs a connection stands in for the button. It is run here in a node:vm sandbox with a small fake of the few
+// browser objects it touches; main.js's side (data-loading, data-started) is in main-boot-mark.test.js and
+// main-loadfail.test.js.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -32,6 +33,9 @@ test('it references the right ids, attributes, storage key and cache prefix', ()
     assert.match(html, new RegExp(`<[a-z]+ id="${id}"`), `#${id} is in the page`);
   }
   assert.ok(script.includes('id="boot-repair"') && script.includes("getElementById('boot-repair')"), 'its own button');
+  assert.ok(script.includes('id="boot-offline"') && script.includes("getElementById('boot-offline')"), 'its offline line');
+  assert.ok(script.includes('navigator.onLine === false'), 'offline as the browser reports it');
+  assert.ok(script.includes("addEventListener('online'") && script.includes("addEventListener('offline'"));
   assert.ok(script.includes("'[data-loading]'"), 'looks for the loading line');
   assert.ok(script.includes("'data-started'"), 'stands down on main.js\'s mark');
   assert.ok(script.includes(`'${LANG_KEY}'`), 'the saved language');
@@ -48,15 +52,16 @@ test('the loading line in #view and the one main.js writes both carry data-loadi
   assert.ok(main.includes("view.setAttribute('data-started', '')"));
 });
 
-test('its two strings are lang.js\'s bootFail and bootRepair, in both languages', () => {
+test('its three strings are lang.js\'s bootFail, bootRepair and bootOffline, in both languages', () => {
   for (const L of ['en', 'zh_TW']) {
-    for (const key of ['bootFail', 'bootRepair']) {
+    for (const key of ['bootFail', 'bootRepair', 'bootOffline']) {
       assert.notEqual(tr(L, key), key, `${L} ${key}`);
       const quoted = JSON.stringify(tr(L, key)).slice(1, -1);
       assert.ok(script.includes(`'${quoted}'`) || script.includes(`"${quoted}"`), `${L} ${key} in index.html`);
     }
   }
   assert.notEqual(tr('zh_TW', 'bootFail'), tr('en', 'bootFail'));
+  assert.notEqual(tr('zh_TW', 'bootOffline'), tr('en', 'bootOffline'));
 });
 
 // ---------- Behaviour, in a sandbox ----------
@@ -64,15 +69,18 @@ test('its two strings are lang.js\'s bootFail and bootRepair, in both languages'
 /**
  * Run the watchdog against a fake page whose #view shows the loading line.
  * @param {{ stored?: string|null, language?: string, storageThrows?: boolean, sw?: boolean, caches?: boolean,
- *   failing?: boolean }} [opts]  failing: unregister and caches.keys reject
+ *   failing?: boolean, onLine?: boolean }} [opts]  failing: unregister and caches.keys reject; onLine: navigator.onLine
+ *   at the start (the returned `navigator` changes it later)
  */
-function boot({ stored = null, language = 'en-GB', storageThrows = false, sw = true, caches = true, failing = false } = {}) {
+function boot({ stored = null, language = 'en-GB', storageThrows = false, sw = true, caches = true, failing = false,
+  onLine = true } = {}) {
   /** @type {{ fn: Function, ms: number }[]} */
   let timers = [];
   /** @type {Record<string, Function[]>} */
   const listeners = {};
   const log = { unregistered: 0, deleted: /** @type {string[]} */ ([]), reloads: 0 };
   let button = null;
+  let offlineLine = null;
   const makeButton = () => {
     const b = { disabled: false, listeners: {}, addEventListener(type, fn) { (this.listeners[type] ||= []).push(fn); } };
     return b;
@@ -81,7 +89,11 @@ function boot({ stored = null, language = 'en-GB', storageThrows = false, sw = t
     html: LOADING,
     attrs: new Set(),
     get innerHTML() { return this.html; },
-    set innerHTML(v) { this.html = v; button = v.includes('id="boot-repair"') ? makeButton() : null; },
+    set innerHTML(v) {
+      this.html = v;
+      button = v.includes('id="boot-repair"') ? makeButton() : null;
+      offlineLine = v.includes('id="boot-offline"') ? {} : null;
+    },
     hasAttribute(k) { return this.attrs.has(k); },
     setAttribute(k) { this.attrs.add(k); },
     querySelector(sel) {
@@ -92,10 +104,11 @@ function boot({ stored = null, language = 'en-GB', storageThrows = false, sw = t
   const announce = { textContent: '' };
   const ctx = {
     document: {
-      getElementById: id => ({ view, announce, 'boot-repair': button })[id] || null,
+      getElementById: id => ({ view, announce, 'boot-repair': button, 'boot-offline': offlineLine })[id] || null,
     },
     navigator: {
       language,
+      onLine,
       serviceWorker: sw ? {
         getRegistration: async () => ({
           unregister: async () => { if (failing) throw new Error('no'); log.unregistered++; return true; },
@@ -123,6 +136,8 @@ function boot({ stored = null, language = 'en-GB', storageThrows = false, sw = t
   vm.runInContext(script, ctx);
   return {
     view, announce, log,
+    /** The navigator the script reads: set onLine, then fire 'online' or 'offline'. */
+    navigator: ctx.navigator,
     /** The window as the script sees it: the target of a thrown error's ErrorEvent. */
     win: vm.runInContext('window', ctx),
     button: () => button,
@@ -139,6 +154,9 @@ function boot({ stored = null, language = 'en-GB', storageThrows = false, sw = t
 const flush = () => new Promise(r => setImmediate(r));
 const message = L => `<div lang="${L === 'zh_TW' ? 'zh-Hant-TW' : 'en'}"><p>${tr(L, 'bootFail')}</p>`
   + `<button type="button" class="btn primary" id="boot-repair">${tr(L, 'bootRepair')}</button></div>`;
+/** Offline: the same message, with a line in place of Repair */
+const offlineMessage = L => `<div lang="${L === 'zh_TW' ? 'zh-Hant-TW' : 'en'}"><p>${tr(L, 'bootFail')}</p>`
+  + `<p class="muted" id="boot-offline">${tr(L, 'bootOffline')}</p></div>`;
 
 test('nothing happens at once: the loading line stays and one check is set for 8 seconds on', () => {
   const b = boot();
@@ -257,4 +275,93 @@ test('Repair still reloads without a service worker or Cache Storage, or when th
     assert.equal(b.log.reloads, 1, JSON.stringify(opts));
     assert.equal(b.log.unregistered, 0);
   }
+});
+
+// ---------- Offline: Repair would delete the only offline copy ----------
+
+test('offline: the message says Repair needs a connection, with no button; screen readers hear the message', () => {
+  for (const L of ['en', 'zh_TW']) {
+    const b = boot({ onLine: false, stored: JSON.stringify(L) });
+    b.elapse();
+    assert.equal(b.view.innerHTML, offlineMessage(L), L);
+    assert.equal(b.button(), null, 'no Repair to tap');
+    assert.equal(b.announce.textContent, tr(L, 'bootFail'));
+  }
+});
+
+test('offline, then back online: Repair appears, wired, and cleans up as usual', async () => {
+  const b = boot({ onLine: false });
+  b.fire('error', { target: { tagName: 'SCRIPT' } });
+  assert.equal(b.view.innerHTML, offlineMessage('en'));
+  b.navigator.onLine = true;
+  b.fire('online', {});
+  assert.equal(b.view.innerHTML, message('en'));
+  assert.equal(b.button().listeners.click.length, 1);
+  b.button().listeners.click[0]();
+  await flush();
+  assert.equal(b.log.unregistered, 1);
+  assert.deepEqual(b.log.deleted, ['tg-v27', 'tg-v26']);
+  assert.equal(b.log.reloads, 1);
+});
+
+test('the connection drops with Repair on screen: the line replaces it; back online, Repair again', () => {
+  const b = boot();
+  b.elapse();
+  b.navigator.onLine = false;
+  b.fire('offline', {});
+  assert.equal(b.view.innerHTML, offlineMessage('en'));
+  b.navigator.onLine = true;
+  b.fire('online', {});
+  assert.equal(b.view.innerHTML, message('en'));
+  assert.equal(b.button().listeners.click.length, 1);
+});
+
+test('Repair tapped while the browser says offline (no event came): nothing is deleted or reloaded, the line shows', async () => {
+  const b = boot();
+  b.elapse();
+  const button = b.button();
+  b.navigator.onLine = false;
+  button.listeners.click[0]();
+  await flush();
+  assert.equal(b.log.unregistered, 0);
+  assert.deepEqual(b.log.deleted, []);
+  assert.equal(b.log.reloads, 0);
+  assert.equal(b.view.innerHTML, offlineMessage('en'));
+});
+
+test('a repair under way is not redrawn when the connection drops: the clean-up and reload go on', async () => {
+  const b = boot();
+  b.elapse();
+  const button = b.button();
+  button.listeners.click[0]();
+  b.navigator.onLine = false;
+  b.fire('offline', {});
+  assert.equal(b.button(), button, 'the same, disabled button');
+  assert.equal(button.disabled, true);
+  await flush();
+  assert.equal(b.log.reloads, 1);
+});
+
+test('offline, the watchdog keeps looking, the app still replaces the message, and later network events leave it', () => {
+  const b = boot({ onLine: false });
+  b.elapse();
+  assert.equal(b.view.innerHTML, offlineMessage('en'));
+  assert.equal(b.timers().length, 1, 'keeps looking');
+  b.appRenders();
+  b.navigator.onLine = true;
+  b.fire('online', {});
+  b.navigator.onLine = false;
+  b.fire('offline', {});
+  b.elapse();
+  assert.equal(b.view.innerHTML, '<h1>Explore</h1>');
+  assert.deepEqual(b.timers(), [], 'stood down');
+});
+
+test('network events before any message change nothing: the loading line stays', () => {
+  const b = boot();
+  b.navigator.onLine = false;
+  b.fire('offline', {});
+  b.navigator.onLine = true;
+  b.fire('online', {});
+  assert.equal(b.view.innerHTML, LOADING);
 });

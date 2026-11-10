@@ -57,29 +57,51 @@
   // #view with data-started (after its first render), a script error, or #view still showing the loading line
   // (data-loading) 8 seconds on, puts "The app didn't start" and a Repair button in #view. Loading goes on: when
   // the app renders, its page replaces the message, so a slow first load is not cut off. Repair unregisters this
-  // page's service worker, deletes the app's caches (tg-*) and reloads. Its two strings are copies of bootFail and
-  // bootRepair in lang.js, which may not have loaded (tests/core/boot-watchdog.test.js keeps them equal).
+  // page's service worker, deletes the app's caches (tg-*) and reloads. That removes the only offline copy, so
+  // while the browser is offline (navigator.onLine false) the button is a line saying Repair needs a connection,
+  // and the button comes back on 'online'. Its three strings are copies of bootFail, bootRepair and bootOffline in
+  // lang.js, which may not have loaded (tests/core/boot-watchdog.test.js keeps them equal).
   (function () {
     var WAIT = 8000;
     var view = document.getElementById('view');
     var lang = null;
     try { lang = JSON.parse(localStorage.getItem('tg.lang.v1')); } catch (e) {}
     if (lang !== 'en' && lang !== 'zh_TW') lang = /^zh/i.test(navigator.language || '') ? 'zh_TW' : 'en';
-    var text = lang === 'zh_TW' ? ['App 沒有順利啟動。', '修復'] : ["The app didn't start.", 'Repair'];
+    var text = lang === 'zh_TW'
+      ? ['App 沒有順利啟動。', '修復', '修復需要網路連線，連上網路後會出現在這裡。']
+      : ["The app didn't start.", 'Repair', 'Repair needs an internet connection. It appears here once you are online.'];
 
     function started() { return view.hasAttribute('data-started'); }
     function loading() { return !!view.querySelector('[data-loading]'); }
+    function offline() { return navigator.onLine === false; }
+
+    // The message, with Repair, or offline the line that stands in for it
+    function draw() {
+      view.innerHTML = '<div lang="' + (lang === 'zh_TW' ? 'zh-Hant-TW' : 'en') + '"><p>' + text[0] + '</p>'
+        + (offline() ? '<p class="muted" id="boot-offline">' + text[2] + '</p>'
+          : '<button type="button" class="btn primary" id="boot-repair">' + text[1] + '</button>') + '</div>';
+      var button = document.getElementById('boot-repair');
+      if (button) button.addEventListener('click', repair);
+    }
 
     function show() {
       if (started() || !loading()) return;
-      view.innerHTML = '<div lang="' + (lang === 'zh_TW' ? 'zh-Hant-TW' : 'en') + '"><p>' + text[0] + '</p>'
-        + '<button type="button" class="btn primary" id="boot-repair">' + text[1] + '</button></div>';
-      document.getElementById('boot-repair').addEventListener('click', repair);
+      draw();
       var say = document.getElementById('announce');
       if (say) say.textContent = text[0];
     }
 
+    // The connection came or went while the message is up: swap Repair and the offline line (not during a repair)
+    function net() {
+      if (started()) return;
+      var button = document.getElementById('boot-repair');
+      if (offline() ? button && !button.disabled : document.getElementById('boot-offline')) draw();
+    }
+    window.addEventListener('online', net);
+    window.addEventListener('offline', net);
+
     function repair() {
+      if (offline()) { draw(); return; } // no clean-up: it would leave nothing to load until the phone is online
       document.getElementById('boot-repair').disabled = true;
       var quiet = function () {};
       var jobs = [];
@@ -107,7 +129,7 @@
     // Look again every 8 seconds: main.js puts its own loading line back when it starts after the message is up.
     // Stop once the app has started, or #view shows neither the loading line nor this message (an older main.js).
     function tick() {
-      if (started() || !(loading() || document.getElementById('boot-repair'))) return;
+      if (started() || !(loading() || document.getElementById('boot-repair') || document.getElementById('boot-offline'))) return;
       show();
       setTimeout(tick, WAIT);
     }
