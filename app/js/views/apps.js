@@ -30,7 +30,7 @@ export function renderApps(s) {
     .map(cat => [cat, apps.filter(a => a.category === cat)])
     .filter(([, list]) => list.length);
   return `
-    <a href="#/tips" class="small">${tr(L, 'learn.backTips')}</a>
+    <div class="back"><a href="#/tips" class="small">${tr(L, 'learn.backTips')}</a></div>
     <h1>${tr(L, 'apps.title')}</h1>
     <p class="muted small">${tr(L, 'apps.intro')}</p>
     ${sections.length ? sections.map(([cat, list]) => `

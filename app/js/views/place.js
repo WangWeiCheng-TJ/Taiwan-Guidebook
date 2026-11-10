@@ -38,7 +38,7 @@ export function renderPlace(s, id) {
   const look = localized(c, 'architectural_highlights', L);
 
   return `
-    <a href="#/explore" class="small">${tr(L, 'allPlaces')}</a>
+    <div class="back"><a href="#/explore" class="small">${tr(L, 'allPlaces')}</a></div>
     <h1>${esc(placeName(p, L))} ${sayButton(p.name.zh_TW, L)}</h1>
     <div class="zh" lang="${langTag(otherLang(L))}">${esc(placeName(p, otherLang(L)))}</div>
     <div class="muted small">${esc(localized(p.location, 'district', L))}, ${esc(localized(p.location, 'city', L))}${d != null ? ` · ${tr(L, 'away', { d: fmtKm(d) })}` : ''}</div>

@@ -26,7 +26,7 @@ export function renderLearn(s, id) {
   if (!id) {
     const timeline = mergeTimeline(s.data?.places || []).length > 0;
     return `
-      <a href="#/tips" class="small">${tr(L, 'learn.backTips')}</a>
+      <div class="back"><a href="#/tips" class="small">${tr(L, 'learn.backTips')}</a></div>
       <h1>${tr(L, 'learn.title')}</h1>
       <p class="muted small">${tr(L, 'learn.intro')}</p>
       ${timeline ? `<a class="card" href="#/learn/${TIMELINE_ID}">
@@ -42,7 +42,7 @@ export function renderLearn(s, id) {
   const related = placesForTopic(t, s.data?.places || []);
   const sources = t.metadata?.sources || [];
   return `
-    <a href="#/learn" class="small">${tr(L, 'learn.all')}</a>
+    <div class="back"><a href="#/learn" class="small">${tr(L, 'learn.all')}</a></div>
     <h1>${esc(localized(t, 'title', L))}</h1>
     <p class="muted">${esc(localized(t, 'summary', L))}</p>
     ${isPending(t) ? `<p class="muted small pending">${tr(L, 'learn.pending')}</p>` : ''}
@@ -72,7 +72,7 @@ export function renderTimeline(s) {
   const groups = mergeTimeline(s.data?.places || []);
   const en = L === 'en' ? '' : ' lang="en"'; // English text inside the Chinese UI
   return `
-    <a href="#/learn" class="small">${tr(L, 'timeline.back')}</a>
+    <div class="back"><a href="#/learn" class="small">${tr(L, 'timeline.back')}</a></div>
     <h1>${tr(L, 'timeline.title')}</h1>
     <p class="muted small">${tr(L, 'timeline.intro')}</p>
     ${groups.length ? `<div class="row"><button class="btn" data-action="copy-timeline">${tr(L, 'copyAi')}</button></div>` : `<p>${tr(L, 'timeline.none')}</p>`}

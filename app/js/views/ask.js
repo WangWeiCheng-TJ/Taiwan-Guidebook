@@ -194,12 +194,12 @@ export function renderAsk(s) {
       <label>${tr(L, 'yourQuestion')}
         <textarea data-input="question" rows="3">${esc(questionText(s))}</textarea>
       </label>
-      <label class="row" style="color:var(--text)">
-        <input type="checkbox" data-change="include-log" ${a.includeLog ? 'checked' : ''} style="width:auto">
+      <label class="row check" style="color:var(--text)">
+        <input type="checkbox" data-change="include-log" ${a.includeLog ? 'checked' : ''}>
         ${tr(L, 'includeNotes', { n: s.log.length })}
       </label>
-      <label class="row" style="color:var(--text)">
-        <input type="checkbox" data-change="want-plan" ${a.wantPlan ? 'checked' : ''} style="width:auto">
+      <label class="row check" style="color:var(--text)">
+        <input type="checkbox" data-change="want-plan" ${a.wantPlan ? 'checked' : ''}>
         ${tr(L, 'wantPlan')}
       </label>`;
 

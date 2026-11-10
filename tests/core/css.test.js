@@ -266,6 +266,17 @@ test('tap targets: small buttons, the party stepper and stars are 44px; chips an
   assert.ok(px(resolve('details.map summary', 'min-height')) >= 40);
 });
 
+test('tap targets: the Back links and the Ask AI links are 44px tall, checkboxes 24px with a 44px label', () => {
+  for (const sel of ['.back a', '.ai-links a']) {
+    assert.ok(px(rule(sel)['min-height']) >= 44, sel + ': Back link at the top of a page, ChatGPT / Claude / Gemini');
+    assert.equal(rule(sel).display, 'inline-flex', 'min-height needs a box; the text stays on one line');
+  }
+  const box = rule('input[type="checkbox"]');
+  assert.ok(px(box.width) >= 24 && px(box.height) >= 24);
+  assert.equal(box.flex, 'none', 'the row must not squeeze the box');
+  assert.ok(px(rule('label.check')['min-height']) >= 44, 'tapping the text toggles it, on a 44px row');
+});
+
 test('tap targets: the speaker button stays small to look at but its invisible ring makes it 44px', () => {
   const btn = rule('.say-btn');
   const ring = rule('.say-btn::after');

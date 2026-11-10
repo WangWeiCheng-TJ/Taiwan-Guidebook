@@ -73,7 +73,7 @@ export function locationPanel(s) {
  * @returns {string}
  */
 export function aiLinks(L) {
-  return `<div class="row small">
+  return `<div class="row small ai-links">
     <span class="muted">${tr(L, 'thenOpen')}</span>
     <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT</a>
     <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude</a>

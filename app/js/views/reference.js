@@ -89,7 +89,7 @@ export function renderPhrases(s, group) {
   }
   const list = phrasesIn(s.data.phrases, known.id);
   return `
-    <a href="#/phrases" class="small">${tr(L, 'allCategories')}</a>
+    <div class="back"><a href="#/phrases" class="small">${tr(L, 'allCategories')}</a></div>
     <h1>${known.icon} ${tr(L, `cat.${known.id}`)}</h1>
     ${list.some(ph => ph.party) ? partyControl(L, s.party) : ''}
     <p class="muted small">${tr(L, 'phrasesIntro')} ${typeof speechSynthesis !== 'undefined' ? tr(L, 'tapToHear') : ''}<br>${tr(L, 'toneLegend')}</p>
