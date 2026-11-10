@@ -52,6 +52,7 @@ test('the list stored on the device is read back, re-validated', () => {
   assert.deepEqual(state.later.map(x => x.id), ['old']);
   assert.equal(state.later[0].waiting, true);
   assert.ok(dom.view.innerHTML.includes('<section class="panel later"'), 'drawn on the Ask AI tab');
+  assert.equal(askTab().classList.contains('has-dot'), false, 'opened online on the Ask AI tab: no dot for it');
 });
 
 test('Copy question on the Ask AI tab: the prompt goes first in Ask later, stored, and the list is drawn again', async () => {

@@ -445,13 +445,24 @@ function refreshLater() {
 }
 
 /**
+ * Items copied offline wait in Ask later: the Ask AI tab gets a dot until it is shown (none while it is on screen).
+ * The caller draws the tab bar.
+ * @returns {number} how many items wait
+ */
+function flagLater() {
+  const n = waitingCount(state.later);
+  if (n) state.laterDot = activeTab(parseRoute(location.hash).tab) !== 'ask';
+  return n;
+}
+
+/**
  * The browser is back online with items copied offline: a toast says how many, and the Ask AI tab gets a dot
- * until it is shown (on the Ask AI tab itself, only the toast).
+ * until it is shown (on the Ask AI tab itself, only the toast). An app opened online gets the dot at start
+ * (init), without the toast.
  */
 function laterOnline() {
-  const n = waitingCount(state.later);
+  const n = flagLater();
   if (!n) return;
-  state.laterDot = activeTab(parseRoute(location.hash).tab) !== 'ask';
   renderChrome();
   toast(tr(state.lang, n === 1 ? 'later.online1' : 'later.onlineN', { n }), 6000);
 }
@@ -789,7 +800,7 @@ function renderChrome() {
   const toggle = document.getElementById('lang-toggle');
   toggle.textContent = tr(L, 'switchTo');
   toggle.setAttribute('aria-label', tr(L, 'switchLabel'));
-  // Ask AI's dot: back online with items copied offline (laterOnline), until the tab is shown
+  // Ask AI's dot: online with items copied offline (laterOnline, or at start), until the tab is shown
   const waiting = waitingCount(state.later);
   const dot = state.laterDot && waiting > 0;
   document.querySelectorAll('.tabbar a').forEach(a => {
@@ -934,6 +945,7 @@ const markStarted = () => view.setAttribute('data-started', '');
 
 async function init() {
   updateNet();
+  if (!isOffline()) flagLater(); // opened online with items copied offline still waiting: the dot, no toast
   renderChrome(); // top bar and tabs in the saved or browser language while the guide loads
   // data-loading: the boot watchdog in index.html looks for it (and replaces it if the app never gets further)
   view.innerHTML = `<p class="muted" data-loading>${tr(state.lang, 'loading')}</p>`;

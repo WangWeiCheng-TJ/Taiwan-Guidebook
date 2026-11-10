@@ -37,8 +37,8 @@ import { ASK_LATER_KEY, readLater } from './asklater.js';
  * @property {import('./asklater.js').AskLaterItem[]} later  Ask later: every prompt the app copied, newest first, at
  *                                  most ASK_LATER_MAX; persisted under ASK_LATER_KEY (device only: never in the export)
  * @property {boolean} laterAll     Ask AI: the Ask later list shows every item, not only the newest (not persisted)
- * @property {boolean} laterDot     the Ask AI tab shows a dot: the browser came back online with items copied
- *                                  offline; cleared when the Ask AI tab is shown (not persisted)
+ * @property {boolean} laterDot     the Ask AI tab shows a dot: the browser came back online, or the app opened
+ *                                  online, with items copied offline; cleared when the Ask AI tab is shown (not persisted)
  * @property {string} exploreCity    "all" or a city_en
  * @property {LogDraft} draft        the log form, survives tab switches; draft.date "" follows today's date
  * @property {{ mode: 'near'|'plan'|'photo', radius: number, area: string, customArea: string,
