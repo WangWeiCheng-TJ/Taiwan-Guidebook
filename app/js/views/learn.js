@@ -24,15 +24,16 @@ export function renderLearn(s, id) {
   const L = s.lang;
   const topics = s.data?.topics || [];
   if (!id) {
+    const timeline = mergeTimeline(s.data?.places || []).length > 0;
     return `
       <a href="#/tips" class="small">${tr(L, 'learn.backTips')}</a>
       <h1>${tr(L, 'learn.title')}</h1>
       <p class="muted small">${tr(L, 'learn.intro')}</p>
-      ${mergeTimeline(s.data?.places || []).length ? `<a class="card" href="#/learn/${TIMELINE_ID}">
+      ${timeline ? `<a class="card" href="#/learn/${TIMELINE_ID}">
         <div class="title">${tr(L, 'timeline.title')}</div>
         <div class="meta">${tr(L, 'timeline.summary')}</div>
       </a>` : ''}
-      ${topics.length ? topics.map(t => topicLink(t, L)).join('') : `<p>${tr(L, 'learn.none')}</p>`}
+      ${topics.length ? topics.map(t => topicLink(t, L)).join('') : timeline ? '' : `<p>${tr(L, 'learn.none')}</p>`}
     `;
   }
   if (id === TIMELINE_ID) return renderTimeline(s);

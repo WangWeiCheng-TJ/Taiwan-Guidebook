@@ -115,3 +115,13 @@ test('bundle topics (when present) render and name only known places', { skip: !
     for (const L of ['en', 'zh_TW']) assert.ok(renderLearn(state(L, guidebook), t.id).includes('<h1>'), t.id);
   }
 });
+
+test('Learn list: with a timeline and no topics, the timeline card shows and "No topics yet." does not', () => {
+  for (const [L, none] of [['en', /No topics yet\./], ['zh_TW', /目前還沒有主題。/]]) {
+    const html = renderLearn(state(L, { places: guidebook.places }));
+    assert.match(html, /href="#\/learn\/timeline"/, L);
+    assert.doesNotMatch(html, none, L);
+  }
+  // neither timeline nor topics: the empty line stays
+  assert.match(renderLearn(state('zh_TW', { places: P })), /目前還沒有主題。/);
+});
